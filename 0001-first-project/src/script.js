@@ -1,46 +1,62 @@
-import * as THREE from 'three';
+import * as THREE from 'three'
 
-function createCube(xPosition) {
-  const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-  const solidGreenMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  const boxMesh = new THREE.Mesh(boxGeometry, solidGreenMaterial);
-  boxMesh.position.x = xPosition;
-  return boxMesh;
+/**
+ * Base
+ */
+// Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+// Sizes
+const sizes = {
+    width: 800,
+    height: 600
 }
 
-const scene = new THREE.Scene();
-const group = new THREE.Group();
-scene.add(group);
+// Scene
+const scene = new THREE.Scene()
 
-group.scale.y = 2
-group.rotation.y = 0.2
+// Object
+const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
+    new THREE.MeshBasicMaterial({ color: 0xff0000 })
+)
+scene.add(mesh)
 
-const cube1 = createCube(-1.5);
-const cube2 = createCube(0);
-const cube3 = createCube(1.5);
-
-group.add(cube1, cube2, cube3);
-
-const axesHelper = new THREE.AxesHelper(2);
-scene.add(axesHelper);
-
-const size = {
-  width: 800,
-  height: 600,
-}
-
-const camera = new THREE.PerspectiveCamera(75, size.width / size.height);
+// Camera
+const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 1, 100)
+//const aspectRatio = sizes.width / sizes.height
+//const camera = new THREE.OrthographicCamera(-1 * aspectRatio, 1 * aspectRatio, 1, -1, 0.1, 100)
+//camera.position.x = 2
+//camera.position.y = 2
 camera.position.z = 3
-camera.lookAt(group.position)
-scene.add(camera);
+camera.lookAt(mesh.position)
+scene.add(camera)
 
-const canvas = document.querySelector('canvas.webgl');
+// Renderer
 const renderer = new THREE.WebGLRenderer({
-  canvas,
-});
-renderer.setSize(size.width, size.height);
-renderer.render(scene, camera);
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
 
-console.log(boxMesh.position.length())
-console.log(boxMesh.position.distanceTo(camera.position))
-console.log(boxMesh.position.normalize())
+// Animate
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+
+    // Update objects
+    //mesh.rotation.y = elapsedTime;
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()
+
+window.addEventListener('mousemove', (event) => {
+  console.log(event.clientX, event.clientY)
+});
