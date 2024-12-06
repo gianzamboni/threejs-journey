@@ -26,7 +26,7 @@ const tick = () =>
     window.requestAnimationFrame(tick)
 }
 
-tick()
+tick();
 
 window.addEventListener('mousemove', (event) => {
   cursor.x = event.clientX / exercise.size.width - 0.5;
