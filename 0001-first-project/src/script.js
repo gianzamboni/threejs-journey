@@ -1,46 +1,87 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { BasicSetup } from './utils/BasicSetup.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import gsap from 'gsap'
+
 /**
  * Base
  */
+// Canvas
+const canvas = document.querySelector('canvas.webgl')
 
-const exercise = new BasicSetup({
-  size: {
+// Scene
+const scene = new THREE.Scene()
+
+/**
+ * Object
+ */
+const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
+const material = new THREE.MeshBasicMaterial({ color: '#ff0000' })
+const mesh = new THREE.Mesh(geometry, material)
+scene.add(mesh)
+
+/**
+ * Sizes
+ */
+const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
-  },
-  cameraPosition: { z: 6 }
-});
-
-const geometry = new THREE.BufferGeometry();
-
-const count = 50;
-const positionsArray = new Float32Array(count * 3 * 3);
-
-for (let i = 0; i < count * 3 * 3; i++) {
-  positionsArray[i] = (Math.random() - 0.5) * 4;
 }
 
-const bufferAtrribute = new THREE.BufferAttribute(positionsArray, 3);
-geometry.setAttribute('position', bufferAtrribute);
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
 
-const redWireFrameMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-const mesh = new THREE.Mesh(geometry, redWireFrameMaterial);
-exercise.add(mesh);
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
 
-const controls = new OrbitControls(exercise.camera, exercise.canvas)
-controls.enableDamping = true;
-
-// Animate
-exercise.animate(() => {
-  controls.update();
-});
-
-window.addEventListener('resize', () => {
-  exercise.updateSize(window.innerWidth, window.innerHeight);
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-window.addEventListener('dblclick', () => {
-  exercise.toggleFullscreen();
-});
+/**
+ * Camera
+ */
+// Base camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+camera.position.x = 1
+camera.position.y = 1
+camera.position.z = 2
+scene.add(camera)
+
+// Controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+
+/**
+ * Renderer
+ */
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas
+})
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+/**
+ * Animate
+ */
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+
+    // Update controls
+    controls.update()
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()

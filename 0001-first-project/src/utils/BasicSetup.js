@@ -18,7 +18,7 @@ export function basicRenderer(size) {
 
 export function basicCamera(scene, position) {
   const camera = new THREE.PerspectiveCamera(75, RENDERER_SIZE.width / RENDERER_SIZE.height, 1, 100)
-  camera.position.z = position.z
+  camera.position.z = position.z ?? 3
   scene.add(camera)
   return camera;
 }
@@ -65,10 +65,13 @@ export class BasicSetup {
   updateSize(width, height) {
     this.size.width = width;
     this.size.height = height;
-    this.renderer.setSize(width, height);
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(width, height);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   }
+
   toggleFullscreen() {
     if(document.fullscreenElement) {
       document.exitFullscreen();

@@ -1,9 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { BasicSetup } from './utils/BasicSetup.js';
-/**
- * Base
- */
+
 
 const exercise = new BasicSetup({
   size: {
