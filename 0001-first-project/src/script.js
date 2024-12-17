@@ -1,87 +1,90 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import gsap from 'gsap'
+import { BasicSetup } from './utils/BasicSetup.js'
+import GUI from 'lil-gui';
 
-/**
- * Base
- */
-// Canvas
-const canvas = document.querySelector('canvas.webgl')
+const exercise = new BasicSetup({
+    responsive: true,
+    withControls: true
+});
 
-// Scene
-const scene = new THREE.Scene()
+const textureLoader = new THREE.TextureLoader();
+const doorColorTexture = textureLoader.load('/textures/door/color.jpg');
+doorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
-/**
- * Object
- */
-const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
-const material = new THREE.MeshBasicMaterial({ color: '#ff0000' })
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg');
+const doorAmbientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
+const doorHeightTexture = textureLoader.load('/textures/door/height.jpg');
+const doorNormalTexture = textureLoader.load('/textures/door/normal.jpg');
+const doorMetalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
+const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
 
-/**
- * Sizes
- */
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
+const matcapTexture = textureLoader.load('/textures/matcaps/1.png');
+matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
-window.addEventListener('resize', () =>
-{
-    // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+const gradientTexture = textureLoader.load('/textures/gradients/5.jpg');
+gradientTexture.minFilter = THREE.NearestFilter;
+gradientTexture.magFilter = THREE.NearestFilter;
+gradientTexture.generateMipmaps = false;
 
-    // Update camera
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
+//const material = new THREE.MeshBasicMaterial();
+//material.color = new THREE.Color(0xff0000);
+//material.map = doorColorTexture;
+//material.wireframe = true;
+//material.opacity = 0.5;
+// material.alphaMap = doorAlphaTexture;
+// material.transparent = true;
+// material.side = THREE.DoubleSide;
 
-    // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
+// const material = new THREE.MeshNormalMaterial();
+// material.flatShading = true;
 
-/**
- * Camera
- */
-// Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1
-camera.position.y = 1
-camera.position.z = 2
-scene.add(camera)
+//const material = new THREE.MeshMatcapMaterial();
+//material.matcap = matcapTexture;
 
-// Controls
-const controls = new OrbitControls(camera, canvas)
-controls.enableDamping = true
+//const material = new THREE.MeshDepthMaterial();
 
-/**
- * Renderer
- */
-const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
-})
-renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+//const material = new THREE.MeshLambertMaterial();
 
-/**
- * Animate
- */
-const clock = new THREE.Clock()
+// const material = new THREE.MeshPhongMaterial();
+// material.shininess = 100;
+// material.specular = new THREE.Color(0x1188ff);
 
-const tick = () =>
-{
-    const elapsedTime = clock.getElapsedTime()
+//const material = new THREE.MeshToonMaterial();
+//material.gradientMap = gradientTexture;
 
-    // Update controls
-    controls.update()
+const material = new THREE.MeshStandardMaterial();
+material.metalness = 0.45;
+material.roughness = 0.65;
 
-    // Render
-    renderer.render(scene, camera)
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+exercise.add(ambientLight);
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
-}
+const pointLight = new THREE.PointLight(0xffffff, 30);
+pointLight.position.set(2, 3, 4);
+exercise.add(pointLight);
 
-tick()
+const geometries = [
+    new THREE.SphereGeometry(0.5, 16, 16),
+    new THREE.PlaneGeometry(1, 1),
+    new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+];
+
+const meshes = geometries.map((geometry, index) => {
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.x = (index - 1) * 1.5;
+    return mesh;
+});
+
+exercise.add(...meshes);
+
+exercise.animate((clock) => {
+    const elapsedTime = clock.getElapsedTime();
+    meshes.forEach((mesh) => {
+        mesh.rotation.x = -0.1 * elapsedTime;
+        mesh.rotation.y = 0.15 * elapsedTime;
+    });
+});
+
+const gui = new GUI();
+gui.add(material, 'metalness').min(0).max(1).step(0.0001);
+gui.add(material, 'roughness').min(0).max(1).step(0.0001);

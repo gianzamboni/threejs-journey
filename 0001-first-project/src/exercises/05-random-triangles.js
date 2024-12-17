@@ -4,11 +4,9 @@ import { BasicSetup } from './utils/BasicSetup.js';
 
 
 const exercise = new BasicSetup({
-  size: {
-    width: window.innerWidth,
-    height: window.innerHeight
-  },
-  cameraPosition: { z: 6 }
+  responsive: true,
+  cameraPosition: { z: 6 },
+  withControls: true,
 });
 
 const geometry = new THREE.BufferGeometry();
@@ -26,18 +24,6 @@ geometry.setAttribute('position', bufferAtrribute);
 const redWireFrameMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 const mesh = new THREE.Mesh(geometry, redWireFrameMaterial);
 exercise.add(mesh);
-
-const controls = new OrbitControls(exercise.camera, exercise.canvas)
-controls.enableDamping = true;
-
-// Animate
-exercise.animate(() => {
-  controls.update();
-});
-
-window.addEventListener('resize', () => {
-  exercise.updateSize(window.innerWidth, window.innerHeight);
-})
 
 window.addEventListener('dblclick', () => {
   exercise.toggleFullscreen();

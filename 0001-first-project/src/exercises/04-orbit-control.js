@@ -4,11 +4,5 @@ import { BasicSetup } from './utils/BasicSetup.js';
 
 const exercise = new BasicSetup({
   withCube: true,
-});
-
-const controls = new OrbitControls(exercise.camera, exercise.canvas)
-controls.enableDamping = true;
-
-exercise.animate(() => {
-  controls.update();
+  withControls: true,
 });

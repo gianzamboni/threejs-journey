@@ -11,7 +11,9 @@ exercise.add(group);
 group.scale.y = 2
 group.rotation.y = 0.2
 
-const cubes = [-1.5, 0, 1.5].map(createCube);
+const cubes = [-1.5, 0, 1.5].map((x) => createCube({
+    xPosition: x
+}));
 group.add(...cubes);
 
 const axesHelper = new THREE.AxesHelper(2);
