@@ -1,90 +1,161 @@
 import * as THREE from 'three'
-import { BasicSetup } from './utils/BasicSetup.js'
-import GUI from 'lil-gui';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
-const exercise = new BasicSetup({
-    responsive: true,
-    withControls: true
+import GUI from 'lil-gui'
+
+
+
+
+/**
+ * Base
+ */
+// Debug
+const gui = new GUI()
+
+// Canvas
+const canvas = document.querySelector('canvas.webgl')
+
+// Scene
+const scene = new THREE.Scene()
+
+/**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+
+/**
+ * Object
+ */
+const cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial()
+)
+
+//scene.add(cube)
+
+/**
+ * Sizes
+ */
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
+
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
+
+/**
+ * Camera
+ */
+// Base camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+camera.position.x = 1
+camera.position.y = 1
+camera.position.z = 2
+scene.add(camera)
+
+// Controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+
+/**
+ * Renderer
+ */
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
 });
+renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-const textureLoader = new THREE.TextureLoader();
-const doorColorTexture = textureLoader.load('/textures/door/color.jpg');
-doorColorTexture.colorSpace = THREE.SRGBColorSpace;
+/**
+ * Animate
+ */
 
-const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg');
-const doorAmbientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
-const doorHeightTexture = textureLoader.load('/textures/door/height.jpg');
-const doorNormalTexture = textureLoader.load('/textures/door/normal.jpg');
-const doorMetalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
-const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
-
-const matcapTexture = textureLoader.load('/textures/matcaps/1.png');
+const matcapTexture = textureLoader.load('/textures/matcaps/8.png');
 matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
-const gradientTexture = textureLoader.load('/textures/gradients/5.jpg');
-gradientTexture.minFilter = THREE.NearestFilter;
-gradientTexture.magFilter = THREE.NearestFilter;
-gradientTexture.generateMipmaps = false;
+const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
+const donuts = [];
+const fontLoader = new FontLoader();
+fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
+  const textGeometry = new TextGeometry(
+    'Hello Three.js',
+    {
+      font: font,
+      size: 0.5,
+      depth: 0.2,
+      curveSegments: 8,
+      bevelEnabled: true,
+      bevelThickness: 0.03,
+      bevelSize: 0.02,
+      bevelOffset: 0,
+      bevelSegments: 10
+    }
+  );
+  // textGeometry.computeBoundingBox();
+  // console.log(textGeometry.boundingBox);  
+  // textGeometry.translate(
+  //   -(textGeometry.boundingBox.max.x - 0.02) * 0.5,
+  //   -(textGeometry.boundingBox.max.y - 0.02) * 0.5,
+  //   -(textGeometry.boundingBox.max.z - 0.03) * 0.5
+  // );
+  textGeometry.center();
 
-//const material = new THREE.MeshBasicMaterial();
-//material.color = new THREE.Color(0xff0000);
-//material.map = doorColorTexture;
-//material.wireframe = true;
-//material.opacity = 0.5;
-// material.alphaMap = doorAlphaTexture;
-// material.transparent = true;
-// material.side = THREE.DoubleSide;
+  const text = new THREE.Mesh(textGeometry, material);
 
-// const material = new THREE.MeshNormalMaterial();
-// material.flatShading = true;
+  scene.add(text);
 
-//const material = new THREE.MeshMatcapMaterial();
-//material.matcap = matcapTexture;
+  const donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
 
-//const material = new THREE.MeshDepthMaterial();
-
-//const material = new THREE.MeshLambertMaterial();
-
-// const material = new THREE.MeshPhongMaterial();
-// material.shininess = 100;
-// material.specular = new THREE.Color(0x1188ff);
-
-//const material = new THREE.MeshToonMaterial();
-//material.gradientMap = gradientTexture;
-
-const material = new THREE.MeshStandardMaterial();
-material.metalness = 0.45;
-material.roughness = 0.65;
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-exercise.add(ambientLight);
-
-const pointLight = new THREE.PointLight(0xffffff, 30);
-pointLight.position.set(2, 3, 4);
-exercise.add(pointLight);
-
-const geometries = [
-    new THREE.SphereGeometry(0.5, 16, 16),
-    new THREE.PlaneGeometry(1, 1),
-    new THREE.TorusGeometry(0.3, 0.2, 16, 32),
-];
-
-const meshes = geometries.map((geometry, index) => {
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.x = (index - 1) * 1.5;
-    return mesh;
+  for(let i = 0; i < 100; i++) {
+    const donut = new THREE.Mesh(donutGeometry, material);
+    donut.position.x = (Math.random() - 0.5) * 10;
+    donut.position.y = (Math.random() - 0.5) * 10;
+    donut.position.z = (Math.random() - 0.5) * 10;
+    donut.rotation.x = Math.random() * Math.PI;
+    donut.rotation.y = Math.random() * Math.PI;
+    const scale = Math.random();
+    donut.scale.set(scale, scale, scale);
+    donuts.push(donut);
+  }
+  scene.add(...donuts);
 });
 
-exercise.add(...meshes);
 
-exercise.animate((clock) => {
-    const elapsedTime = clock.getElapsedTime();
-    meshes.forEach((mesh) => {
-        mesh.rotation.x = -0.1 * elapsedTime;
-        mesh.rotation.y = 0.15 * elapsedTime;
+
+const clock = new THREE.Clock()
+
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+
+    // Update controls
+    controls.update()
+
+    donuts.forEach((donut, index) => {
+      const rotation = elapsedTime + index;
+      donut.rotation.x = rotation;
     });
-});
+    // Render
+    renderer.render(scene, camera)
 
-const gui = new GUI();
-gui.add(material, 'metalness').min(0).max(1).step(0.0001);
-gui.add(material, 'roughness').min(0).max(1).step(0.0001);
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()
