@@ -1,6 +1,6 @@
 import { BasicView } from './app/basic-renderer.js';
 import { Menu } from './app/gui.js';
-import { DebugUI } from './exercises/01-basics/06-debug-ui.js';
+import { MaterialExercise } from './exercises/01-basics/08-materials.js';
 
 const view = new BasicView();
 const menu = new Menu(async (exercise) => {
@@ -8,4 +8,4 @@ const menu = new Menu(async (exercise) => {
   await view.run(exercise.class);
 });
 
-view.run(DebugUI);
+view.run(MaterialExercise);

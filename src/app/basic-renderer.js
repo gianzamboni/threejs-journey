@@ -13,7 +13,7 @@ export class BasicView {
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
 
-    this.camera = new THREE.PerspectiveCamera(75, DEFAULT_SIZE.width / DEFAULT_SIZE.height, 1, 100);
+    this.camera = new THREE.PerspectiveCamera(75, DEFAULT_SIZE.width / DEFAULT_SIZE.height, 0.1, 100);
     this.camera.position.z = 3;
 
     this.activeExercise = null;
@@ -31,6 +31,12 @@ export class BasicView {
 
   }
 
+  setCamera({ position, lookAt}) {
+    this.camera.position.x = position.x;
+    this.camera.position.y = position.y;
+    this.camera.position.z = position.z;
+    this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+  }
   setSize(){
     const size = {
       height: window.innerHeight,
