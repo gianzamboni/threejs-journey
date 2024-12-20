@@ -6,6 +6,7 @@ export class AnimationLoop {
   }
 
   animate() {
+    console.log("Animating");
     this.tick();
     if (this.animationStatus === "RUNNING") {
       window.requestAnimationFrame(() => this.animate());
@@ -27,22 +28,5 @@ export class AnimationLoop {
   async dispose() {
     this.animationStatus = "STOPPING";
     await this.animationStopped();
-  }
-}
-
-export class AnimationWithOrbitControls extends AnimationLoop {
-  constructor(tick, controls, config) {
-    super(tick, config);
-    this.controls = controls;
-  }
-
-  animate() {
-    this.controls.update();
-    super.animate();
-  }
-
-  async dispose() {
-    this.controls.dispose();
-    await super.dispose();
   }
 }

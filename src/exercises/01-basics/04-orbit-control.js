@@ -17,5 +17,4 @@ export class OrbitControlsCube extends CenteredCube {
     await this.animationLoop.dispose();
     super.dispose();
   }
-
 }

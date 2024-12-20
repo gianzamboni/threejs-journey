@@ -69,8 +69,12 @@ export class BasicView {
       await this.activeExercise.dispose();
     }
     this.resetCamera();
+    this.renderer.dispose();
     this.activeExercise = new exercise(this);
+    this.activeExercise.init();
     this.createHelpBox();
+    console.log(this.renderer.info);
+
   }
 
   createHelpBox() {

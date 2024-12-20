@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { AnimationLoop } from '../../utils/animation-loop';
+import { dispose } from '../../utils/dispose';
 
 export class RandomTriangles {
   constructor(view) {
@@ -25,6 +26,8 @@ export class RandomTriangles {
     this.view.init(this.scene);    
   }
 
+  init() {}
+  
   animation() {
     this.view.render(this.scene);
   }
@@ -32,7 +35,6 @@ export class RandomTriangles {
   async dispose() {
     await this.animationLoop.dispose();
     this.scene.remove(this.mesh);
-    this.material.dispose();
-    this.geometry.dispose();
+    dispose(this.mesh);
   }
 }

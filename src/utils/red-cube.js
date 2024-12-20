@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import { dispose } from './dispose';
 export class RedCube {
   constructor() {
     this.geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -27,7 +27,6 @@ export class RedCube {
   }
 
   dispose() {
-    this.geometry.dispose();
-    this.material.dispose();
+    dispose(this.mesh);
   }
 }

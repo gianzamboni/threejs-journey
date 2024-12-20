@@ -16,6 +16,8 @@ export class CubeGroup {
     console.log(this.groupData.cubes[0].position.normalize());
   }
 
+  init(){}
+  
   createCubeGroup() {
     const group = new THREE.Group();
     group.scale.y = 2;

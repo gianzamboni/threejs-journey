@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import GUI from 'lil-gui'
 import { AnimationLoop } from '../../utils/animation-loop'
+import { dispose } from '../../utils/dispose';
 
 export class DebugUI {
   constructor(view) {
@@ -56,16 +57,17 @@ export class DebugUI {
     });
   }
 
+  init() {}
+  
   animate() {
     this.view.render(this.scene)
   }
 
   async dispose() {
     await this.animationLoop.dispose();
+    this.gui.destroy();
     this.scene.remove(this.mesh);
-    this.material.dispose();
-    this.mesh.geometry.dispose();
-    this.gui.destroy()
+    dispose(this.mesh);
   }
 
 }

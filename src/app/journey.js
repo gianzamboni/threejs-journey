@@ -6,6 +6,7 @@ import { OrbitControlsCube } from '../exercises/01-basics/04-orbit-control.js';
 import { RandomTriangles } from '../exercises/01-basics/05-random-triangles.js';
 import { DebugUI } from '../exercises/01-basics/06-debug-ui.js';
 import { TextureExercise } from '../exercises/01-basics/07-textures.js';
+import { MaterialExercise } from '../exercises/01-basics/08-materials.js';
 
 const journey = [
   {
@@ -32,6 +33,10 @@ const journey = [
       }, {
         title: "Textures",
         class: TextureExercise,
+      },
+      {
+        title: "Materials",
+        class: MaterialExercise
       }
     ]
   },

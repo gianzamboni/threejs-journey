@@ -9,6 +9,8 @@ export class CenteredCube {
     view.init(this.scene);
   }
 
+  init() {}
+
   dispose() {
     this.cube.removeFrom(this.scene);
   }

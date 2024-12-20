@@ -3,13 +3,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
-import GUI from 'lil-gui'
+export class Text3D {
+  constructor() {
 
-/**
- * Base
- */
-// Debug
-const gui = new GUI()
+  }
+}
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -21,14 +19,6 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
-
-/**
- * Object
- */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
-)
 
 //scene.add(cube)
 
@@ -104,13 +94,7 @@ fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
       bevelSegments: 10
     }
   );
-  // textGeometry.computeBoundingBox();
-  // console.log(textGeometry.boundingBox);  
-  // textGeometry.translate(
-  //   -(textGeometry.boundingBox.max.x - 0.02) * 0.5,
-  //   -(textGeometry.boundingBox.max.y - 0.02) * 0.5,
-  //   -(textGeometry.boundingBox.max.z - 0.03) * 0.5
-  // );
+
   textGeometry.center();
 
   const text = new THREE.Mesh(textGeometry, material);
