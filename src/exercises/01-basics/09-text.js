@@ -5,6 +5,9 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 import GUI from 'lil-gui'
 
+
+
+
 /**
  * Base
  */
@@ -91,7 +94,7 @@ const donuts = [];
 const fontLoader = new FontLoader();
 fontLoader.load('/fonts/helvetiker_regular.typeface.json', (font) => {
   const textGeometry = new TextGeometry(
-    'Puto el que lee',
+    'Hola Three.js',
     {
       font: font,
       size: 0.5,
