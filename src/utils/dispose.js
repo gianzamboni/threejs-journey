@@ -7,4 +7,6 @@ export function dispose(mesh) {
       child.material.dispose();
     }
   });
+  mesh.geometry.dispose();
+  mesh.material.dispose();
 }

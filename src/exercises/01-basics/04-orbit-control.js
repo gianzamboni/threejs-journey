@@ -9,12 +9,17 @@ export class OrbitControlsCube extends CenteredCube {
     this.animationLoop = new AnimationLoop (() => this.animation());
   }
 
+  init() {
+    this.view.show(this.scene);
+    this.animationLoop.start();
+  }
+  
   animation() {
     this.view.render(this.scene);
   }
 
   async dispose() {
-    await this.animationLoop.dispose();
+    await this.animationLoop.stop();
     super.dispose();
   }
 }

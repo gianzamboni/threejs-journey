@@ -18,7 +18,6 @@ export class DebugUI {
     
     this.createScene();
 
-    this.view.init(this.scene)
     this.animationLoop = new AnimationLoop(() => this.animate());
 
     this.gui = new GUI({
@@ -57,14 +56,17 @@ export class DebugUI {
     });
   }
 
-  init() {}
+  init() {
+    this.animationLoop.start();
+    this.view.show(this.scene);
+  }
   
   animate() {
     this.view.render(this.scene)
   }
 
   async dispose() {
-    await this.animationLoop.dispose();
+    await this.animationLoop.stop();
     this.gui.destroy();
     this.scene.remove(this.mesh);
     dispose(this.mesh);

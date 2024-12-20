@@ -15,4 +15,4 @@ const menu = new Menu(async (exercise) => {
   await view.run(exercise.class);
 });
 
-view.run(TextureExercise);
+view.run(MaterialExercise);

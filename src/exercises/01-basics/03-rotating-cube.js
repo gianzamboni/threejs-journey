@@ -10,6 +10,11 @@ export class RotatingCube extends CenteredCube {
     this.animationLoop = new AnimationLoop(() => this.animation());
   }
 
+  init() {
+    this.view.show(this.scene);
+    this.animationLoop.start();
+  }
+
   animation() {
     const elapsedTime = this.clock.getElapsedTime();
     this.cube.position.y = Math.sin(elapsedTime);
@@ -19,7 +24,7 @@ export class RotatingCube extends CenteredCube {
   }
 
   async dispose() {
-    await this.animationLoop.dispose();
+    await this.animationLoop.stop();
     super.dispose();
   }
 }

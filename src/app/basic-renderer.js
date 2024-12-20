@@ -37,6 +37,7 @@ export class BasicView {
     this.camera.position.z = position.z;
     this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
   }
+
   setSize(){
     const size = {
       height: window.innerHeight,
@@ -48,7 +49,7 @@ export class BasicView {
     this.camera.updateProjectionMatrix();
   }
 
-  init(scene) {
+  show(scene) {
     scene.add(this.camera);
     this.renderer.render(scene, this.camera);
   }
@@ -69,9 +70,8 @@ export class BasicView {
       await this.activeExercise.dispose();
     }
     this.resetCamera();
-    this.renderer.dispose();
     this.activeExercise = new exercise(this);
-    this.activeExercise.init();
+    await this.activeExercise.init();
     this.createHelpBox();
     console.log(this.renderer.info);
 

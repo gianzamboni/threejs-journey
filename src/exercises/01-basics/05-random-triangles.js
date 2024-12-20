@@ -23,17 +23,19 @@ export class RandomTriangles {
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
-    this.view.init(this.scene);    
   }
 
-  init() {}
+  init() {
+    this.view.show(this.scene);
+    this.animationLoop.start();
+  }
   
   animation() {
     this.view.render(this.scene);
   }
 
   async dispose() {
-    await this.animationLoop.dispose();
+    await this.animationLoop.stop();
     this.scene.remove(this.mesh);
     dispose(this.mesh);
   }

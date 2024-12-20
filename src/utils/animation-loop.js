@@ -1,10 +1,13 @@
 export class AnimationLoop {
   constructor(tick, config) {
-    this.animationStatus = "RUNNING";
+    this.animationStatus = "STOPPED";
     this.tick = tick;
-    this.animate();
   }
 
+  start() {
+    this.animationStatus = "RUNNING";
+    this.animate();
+  }
   animate() {
     console.log("Animating");
     this.tick();
@@ -25,7 +28,7 @@ export class AnimationLoop {
     });
   };
 
-  async dispose() {
+  async stop() {
     this.animationStatus = "STOPPING";
     await this.animationStopped();
   }

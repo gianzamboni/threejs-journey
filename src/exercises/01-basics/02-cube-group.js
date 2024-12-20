@@ -2,21 +2,22 @@ import * as THREE from 'three';
 
 export class CubeGroup {
   constructor(view) {
+    this.view = view;
     this.scene = new THREE.Scene();
     this.groupData  = this.createCubeGroup();
     this.scene.add(this.groupData.group);
 
     this.axesHelper = new THREE.AxesHelper(2);
     this.scene.add(this.axesHelper);
-
-    view.init(this.scene);
-
-    console.log(this.groupData.cubes[0].position.length());
-    console.log(this.groupData.cubes[0].position.distanceTo(view.camera.position));
-    console.log(this.groupData.cubes[0].position.normalize());
   }
 
-  init(){}
+  init(){
+    this.view.show(this.scene);
+
+    console.log(this.groupData.cubes[0].position.length());
+    console.log(this.groupData.cubes[0].position.distanceTo(this.view.camera.position));
+    console.log(this.groupData.cubes[0].position.normalize());
+  }
   
   createCubeGroup() {
     const group = new THREE.Group();
