@@ -1,7 +1,15 @@
-import { BasicSetup } from "./utils/BasicSetup"
+import * as THREE from 'three';
+import { RedCube } from '../../utils/red-cube';
 
-const exercise = new BasicSetup({
-  withCube: true,
-});
+export class CenteredCube {
+  constructor(view) {
+    this.cube = new RedCube();
+    this.scene = new THREE.Scene();
+    this.cube.addTo(this.scene);
+    view.init(this.scene);
+  }
 
-exercise.render();
+  dispose() {
+    this.cube.removeFrom(this.scene);
+  }
+}

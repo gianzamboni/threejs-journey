@@ -1,64 +1,71 @@
-import { BasicSetup } from './utils/BasicSetup';
-import gsap from 'gsap';
-import GUI from 'lil-gui';
-import * as THREE from 'three';
+import * as THREE from 'three'
+import gsap from 'gsap'
+import GUI from 'lil-gui'
+import { AnimationLoop } from '../../utils/animation-loop'
 
-const exercise = new BasicSetup({
-  responsive: true,
-  cameraPosition: { z: 6 },
-  withControls: true
-});
+export class DebugUI {
+  constructor(view) {
+    this.view = view;
 
-window.addEventListener('dblclick', () => {
-  exercise.toggleFullscreen();
-});
+    this.debugOject = {
+      color: '#a778d8',
+      spin: this.spin.bind(this),
+      subdivision: 2
+    }
 
-const gui = new GUI({
-  width: 300,
-  title: 'Debug UI',
-  closeFolders: true
-});
-gui.close();
-gui.hide();
+    this.view.toggleOrbitControls(true);
+    
+    this.createScene();
 
-window.addEventListener('keydown', (event) => {
-  if (event.key == 'h')
-    gui.show(gui._hidden)
-})
+    this.view.init(this.scene)
+    this.animationLoop = new AnimationLoop(() => this.animate());
 
-const debugObject = {
-  color: "#a778d8",
-  spin: () => {
-    gsap.to(cube.rotation, { duration: 1, y: cube.rotation.y + Math.PI * 2 });
-  },
-  subdivisions: 2
-};
+    this.gui = new GUI({
+      width: 300,
+      title: 'Nice debug UI',
+      closeFolders: false
+    })
 
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2);
-const material = new THREE.MeshBasicMaterial({ color: debugObject.color, wireframe: true });
-const cube = new THREE.Mesh(cubeGeometry, material);
-exercise.add(cube);
+    this.addGuiTweaks();
+  }
 
-const cubeTweaks = gui.addFolder("Awesome cube");
-cubeTweaks.close();
-cubeTweaks.add(cube.position, 'y')
-  .min(-3)
-  .max(3)
-  .step(0.1)
-  .name('elevation');
+  createScene() {
+    this.scene = new THREE.Scene();
+    this.geometry = new THREE.BoxGeometry(1, 1, 1)
+    this.material = new THREE.MeshBasicMaterial({ color: this.debugOject.color, wireframe: true })
+    this.mesh = new THREE.Mesh(this.geometry, this.material)
+    this.scene.add(this.mesh)
+  }
 
-cubeTweaks.add(cube, 'visible');
-cubeTweaks.add(cube.material, 'wireframe');
-cubeTweaks.addColor(debugObject, 'color')
-  .onChange(() => {
-    material.color.set(debugObject.color);
-  });
-cubeTweaks.add(debugObject, 'spin');
-cubeTweaks.add(debugObject, 'subdivisions')
-  .min(1)
-  .max(20)
-  .step(1)
-  .onFinishChange(() => {
-    cube.geometry.dispose();
-    cube.geometry = new THREE.BoxGeometry(1, 1, 1, debugObject.subdivisions, debugObject.subdivisions, debugObject.subdivisions);
-  });
+  spin() {
+    gsap.to(this.mesh.rotation, { duration: 1, y: this.mesh.rotation.y + Math.PI * 2 })
+  }
+
+  addGuiTweaks() {
+    const cubeTweaks = this.gui.addFolder('Awesome cube')
+    cubeTweaks.add(this.mesh.position, 'y').min(- 3).max(3).step(0.01).name('elevation');
+    cubeTweaks.add(this.mesh, 'visible');
+    cubeTweaks.add(this.material, 'wireframe');
+    cubeTweaks.addColor(this.debugOject, 'color').onChange(() => {
+      this.material.color.set(this.debugOject.color)
+    });
+    cubeTweaks.add(this.debugOject, 'spin');
+    cubeTweaks.add(this.debugOject, 'subdivision').min(1).max(20).step(1).onFinishChange(() => {
+      this.mesh.geometry.dispose()
+      this.mesh.geometry = new THREE.BoxGeometry(1, 1, 1, this.debugOject.subdivision, this.debugOject.subdivision, this.debugOject.subdivision)
+    });
+  }
+
+  animate() {
+    this.view.render(this.scene)
+  }
+
+  async dispose() {
+    await this.animationLoop.dispose();
+    this.scene.remove(this.mesh);
+    this.material.dispose();
+    this.mesh.geometry.dispose();
+    this.gui.destroy()
+  }
+
+}

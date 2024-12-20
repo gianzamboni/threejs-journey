@@ -1,8 +1,21 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { BasicSetup } from './utils/BasicSetup.js';
+import { CenteredCube } from './01-centered-cube';
+import { AnimationLoop } from '../../utils/animation-loop';
 
-const exercise = new BasicSetup({
-  withCube: true,
-  withControls: true,
-});
+export class OrbitControlsCube extends CenteredCube {
+  constructor(view) {
+    super(view);
+    this.view = view;
+    this.view.toggleOrbitControls(true);
+    this.animationLoop = new AnimationLoop (() => this.animation());
+  }
+
+  animation() {
+    this.view.render(this.scene);
+  }
+
+  async dispose() {
+    await this.animationLoop.dispose();
+    super.dispose();
+  }
+
+}

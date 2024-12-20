@@ -5,9 +5,6 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 import GUI from 'lil-gui'
 
-
-
-
 /**
  * Base
  */

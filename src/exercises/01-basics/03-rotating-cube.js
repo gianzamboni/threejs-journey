@@ -1,15 +1,25 @@
 import * as THREE from 'three';
-import { createCube } from "./utils/cube"
-import { BasicSetup } from "./utils/BasicSetup"
+import { CenteredCube } from './01-centered-cube';
+import { AnimationLoop } from '../../utils/animation-loop';
 
-const exercise = new BasicSetup({
-  withCube: true,
-});
+export class RotatingCube extends CenteredCube {
+  constructor(view) {
+    super(view);
+    this.view = view;
+    this.clock = new THREE.Clock();
+    this.animationLoop = new AnimationLoop(() => this.animation());
+  }
 
-exercise.animate((clock) => {
-  const elapsedTime = clock.getElapsedTime();
-  exercise.moveCube({
-    x: Math.cos(elapsedTime),
-    y: Math.sin(elapsedTime),
-  })
-});
+  animation() {
+    const elapsedTime = this.clock.getElapsedTime();
+    this.cube.position.y = Math.sin(elapsedTime);
+    this.cube.position.x = Math.cos(elapsedTime);
+    this.view.camera.lookAt(this.cube.position);
+    this.view.render(this.scene);
+  }
+
+  async dispose() {
+    await this.animationLoop.dispose();
+    super.dispose();
+  }
+}

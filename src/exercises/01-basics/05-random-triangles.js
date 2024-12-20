@@ -1,30 +1,38 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { BasicSetup } from './utils/BasicSetup.js';
+import { AnimationLoop } from '../../utils/animation-loop';
 
+export class RandomTriangles {
+  constructor(view) {
+    this.scene = new THREE.Scene();
+    this.view = view;
+    this.view.toggleOrbitControls(true);
+    this.animationLoop = new AnimationLoop(() => this.animation())
 
-const exercise = new BasicSetup({
-  responsive: true,
-  cameraPosition: { z: 6 },
-  withControls: true,
-});
+    this.geometry = new THREE.BufferGeometry();
 
-const geometry = new THREE.BufferGeometry();
+    const count = 50;
+    const positionsArray = new Float32Array(count * 3 * 3);
+    for (let i = 0; i < count * 3 * 3; i++) {
+      positionsArray[i] = (Math.random() - 0.5) * 4;
+    }
 
-const count = 50;
-const positionsArray = new Float32Array(count * 3 * 3);
+    const bufferAtrribute = new THREE.BufferAttribute(positionsArray, 3);
+    this.geometry.setAttribute('position', bufferAtrribute);
 
-for (let i = 0; i < count * 3 * 3; i++) {
-  positionsArray[i] = (Math.random() - 0.5) * 4;
+    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.scene.add(this.mesh);
+    this.view.init(this.scene);    
+  }
+
+  animation() {
+    this.view.render(this.scene);
+  }
+
+  async dispose() {
+    await this.animationLoop.dispose();
+    this.scene.remove(this.mesh);
+    this.material.dispose();
+    this.geometry.dispose();
+  }
 }
-
-const bufferAtrribute = new THREE.BufferAttribute(positionsArray, 3);
-geometry.setAttribute('position', bufferAtrribute);
-
-const redWireFrameMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-const mesh = new THREE.Mesh(geometry, redWireFrameMaterial);
-exercise.add(mesh);
-
-window.addEventListener('dblclick', () => {
-  exercise.toggleFullscreen();
-});
