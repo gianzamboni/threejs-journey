@@ -1,4 +1,3 @@
-import { Texture } from 'three';
 import { CenteredCube } from '../exercises/01-basics/01-centered-cube.js';
 import { CubeGroup } from '../exercises/01-basics/02-cube-group.js';
 import { RotatingCube } from '../exercises/01-basics/03-rotating-cube.js';
@@ -7,6 +6,7 @@ import { RandomTriangles } from '../exercises/01-basics/05-random-triangles.js';
 import { DebugUI } from '../exercises/01-basics/06-debug-ui.js';
 import { TextureExercise } from '../exercises/01-basics/07-textures.js';
 import { MaterialExercise } from '../exercises/01-basics/08-materials.js';
+import { Text3D } from '../exercises/01-basics/09-text.js';
 
 const journey = [
   {
@@ -37,11 +37,14 @@ const journey = [
       {
         title: "Materials",
         class: MaterialExercise
+      }, {
+        title: "3D Text",
+        class: Text3D
       }
     ]
   },
   // {
-  //   title: "02 - Classic Techniques",
+  //   title: "02 - Classic""//  Techniques",
   // },
   // {
   //   title: "03 - Advanced Techniques",

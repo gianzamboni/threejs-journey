@@ -3,7 +3,11 @@ import GUI from 'lil-gui'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { AnimationLoop } from '../../utils/animation-loop';
 import { dispose } from '../../utils/dispose';
-import { color } from 'three/webgpu';
+
+/*
+  This exercise has some issues:
+    - It leaves some dangling objects in memory 
+*/
 
 export class MaterialExercise {
   constructor(view) {
@@ -21,12 +25,12 @@ export class MaterialExercise {
     this.gui = new GUI();
     
     this.physicalMaterial = this.createMaterial();
-    //this.addGuiTweaks();
+    this.addGuiTweaks();
 
     this.geometries = [
       new THREE.SphereGeometry(0.5, 64, 64),
-      new THREE.PlaneGeometry(1, 1, 100, 100),
-      new THREE.TorusGeometry(0.3, 0.2, 64, 128)
+     new THREE.PlaneGeometry(1, 1, 100, 100),
+     new THREE.TorusGeometry(0.3, 0.2, 64, 128)
     ]
     
     this.meshes = this.geometries.map(geometry => new THREE.Mesh(geometry, this.physicalMaterial));
@@ -75,26 +79,28 @@ export class MaterialExercise {
   }
 
   createMaterial() {
-    const material = new THREE.MeshPhysicalMaterial();
-    material.metalness = 0;
-    material.roughness = 0.15;
-    material.transmission = 1;
-    material.ior = 1.5;
-    material.thickness = 0.5;
-
-    return material;
+    return new THREE.MeshPhysicalMaterial({
+      metalness: 0,
+      roughness: 0.15,
+      transmission: 1,
+      ior: 1.5,
+      thickness: 0.5
+    });
   }
 
   async dispose() {
     await this.animationLoop.stop();
-    console.log(this.scene);
-    this.scene.background?.dispose(); 
+    this.scene.background.dispose(); 
     this.scene.background = null;
-    this.scene.environment?.dispose();
+
+    this.scene.environment.dispose();
     this.scene.environment = null;
     
     this.meshes.forEach(mesh => {
       this.scene.remove(mesh);
+    });
+
+    this.meshes.forEach(mesh => {
       dispose(mesh);
     });
 

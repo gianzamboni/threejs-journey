@@ -21,10 +21,12 @@ export class TextureExercise {
       position: { x: 2, y: 2, z: 2 },
       lookAt: { x: 0, y: 0, z: 0 }
     });
-    this.view.init(this.scene);
   }
 
-  init() {}
+  init() {
+    this.animationLoop.start();
+    this.view.show(this.scene);
+  }
 
   loadMinecrafTexture() {
     const colorTexture = textureLoader.load('/textures/minecraft.png');

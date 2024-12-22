@@ -11,7 +11,7 @@ const DEFAULT_SIZE = {
 export class BasicView {
   constructor() {
     this.canvas = document.querySelector('canvas.webgl');
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
 
     this.camera = new THREE.PerspectiveCamera(75, DEFAULT_SIZE.width / DEFAULT_SIZE.height, 0.1, 100);
     this.camera.position.z = 3;
@@ -74,7 +74,6 @@ export class BasicView {
     await this.activeExercise.init();
     this.createHelpBox();
     console.log(this.renderer.info);
-
   }
 
   createHelpBox() {
