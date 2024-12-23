@@ -15,3 +15,44 @@ html,
 body {
 	overflow: hidden;
 }
+
+.floating-button {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	z-index: 1000;
+	align-items: center;
+  display: flex !important;
+  gap: 5px;
+	border: 1px solid #000;
+}
+
+ol li {
+	list-style-type: none;
+	cursor: pointer;
+}
+
+.active {
+	border-bottom: 1px solid #000;
+}
+
+
+#help-box {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	margin: 1em;
+	z-index: 1000;
+}
+
+.help-box-item {
+	background-color: #fff;
+	padding: 0.5em 2em 0.5em 1em;
+	border-radius: 5px;
+	margin: 1em;
+}
+
+.exercise-title {
+	font-size: 1.25em;
+	font-weight: bold;
+}
