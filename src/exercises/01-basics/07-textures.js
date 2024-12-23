@@ -44,7 +44,7 @@ export class TextureExercise {
   }
 
   async dispose() {
-    await this.animationLoop.dispose();
+    await this.animationLoop.stop();
     this.scene.remove(this.mesh);
     dispose(this.mesh);
     this.colorTexture.dispose();

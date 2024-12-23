@@ -32,10 +32,13 @@ ol li {
 	cursor: pointer;
 }
 
+ul {
+	margin-bottom: 0 !important;
+}
+
 .active {
 	border-bottom: 1px solid #000;
 }
-
 
 #help-box {
 	position: fixed;
@@ -47,7 +50,7 @@ ol li {
 
 .help-box-item {
 	background-color: #fff;
-	padding: 0.5em 2em 0.5em 1em;
+	padding: 0.5em 1em 0.5em 1em;
 	border-radius: 5px;
 	margin: 1em;
 }
@@ -55,4 +58,16 @@ ol li {
 .exercise-title {
 	font-size: 1.25em;
 	font-weight: bold;
+}
+
+.lil-gui {
+	--background-color: #fff;
+	--text-color: #000;
+	--title-background-color: #fff;
+	--title-text-color: #000;
+	--widget-color: #ddd;
+	--hover-color: #ccc;
+	--focus-color: #bbb;
+	--number-color: #000;
+	--string-color: #000;
 }

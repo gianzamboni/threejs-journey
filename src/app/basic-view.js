@@ -26,7 +26,8 @@ export class BasicView {
       title: document.getElementById('help-box-title'), 
     }
 
-    this.orbitControls = null;
+    this.orbitControls = new OrbitControls(this.camera, this.canvas);
+    this.orbitControls.enableDamping = true;
 
     this.setSize();
 
@@ -71,7 +72,6 @@ export class BasicView {
   }
 
   async run(exercise) {
-    console.log(exercise);
     this.toggleOrbitControls(false);
     if(this.activeExercise.instance) {
       await this.activeExercise.instance.dispose();
@@ -88,7 +88,8 @@ export class BasicView {
     this.helpBox.title.innerHTML = this.activeExercise.data.title;
     this.helpBox.content.innerHTML = "";
 
-    if(!this.orbitControls && !this.activeExercise.instance.helpMessage) {
+
+    if(!this.orbitControls.enablePan && !this.activeExercise.instance.helpMessage) {
       this.helpBox.content.style.display = 'none';
       return;
     }
@@ -96,10 +97,9 @@ export class BasicView {
     const list = document.createElement('ul');
     this.helpBox.content.appendChild(list);
 
-    if(this.orbitControls) {
+    if(this.orbitControls.enablePan) {
       addOrbitControlHelp(list);
     }
-
 
     if(this.activeExercise.instance.helpMessage) {
       const items = this.activeExercise.instance.helpMessage();
@@ -113,11 +113,13 @@ export class BasicView {
 
   toggleOrbitControls(activate = true) {
     if(activate) {
-      this.orbitControls = new OrbitControls(this.camera, this.canvas);
-      this.orbitControls.enableDamping = true;
+      this.orbitControls.enablePan = true;
+      this.orbitControls.enableZoom = true;
+      this.orbitControls.enableRotate = true;
     } else {
-      this.orbitControls?.dispose();
-      this.orbitControls = null;
+      this.orbitControls.enablePan = false;
+      this.orbitControls.enableZoom = false;
+      this.orbitControls.enableRotate = false;
     }
   }
 }
