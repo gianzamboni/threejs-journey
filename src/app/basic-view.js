@@ -62,7 +62,7 @@ export class BasicView {
   }
 
   render(scene) {
-    this.controls?.update();
+    this.orbitControls.update();
     this.renderer.render(scene, this.camera);
   }
   
