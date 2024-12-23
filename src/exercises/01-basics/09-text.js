@@ -82,6 +82,7 @@ export class Text3D {
   }
 
   async dispose() {
+    await this.animationLoop.stop();
     this.scene.remove(this.textMesh);
     this.donuts.forEach(donut => this.scene.remove(donut));
     this.textGeometry.dispose();
