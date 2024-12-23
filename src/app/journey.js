@@ -10,34 +10,44 @@ import { Text3D } from '../exercises/01-basics/09-text.js';
 
 const journey = [
   {
+    id: '01-basics',
     title: "01 - Basics",
     exercises: [
       {
+        id: 'first-threejs-project',
         title: "First Three.js Project",
         class: CenteredCube,
       }, {
-        title: "Transform objetcs",
+        id: 'transform-objects',
+        title: "Transform objects",
         class: CubeGroup,
       }, {
+        id: 'animations',
         title: "Animations",
         class: RotatingCube,
       }, {
+        id: 'cameras',
         title: "Cameras",
         class: OrbitControlsCube,
       }, {
+        id: 'geometries',
         title: "Geometries",
         class: RandomTriangles, 
       }, {
+        id: 'debug-ui',
         title: "Debug UI",
         class: DebugUI,
       }, {
+        id: 'textures',
         title: "Textures",
         class: TextureExercise,
       },
       {
+        id: 'materials',
         title: "Materials",
         class: MaterialExercise
       }, {
+        id: '3d-text',
         title: "3D Text",
         class: Text3D
       }

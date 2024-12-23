@@ -37,11 +37,22 @@ ol li {
 }
 
 
-#help-box-content {
+#help-box {
 	position: fixed;
-	bottom: 1em;
-	left: 1em;
-	padding: 1em;
+	bottom: 0;
+	left: 0;
+	margin: 1em;
 	z-index: 1000;
+}
+
+.help-box-item {
 	background-color: #fff;
+	padding: 0.5em 2em 0.5em 1em;
+	border-radius: 5px;
+	margin: 1em;
+}
+
+.exercise-title {
+	font-size: 1.25em;
+	font-weight: bold;
 }

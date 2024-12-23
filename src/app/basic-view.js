@@ -16,9 +16,15 @@ export class BasicView {
     this.camera = new THREE.PerspectiveCamera(75, DEFAULT_SIZE.width / DEFAULT_SIZE.height, 0.1, 100);
     this.camera.position.z = 3;
 
-    this.activeExercise = null;
+    this.activeExercise = {
+      data: null,
+      instance: null
+    };
 
-    this.helpBox = document.getElementById('help-box-content');
+    this.helpBox = {
+      content: document.getElementById('help-box-content'),
+      title: document.getElementById('help-box-title'), 
+    }
 
     this.orbitControls = null;
 
@@ -65,41 +71,44 @@ export class BasicView {
   }
 
   async run(exercise) {
+    console.log(exercise);
     this.toggleOrbitControls(false);
-    if(this.activeExercise) {
-      await this.activeExercise.dispose();
+    if(this.activeExercise.instance) {
+      await this.activeExercise.instance.dispose();
     }
     this.resetCamera();
-    this.activeExercise = new exercise(this);
-    await this.activeExercise.init();
+    this.activeExercise.data = exercise;
+    this.activeExercise.instance = new exercise.class(this);
+    await this.activeExercise.instance.init();
     this.createHelpBox();
     console.log(this.renderer.info);
   }
 
   createHelpBox() {
-    this.helpBox.innerHTML = "";
+    this.helpBox.title.innerHTML = this.activeExercise.data.title;
+    this.helpBox.content.innerHTML = "";
 
-    if(!this.orbitControls && !this.activeExercise.helpMessage) {
-      this.helpBox.style.display = 'none';
+    if(!this.orbitControls && !this.activeExercise.instance.helpMessage) {
+      this.helpBox.content.style.display = 'none';
       return;
     }
 
     const list = document.createElement('ul');
-    this.helpBox.appendChild(list);
+    this.helpBox.content.appendChild(list);
 
     if(this.orbitControls) {
       addOrbitControlHelp(list);
     }
 
 
-    if(this.activeExercise.helpMessage) {
-      const items = this.activeExercise.helpMessage();
+    if(this.activeExercise.instance.helpMessage) {
+      const items = this.activeExercise.instance.helpMessage();
       items.forEach(item => {
         list.appendChild(item);
       });
     }
      
-    this.helpBox.style.display = 'block';
+    this.helpBox.content.style.display = 'block';
   }
 
   toggleOrbitControls(activate = true) {

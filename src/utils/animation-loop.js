@@ -9,7 +9,6 @@ export class AnimationLoop {
     this.animate();
   }
   animate() {
-    console.log("Animating");
     this.tick();
     if (this.animationStatus === "RUNNING") {
       window.requestAnimationFrame(() => this.animate());

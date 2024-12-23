@@ -1,11 +1,14 @@
-import { BasicView } from './app/basic-renderer.js';
+import { BasicView } from './app/basic-view.js';
 import { Menu } from './app/gui.js';
-import { Text3D } from './exercises/01-basics/09-text.js';
+import { journey } from './app/journey.js';
+
+const lastChapterExercises = journey[journey.length - 1].exercises;
+const lastExercise = lastChapterExercises[lastChapterExercises.length - 1];
 
 const view = new BasicView();
-const menu = new Menu(async (exercise) => {
+const menu = new Menu(lastExercise, async (exercise) => {
   console.log(`Loading exercise: ${exercise.title}`);
-  await view.run(exercise.class);
+  await view.run(exercise);
 });
 
-view.run(Text3D);
+view.run(lastExercise);
