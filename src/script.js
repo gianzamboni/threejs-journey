@@ -33,93 +33,135 @@ const scene = new THREE.Scene()
  * Lights
  */
 const settings = {
-    AmbientLight: {
-        color: "#ffffff",
-        intensity: 0.2,
-        on: true
-    },
-    DirectionalLight: {
-        color: "#00fffc",
-        intensity: 0.9,
-        on: true,
-        position: { x: 1, y: 0.25, z: 0 }
-    },
-    HemisphereLight: {
-        color: "#ff0000",
-        groundColor: "#0000ff",
-        intensity: 0.9,
-        on: true,
-    },
-    PointLight: {
-        color: "#ff9000",
-        intensity: 0.9,
-        on: true,
-        position: { x: 1, y: 0.5, z: 1 }
-    }
+  AmbientLight: {
+    color: "#ffffff",
+    intensity: 0.2,
+    on: true
+  },
+  DirectionalLight: {
+    color: "#00fffc",
+    intensity: 0.9,
+    on: true,
+    position: { x: 1, y: 0.25, z: 0 }
+  },
+  HemisphereLight: {
+    color: "#ff0000",
+    groundColor: "#0000ff",
+    intensity: 0.9,
+    on: true,
+  },
+  PointLight: {
+    color: "#ff9000",
+    intensity: 0.9,
+    on: true,
+    position: { x: 1, y: 0.5, z: 1 },
+    distance: 0,
+    decay: 2
+  }
 }
 
-const ambientLight = new THREE.AmbientLight(settings.AmbientLight.color, settings.AmbientLight.intensity);
+function createAmbientLight() {
+  return new THREE.AmbientLight(settings.AmbientLight.color, settings.AmbientLight.intensity);
+}
+
+function createDirectionalLight() {
+  const directionalLight = new THREE.DirectionalLight(settings.DirectionalLight.color, settings.DirectionalLight.intensity);
+  directionalLight.position.set(settings.DirectionalLight.position.x, settings.DirectionalLight.position.y, settings.DirectionalLight.position.z);
+  return directionalLight;
+}
+
+function createHemisphereLight() {
+  return new THREE.HemisphereLight(settings.HemisphereLight.skyColor, settings.HemisphereLight.groundColor, settings.HemisphereLight.intensity);
+}
+
+function createPointLight() {
+  const pointLight = new THREE.PointLight(settings.PointLight.color, settings.PointLight.intensity, settings.PointLight.distance, settings.PointLight.decay);
+  pointLight.position.set(settings.PointLight.position.x, settings.PointLight.position.y, settings.PointLight.position.z);
+  return pointLight;
+}
+
+function createOnOffControl(lightFolder, light, lightType) {
+  lightFolder.add(settings[lightType], 'on').name('On/Off').onChange(() => {
+    light.intensity = settings[lightType].on ? settings[lightType].intensity : 0;
+    lightControls[lightType].forEach(control => settings[lightType].on ? control.enable() : control.disable());
+  });
+}
+
+function createColorControl(lightFolder, light, lightType, propertyName) {
+  lightFolder.addColor(settings[lightType], propertyName).name(propertyName).onChange(() => {
+    light[propertyName].set(settings[lightType].color)
+  });
+}
+
+function createIntensityControl(lightFolder, light, lightType) {
+  lightFolder.add(settings[lightType], 'intensity').min(0).max(2).step(0.001).name('Intensity').onChange(() => {
+    light.intensity = settings[lightType].intensity;
+  });
+}
+
+function createPositionControl(lightFolder, light, lightType) {
+  const positionFolder = lightFolder.addFolder('Position');
+  positionFolder.close();
+  ["x", "y", "z"].forEach(axis => {
+    positionFolder.add(settings[lightType].position, axis).min(-5).max(5).step(0.01).name(axis.toUpperCase()).onChange(() => {
+      light.position[axis] = settings[lightType].position[axis];
+    });
+  })
+}
+
+function createDecayControl(lightFolder, light, lightType) {
+  lightFolder.add(settings[lightType], 'decay').min(0).max(2).step(0.01).name('Decay').onChange(() => {
+    light.decay = settings[lightType].decay;
+  });
+}
+
+function createDistanceControl(lightFolder, light, lightType) {
+  lightFolder.add(settings[lightType], 'distance').min(0).max(10).step(0.01).name('Distance').onChange(() => {
+    light.distance = settings[lightType].distance;
+  });
+}
+
+const ambientLight = createAmbientLight();
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(settings.DirectionalLight.color, settings.DirectionalLight.intensity);
-directionalLight.position.set(settings.DirectionalLight.position.x, settings.DirectionalLight.position.y, settings.DirectionalLight.position.z);
+const directionalLight = createDirectionalLight();
 scene.add(directionalLight);
 
-const hemisphereLight = new THREE.HemisphereLight(settings.HemisphereLight.skyColor, settings.HemisphereLight.groundColor, settings.HemisphereLight.intensity);
+const hemisphereLight = createHemisphereLight();
 scene.add(hemisphereLight);
 
-const pointLight = new THREE.PointLight(settings.PointLight.color, settings.PointLight.intensity);
-pointLight.position.set(settings.PointLight.position.x, settings.PointLight.position.y, settings.PointLight.position.z);
+const pointLight = createPointLight();
 scene.add(pointLight);
 
 const lights = [ambientLight, directionalLight, hemisphereLight, pointLight];
 const lightControls = {
-    AmbientLight: [],
-    DirectionalLight: [],
-    HemisphereLight: []
+  AmbientLight: [],
+  DirectionalLight: [],
+  HemisphereLight: [],
+  PointLight: []
 }
 
 lights.forEach(light => {
-    const lightType = light.type;
-    const lightFolderName = light.type.split("L").join(" L");
-    console.log(lightType)
-    const lightFolder = gui.addFolder(lightFolderName);
-    lightFolder.add(settings[lightType], 'on').name('On/Off').onChange(() => {
-        light.intensity = settings[lightType].on ? settings[lightType].intensity : 0;
-        lightControls[lightType].forEach(control => settings[lightType].on ? control.enable() : control.disable());
-    });
+  const lightType = light.type;
+  const lightFolderName = light.type.split("L").join(" L");
+  const lightFolder = gui.addFolder(lightFolderName);
+  createOnOffControl(lightFolder, light, lightType);
+  createColorControl(lightFolder, light, lightType, 'color');
 
-    switch (lightType) {
-        case "AmbientLight":
-            lightFolder.addColor(settings[lightType], 'color').name('Color').onChange(() => {
-                light.color.set(settings[lightType].color)
-            });
-            break;
-        case "DirectionalLight":
-        case "PointLight":
-            lightFolder.addColor(settings[lightType], 'color').name('Color').onChange(() => {
-                light.color.set(settings[lightType].color)
-            });
-            const positionFolder = lightFolder.addFolder('Position');
-            positionFolder.close();
-            ["x", "y", "z"].forEach(axis => {
-                positionFolder.add(settings[lightType].position, axis).min(-5).max(5).step(0.01).name(axis.toUpperCase()).onChange(() => {
-                    light.position[axis] = settings[lightType].position[axis];
-                });
-            })
-            break;
-        case "HemisphereLight":
-            ['color', 'groundColor'].forEach(color => {
-                console.log(settings[lightType])
-                lightFolder.addColor(settings[lightType], color).name(color).onChange(() => {
-                    hemisphereLight[color].set(settings[lightType][color]);
-                });
-            });
-    }
+  if (lightType === "HemisphereLight") {
+    createColorControl(lightFolder, light, lightType, 'groundColor');
+  }
 
-    lightFolder.add(light, 'intensity').min(0).max(2).step(0.001).name('Intensity').onChange(() => {
-        settings[lightType].intensity = light.intensity;
-    });
+  createIntensityControl(lightFolder, light, lightType);
+  
+  if (lightType === "PointLight") {
+    createDistanceControl(lightFolder, light, lightType);
+    createDecayControl(lightFolder, light, lightType);
+  }
+
+  if (lightType === "DirectionalLight" || lightType === "PointLight") {
+    createPositionControl(lightFolder, light, lightType);
+  }
 
 
 })
@@ -151,25 +193,25 @@ material.roughness = 0.4
 
 // Objects
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
-    material
+  new THREE.SphereGeometry(0.5, 32, 32),
+  material
 )
 sphere.position.x = - 1.5
 
 const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(0.75, 0.75, 0.75),
-    material
+  new THREE.BoxGeometry(0.75, 0.75, 0.75),
+  material
 )
 
 const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.3, 0.2, 32, 64),
-    material
+  new THREE.TorusGeometry(0.3, 0.2, 32, 64),
+  material
 )
 torus.position.x = 1.5
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(5, 5),
-    material
+  new THREE.PlaneGeometry(5, 5),
+  material
 )
 plane.rotation.x = - Math.PI * 0.5
 plane.position.y = - 0.65
@@ -180,22 +222,22 @@ scene.add(sphere, cube, torus, plane)
  * Sizes
  */
 const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
+  width: window.innerWidth,
+  height: window.innerHeight
 }
 
 window.addEventListener('resize', () => {
-    // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+  // Update sizes
+  sizes.width = window.innerWidth
+  sizes.height = window.innerHeight
 
-    // Update camera
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
+  // Update camera
+  camera.aspect = sizes.width / sizes.height
+  camera.updateProjectionMatrix()
 
-    // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
 /**
@@ -216,7 +258,7 @@ controls.enableDamping = true
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+  canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -227,25 +269,25 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 const clock = new THREE.Clock()
 
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime()
+  const elapsedTime = clock.getElapsedTime()
 
-    // Update objects
-    sphere.rotation.y = 0.1 * elapsedTime
-    cube.rotation.y = 0.1 * elapsedTime
-    torus.rotation.y = 0.1 * elapsedTime
+  // Update objects
+  sphere.rotation.y = 0.1 * elapsedTime
+  cube.rotation.y = 0.1 * elapsedTime
+  torus.rotation.y = 0.1 * elapsedTime
 
-    sphere.rotation.x = 0.15 * elapsedTime
-    cube.rotation.x = 0.15 * elapsedTime
-    torus.rotation.x = 0.15 * elapsedTime
+  sphere.rotation.x = 0.15 * elapsedTime
+  cube.rotation.x = 0.15 * elapsedTime
+  torus.rotation.x = 0.15 * elapsedTime
 
-    // Update controls
-    controls.update()
+  // Update controls
+  controls.update()
 
-    // Render
-    renderer.render(scene, camera)
+  // Render
+  renderer.render(scene, camera)
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+  // Call tick again on the next frame
+  window.requestAnimationFrame(tick)
 }
 
 tick()
