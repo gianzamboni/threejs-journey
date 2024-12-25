@@ -42,7 +42,7 @@ const settings = {
     color: "#00fffc",
     intensity: 0.9,
     on: true,
-    position: { x: 1, y: 0.25, z: 0 }
+    position: { x: 1, y: 0, z: 0 }
   },
   HemisphereLight: {
     color: "#ff0000",
@@ -52,11 +52,20 @@ const settings = {
   },
   PointLight: {
     color: "#ff9000",
-    intensity: 0.9,
+    intensity: 1.5,
     on: true,
-    position: { x: 1, y: 0.5, z: 1 },
-    distance: 0,
+    position: { x: 1, y: -0.5, z: 1 },
+    distance: 0.5,
     decay: 2
+  },
+  RectAreaLight: {
+    on: true,
+    color: "#4e00ff",
+    intensity: 6,
+    width: 1,
+    height: 1,
+    position: { x: -1.5, y: 0, z: 1.5 },
+    lookAt: { x: 0, y: 0, z: 0 }
   }
 }
 
@@ -80,6 +89,13 @@ function createPointLight() {
   return pointLight;
 }
 
+function createRectAreaLight() {
+  const rectAreaLight = new THREE.RectAreaLight(settings.RectAreaLight.color, settings.RectAreaLight.intensity, settings.RectAreaLight.width, settings.RectAreaLight.height);
+  rectAreaLight.position.set(settings.RectAreaLight.position.x, settings.RectAreaLight.position.y, settings.RectAreaLight.position.z);
+  rectAreaLight.lookAt(new THREE.Vector3(settings.RectAreaLight.lookAt.x, settings.RectAreaLight.lookAt.y, settings.RectAreaLight.lookAt.z));
+  return rectAreaLight;
+}
+
 function createOnOffControl(lightFolder, light, lightType) {
   lightFolder.add(settings[lightType], 'on').name('On/Off').onChange(() => {
     light.intensity = settings[lightType].on ? settings[lightType].intensity : 0;
@@ -94,20 +110,30 @@ function createColorControl(lightFolder, light, lightType, propertyName) {
 }
 
 function createIntensityControl(lightFolder, light, lightType) {
-  lightFolder.add(settings[lightType], 'intensity').min(0).max(2).step(0.001).name('Intensity').onChange(() => {
+  lightFolder.add(settings[lightType], 'intensity').min(0).max(6).step(0.001).name('Intensity').onChange(() => {
     light.intensity = settings[lightType].intensity;
   });
 }
 
-function createPositionControl(lightFolder, light, lightType) {
-  const positionFolder = lightFolder.addFolder('Position');
+function createXYZControl(lightFolder, light, lightType, propertyName, onChange) {
+  const positionFolder = lightFolder.addFolder(propertyName);
   positionFolder.close();
   ["x", "y", "z"].forEach(axis => {
-    positionFolder.add(settings[lightType].position, axis).min(-5).max(5).step(0.01).name(axis.toUpperCase()).onChange(() => {
-      light.position[axis] = settings[lightType].position[axis];
-    });
+    positionFolder.add(settings[lightType][propertyName], axis).min(-5).max(5).step(0.01).name(axis.toUpperCase()).onChange(() => onChange(axis));
   })
 }
+
+function createPositionControl(lightFolder, light, lightType) {
+  createXYZControl(lightFolder, light, lightType, 'position', (axis) => {
+    light.position[axis] = settings[lightType].position[axis];
+  });
+}
+
+function createLookAtControl(lightFolder, light, lightType) {
+  createXYZControl(lightFolder, light, lightType, 'lookAt', () => {
+    light.lookAt(new THREE.Vector3(settings[lightType].lookAt.x, settings[lightType].lookAt.y, settings[lightType].lookAt.z));
+  });
+};
 
 function createDecayControl(lightFolder, light, lightType) {
   lightFolder.add(settings[lightType], 'decay').min(0).max(2).step(0.01).name('Decay').onChange(() => {
@@ -121,6 +147,7 @@ function createDistanceControl(lightFolder, light, lightType) {
   });
 }
 
+
 const ambientLight = createAmbientLight();
 scene.add(ambientLight);
 
@@ -133,7 +160,10 @@ scene.add(hemisphereLight);
 const pointLight = createPointLight();
 scene.add(pointLight);
 
-const lights = [ambientLight, directionalLight, hemisphereLight, pointLight];
+const rectAreaLight = createRectAreaLight();
+scene.add(rectAreaLight);
+
+const lights = [ambientLight, directionalLight, hemisphereLight, pointLight, rectAreaLight];
 const lightControls = {
   AmbientLight: [],
   DirectionalLight: [],
@@ -159,11 +189,17 @@ lights.forEach(light => {
     createDecayControl(lightFolder, light, lightType);
   }
 
-  if (lightType === "DirectionalLight" || lightType === "PointLight") {
+  if (lightType === "DirectionalLight" || lightType === "PointLight" || lightType === "RectAreaLight") {
     createPositionControl(lightFolder, light, lightType);
   }
 
+  if (lightType === "RectAreaLight") {
+    createLookAtControl(lightFolder, light, lightType);
+  }
 
+  if (lightType !== "AmbientLight") {
+    lightFolder.close();
+  }
 })
 
 console.log(hemisphereLight)
