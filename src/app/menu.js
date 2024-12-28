@@ -11,6 +11,7 @@ export class Menu {
       this.generateChapter(chapter);
     });
     this.actionOnClick = actionOnClick;
+    history.pushState(activeDefault.id, "", activeDefault.id);
   }
 
   generateChapter(chapter) {
