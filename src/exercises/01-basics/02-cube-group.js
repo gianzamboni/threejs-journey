@@ -5,13 +5,12 @@ export class CubeGroup {
     this.view = view;
     this.scene = new THREE.Scene();
     this.groupData  = this.createCubeGroup();
-    this.scene.add(this.groupData.group);
-
     this.axesHelper = new THREE.AxesHelper(2);
-    this.scene.add(this.axesHelper);
   }
 
   init(){
+    this.scene.add(this.groupData.group);
+    this.scene.add(this.axesHelper);
     this.view.show(this.scene);
 
     console.log(this.groupData.cubes[0].position.length());

@@ -8,8 +8,6 @@ export class Text3D {
   constructor(view) {
     this.view = view;
     this.scene = new THREE.Scene();
-    this.animationLoop = new AnimationLoop(() => this.animate());
-
     this.matcapTexture = textureLoader.load('/textures/matcaps/8.png');
     this.matcapTexture.colorSpace = THREE.SRGBColorSpace;
     this.material = new THREE.MeshMatcapMaterial({ matcap: this.matcapTexture });
@@ -17,8 +15,6 @@ export class Text3D {
     this.donutGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
     this.textGeometry = null;
     this.textMesh = null;
-
-
   }
 
   init() {
@@ -30,8 +26,8 @@ export class Text3D {
 
     this.generateText();
     this.generateDonuts();
+    this.view.setTick(() => this.animate());
     this.view.show(this.scene);
-    this.animationLoop.start();
   }
 
   generateDonuts() {
@@ -77,12 +73,9 @@ export class Text3D {
       donut.rotation.x += 0.01;
       donut.rotation.y += 0.01;
     });
-
-    this.view.render(this.scene);
   }
 
   async dispose() {
-    await this.animationLoop.stop();
     this.scene.remove(this.textMesh);
     this.donuts.forEach(donut => this.scene.remove(donut));
     this.textGeometry.dispose();

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { addOrbitControlHelp } from '../utils/orbit-control-help';
+import { AnimationLoop } from '../utils/animation-loop';
 
 const DEFAULT_SIZE = {
   width: 800,
@@ -12,6 +13,8 @@ export class BasicView {
   constructor() {
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+    this.animationLoop = new AnimationLoop(() => this.animation())
+    this.tick = null;
 
     this.camera = new THREE.PerspectiveCamera(75, DEFAULT_SIZE.width / DEFAULT_SIZE.height, 0.1, 100);
     this.camera.position.z = 3;
@@ -45,6 +48,10 @@ export class BasicView {
     this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
   }
 
+  setTick(tick) {
+    this.tick = tick;
+  }
+
   setSize(){
     const size = {
       height: window.innerHeight,
@@ -72,7 +79,11 @@ export class BasicView {
   }
 
   async run(exercise) {
+    if(this.tick || this.orbitControls.enablePan) {
+      await this.animationLoop.stop();
+    }
     this.toggleOrbitControls(false);
+    this.tick = null;
     if(this.activeExercise.instance) {
       await this.activeExercise.instance.dispose();
     }
@@ -80,8 +91,19 @@ export class BasicView {
     this.activeExercise.data = exercise;
     this.activeExercise.instance = new exercise.class(this);
     await this.activeExercise.instance.init();
+    if(this.tick || this.orbitControls.enablePan) {
+      this.animationLoop.start();
+    }
     this.createHelpBox();
     console.log(this.renderer.info);
+  }
+
+  animation() {
+    this.orbitControls.update();
+    if(this.tick) {
+      this.tick();
+    }
+    this.render(this.activeExercise.instance.scene);
   }
 
   createHelpBox() {
