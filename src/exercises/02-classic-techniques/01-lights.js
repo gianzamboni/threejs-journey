@@ -136,6 +136,10 @@ class CustomLight {
     this.lightSettingFolder.add(this, 'on').name('On/Off').onChange(() => {
       this.light.visible = this.on;
       this.lightControls.forEach(control => {
+        if(this.helper) {
+          this.helper.visible = this.on;
+        }
+        
         if(this.on === false) {
          control.disable();
         } else {
