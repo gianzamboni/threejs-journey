@@ -13,51 +13,39 @@ export class MaterialExercise {
   constructor(view) {
     this.view = view;
     this.scene = new THREE.Scene();
-    this.view.toggleOrbitControls(true);
-
-    this.view.setCamera({
-      position: { x: 2, y: 1, z: 3 },
-      lookAt: { x: 0, y: 0, z: 0 }
-    });
-
     this.clock = new THREE.Clock();
-
     this.gui = new GUI();
-    
     this.physicalMaterial = this.createMaterial();
-    this.addGuiTweaks();
-
     this.geometries = [
       new THREE.SphereGeometry(0.5, 64, 64),
      new THREE.PlaneGeometry(1, 1, 100, 100),
      new THREE.TorusGeometry(0.3, 0.2, 64, 128)
     ]
-    
     this.meshes = this.geometries.map(geometry => new THREE.Mesh(geometry, this.physicalMaterial));
-    this.meshes.forEach((mesh, index) => {
-      mesh.position.x = index * 1.5 - 1.5;
-      this.scene.add(mesh)
-    });
-
-    this.animationLoop = new AnimationLoop(() => this.animationFrame());
-
   }
 
   async init() {
     this.envMap = await this.loadEnvironmentMap();
-    this.animationLoop.start();
+    this.meshes.forEach((mesh, index) => {
+      mesh.position.x = index * 1.5 - 1.5;
+      this.scene.add(mesh)
+    });
+    this.view.toggleOrbitControls(true);
+    this.view.setCamera({
+      position: { x: 2, y: 1, z: 3 },
+      lookAt: { x: 0, y: 0, z: 0 }
+    });
+    this.view.setTick(() => this.animation());
     this.view.show(this.scene);
+    this.addGuiTweaks();
   }
   
-  animationFrame() {
+  animation() {
     const elapsedTime = this.clock.getElapsedTime();
-
     this.meshes.forEach(mesh => {
       mesh.rotation.x = -0.15 * elapsedTime;
       mesh.rotation.y = 0.1 * elapsedTime;
     });
-
-    this.view.render(this.scene);
   }
 
   async loadEnvironmentMap() {
@@ -89,22 +77,18 @@ export class MaterialExercise {
   }
 
   async dispose() {
-    await this.animationLoop.stop();
+    this.meshes.forEach(mesh => {
+      this.scene.remove(mesh);
+      mesh.geometry.dispose();
+    });
+    this.physicalMaterial.dispose();
+
     this.scene.background.dispose(); 
     this.scene.background = null;
 
     this.scene.environment.dispose();
     this.scene.environment = null;
-    
-    this.meshes.forEach(mesh => {
-      this.scene.remove(mesh);
-    });
 
-    this.meshes.forEach(mesh => {
-      dispose(mesh);
-    });
-
-    this.physicalMaterial.dispose();
     this.envMap.dispose();
     this.gui.destroy();
   }

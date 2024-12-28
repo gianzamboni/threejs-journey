@@ -39,6 +39,7 @@ class CustomLight {
     }
 
     this.helper = null;
+
     switch (type) {
       case "DirectionalLight":
         this.helper = new THREE.DirectionalLightHelper(this.light, 0.2);
@@ -213,7 +214,6 @@ export class LightsExercise {
     this.view = view;
     this.gui = new GUI();
     this.scene = new THREE.Scene();
-    this.animation = new AnimationLoop(() => this.animationFrame());
     this.clock = new THREE.Clock();
     this.lights = [
       new CustomLight("AmbientLight", {
@@ -295,7 +295,7 @@ export class LightsExercise {
       }
     });
     this.view.show(this.scene);
-    this.animation.start();
+    this.view.setTick(() => this.animationFrame());
 
   }
 
@@ -310,13 +310,10 @@ export class LightsExercise {
     this.objects.forEach(object => {
       object.rotation.y = 0.1 * elapsedTime;
       object.rotation.x = 0.15 * elapsedTime;
-    });
-    
-    this.view.render(this.scene);
+    });    
   };
 
   async dispose() {
-    await this.animation.stop();
     this.scene.remove(this.plane);
     this.plane.geometry.dispose();
     this.objects.forEach(object => {

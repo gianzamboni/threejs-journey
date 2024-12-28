@@ -7,34 +7,33 @@ import { dispose } from '../../utils/dispose';
 export class DebugUI {
   constructor(view) {
     this.view = view;
-
     this.debugOject = {
       color: '#a778d8',
       spin: this.spin.bind(this),
       subdivision: 2
     }
-
-    this.view.toggleOrbitControls(true);
-    
-    this.createScene();
-
-    this.animationLoop = new AnimationLoop(() => this.animate());
-
     this.gui = new GUI({
       width: 300,
       title: 'Nice debug UI',
       closeFolders: false
     })
-
-    this.addGuiTweaks();
-  }
-
-  createScene() {
     this.scene = new THREE.Scene();
     this.geometry = new THREE.BoxGeometry(1, 1, 1)
     this.material = new THREE.MeshBasicMaterial({ color: this.debugOject.color, wireframe: true })
     this.mesh = new THREE.Mesh(this.geometry, this.material)
+  }
+  
+  init() {
     this.scene.add(this.mesh)
+    this.addGuiTweaks();
+    this.view.toggleOrbitControls(true);
+    this.view.show(this.scene);
+  }
+
+  async dispose() {
+    this.gui.destroy();
+    this.scene.remove(this.mesh);
+    dispose(this.mesh);
   }
 
   spin() {
@@ -55,21 +54,4 @@ export class DebugUI {
       this.mesh.geometry = new THREE.BoxGeometry(1, 1, 1, this.debugOject.subdivision, this.debugOject.subdivision, this.debugOject.subdivision)
     });
   }
-
-  init() {
-    this.animationLoop.start();
-    this.view.show(this.scene);
-  }
-  
-  animate() {
-    this.view.render(this.scene)
-  }
-
-  async dispose() {
-    await this.animationLoop.stop();
-    this.gui.destroy();
-    this.scene.remove(this.mesh);
-    dispose(this.mesh);
-  }
-
 }

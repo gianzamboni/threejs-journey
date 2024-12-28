@@ -6,11 +6,11 @@ export class CenteredCube {
     this.view = view;
     this.cube = new RedCube();
     this.scene = new THREE.Scene();
-    this.cube.addTo(this.scene);
   }
 
   init() {
-   this.view.show(this.scene);
+    this.cube.addTo(this.scene);
+    this.view.show(this.scene);
   }
 
   dispose() {

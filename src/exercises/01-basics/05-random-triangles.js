@@ -6,11 +6,24 @@ export class RandomTriangles {
   constructor(view) {
     this.scene = new THREE.Scene();
     this.view = view;
+    this.geometry = this.generateTriangleGeometry();
+    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+  }
+
+  init() {
     this.view.toggleOrbitControls(true);
-    this.animationLoop = new AnimationLoop(() => this.animation())
+    this.scene.add(this.mesh);
+    this.view.show(this.scene);
+  }
+  
+  async dispose() {
+    this.scene.remove(this.mesh);
+    dispose(this.mesh);
+  }
 
-    this.geometry = new THREE.BufferGeometry();
-
+  generateTriangleGeometry() {
+    const geometry = new THREE.BufferGeometry();
     const count = 50;
     const positionsArray = new Float32Array(count * 3 * 3);
     for (let i = 0; i < count * 3 * 3; i++) {
@@ -18,25 +31,7 @@ export class RandomTriangles {
     }
 
     const bufferAtrribute = new THREE.BufferAttribute(positionsArray, 3);
-    this.geometry.setAttribute('position', bufferAtrribute);
-
-    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.scene.add(this.mesh);
-  }
-
-  init() {
-    this.view.show(this.scene);
-    this.animationLoop.start();
-  }
-  
-  animation() {
-    this.view.render(this.scene);
-  }
-
-  async dispose() {
-    await this.animationLoop.stop();
-    this.scene.remove(this.mesh);
-    dispose(this.mesh);
+    geometry.setAttribute('position', bufferAtrribute)
+    return geometry;
   }
 }
