@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { AnimationLoop } from '../../utils/animation-loop';
 import { dispose } from '../../utils/dispose';
 
 export class RandomTriangles {

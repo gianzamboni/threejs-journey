@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { AnimationLoop } from '../../utils/animation-loop';
 import { textureLoader } from '../../utils/loading-manager';
 import { dispose } from '../../utils/dispose';
 export class TextureExercise {
