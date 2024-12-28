@@ -43,7 +43,7 @@ export class DebugUI {
 
   addGuiTweaks() {
     const cubeTweaks = this.gui.addFolder('Awesome cube')
-    cubeTweaks.add(this.mesh.position, 'y').min(- 3).max(3).step(0.01).name('elevation');
+    cubeTweaks.add(this.mesh.position, 'y').min(- 3).max(3).step(0.01).name('Elevation');
     cubeTweaks.add(this.mesh, 'visible');
     cubeTweaks.add(this.material, 'wireframe');
     cubeTweaks.addColor(this.debugOject, 'color').onChange(() => {

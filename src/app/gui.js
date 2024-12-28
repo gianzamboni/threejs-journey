@@ -40,7 +40,7 @@ export class Menu {
     }
 
     li.onclick = () => {
-      this.activeItem?.menuLiItem.classList.remove("active");
+      this.activeItem.menuLiItem.classList.remove("active");
       this.actionOnClick(exercise);
       li.classList.add("active");
       this.activeItem = exercise;

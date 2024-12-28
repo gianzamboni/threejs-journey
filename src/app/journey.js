@@ -7,11 +7,12 @@ import { DebugUI } from '../exercises/01-basics/06-debug-ui.js';
 import { TextureExercise } from '../exercises/01-basics/07-textures.js';
 import { MaterialExercise } from '../exercises/01-basics/08-materials.js';
 import { Text3D } from '../exercises/01-basics/09-text.js';
+import { LightsExercise } from '../exercises/02-classic-techniques/01-lights.js';
 
 const journey = [
   {
     id: '01-basics',
-    title: "01 - Basics",
+    title: "Basics",
     exercises: [
       {
         id: 'first-threejs-project',
@@ -53,9 +54,16 @@ const journey = [
       }
     ]
   },
-  // {
-  //   title: "02 - Classic""//  Techniques",
-  // },
+  {
+    title: "Classic Techniques",
+    exercises: [
+      {
+        id: 'lights',
+        title: "Lights",
+        class: LightsExercise
+      },
+    ]
+  },
   // {
   //   title: "03 - Advanced Techniques",
   // },

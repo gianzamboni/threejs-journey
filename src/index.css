@@ -59,15 +59,3 @@ ul {
 	font-size: 1.25em;
 	font-weight: bold;
 }
-
-.lil-gui {
-	--background-color: #fff;
-	--text-color: #000;
-	--title-background-color: #fff;
-	--title-text-color: #000;
-	--widget-color: #ddd;
-	--hover-color: #ccc;
-	--focus-color: #bbb;
-	--number-color: #000;
-	--string-color: #000;
-}
