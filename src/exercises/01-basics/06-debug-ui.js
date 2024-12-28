@@ -44,13 +44,13 @@ export class DebugUI {
   addGuiTweaks() {
     const cubeTweaks = this.gui.addFolder('Awesome cube')
     cubeTweaks.add(this.mesh.position, 'y').min(- 3).max(3).step(0.01).name('Elevation');
-    cubeTweaks.add(this.mesh, 'Visible');
-    cubeTweaks.add(this.material, 'Wireframe');
-    cubeTweaks.addColor(this.debugOject, 'Color').onChange(() => {
+    cubeTweaks.add(this.mesh, 'visible');
+    cubeTweaks.add(this.material, 'wireframe');
+    cubeTweaks.addColor(this.debugOject, 'color').onChange(() => {
       this.material.color.set(this.debugOject.color)
     });
-    cubeTweaks.add(this.debugOject, 'Spin');
-    cubeTweaks.add(this.debugOject, 'Subdivision').min(1).max(20).step(1).onFinishChange(() => {
+    cubeTweaks.add(this.debugOject, 'spin');
+    cubeTweaks.add(this.debugOject, 'subdivision').min(1).max(20).step(1).onFinishChange(() => {
       this.mesh.geometry.dispose()
       this.mesh.geometry = new THREE.BoxGeometry(1, 1, 1, this.debugOject.subdivision, this.debugOject.subdivision, this.debugOject.subdivision)
     });

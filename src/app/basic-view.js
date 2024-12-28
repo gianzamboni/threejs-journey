@@ -33,7 +33,7 @@ export class BasicView {
 
     window.addEventListener('resize', () => {
       this.setSize();
-      this.renderer.render(this.activeExercise.scene, this.camera);
+      this.renderer.render(this.activeExercise.instance.scene, this.camera);
     });
 
   }
