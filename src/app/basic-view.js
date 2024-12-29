@@ -78,11 +78,17 @@ export class BasicView {
     this.camera.lookAt(0, 0, 0);
   }
 
+  enableShadows() {
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  }
+
   async run(exercise) {
     if(this.tick || this.orbitControls.enablePan) {
       await this.animationLoop.stop();
     }
     this.toggleOrbitControls(false);
+    this.renderer.shadowMap.enabled = false;
     this.tick = null;
     if(this.activeExercise.instance) {
       await this.activeExercise.instance.dispose();

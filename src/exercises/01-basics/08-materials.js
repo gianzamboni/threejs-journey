@@ -1,8 +1,6 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { AnimationLoop } from '../../utils/animation-loop';
-import { dispose } from '../../utils/dispose';
 
 /*
   This exercise has some issues:

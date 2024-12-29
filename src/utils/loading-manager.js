@@ -14,5 +14,5 @@ loadingManager.onError = (url) => {
   console.error(`Error loading: ${url}`);
 };
 
-export const textureLoader = new THREE.TextureLoader(loadingManager);
+export const TEXTURE_LOADER = new THREE.TextureLoader(loadingManager);
 

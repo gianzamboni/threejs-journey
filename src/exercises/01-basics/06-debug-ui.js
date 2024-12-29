@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 import GUI from 'lil-gui'
-import { AnimationLoop } from '../../utils/animation-loop'
 import { dispose } from '../../utils/dispose';
 
 export class DebugUI {
