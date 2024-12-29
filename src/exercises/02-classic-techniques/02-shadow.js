@@ -19,10 +19,22 @@ export class ShadowExercise {
       }, {
         position: { x: 2, y: 2, z: -1 },
       }),
+      spot: new CustomizableLight('SpotLight', {
+        color: "#0000ff",
+        intensity: 3.6,
+        distance: 10,
+        angle: Math.PI * 0.3
+      }, {
+        position: { x: 0, y: 2, z: 2 },
+      }),
+      point: new CustomizableLight('PointLight', {
+        color: "#ff0000",
+        intensity: 2.7
+      }, {
+        position: { x: -1, y: 1, z: 0 }
+      }),
     };
 
-    this.spotLight = new THREE.SpotLight(0x0000ff, 3.6, 10, Math.PI * 0.3);
-    this.pointLight = new THREE.PointLight(0x0ff000, 2.7);
     this.material = new THREE.MeshStandardMaterial();
 
     this.sphere = new THREE.Mesh(
@@ -34,6 +46,7 @@ export class ShadowExercise {
       new THREE.PlaneGeometry(5, 5),
       this.material
     );
+
   }
   
   init() {
@@ -42,35 +55,26 @@ export class ShadowExercise {
       light.addControls(this.gui);
     });
 
-    this.spotLight.position.set(0, 2, 2);
-    this.pointLight.position.set(-1, 1, 0);
     
-    ["directional", ].forEach((lightType) => {
+    ["directional", "spot", "point" ].forEach((lightType) => {
       this.lights[lightType].enableShadows();
     });
     
-    [this.spotLight].forEach((light) => {
-      light.castShadow = true;
-      light.shadow.mapSize.width = 1024;
-      light.shadow.mapSize.height = 1024;
-      light.shadow.camera.near = 1;
-      light.shadow.camera.far = 6;
-      //this.directionalLight.shadow.radius = 10;
-    });
-    
-    this.lights.directional.shadow.camera.top = 2;
-    this.lights.directional.shadow.camera.right = 2;
-    this.lights.directional.shadow.camera.bottom = -2;
-    this.lights.directional.shadow.camera.left = -2;
+    const directionalShadowCamera = this.lights.directional.shadow.camera;
+    directionalShadowCamera.top = 2;
+    directionalShadowCamera.right = 2;
+    directionalShadowCamera.bottom = -2;
+    directionalShadowCamera.left = -2;
 
-    this.directionalCameraHelper = new THREE.CameraHelper(this.lights.directional.shadow.camera);
+    this.directionalCameraHelper = new THREE.CameraHelper(directionalShadowCamera);
     this.directionalCameraHelper.visible = false;
 
-    this.spotLightCameraHelper = new THREE.CameraHelper(this.spotLight.shadow.camera);
+    this.spotLightCameraHelper = new THREE.CameraHelper(this.lights.spot.shadow.camera);
     this.spotLightCameraHelper.visible = false;
 
-    this.addLightControls();
-
+    this.pointLightCameraHelper = new THREE.CameraHelper(this.lights.point.shadow.camera);
+    this.pointLightCameraHelper.visible = false;
+  
     this.material.roughness = 0.7;
     this.addMaterialControls();
 
@@ -81,11 +85,9 @@ export class ShadowExercise {
     this.plane.receiveShadow = true;
 
     this.scene.add(
-      this.spotLight,
-      this.spotLight.target,
       this.directionalCameraHelper,
       this.spotLightCameraHelper,
-      this.pointLight,
+      this.pointLightCameraHelper,
       this.sphere, 
       this.plane
     );
@@ -96,8 +98,16 @@ export class ShadowExercise {
     });
 
     this.view.enableShadows()
+      
     this.view.toggleOrbitControls(true);
     this.view.show(this.scene);
+    this.view.setTick(() => this.animation());
+  }
+
+  animation() {
+    Object.values(this.lights).forEach((light) => {
+      light.update();
+    });
   }
 
   dispose() {
@@ -111,13 +121,9 @@ export class ShadowExercise {
       object.geometry.dispose();
     });
     this.material.dispose();
+    
     this.directionalCameraHelper.dispose();
     this.spotLightCameraHelper.dispose();
-    this.pointLight.dispose();
-    [this.spotLight].forEach((light) => { 
-      this.scene.remove(light);
-      light.dispose();
-    });
   }
 
   addMaterialControls() {
@@ -127,27 +133,6 @@ export class ShadowExercise {
         .min(0)
         .max(1)
         .step(0.001);
-    });
-  }
-
-  addLightControls() {
-    [this.spotLight, this.pointLight].forEach((light) => {
-      const folder = this.gui.addFolder(light.type);
-      folder.add(light, 'intensity')
-        .min(0)
-        .max(3)
-        .step(0.001);
-
-      if (light.type === 'SpotLight' || light.type === 'PointLight') {
-        const positionFolder = folder.addFolder('Position');
-        
-        ['x', 'y', 'z'].forEach((axis) => {
-          positionFolder.add(light.position, axis)
-            .min(-5)
-            .max(5)
-            .step(0.001);
-        });
-      }
     });
   }
 }

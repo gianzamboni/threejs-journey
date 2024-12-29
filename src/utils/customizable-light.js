@@ -4,7 +4,7 @@ import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHel
 const MIN_MAX = {
   angle: { min: 0, max: Math.PI / 2, step: 0.01 },
   decay: { min: 0, max: 2, step: 0.01 },
-  distance: { min: 0, max: 1, step: 0.001 },
+  distance: { min: 0, max: 10, step: 0.001 },
   height: { min: 0, max: 1, step: 0.01 },
   intensity: { min: 0, max: 6, step: 0.01 },
   penumbra: { min: 0, max: 1, step: 0.01 },
@@ -146,6 +146,10 @@ export class CustomizableLight {
           control.enable();
         }
       });
+
+      if(this.helper) {
+        this.helper.visible = this.on && this.showLightHelper;
+      }
     });
     
     if(this.helper) {

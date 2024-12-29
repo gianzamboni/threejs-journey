@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { textureLoader } from '../../utils/loading-manager';
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { dispose } from '../../utils/dispose';
 export class TextureExercise {
   constructor(view) {
@@ -22,7 +22,7 @@ export class TextureExercise {
   }
 
   loadMinecrafTexture() {
-    const colorTexture = textureLoader.load('/textures/minecraft.png');
+    const colorTexture = TEXTURE_LOADER.load('/textures/minecraft.png');
     colorTexture.colorSpace = THREE.SRGBColorSpace;
     colorTexture.wrapS = THREE.RepeatWrapping;
     colorTexture.wrapT = THREE.RepeatWrapping;

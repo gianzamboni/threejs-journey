@@ -1,14 +1,13 @@
 import * as THREE from 'three';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { textureLoader } from '../../utils/loading-manager';
-import { AnimationLoop } from '../../utils/animation-loop';
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
 
 export class Text3D {
   constructor(view) {
     this.view = view;
     this.scene = new THREE.Scene();
-    this.matcapTexture = textureLoader.load('/textures/matcaps/8.png');
+    this.matcapTexture = TEXTURE_LOADER.load('/textures/matcaps/8.png');
     this.matcapTexture.colorSpace = THREE.SRGBColorSpace;
     this.material = new THREE.MeshMatcapMaterial({ matcap: this.matcapTexture });
     this.donuts = [];

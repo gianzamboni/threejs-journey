@@ -9,6 +9,7 @@ import { MaterialExercise } from '../exercises/01-basics/08-materials.js';
 import { Text3D } from '../exercises/01-basics/09-text.js';
 import { LightsExercise } from '../exercises/02-classic-techniques/01-lights.js';
 import { ShadowExercise } from '../exercises/02-classic-techniques/02-shadow.js';
+import { BakedShadow } from '../exercises/02-classic-techniques/03-baked-shadow.js';
 
 const journey = [
   {
@@ -64,8 +65,12 @@ const journey = [
         class: LightsExercise
       }, {
         id: 'shadows',
-        title: "Shadows",
+        title: "Dynamic Shadows",
         class: ShadowExercise
+      }, {
+        id: 'baked-shadows',
+        title: "Baked Shadows",
+        class: BakedShadow
       }
     ]
   },
