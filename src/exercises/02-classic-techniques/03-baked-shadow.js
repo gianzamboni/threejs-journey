@@ -7,6 +7,7 @@ export class BakedShadow {
     this.view = view;
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
+    this.timer = new Timer
     this.lights = {
       ambient: new THREE.AmbientLight(0xffffff, 1),
       directional: new THREE.DirectionalLight(0xffffff, 1.5),

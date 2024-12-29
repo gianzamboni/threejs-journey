@@ -10,6 +10,7 @@ import { Text3D } from '../exercises/01-basics/09-text.js';
 import { LightsExercise } from '../exercises/02-classic-techniques/01-lights.js';
 import { ShadowExercise } from '../exercises/02-classic-techniques/02-shadow.js';
 import { BakedShadow } from '../exercises/02-classic-techniques/03-baked-shadow.js';
+import { HauntedHouse } from '../exercises/02-classic-techniques/04-haunted-house.js';
 
 const journey = [
   {
@@ -71,6 +72,10 @@ const journey = [
         id: 'baked-shadows',
         title: "Baked Shadows",
         class: BakedShadow
+      }, {
+        id: 'haunted-house',
+        title: "Haunted House",
+        class: HauntedHouse
       }
     ]
   },
