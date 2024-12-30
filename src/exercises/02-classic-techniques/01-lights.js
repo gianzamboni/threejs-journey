@@ -108,6 +108,7 @@ export class LightsExercise {
   };
 
   async dispose() {
+    this.clock.stop();
     this.scene.remove(this.plane);
     this.plane.geometry.dispose();
     this.objects.forEach(object => {

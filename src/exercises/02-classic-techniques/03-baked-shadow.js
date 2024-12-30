@@ -7,7 +7,6 @@ export class BakedShadow {
     this.view = view;
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
-    this.timer = new Timer
     this.lights = {
       ambient: new THREE.AmbientLight(0xffffff, 1),
       directional: new THREE.DirectionalLight(0xffffff, 1.5),
@@ -27,7 +26,7 @@ export class BakedShadow {
       this.material
     );
 
-    this.simpleBakedShadow = TEXTURE_LOADER.load('/textures/simpleShadow.jpg'); 
+    this.simpleBakedShadow = TEXTURE_LOADER.load('/textures/bakedShadows/simpleShadow.jpg'); 
     this.sphereShadow = new THREE.Mesh(
       new THREE.PlaneGeometry(1.5, 1.5),
       new THREE.MeshBasicMaterial({ 
@@ -65,6 +64,7 @@ export class BakedShadow {
   }
 
   dispose() {
+    this.clock.stop();
     [this.sphere, this.plane, this.sphereShadow].forEach((mesh) => {
       this.scene.remove(mesh);
       mesh.geometry.dispose();

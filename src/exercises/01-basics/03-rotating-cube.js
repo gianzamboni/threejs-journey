@@ -22,6 +22,7 @@ export class RotatingCube extends CenteredCube {
   }
 
   async dispose() {
+    this.clock.stop();
     super.dispose();
   }
 }

@@ -22,7 +22,7 @@ export class TextureExercise {
   }
 
   loadMinecrafTexture() {
-    const colorTexture = TEXTURE_LOADER.load('/textures/minecraft.png');
+    const colorTexture = TEXTURE_LOADER.load('/textures/minecraft/minecraft.png');
     colorTexture.colorSpace = THREE.SRGBColorSpace;
     colorTexture.wrapS = THREE.RepeatWrapping;
     colorTexture.wrapT = THREE.RepeatWrapping;
