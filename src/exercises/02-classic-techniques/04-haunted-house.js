@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
-
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
+import GUI from 'lil-gui';
 export class HauntedHouse {
   constructor(view) {
     this.view = view;
@@ -12,10 +13,38 @@ export class HauntedHouse {
 
     this.timer = new Timer();
 
-    this.material = new THREE.MeshStandardMaterial({ roughness: 0.7 })
+    this.material = new THREE.MeshStandardMaterial()
 
-    this.floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), this.material),
-          
+    this.floorTextures = {}
+    this.floorTextures.color = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_diff_4k.jpg');
+    this.floorTextures.arm = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_arm_4k.jpg');
+    this.floorTextures.normal = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_nor_gl_4k.jpg');
+    this.floorTextures.displacement = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_disp_4k.jpg');
+
+    Object.values(this.floorTextures).forEach(texture => {
+      texture.repeat.set(4,4);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+    });
+
+    this.floorTextures.alpha = TEXTURE_LOADER.load('/textures/floor/alpha.jpg');
+    this.floorTextures.color.colorSpace = THREE.SRGBColorSpace;
+
+    this.floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 20, 1000, 1000), 
+      new THREE.MeshStandardMaterial({
+        transparent: true,
+        alphaMap: this.floorTextures.alpha,
+        map: this.floorTextures.color,
+        aoMap: this.floorTextures.arm,
+        roughnessMap: this.floorTextures.arm,
+        metalnessMap: this.floorTextures.arm,
+        normalMap: this.floorTextures.normal,
+        displacementMap: this.floorTextures.displacement,
+        displacementScale: 0.1,
+      })
+    );
+    
     this.house = {
       walls: new THREE.Mesh(new THREE.BoxGeometry(4, 2.5, 4), this.material),
       roof: new THREE.Mesh(new THREE.ConeGeometry(3.5, 1.5, 4), this.material),
@@ -87,12 +116,16 @@ export class HauntedHouse {
   }
 
   dispose() {
+    this.timer.dispose();
     Object.values(this.lights).forEach(light => this.scene.remove(light));
     this.scene.remove(this.houseGroup, this.floor, ...this.bushes, this.gravesGroup);
     this.graveGeometry.dispose();
     this.bushGeometry.dispose();
     this.houseGroup.clear();
-    [this.floor, ...Object.values(this.house)].forEach(mesh => mesh.geometry.dispose());
-    this.material.dispose();
+    [this.floor, ...Object.values(this.house)].forEach(mesh => {
+      mesh.geometry.dispose()
+      mesh.material.dispose();
+    });
+    this.floorAlphaTexture.dispose();
   }
 }
