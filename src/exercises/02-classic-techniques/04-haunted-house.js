@@ -1,7 +1,171 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
-import GUI from 'lil-gui';
+import { screenResolutionName } from '../../utils/utils';
+
+const textureMaps = {
+  color: 'diff',
+  normal: 'nor_gl',
+  displacement: 'disp',
+  arm: 'arm',
+}
+
+function loadTexturesMaps(filePrefix, mapTypes) {
+  const resolution = screenResolutionName();
+  const textures = {};
+  mapTypes.forEach(mapType => {
+    textures[mapType] = TEXTURE_LOADER.load(`/textures/${filePrefix}_${textureMaps[mapType]}_${resolution}.jpg`);
+  });
+
+  textures.color.colorSpace = THREE.SRGBColorSpace;
+
+  return textures;
+}
+class SceneObject {
+  addTo(scene) {
+    scene.add(this.mesh);
+  }
+
+  removeFrom(scene) {
+    scene.remove(this.mesh);
+  }
+
+  dispose() {
+    this.geometry.dispose();
+    this.material.dispose();
+    Object.values(this.textures).forEach(texture => texture.dispose());
+  }
+}
+
+class Floor extends SceneObject {
+  constructor() {
+    super();
+    this.geometry = new THREE.PlaneGeometry(20, 20, 1000, 1000);
+    this.textures = this.loadTextures();
+    this.material = this.generateMaterial();
+    
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+    this.mesh.rotation.x = - Math.PI * 0.5;
+  }
+
+  generateMaterial() {
+    return new THREE.MeshStandardMaterial({
+      transparent: true,
+      alphaMap: this.textures.alpha,
+      map: this.textures.color,
+      aoMap: this.textures.arm,
+      roughnessMap: this.textures.arm,
+      metalnessMap: this.textures.arm,
+      normalMap: this.textures.normal,
+      displacementMap: this.textures.displacement,
+      displacementScale: 0.1,
+    });
+  }
+
+  loadTextures() {
+    const textures = loadTexturesMaps('floor/stony_dirt_path', 
+      ['color', 'normal', 'displacement', 'arm']
+    );
+    
+    ['color', 'arm', 'normal', 'displacement'].forEach(key => {
+      textures[key].repeat.set(4, 4);
+      textures[key].wrapS = THREE.RepeatWrapping;
+      textures[key].wrapT = THREE.RepeatWrapping;
+    });
+
+    textures.alpha = TEXTURE_LOADER.load('/textures/floor/alpha.jpg');
+
+    return textures;
+  }
+}
+
+class Walls extends SceneObject{
+  constructor() {
+    super();
+    this.geometry = new THREE.BoxGeometry(4, 2.5, 4, 1000, 1000);
+    this.textures = this.loadTextures();
+    this.material = this.generateMaterial();
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.position.y = 1.25;
+  }
+
+  generateMaterial() {
+    return new THREE.MeshStandardMaterial({
+      map: this.textures.color,
+      aoMap: this.textures.arm,
+      roughnessMap: this.textures.arm,
+      metalnessMap: this.textures.arm,
+      normalMap: this.textures.normal,
+    });
+  }
+
+  loadTextures() {
+    const textures = loadTexturesMaps('wood/castle_brick_broken_06', ['color', 'normal', 'arm']);
+    return textures;
+  }
+}
+
+class Roof extends SceneObject {
+  constructor() {
+    super();
+    this.geometry = new THREE.ConeGeometry(3.5, 1.5, 4);
+    this.textures = this.loadTextures();
+    this.material = this.generateMaterial();
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+    this.mesh.position.y = 2.5 + 0.75;
+    this.mesh.rotation.y = Math.PI * 0.25;
+  }
+
+  loadTextures() {
+    const textures = loadTexturesMaps('roof/roof_slates_02', ['color', 'normal', 'arm']);
+
+    ['color', 'normal', 'arm'].forEach(key => {
+      textures[key].repeat.set(3,1);
+      textures[key].wrapS = THREE.RepeatWrapping;
+      textures[key].wrapT = THREE.RepeatWrapping;
+    });
+    
+    textures.color.colorSpace = THREE.SRGBColorSpace;
+    return textures;
+  }
+
+  generateMaterial() {
+    return new THREE.MeshStandardMaterial({
+      map: this.textures.color,
+      aoMap: this.textures.arm,
+      roughnessMap: this.textures.arm,
+      metalnessMap: this.textures.arm,
+      normalMap: this.textures.normal,
+    });
+    
+  }
+};
+
+class House extends SceneObject {
+  constructor() {
+    super();
+    this.walls = new Walls();
+    this.roof = new Roof();
+    this.door = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material);
+
+    this.mesh = new THREE.Group();
+    [this.walls, this.roof].forEach(object => object.addTo(this.mesh));
+    this.mesh.add(this.door);
+    
+    this.door.position.y = 1;
+    this.door.position.z = 2 + 0.01;
+  }
+
+  dispose(scene) {
+    this.mesh.clear();
+    [this.walls, this.roof].forEach(object => object.dispose(scene));
+    this.door.geometry.dispose();
+    this.door.material.dispose();
+  }
+}
+
 export class HauntedHouse {
   constructor(view) {
     this.view = view;
@@ -13,48 +177,11 @@ export class HauntedHouse {
 
     this.timer = new Timer();
 
-    this.material = new THREE.MeshStandardMaterial()
-
-    this.floorTextures = {}
-    this.floorTextures.color = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_diff_4k.jpg');
-    this.floorTextures.arm = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_arm_4k.jpg');
-    this.floorTextures.normal = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_nor_gl_4k.jpg');
-    this.floorTextures.displacement = TEXTURE_LOADER.load('/textures/floor/stony_dirt_path_disp_4k.jpg');
-
-    Object.values(this.floorTextures).forEach(texture => {
-      texture.repeat.set(4,4);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-    });
-
-    this.floorTextures.alpha = TEXTURE_LOADER.load('/textures/floor/alpha.jpg');
-    this.floorTextures.color.colorSpace = THREE.SRGBColorSpace;
-
-    this.floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(20, 20, 1000, 1000), 
-      new THREE.MeshStandardMaterial({
-        transparent: true,
-        alphaMap: this.floorTextures.alpha,
-        map: this.floorTextures.color,
-        aoMap: this.floorTextures.arm,
-        roughnessMap: this.floorTextures.arm,
-        metalnessMap: this.floorTextures.arm,
-        normalMap: this.floorTextures.normal,
-        displacementMap: this.floorTextures.displacement,
-        displacementScale: 0.1,
-      })
-    );
-    
-    this.house = {
-      walls: new THREE.Mesh(new THREE.BoxGeometry(4, 2.5, 4), this.material),
-      roof: new THREE.Mesh(new THREE.ConeGeometry(3.5, 1.5, 4), this.material),
-      door: new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material),
-    }
-
-    this.houseGroup = new THREE.Group();
+    this.floor = new Floor();
+    this.house = new House();
 
     this.bushGeometry = new THREE.SphereGeometry(1, 16, 16);
-    this.bushes = Array.from({ length: 4 }, () => new THREE.Mesh(this.bushGeometry, this.material));
+    this.bushes = Array.from({ length: 4 }, () => new THREE.Mesh(this.bushGeometry));
 
     this.gravesGroup = new THREE.Group();
     this.graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2);
@@ -87,15 +214,6 @@ export class HauntedHouse {
     Object.values(this.lights).forEach(light => this.scene.add(light));
     this.lights.directional.position.set(3, 2, -8);
 
-
-    this.floor.rotation.x = - Math.PI * 0.5;
-    Object.values(this.house).forEach(mesh => this.houseGroup.add(mesh));
-    this.house.walls.position.y = 1.25;    
-    this.house.roof.position.y = 2.5 + 0.75;
-    this.house.roof.rotation.y = Math.PI * 0.25;
-    this.house.door.position.y = 1;
-    this.house.door.position.z = 2 + 0.01;
-
     this.bushes[0].scale.set(0.5, 0.5, 0.5);
     this.bushes[0].position.set(0.8, 0.2, 2.2);
     this.bushes[1].scale.set(0.25, 0.25, 0.25);
@@ -105,7 +223,8 @@ export class HauntedHouse {
     this.bushes[3].scale.set(0.15, 0.15, 0.15);
     this.bushes[3].position.set(-1, 0.05, 2.6);
 
-    [this.floor, this.houseGroup, ...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
+    [this.floor, this.house].forEach(mesh => mesh.addTo(this.scene));
+    [...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
     this.view.toggleOrbitControls();
     this.view.show(this.scene);
   }
@@ -118,14 +237,12 @@ export class HauntedHouse {
   dispose() {
     this.timer.dispose();
     Object.values(this.lights).forEach(light => this.scene.remove(light));
-    this.scene.remove(this.houseGroup, this.floor, ...this.bushes, this.gravesGroup);
+    [this.floor, this.house].forEach(object => {
+      object.removeFrom(this.scene);
+      object.dispose();
+    });
+    this.scene.remove(...this.bushes, this.gravesGroup);
     this.graveGeometry.dispose();
     this.bushGeometry.dispose();
-    this.houseGroup.clear();
-    [this.floor, ...Object.values(this.house)].forEach(mesh => {
-      mesh.geometry.dispose()
-      mesh.material.dispose();
-    });
-    this.floorAlphaTexture.dispose();
   }
 }

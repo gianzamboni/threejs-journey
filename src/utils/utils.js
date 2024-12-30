@@ -10,8 +10,8 @@ export function nearestPowerOfTwo(x) {
 
 export function screenResolution() {
   return {
-    width: window.screen.height * window.devicePixelRatio,
-    height: window.screen.width * window.devicePixelRatio,
+    width: window.screen.width * window.devicePixelRatio,
+    height: window.screen.height * window.devicePixelRatio,
   };
 }
 
