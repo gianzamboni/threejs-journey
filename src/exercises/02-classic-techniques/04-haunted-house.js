@@ -12,16 +12,41 @@ export class HauntedHouse {
 
     this.timer = new Timer();
 
-    this.materials = {
-      standard: new THREE.MeshStandardMaterial({ roughness: 0.7 })
+    this.material = new THREE.MeshStandardMaterial({ roughness: 0.7 })
+
+    this.floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), this.material),
+          
+    this.house = {
+      walls: new THREE.Mesh(new THREE.BoxGeometry(4, 2.5, 4), this.material),
+      roof: new THREE.Mesh(new THREE.ConeGeometry(3.5, 1.5, 4), this.material),
+      door: new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material),
     }
 
-    this.meshes = {
-      floor: new THREE.Mesh(
-          new THREE.PlaneGeometry(10, 10),
-          this.materials.standard
-      ),
+    this.houseGroup = new THREE.Group();
+
+    this.bushGeometry = new THREE.SphereGeometry(1, 16, 16);
+    this.bushes = Array.from({ length: 4 }, () => new THREE.Mesh(this.bushGeometry, this.material));
+
+    this.gravesGroup = new THREE.Group();
+    this.graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2);
+
+    for(let i = 0; i < 30; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 3 + Math.random() * 4;
+ 
+      const grave = new THREE.Mesh(this.graveGeometry, this.material);
+      this.gravesGroup.add(grave);
+
+      grave.position.x = Math.sin(angle) * radius;
+      grave.position.z = Math.cos(angle) * radius;
+      grave.position.y = Math.random() * 0.4;
+
+      ['x', 'y', 'z'].forEach(axis => {
+        grave.rotation[axis] = (Math.random() - 0.5)*0.4;
+      });      
+
     }
+    
   }
 
   init() {
@@ -30,15 +55,28 @@ export class HauntedHouse {
       lookAt: { x: 0, y: 0, z: 0 }
     })
     
-    this.meshes.floor.rotation.x = - Math.PI * 0.5;
+    Object.values(this.lights).forEach(light => this.scene.add(light));
     this.lights.directional.position.set(3, 2, -8);
 
-    Object.values(this.lights).forEach(light => this.scene.add(light));
 
-    Object.values(this.meshes).forEach(mesh => {
-        this.scene.add(mesh);
-    });
+    this.floor.rotation.x = - Math.PI * 0.5;
+    Object.values(this.house).forEach(mesh => this.houseGroup.add(mesh));
+    this.house.walls.position.y = 1.25;    
+    this.house.roof.position.y = 2.5 + 0.75;
+    this.house.roof.rotation.y = Math.PI * 0.25;
+    this.house.door.position.y = 1;
+    this.house.door.position.z = 2 + 0.01;
 
+    this.bushes[0].scale.set(0.5, 0.5, 0.5);
+    this.bushes[0].position.set(0.8, 0.2, 2.2);
+    this.bushes[1].scale.set(0.25, 0.25, 0.25);
+    this.bushes[1].position.set(1.4, 0.1, 2.1);
+    this.bushes[2].scale.set(0.4, 0.4, 0.4);
+    this.bushes[2].position.set(-0.8, 0.1, 2.2);
+    this.bushes[3].scale.set(0.15, 0.15, 0.15);
+    this.bushes[3].position.set(-1, 0.05, 2.6);
+
+    [this.floor, this.houseGroup, ...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
     this.view.toggleOrbitControls();
     this.view.show(this.scene);
   }
@@ -49,11 +87,12 @@ export class HauntedHouse {
   }
 
   dispose() {
-    this.scene.remove(this.sphere);
-    Object.values(this.meshes).forEach(mesh => {
-      this.scene.remove(mesh);
-      mesh.geometry.dispose();
-    });
-    Object.values(this.materials).forEach(material => material.dispose());
+    Object.values(this.lights).forEach(light => this.scene.remove(light));
+    this.scene.remove(this.houseGroup, this.floor, ...this.bushes, this.gravesGroup);
+    this.graveGeometry.dispose();
+    this.bushGeometry.dispose();
+    this.houseGroup.clear();
+    [this.floor, ...Object.values(this.house)].forEach(mesh => mesh.geometry.dispose());
+    this.material.dispose();
   }
 }
