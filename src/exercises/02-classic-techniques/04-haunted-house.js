@@ -66,9 +66,7 @@ class Floor extends SceneObject {
   }
 
   loadTextures() {
-    const textures = loadTexturesMaps('floor/stony_dirt_path', 
-      ['color', 'normal', 'displacement', 'arm']
-    );
+    const textures = loadTexturesMaps('floor/stony_dirt_path', ['color', 'normal', 'displacement', 'arm']);
     
     ['color', 'arm', 'normal', 'displacement'].forEach(key => {
       textures[key].repeat.set(4, 4);
@@ -86,7 +84,7 @@ class Walls extends SceneObject{
   constructor() {
     super();
     this.geometry = new THREE.BoxGeometry(4, 2.5, 4, 1, 1);
-    this.textures = this.loadTextures();
+    this.textures = loadTexturesMaps('wood/castle_brick_broken_06', ['color', 'normal', 'arm']);
     this.material = this.generateMaterial();
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.y = 1.25;
@@ -100,11 +98,6 @@ class Walls extends SceneObject{
       metalnessMap: this.textures.arm,
       normalMap: this.textures.normal,
     });
-  }
-
-  loadTextures() {
-    const textures = loadTexturesMaps('wood/castle_brick_broken_06', ['color', 'normal', 'arm']);
-    return textures;
   }
 }
 
@@ -236,7 +229,7 @@ class Bushes extends SceneObject {
   constructor() {
     super();
     this.geometry = new THREE.SphereGeometry(1, 100, 100);
-    this.textures = this.loadTextures();
+    this.textures = loadTexturesMaps('bushes/scattered_leaves_008', ['color', 'normal', 'ao', 'displacement', 'roug']);
     this.material = this.generateMaterial();
     this.mesh = new THREE.Group();
 
@@ -262,12 +255,6 @@ class Bushes extends SceneObject {
 
   }
 
-  loadTextures() {
-    const textures = loadTexturesMaps('bushes/scattered_leaves_008', ['color', 'normal', 'ao', 'displacement', 'roug']);
-    textures.color.colorSpace = THREE.SRGBColorSpace;
-    return textures;
-  } 
-
   generateMaterial() {
     return new THREE.MeshStandardMaterial({
       color: "#ccffcc",
@@ -283,6 +270,53 @@ class Bushes extends SceneObject {
   }
 }
 
+export class Graves extends SceneObject {
+  constructor() {
+    super();
+    this.geometry = new THREE.BoxGeometry(0.6, 0.8, 0.2, 100, 100, 100);
+    this.textures = loadTexturesMaps('graves/plastered_stone_wall', ['color', 'normal', 'arm', 'displacement']);
+    this.material = this.generateMaterial();
+    this.mesh = new THREE.Group();
+    this.graves = [];
+
+    for(let i = 0; i < 30; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 3.5 + Math.random() * 3;
+ 
+      const grave = new THREE.Mesh(this.geometry, this.material);
+      this.graves.push(grave);
+      this.mesh.add(grave);
+
+      grave.position.x = Math.sin(angle) * radius;
+      grave.position.z = Math.cos(angle) * radius;
+      grave.position.y = Math.random() * 0.4;
+
+      ['x', 'y', 'z'].forEach(axis => {
+        grave.rotation[axis] = (Math.random() - 0.5)*0.4;
+      });      
+    }
+  }
+
+  loadTextures() {
+    const textures = loadTexturesMaps('graves/plastered_stone_wall', ['color', 'normal', 'arm', 'displacement']);
+    Object.values(textures).forEach(texture => {
+      texture.repeat.set(0.3, 0.4); 
+    });  
+  }
+
+  generateMaterial() {
+    return new THREE.MeshStandardMaterial({
+      map: this.textures.color,
+      aoMap: this.textures.arm,
+      roughnessMap: this.textures.arm,
+      metalnessMap: this.textures.arm,
+      normalMap: this.textures.normal,
+      displacementMap: this.textures.displacement,
+      displacementScale: 0.025,
+      displacementBias: -0.015,
+    });
+  }
+}
 export class HauntedHouse {
   constructor(view) {
     this.view = view;
@@ -298,28 +332,8 @@ export class HauntedHouse {
       new Floor(),
       new House(),
       new Bushes(),
+      new Graves(),
     ];
-
-    this.gravesGroup = new THREE.Group();
-    this.graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2);
-
-    for(let i = 0; i < 30; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 3.5 + Math.random() * 3;
- 
-      const grave = new THREE.Mesh(this.graveGeometry, this.material);
-      this.gravesGroup.add(grave);
-
-      grave.position.x = Math.sin(angle) * radius;
-      grave.position.z = Math.cos(angle) * radius;
-      grave.position.y = Math.random() * 0.4;
-
-      ['x', 'y', 'z'].forEach(axis => {
-        grave.rotation[axis] = (Math.random() - 0.5)*0.4;
-      });      
-
-    }
-    
   }
 
   init() {
@@ -332,10 +346,7 @@ export class HauntedHouse {
     this.lights.directional.position.set(3, 2, -8);
 
     this.children.forEach(mesh => mesh.addTo(this.scene));
-    [this.gravesGroup].forEach(mesh => this.scene.add(mesh));
 
-    this.axisHelper = new THREE.AxesHelper(50);
-    this.scene.add(this.axisHelper);
     this.view.toggleOrbitControls();
     this.view.show(this.scene);
   }
@@ -352,8 +363,5 @@ export class HauntedHouse {
       object.removeFrom(this.scene);
       object.dispose();
     });
-    this.scene.remove(...this.bushes, this.gravesGroup);
-    this.graveGeometry.dispose();
-    this.bushGeometry.dispose();
   }
 }
