@@ -195,12 +195,22 @@ class Roof extends SceneObject {
   }
 };
 
+class Door extends SceneObject {
+  constructor() {
+
+  }
+
+  dispose() {
+    
+  }
+}
 class House extends SceneObject {
   constructor() {
     super();
     this.children = [
-      new Walls(),
-      new Roof(),      
+     // new Walls(),
+     // new Roof(),
+     new Door(),
     ];
 
     this.door = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material);
@@ -233,7 +243,7 @@ export class HauntedHouse {
     this.timer = new Timer();
 
     this.children = [
-      new Floor(),
+      //new Floor(),
       new House(),
     ];
 
@@ -281,7 +291,7 @@ export class HauntedHouse {
     this.bushes[3].position.set(-1, 0.05, 2.6);
 
     this.children.forEach(mesh => mesh.addTo(this.scene));
-    [...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
+    //[...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
 
     this.axisHelper = new THREE.AxesHelper(50);
     this.scene.add(this.axisHelper);
