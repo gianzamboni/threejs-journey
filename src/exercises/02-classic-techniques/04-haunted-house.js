@@ -8,6 +8,8 @@ const textureMaps = {
   normal: 'nor_gl',
   displacement: 'disp',
   arm: 'arm',
+  roug: 'roughness',
+  ao: 'ao',
 }
 
 function loadTexturesMaps(filePrefix, mapTypes) {
@@ -18,7 +20,6 @@ function loadTexturesMaps(filePrefix, mapTypes) {
   });
 
   textures.color.colorSpace = THREE.SRGBColorSpace;
-
   return textures;
 }
 
@@ -208,9 +209,9 @@ class House extends SceneObject {
   constructor() {
     super();
     this.children = [
-     // new Walls(),
-     // new Roof(),
-     new Door(),
+     new Walls(),
+     new Roof(),
+     // new Door(),
     ];
 
     this.door = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material);
@@ -231,6 +232,57 @@ class House extends SceneObject {
   }
 }
 
+class Bushes extends SceneObject {
+  constructor() {
+    super();
+    this.geometry = new THREE.SphereGeometry(1, 100, 100);
+    this.textures = this.loadTextures();
+    this.material = this.generateMaterial();
+    this.mesh = new THREE.Group();
+
+    this.bushes = [];
+    for (let i = 0; i < 4; i++) {
+      const bush = new THREE.Mesh(this.geometry, this.material);
+      bush.rotation.x = -0.75;
+      this.bushes.push(bush);
+      this.mesh.add(bush);
+    }
+
+    this.bushes[0].scale.set(0.4, 0.4, 0.4);
+    this.bushes[0].position.set(0.8, 0.2, 2.2);
+
+    this.bushes[1].scale.set(0.15, 0.15, 0.15);
+    this.bushes[1].position.set(1.4, 0.1, 2.1);
+    
+    this.bushes[2].scale.set(0.3, 0.3, 0.3);
+    this.bushes[2].position.set(-0.8, 0.1, 2.2);
+    
+    this.bushes[3].scale.set(0.1, 0.1, 0.1);
+    this.bushes[3].position.set(-1, 0.05, 2.6);
+
+  }
+
+  loadTextures() {
+    const textures = loadTexturesMaps('bushes/scattered_leaves_008', ['color', 'normal', 'ao', 'displacement', 'roug']);
+    textures.color.colorSpace = THREE.SRGBColorSpace;
+    return textures;
+  } 
+
+  generateMaterial() {
+    return new THREE.MeshStandardMaterial({
+      color: "#ccffcc",
+      map: this.textures.color,
+      aoMap: this.textures.ao,
+      roughness: 2,
+      roughnessMap: this.textures.roug,
+      normalMap: this.textures.normal,
+      displacementMap: this.textures.displacement,
+      displacementScale: 0.5,
+      metalness: 0,
+    });
+  }
+}
+
 export class HauntedHouse {
   constructor(view) {
     this.view = view;
@@ -243,19 +295,17 @@ export class HauntedHouse {
     this.timer = new Timer();
 
     this.children = [
-      //new Floor(),
+      new Floor(),
       new House(),
+      new Bushes(),
     ];
-
-    this.bushGeometry = new THREE.SphereGeometry(1, 16, 16);
-    this.bushes = Array.from({ length: 4 }, () => new THREE.Mesh(this.bushGeometry));
 
     this.gravesGroup = new THREE.Group();
     this.graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2);
 
     for(let i = 0; i < 30; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 3 + Math.random() * 4;
+      const radius = 3.5 + Math.random() * 3;
  
       const grave = new THREE.Mesh(this.graveGeometry, this.material);
       this.gravesGroup.add(grave);
@@ -281,17 +331,8 @@ export class HauntedHouse {
     Object.values(this.lights).forEach(light => this.scene.add(light));
     this.lights.directional.position.set(3, 2, -8);
 
-    this.bushes[0].scale.set(0.5, 0.5, 0.5);
-    this.bushes[0].position.set(0.8, 0.2, 2.2);
-    this.bushes[1].scale.set(0.25, 0.25, 0.25);
-    this.bushes[1].position.set(1.4, 0.1, 2.1);
-    this.bushes[2].scale.set(0.4, 0.4, 0.4);
-    this.bushes[2].position.set(-0.8, 0.1, 2.2);
-    this.bushes[3].scale.set(0.15, 0.15, 0.15);
-    this.bushes[3].position.set(-1, 0.05, 2.6);
-
     this.children.forEach(mesh => mesh.addTo(this.scene));
-    //[...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
+    [this.gravesGroup].forEach(mesh => this.scene.add(mesh));
 
     this.axisHelper = new THREE.AxesHelper(50);
     this.scene.add(this.axisHelper);
