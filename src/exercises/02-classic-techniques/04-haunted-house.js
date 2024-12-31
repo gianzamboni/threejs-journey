@@ -21,6 +21,7 @@ function loadTexturesMaps(filePrefix, mapTypes) {
 
   return textures;
 }
+
 class SceneObject {
   addTo(scene) {
     scene.add(this.mesh);
@@ -83,7 +84,7 @@ class Floor extends SceneObject {
 class Walls extends SceneObject{
   constructor() {
     super();
-    this.geometry = new THREE.BoxGeometry(4, 2.5, 4, 1000, 1000);
+    this.geometry = new THREE.BoxGeometry(4, 2.5, 4, 1, 1);
     this.textures = this.loadTextures();
     this.material = this.generateMaterial();
     this.mesh = new THREE.Mesh(this.geometry, this.material);
@@ -109,13 +110,65 @@ class Walls extends SceneObject{
 class Roof extends SceneObject {
   constructor() {
     super();
-    this.geometry = new THREE.ConeGeometry(3.5, 1.5, 4);
+    this.geometry = this.generatePyramid();
+
     this.textures = this.loadTextures();
     this.material = this.generateMaterial();
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
-    this.mesh.position.y = 2.5 + 0.75;
+    this.mesh.position.y = 2.5;
     this.mesh.rotation.y = Math.PI * 0.25;
+  }
+
+  generatePyramid() {
+    const geometry = new THREE.BufferGeometry();
+    console.log(geometry.attributes)
+    const radius = 3.25;
+    const height = 1.5;
+
+    const vertices = new Float32Array(54);
+    const uvCoords = new Float32Array(36);
+
+    const point = [0, height, 0];
+    const basePoints = []
+    for(let i = 0; i < 4; i++) {
+      const angle = Math.PI * i * 0.5;
+      basePoints.push([Math.cos(angle)*radius, 0, Math.sin(angle)*radius]);
+
+    }
+
+    /* Caras laterales */
+    for(let i = 0; i < 4; i++) {
+      const index_v = i * 9; 
+      vertices.set(basePoints[i], index_v);
+      vertices.set(point, index_v + 3);
+      vertices.set(basePoints[(i + 1) % 4], index_v + 6);
+      const xDisplacement = Math.random() * 0.5;
+      const yDisplacement = Math.random() * 0.5;
+      uvCoords.set([
+        0 + xDisplacement, 
+        0 + yDisplacement, 
+        0.25 + xDisplacement, 
+        0.5 + yDisplacement, 
+        0.5 + xDisplacement, 
+        0 + yDisplacement], i * 6);
+    }
+
+    /* Base */
+    for(let i = 0; i < 2; i++) {
+      const index_v = 36 + i * 9;
+      vertices.set(basePoints[i*2], index_v);
+      vertices.set(basePoints[i*2 + 1], index_v + 3);
+      vertices.set(basePoints[(i*2 + 3) % 4], index_v + 6);
+      uvCoords.set([0, 0, 0.25, 0.5, 0.5, 0], 24 + i * 6);
+    }
+
+    const vbufferAtrribute = new THREE.BufferAttribute(vertices, 3);
+    const uvBufferAttribute = new THREE.BufferAttribute(uvCoords, 2);
+    geometry.setAttribute('position', vbufferAtrribute);
+    geometry.setAttribute('uv', uvBufferAttribute);
+
+    return geometry;
   }
 
   loadTextures() {
@@ -139,19 +192,21 @@ class Roof extends SceneObject {
       metalnessMap: this.textures.arm,
       normalMap: this.textures.normal,
     });
-    
   }
 };
 
 class House extends SceneObject {
   constructor() {
     super();
-    this.walls = new Walls();
-    this.roof = new Roof();
+    this.children = [
+      new Walls(),
+      new Roof(),      
+    ];
+
     this.door = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material);
 
     this.mesh = new THREE.Group();
-    [this.walls, this.roof].forEach(object => object.addTo(this.mesh));
+    this.children.forEach(object => object.addTo(this.mesh));
     this.mesh.add(this.door);
     
     this.door.position.y = 1;
@@ -160,7 +215,7 @@ class House extends SceneObject {
 
   dispose(scene) {
     this.mesh.clear();
-    [this.walls, this.roof].forEach(object => object.dispose(scene));
+    this.children.forEach(object => object.dispose(scene));
     this.door.geometry.dispose();
     this.door.material.dispose();
   }
@@ -177,8 +232,10 @@ export class HauntedHouse {
 
     this.timer = new Timer();
 
-    this.floor = new Floor();
-    this.house = new House();
+    this.children = [
+      new Floor(),
+      new House(),
+    ];
 
     this.bushGeometry = new THREE.SphereGeometry(1, 16, 16);
     this.bushes = Array.from({ length: 4 }, () => new THREE.Mesh(this.bushGeometry));
@@ -223,8 +280,11 @@ export class HauntedHouse {
     this.bushes[3].scale.set(0.15, 0.15, 0.15);
     this.bushes[3].position.set(-1, 0.05, 2.6);
 
-    [this.floor, this.house].forEach(mesh => mesh.addTo(this.scene));
+    this.children.forEach(mesh => mesh.addTo(this.scene));
     [...this.bushes, this.gravesGroup].forEach(mesh => this.scene.add(mesh));
+
+    this.axisHelper = new THREE.AxesHelper(50);
+    this.scene.add(this.axisHelper);
     this.view.toggleOrbitControls();
     this.view.show(this.scene);
   }
@@ -237,7 +297,7 @@ export class HauntedHouse {
   dispose() {
     this.timer.dispose();
     Object.values(this.lights).forEach(light => this.scene.remove(light));
-    [this.floor, this.house].forEach(object => {
+    this.children.forEach(object => {
       object.removeFrom(this.scene);
       object.dispose();
     });

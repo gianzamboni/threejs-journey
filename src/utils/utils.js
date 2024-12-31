@@ -17,7 +17,6 @@ export function screenResolution() {
 
 export function screenResolutionName() {
   const { width, height } = screenResolution();
-  console.log(width, height);
   if(width >= 3840 && height >= 2160) {
     return '4k';
   } else if(width >= 2560 && height >= 1440) {
