@@ -104,6 +104,8 @@ class Walls extends SceneObject{
 class Roof extends SceneObject {
   constructor() {
     super();
+    this.radius = 3.25;
+    this.height = 1.5;
     this.geometry = this.generatePyramid();
 
     this.textures = this.loadTextures();
@@ -116,26 +118,36 @@ class Roof extends SceneObject {
 
   generatePyramid() {
     const geometry = new THREE.BufferGeometry();
-    console.log(geometry.attributes)
-    const radius = 3.25;
-    const height = 1.5;
-
     const vertices = new Float32Array(54);
     const uvCoords = new Float32Array(36);
 
-    const point = [0, height, 0];
+    const [topPoint, basePoints] = this.generateVertices();
+    this.generateSideFaces(vertices, uvCoords, topPoint, basePoints);
+    this.generateBaseFaces(vertices, uvCoords, basePoints);
+
+    const vbufferAtrribute = new THREE.BufferAttribute(vertices, 3);
+    const uvBufferAttribute = new THREE.BufferAttribute(uvCoords, 2);
+    geometry.setAttribute('position', vbufferAtrribute);
+    geometry.setAttribute('uv', uvBufferAttribute);
+
+    return geometry;
+  }
+
+  generateVertices() {
+    const topPoint = [0, this.height, 0];
     const basePoints = []
     for(let i = 0; i < 4; i++) {
       const angle = Math.PI * i * 0.5;
-      basePoints.push([Math.cos(angle)*radius, 0, Math.sin(angle)*radius]);
-
+      basePoints.push([Math.cos(angle)*this.radius, 0, Math.sin(angle)*this.radius]);
     }
-
-    /* Caras laterales */
+    return [topPoint, basePoints];
+  }
+  
+  generateSideFaces(vertices, uvCoords, topPoint, basePoints) {
     for(let i = 0; i < 4; i++) {
       const index_v = i * 9; 
       vertices.set(basePoints[i], index_v);
-      vertices.set(point, index_v + 3);
+      vertices.set(topPoint, index_v + 3);
       vertices.set(basePoints[(i + 1) % 4], index_v + 6);
       const xDisplacement = Math.random() * 0.5;
       const yDisplacement = Math.random() * 0.5;
@@ -147,8 +159,9 @@ class Roof extends SceneObject {
         0.5 + xDisplacement, 
         0 + yDisplacement], i * 6);
     }
+  }
 
-    /* Base */
+  generateBaseFaces(vertices, uvCoords, basePoints) {
     for(let i = 0; i < 2; i++) {
       const index_v = 36 + i * 9;
       vertices.set(basePoints[i*2], index_v);
@@ -156,13 +169,6 @@ class Roof extends SceneObject {
       vertices.set(basePoints[(i*2 + 3) % 4], index_v + 6);
       uvCoords.set([0, 0, 0.25, 0.5, 0.5, 0], 24 + i * 6);
     }
-
-    const vbufferAtrribute = new THREE.BufferAttribute(vertices, 3);
-    const uvBufferAttribute = new THREE.BufferAttribute(uvCoords, 2);
-    geometry.setAttribute('position', vbufferAtrribute);
-    geometry.setAttribute('uv', uvBufferAttribute);
-
-    return geometry;
   }
 
   loadTextures() {
@@ -174,7 +180,6 @@ class Roof extends SceneObject {
       textures[key].wrapT = THREE.RepeatWrapping;
     });
     
-    textures.color.colorSpace = THREE.SRGBColorSpace;
     return textures;
   }
 
@@ -192,10 +197,6 @@ class Roof extends SceneObject {
 class Door extends SceneObject {
   constructor() {
 
-  }
-
-  dispose() {
-    
   }
 }
 class House extends SceneObject {
@@ -233,26 +234,28 @@ class Bushes extends SceneObject {
     this.material = this.generateMaterial();
     this.mesh = new THREE.Group();
 
-    this.bushes = [];
-    for (let i = 0; i < 4; i++) {
+    this.bushes = this.generateBushes();
+  }
+
+  generateBushes() {
+    const bushes = [];
+    for(let i = 0; i < 4; i++) {
       const bush = new THREE.Mesh(this.geometry, this.material);
       bush.rotation.x = -0.75;
-      this.bushes.push(bush);
+      bushes.push(bush);
       this.mesh.add(bush);
     }
 
-    this.bushes[0].scale.set(0.4, 0.4, 0.4);
-    this.bushes[0].position.set(0.8, 0.2, 2.2);
+    bushes[0].scale.set(0.4, 0.4, 0.4);
+    bushes[0].position.set(0.8, 0.2, 2.2);
+    bushes[1].scale.set(0.15, 0.15, 0.15);
+    bushes[1].position.set(1.4, 0.1, 2.1);
+    bushes[2].scale.set(0.3, 0.3, 0.3);
+    bushes[2].position.set(-0.8, 0.1, 2.2);
+    bushes[3].scale.set(0.1, 0.1, 0.1);
+    bushes[3].position.set(-1, 0.05, 2.6);
 
-    this.bushes[1].scale.set(0.15, 0.15, 0.15);
-    this.bushes[1].position.set(1.4, 0.1, 2.1);
-    
-    this.bushes[2].scale.set(0.3, 0.3, 0.3);
-    this.bushes[2].position.set(-0.8, 0.1, 2.2);
-    
-    this.bushes[3].scale.set(0.1, 0.1, 0.1);
-    this.bushes[3].position.set(-1, 0.05, 2.6);
-
+    return bushes;
   }
 
   generateMaterial() {
@@ -277,14 +280,17 @@ export class Graves extends SceneObject {
     this.textures = loadTexturesMaps('graves/plastered_stone_wall', ['color', 'normal', 'arm', 'displacement']);
     this.material = this.generateMaterial();
     this.mesh = new THREE.Group();
-    this.graves = [];
+    this.graves = this.generateGraves();
+  }
 
+  generateGraves() {
+    const graves = [];
     for(let i = 0; i < 30; i++) {
       const angle = Math.random() * Math.PI * 2;
       const radius = 3.5 + Math.random() * 3;
  
       const grave = new THREE.Mesh(this.geometry, this.material);
-      this.graves.push(grave);
+      graves.push(grave);
       this.mesh.add(grave);
 
       grave.position.x = Math.sin(angle) * radius;
@@ -293,8 +299,9 @@ export class Graves extends SceneObject {
 
       ['x', 'y', 'z'].forEach(axis => {
         grave.rotation[axis] = (Math.random() - 0.5)*0.4;
-      });      
+      });
     }
+    return graves;
   }
 
   loadTextures() {
