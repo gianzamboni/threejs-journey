@@ -3,8 +3,6 @@ import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { screenResolutionName } from '../../utils/utils';
 import GUI from 'lil-gui';
-import { color } from 'three/tsl';
-
 
 const gui = new GUI();
 const debugObject = {
@@ -291,7 +289,7 @@ class Bushes extends SceneObject {
 
   generateMaterial() {
     return new THREE.MeshStandardMaterial({
-      color: "#d29e2d",
+      color: "#dfdfdf",
       map: this.textures.color,
       aoMap: this.textures.ao,
       roughness: 2,
