@@ -8,6 +8,7 @@ const gui = new GUI();
 const debugObject = {
   color: "#555555",
 }
+
 const textureMaps = {
   color: 'diff',
   normal: 'nor_gl',
@@ -18,10 +19,9 @@ const textureMaps = {
 }
 
 function loadTexturesMaps(filePrefix, mapTypes) {
-  const resolution = screenResolutionName();
   const textures = {};
   mapTypes.forEach(mapType => {
-    textures[mapType] = TEXTURE_LOADER.load(`/textures/${filePrefix}_${textureMaps[mapType]}_${resolution}.jpg`);
+    textures[mapType] = TEXTURE_LOADER.load(`/textures/${filePrefix}_${textureMaps[mapType]}_1k.jpg`);
   });
 
   textures.color.colorSpace = THREE.SRGBColorSpace;
@@ -247,12 +247,17 @@ class House extends SceneObject {
     ];
 
     this.mesh = new THREE.Group();
-    this.children.forEach(object => object.addTo(this.mesh));    
+    this.children.forEach(object => object.addTo(this.mesh));  
+    
+    this.doorLight = new THREE.PointLight(0xff7d46, 5);
+    this.doorLight.position.set(0, 2.2, 2.5);
+    this.mesh.add(this.doorLight);
   }
 
   dispose(scene) {
     this.mesh.clear();
     this.children.forEach(object => object.dispose(scene));
+    this.doorLight.dispose();
   }
 }
 
@@ -353,23 +358,72 @@ export class Graves extends SceneObject {
     });
   }
 }
+
+export class Ghosts extends SceneObject {
+  constructor() {
+    super();
+    this.mesh = new THREE.Group();
+    this.ghosts = [];
+    this.minRadius = 4;
+    ['#8800ff', '#ff0088', '#ff0000'].forEach(color => {
+      const ghost = {
+        light: new THREE.PointLight(color, 6),
+        pacing: Math.random() * 0.3 * (Math.random() > 0.5 ? 1 : -1),
+        radius: this.minRadius + Math.random() * 3,
+        multipliers: [Math.random() * 2.43, Math.random() * 3.45],
+      };
+      console.log(this.minRadius, ghost.radius);
+      ['X', 'Z'].forEach(axis => {
+        ghost[`wobbling${axis}`] = {
+          speed: Math.random(),
+          amplitude: Math.random() * (ghost.radius - this.minRadius),
+        }
+      });
+      ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+      ghost.helper.material.wireframe = false;
+      this.ghosts.push(ghost);
+      this.mesh.add(ghost.light, ghost.helper);
+      console.log(ghost);
+    });
+  }
+
+  animate(elapsedTime) {
+    this.ghosts.forEach(({light, pacing, radius, wobblingX, wobblingZ, multipliers }, index) => {
+      const angle = elapsedTime * pacing;
+      light.position.x = Math.cos(angle) * (radius + Math.sin(angle*wobblingX.speed)*Math.sin(angle*multipliers[0])*wobblingX.amplitude);
+      light.position.z = Math.sin(angle) * (radius + Math.cos(angle * wobblingZ.speed) * Math.sin(angle * multipliers[0]) *wobblingZ.amplitude);
+      light.position.y = Math.sin(angle) * Math.sin(angle * multipliers[0]) * Math.sin(angle * multipliers[1]);
+    })
+  }
+
+  dispose() {
+    this.mesh.clear();
+    this.ghosts.forEach(ghost => {
+      ghost.light.dispose();
+      ghost.helper.dispose();
+    });
+  }
+}
 export class HauntedHouse {
   constructor(view) {
     this.view = view;
     this.scene = new THREE.Scene();
     this.lights = { 
-      ambient: new THREE.AmbientLight(0xffffff, 0.5),
-      directional: new THREE.DirectionalLight(0xffffff, 1.5),
+      ambient: new THREE.AmbientLight(0x86cdff, 0.275),
+      directional: new THREE.DirectionalLight(0x86cdff, 1),
     }
 
     this.timer = new Timer();
+    this.ghosts = new Ghosts();
 
     this.children = [
       new Floor(),
       new House(),
       new Bushes(),
       new Graves(),
+      this.ghosts,
     ];
+    
   }
 
   init() {
@@ -385,11 +439,13 @@ export class HauntedHouse {
 
     this.view.toggleOrbitControls();
     this.view.show(this.scene);
+    this.view.setTick(this.animate.bind(this));
   }
 
   animate() {
     this.timer.update();
-    const elaptsedTime = this.timer.getElapsedTime();
+    const elapsedTime = this.timer.getElapsed();
+    this.ghosts.animate(elapsedTime);
   }
 
   dispose() {
