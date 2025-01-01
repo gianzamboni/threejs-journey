@@ -380,10 +380,8 @@ export class Ghosts extends SceneObject {
         }
       });
       ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
-      ghost.helper.material.wireframe = false;
       this.ghosts.push(ghost);
-      this.mesh.add(ghost.light, ghost.helper);
-      console.log(ghost);
+      this.mesh.add(ghost.light);
     });
   }
 
