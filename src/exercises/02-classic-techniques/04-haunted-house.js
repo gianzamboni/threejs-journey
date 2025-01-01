@@ -3,10 +3,13 @@ import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { screenResolutionName } from '../../utils/utils';
 import GUI from 'lil-gui';
+import { color } from 'three/tsl';
 
 
 const gui = new GUI();
-
+const debugObject = {
+  color: "#555555",
+}
 const textureMaps = {
   color: 'diff',
   normal: 'nor_gl',
@@ -222,6 +225,7 @@ class Door extends SceneObject {
 
   generateMaterial() {
     return new THREE.MeshStandardMaterial({
+      color: "#b3b3b3",
       alphaMap: this.textures.alpha,
       aoMap: this.textures.ambientOcclusion,
       displacementBias: -0.04,
@@ -287,7 +291,7 @@ class Bushes extends SceneObject {
 
   generateMaterial() {
     return new THREE.MeshStandardMaterial({
-      color: "#ccffcc",
+      color: "#d29e2d",
       map: this.textures.color,
       aoMap: this.textures.ao,
       roughness: 2,
