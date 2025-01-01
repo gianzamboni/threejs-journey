@@ -2,6 +2,10 @@ import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { screenResolutionName } from '../../utils/utils';
+import GUI from 'lil-gui';
+
+
+const gui = new GUI();
 
 const textureMaps = {
   color: 'diff',
@@ -196,7 +200,39 @@ class Roof extends SceneObject {
 
 class Door extends SceneObject {
   constructor() {
+    super();
+    this.geometry = new THREE.PlaneGeometry(2.2, 2.2, 100, 100);
+    this.textures = this.loadTextures();
+    this.material = this.generateMaterial();
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.position.y = 1;
+    this.mesh.position.z = 2 + 0.01;
+  }
 
+  loadTextures() {
+    const textures = {};
+    ['alpha', 'ambientOcclusion', 'color', 'height', 'metalness', 'normal', 'roughness'].forEach(mapType => {
+      textures[mapType] = TEXTURE_LOADER.load(`/textures/door/${mapType}.jpg`);
+    });
+
+    textures.color.colorSpace = THREE.SRGBColorSpace;
+    textures.height.colorSpace = THREE.SRGBColorSpace;
+    return textures;
+  }
+
+  generateMaterial() {
+    return new THREE.MeshStandardMaterial({
+      alphaMap: this.textures.alpha,
+      aoMap: this.textures.ambientOcclusion,
+      displacementBias: -0.04,
+      displacementMap: this.textures.height,
+      displacementScale: 0.1,
+      map: this.textures.color,
+      metalnessMap: this.textures.metalness,
+      normalMap: this.textures.normal,
+      roughnessMap: this.textures.roughness,
+      transparent: true,  
+    });
   }
 }
 class House extends SceneObject {
@@ -205,24 +241,16 @@ class House extends SceneObject {
     this.children = [
      new Walls(),
      new Roof(),
-     // new Door(),
+     new Door(),
     ];
 
-    this.door = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), this.material);
-
     this.mesh = new THREE.Group();
-    this.children.forEach(object => object.addTo(this.mesh));
-    this.mesh.add(this.door);
-    
-    this.door.position.y = 1;
-    this.door.position.z = 2 + 0.01;
+    this.children.forEach(object => object.addTo(this.mesh));    
   }
 
   dispose(scene) {
     this.mesh.clear();
     this.children.forEach(object => object.dispose(scene));
-    this.door.geometry.dispose();
-    this.door.material.dispose();
   }
 }
 
@@ -247,14 +275,13 @@ class Bushes extends SceneObject {
     }
 
     bushes[0].scale.set(0.4, 0.4, 0.4);
-    bushes[0].position.set(0.8, 0.2, 2.2);
+    bushes[0].position.set(1, 0.2, 2.2);
     bushes[1].scale.set(0.15, 0.15, 0.15);
-    bushes[1].position.set(1.4, 0.1, 2.1);
+    bushes[1].position.set(1.6, 0.1, 2.1);
     bushes[2].scale.set(0.3, 0.3, 0.3);
     bushes[2].position.set(-0.8, 0.1, 2.2);
     bushes[3].scale.set(0.1, 0.1, 0.1);
-    bushes[3].position.set(-1, 0.05, 2.6);
-
+    bushes[3].position.set(-1, 0.05, 2.55);
     return bushes;
   }
 
