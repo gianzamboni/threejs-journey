@@ -1,4 +1,4 @@
-=== Listas de todos
+## TO DOs
 
 - Agregar .ico
 - Selector de resoluciones
@@ -8,8 +8,8 @@
 - Agregar modulo de debugging
 - Separar BasicView, HelpBox en modulos
 
-=== Temas interesantes para investigar
+## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 
-=== Programas
+## Programas
 https://file-converter.io/download.html
