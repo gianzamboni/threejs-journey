@@ -5,11 +5,6 @@ import { Sky } from 'three/addons/objects/Sky.js'
 //import { PathTracer } from '../../utils/path-tracer';
 import GUI from 'lil-gui';
 
-const gui = new GUI();
-const debugObject = {
-  color: "#555555",
-}
-
 const textureMaps = {
   color: 'diff',
   normal: 'nor_gl',
@@ -56,7 +51,7 @@ class SceneObject {
 class Floor extends SceneObject {
   constructor() {
     super();
-    this.geometry = new THREE.PlaneGeometry(20, 20, 1000, 1000);
+    this.geometry = new THREE.PlaneGeometry(20, 20, 100, 100);
     this.textures = this.loadTextures();
     this.material = this.generateMaterial();
     
@@ -98,7 +93,7 @@ class Floor extends SceneObject {
 class Walls extends SceneObject{
   constructor() {
     super();
-    this.geometry = new THREE.BoxGeometry(4, 2.5, 4, 1, 1);
+    this.geometry = new THREE.BoxGeometry(4, 2.5, 4, 100, 100, 100);
     this.textures = loadTexturesMaps('wood/castle_brick_broken_06', ['color', 'normal', 'arm']);
     this.material = this.generateMaterial();
     this.mesh = new THREE.Mesh(this.geometry, this.material);
@@ -147,7 +142,7 @@ class Roof extends SceneObject {
     const uvBufferAttribute = new THREE.BufferAttribute(uvCoords, 2);
     geometry.setAttribute('position', vbufferAtrribute);
     geometry.setAttribute('uv', uvBufferAttribute);
-
+    geometry.computeVertexNormals();
     return geometry;
   }
 
