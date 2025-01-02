@@ -84,6 +84,7 @@ export class BasicView {
   }
 
   async run(exercise) {
+    document.title = `${exercise.title} - Three.js Journey`;
     if(this.tick || this.orbitControls.enablePan) {
       await this.animationLoop.stop();
     }
