@@ -75,6 +75,7 @@ export class MaterialExercise {
   }
 
   async dispose() {
+    this.clock.stop();
     this.meshes.forEach(mesh => {
       this.scene.remove(mesh);
       mesh.geometry.dispose();

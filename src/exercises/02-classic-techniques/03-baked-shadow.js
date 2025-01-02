@@ -26,7 +26,7 @@ export class BakedShadow {
       this.material
     );
 
-    this.simpleBakedShadow = TEXTURE_LOADER.load('/textures/simpleShadow.jpg'); 
+    this.simpleBakedShadow = TEXTURE_LOADER.load('/textures/bakedShadows/simpleShadow.jpg'); 
     this.sphereShadow = new THREE.Mesh(
       new THREE.PlaneGeometry(1.5, 1.5),
       new THREE.MeshBasicMaterial({ 
@@ -64,6 +64,7 @@ export class BakedShadow {
   }
 
   dispose() {
+    this.clock.stop();
     [this.sphere, this.plane, this.sphereShadow].forEach((mesh) => {
       this.scene.remove(mesh);
       mesh.geometry.dispose();

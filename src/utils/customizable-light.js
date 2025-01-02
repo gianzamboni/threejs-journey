@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper";
+import { nearestPowerOfTwo, screenResolution } from "./utils";
 
 const MIN_MAX = {
   angle: { min: 0, max: Math.PI / 2, step: 0.01 },
@@ -216,8 +217,13 @@ export class CustomizableLight {
 
   enableShadows() {
     this.light.castShadow = true;
-    this.light.shadow.mapSize.width = 1024;
-    this.light.shadow.mapSize.height = 1024;
+    
+    const resolution = screenResolution();
+    const sizeReferene = Math.max(window.screen.width, window.screen.height);
+    const shadowMapSize = nearestPowerOfTwo(sizeReferene);
+
+    this.light.shadow.mapSize.width = shadowMapSize;
+    this.light.shadow.mapSize.height = shadowMapSize;
     this.light.shadow.camera.near = 1;
     this.light.shadow.camera.far = 6;
   }
