@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
-import { screenResolutionName } from '../../utils/utils';
+import { PathTracer } from '../../utils/path-tracer';
 import GUI from 'lil-gui';
 
 const gui = new GUI();
@@ -26,6 +26,14 @@ function loadTexturesMaps(filePrefix, mapTypes) {
 
   textures.color.colorSpace = THREE.SRGBColorSpace;
   return textures;
+}
+
+function randomBetween(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function randomSign() {
+  return Math.random() > 0.5 ? 1 : -1;
 }
 
 class SceneObject {
@@ -154,8 +162,8 @@ class Roof extends SceneObject {
       vertices.set(basePoints[i], index_v);
       vertices.set(topPoint, index_v + 3);
       vertices.set(basePoints[(i + 1) % 4], index_v + 6);
-      const xDisplacement = Math.random() * 0.5;
-      const yDisplacement = Math.random() * 0.5;
+      const xDisplacement = randomBetween(0, 0.5);
+      const yDisplacement = randomBetween(0, 0.5);
       uvCoords.set([
         0 + xDisplacement, 
         0 + yDisplacement, 
@@ -320,8 +328,8 @@ export class Graves extends SceneObject {
   generateGraves() {
     const graves = [];
     for(let i = 0; i < 30; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 3.5 + Math.random() * 3;
+      const angle = randomBetween(0, Math.PI * 2);
+      const radius = randomBetween(3.5, 6);
  
       const grave = new THREE.Mesh(this.geometry, this.material);
       graves.push(grave);
@@ -329,10 +337,10 @@ export class Graves extends SceneObject {
 
       grave.position.x = Math.sin(angle) * radius;
       grave.position.z = Math.cos(angle) * radius;
-      grave.position.y = Math.random() * 0.4;
+      grave.position.y = randomBetween(0, 0.4);
 
       ['x', 'y', 'z'].forEach(axis => {
-        grave.rotation[axis] = (Math.random() - 0.5)*0.4;
+        grave.rotation[axis] = randomBetween(-0.2, 0.2);
       });
     }
     return graves;
@@ -365,32 +373,37 @@ export class Ghosts extends SceneObject {
     this.mesh = new THREE.Group();
     this.ghosts = [];
     this.minRadius = 4;
+
     ['#8800ff', '#ff0088', '#ff0000'].forEach(color => {
       const ghost = {
         light: new THREE.PointLight(color, 6),
-        pacing: Math.random() * 0.3 * (Math.random() > 0.5 ? 1 : -1),
-        radius: this.minRadius + Math.random() * 3,
-        multipliers: [Math.random() * 2.43, Math.random() * 3.45],
+        pacing: randomSign() * randomBetween(0.0001, 0.3),
+        radius: randomBetween(this.minRadius, 6),
+        multipliers: [randomSign() * randomBetween(0, 3), randomSign() * randomBetween(0, 4)],
       };
-      console.log(this.minRadius, ghost.radius);
+
       ['X', 'Z'].forEach(axis => {
         ghost[`wobbling${axis}`] = {
-          speed: Math.random(),
-          amplitude: Math.random() * (ghost.radius - this.minRadius),
+          amplitude: randomBetween(0, ghost.radius - this.minRadius),
+          speed: randomBetween(1, 10),
         }
       });
-      ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+      //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+      ghost.tracer = new PathTracer(ghost.light, color);
       this.ghosts.push(ghost);
-      this.mesh.add(ghost.light);
+      this.mesh.add(ghost.light, ghost.helper);
+      ghost.tracer.addTo(this.mesh);
     });
   }
 
   animate(elapsedTime) {
-    this.ghosts.forEach(({light, pacing, radius, wobblingX, wobblingZ, multipliers }, index) => {
+    this.ghosts.forEach((ghost) => {
+      const { light, pacing, radius, multipliers, wobblingX, wobblingZ } = ghost;
       const angle = elapsedTime * pacing;
-      light.position.x = Math.cos(angle) * (radius + Math.sin(angle*wobblingX.speed)*Math.sin(angle*multipliers[0])*wobblingX.amplitude);
-      light.position.z = Math.sin(angle) * (radius + Math.cos(angle * wobblingZ.speed) * Math.sin(angle * multipliers[0]) *wobblingZ.amplitude);
+      light.position.x = Math.cos(angle) * (radius + Math.cos(angle*wobblingX.speed)*wobblingX.amplitude);
+      light.position.z = Math.sin(angle) * (radius + Math.sin(angle*wobblingZ.speed)*wobblingZ.amplitude);
       light.position.y = Math.sin(angle) * Math.sin(angle * multipliers[0]) * Math.sin(angle * multipliers[1]);
+      //ghost.tracer.update();
     })
   }
 
@@ -399,6 +412,7 @@ export class Ghosts extends SceneObject {
     this.ghosts.forEach(ghost => {
       ghost.light.dispose();
       ghost.helper.dispose();
+      //ghost.tracer.dispose();
     });
   }
 }
