@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
-import { PathTracer } from '../../utils/path-tracer';
-import GUI from 'lil-gui';
+import { Sky } from 'three/addons/objects/Sky.js'
+//import { PathTracer } from '../../utils/path-tracer';
+// import GUI from 'lil-gui';
 
 const gui = new GUI();
 const debugObject = {
@@ -62,6 +63,7 @@ class Floor extends SceneObject {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
     this.mesh.rotation.x = - Math.PI * 0.5;
+    this.mesh.receiveShadow = true;
   }
 
   generateMaterial() {
@@ -101,6 +103,8 @@ class Walls extends SceneObject{
     this.material = this.generateMaterial();
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.position.y = 1.25;
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
   }
 
   generateMaterial() {
@@ -127,6 +131,7 @@ class Roof extends SceneObject {
 
     this.mesh.position.y = 2.5;
     this.mesh.rotation.y = Math.PI * 0.25;
+    this.mesh.castShadow = true;
   }
 
   generatePyramid() {
@@ -332,6 +337,12 @@ export class Graves extends SceneObject {
       const radius = randomBetween(3.5, 6);
  
       const grave = new THREE.Mesh(this.geometry, this.material);
+      this.setRandomPosition(grave);
+      this.setRandomRotation(grave);
+
+      grave.castShadow = true;
+      grave.receiveShadow = true;
+
       graves.push(grave);
       this.mesh.add(grave);
 
@@ -344,6 +355,21 @@ export class Graves extends SceneObject {
       });
     }
     return graves;
+  }
+
+  setRandomRotation(grave) {
+    ['x', 'y', 'z'].forEach(axis => {
+      grave.rotation[axis] = randomBetween(-0.2, 0.2);
+    });
+  }
+
+  setRandomPosition(grave) {
+    const angle = randomBetween(0, Math.PI * 2);
+    const radius = randomBetween(3.5, 6);
+
+    grave.position.x = Math.sin(angle) * radius;
+    grave.position.z = Math.cos(angle) * radius;
+    grave.position.y = randomBetween(0, 0.4);
   }
 
   loadTextures() {
@@ -389,6 +415,10 @@ export class Ghosts extends SceneObject {
           speed: randomBetween(0, 10),
         }
       });
+      ghost.light.castShadow = true;
+      ghost.light.shadow.mapSize.width = 256
+      ghost.light.shadow.mapSize.height = 256
+      ghost.light.shadow.camera.far = 10
       //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
       //ghost.tracer = new PathTracer(ghost.light, color);
       this.ghosts.push(ghost);
