@@ -3,7 +3,7 @@ import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { Sky } from 'three/addons/objects/Sky.js'
 //import { PathTracer } from '../../utils/path-tracer';
-// import GUI from 'lil-gui';
+import GUI from 'lil-gui';
 
 const gui = new GUI();
 const debugObject = {
@@ -333,9 +333,6 @@ export class Graves extends SceneObject {
   generateGraves() {
     const graves = [];
     for(let i = 0; i < 30; i++) {
-      const angle = randomBetween(0, Math.PI * 2);
-      const radius = randomBetween(3.5, 6);
- 
       const grave = new THREE.Mesh(this.geometry, this.material);
       this.setRandomPosition(grave);
       this.setRandomRotation(grave);
@@ -345,14 +342,6 @@ export class Graves extends SceneObject {
 
       graves.push(grave);
       this.mesh.add(grave);
-
-      grave.position.x = Math.sin(angle) * radius;
-      grave.position.z = Math.cos(angle) * radius;
-      grave.position.y = randomBetween(0, 0.4);
-
-      ['x', 'y', 'z'].forEach(axis => {
-        grave.rotation[axis] = randomBetween(-0.2, 0.2);
-      });
     }
     return graves;
   }
@@ -400,30 +389,44 @@ export class Ghosts extends SceneObject {
     this.ghosts = [];
     this.minRadius = 4;
 
-    ['#8800ff', '#ff0088', '#ff0000'].forEach(color => {
-      const ghost = {
-        light: new THREE.PointLight(color, 6),
-        pacing: randomSign() * randomBetween(0.0001, 0.3),
-        displacement: randomBetween(0, Math.PI * 2),
-        radius: randomBetween(this.minRadius, 6),
-        multipliers: [randomSign() * randomBetween(0, 3), randomSign() * randomBetween(0, 4)],
-      };
-
-      ['X', 'Z'].forEach(axis => {
-        ghost[`wobbling${axis}`] = {
-          amplitude: randomBetween(0, ghost.radius - this.minRadius),
-          speed: randomBetween(0, 10),
-        }
-      });
-      ghost.light.castShadow = true;
-      ghost.light.shadow.mapSize.width = 256
-      ghost.light.shadow.mapSize.height = 256
-      ghost.light.shadow.camera.far = 10
-      //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
-      //ghost.tracer = new PathTracer(ghost.light, color);
+    ['#8800ff', '#ff0088', '#ff0000'].forEach((color) => {
+      const ghost = this.generateGhost(color);
       this.ghosts.push(ghost);
-      this.mesh.add(ghost.light, ghost.helper);
-      //ghost.tracer.addTo(this.mesh);
+      this.mesh.add(ghost.light);
+      //this.mesh.add(ghost.helper);
+      //this.mesh.add(ghost.tracer.mesh);
+    });
+  }
+
+  generateGhost(color) {
+    const ghost = {
+      light: new THREE.PointLight(color, 6),
+      pacing: randomSign() * randomBetween(0.0001, 0.3),
+      displacement: randomBetween(0, Math.PI * 2),
+      radius: randomBetween(this.minRadius, 6),
+      multipliers: [randomSign() * randomBetween(0, 3), randomSign() * randomBetween(0, 4)],
+    };
+
+    this.generateGhostWobblingConstants(ghost);
+    this.setupGhostShadows(ghost);
+    //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+    //ghost.tracer = new PathTracer(ghost.light, color);
+    return ghost;
+  }
+
+  setupGhostShadows(ghost) {
+    ghost.light.castShadow = true;
+    ghost.light.shadow.mapSize.width = 256
+    ghost.light.shadow.mapSize.height = 256
+    ghost.light.shadow.camera.far = 10
+  }
+
+  generateGhostWobblingConstants(ghost) {
+    ['X', 'Z'].forEach(axis => {
+      ghost[`wobbling${axis}`] = {
+        amplitude: randomBetween(0, ghost.radius - this.minRadius),
+        speed: randomBetween(0, 10),
+      }
     });
   }
 
@@ -451,11 +454,7 @@ export class HauntedHouse {
   constructor(view) {
     this.view = view;
     this.scene = new THREE.Scene();
-    this.lights = { 
-      ambient: new THREE.AmbientLight(0x86cdff, 0.275),
-      directional: new THREE.DirectionalLight(0x86cdff, 1),
-    }
-
+    this.lights = this.createLights();
     this.timer = new Timer();
     this.ghosts = new Ghosts();
 
@@ -469,6 +468,42 @@ export class HauntedHouse {
     
   }
 
+  createLights() {
+    const lights = {
+      ambient: new THREE.AmbientLight(0x86cdff, 0.275),
+      directional: this.createDirectionLight(),
+      sky: this.createSkyLight(),
+    }
+    return lights;
+  }
+
+  createSkyLight() {
+    const sky = new Sky();
+    sky.material.uniforms['turbidity'].value = 10
+    sky.material.uniforms['rayleigh'].value = 3
+    sky.material.uniforms['mieCoefficient'].value = 0.1
+    sky.material.uniforms['mieDirectionalG'].value = 0.95
+    sky.material.uniforms['sunPosition'].value.set(0.3, -0.038, -0.95)
+
+    sky.scale.set(100, 100, 100);
+    return sky;
+  }
+
+  createDirectionLight() {
+    const light = new THREE.DirectionalLight(0x86cdff, 1);
+    light.position.set(3, 2, -8);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 256
+    light.shadow.mapSize.height = 256
+    light.shadow.camera.top = 8
+    light.shadow.camera.right = 8
+    light.shadow.camera.bottom = - 8
+    light.shadow.camera.left = - 8
+    light.shadow.camera.near = 1
+    light.shadow.camera.far = 20
+    return light;
+  }
+
   init() {
     this.view.setCamera({
       position: { x: 4, y: 2, z: 5 },
@@ -476,11 +511,10 @@ export class HauntedHouse {
     })
     
     Object.values(this.lights).forEach(light => this.scene.add(light));
-    this.lights.directional.position.set(3, 2, -8);
-
     this.children.forEach(mesh => mesh.addTo(this.scene));
 
     this.view.toggleOrbitControls();
+    this.view.enableShadows();
     this.view.show(this.scene);
     this.view.setTick(this.animate.bind(this));
   }
