@@ -3,7 +3,7 @@ import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { Sky } from 'three/addons/objects/Sky.js'
 //import { PathTracer } from '../../utils/path-tracer';
-import GUI from 'lil-gui';
+//import GUI from 'lil-gui';
 
 const textureMaps = {
   color: 'diff',
