@@ -457,7 +457,8 @@ export class HauntedHouse {
     this.lights = this.createLights();
     this.timer = new Timer();
     this.ghosts = new Ghosts();
-
+    this.fog = new THREE.FogExp2("#04343f", 0.1);//new THREE.Fog('#ff0000', 1, 13);
+      
     this.children = [
       new Floor(),
       new House(),
@@ -510,6 +511,7 @@ export class HauntedHouse {
       lookAt: { x: 0, y: 0, z: 0 }
     })
     
+    this.scene.fog = this.fog; 
     Object.values(this.lights).forEach(light => this.scene.add(light));
     this.children.forEach(mesh => mesh.addTo(this.scene));
 
