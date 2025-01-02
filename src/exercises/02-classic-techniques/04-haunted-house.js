@@ -269,7 +269,7 @@ class House extends SceneObject {
 
   dispose(scene) {
     this.mesh.clear();
-    this.children.forEach(object => object.dispose(scene));
+    this.children.forEach(object => object.dispose());
     this.doorLight.dispose();
   }
 }
@@ -530,6 +530,9 @@ export class HauntedHouse {
   dispose() {
     this.timer.dispose();
     Object.values(this.lights).forEach(light => this.scene.remove(light));
+    this.lights.directional.dispose();
+    this.lights.sky.material.dispose();
+    this.lights.sky.geometry.dispose();
     this.children.forEach(object => {
       object.removeFrom(this.scene);
       object.dispose();
