@@ -378,6 +378,7 @@ export class Ghosts extends SceneObject {
       const ghost = {
         light: new THREE.PointLight(color, 6),
         pacing: randomSign() * randomBetween(0.0001, 0.3),
+        displacement: randomBetween(0, Math.PI * 2),
         radius: randomBetween(this.minRadius, 6),
         multipliers: [randomSign() * randomBetween(0, 3), randomSign() * randomBetween(0, 4)],
       };
@@ -385,24 +386,24 @@ export class Ghosts extends SceneObject {
       ['X', 'Z'].forEach(axis => {
         ghost[`wobbling${axis}`] = {
           amplitude: randomBetween(0, ghost.radius - this.minRadius),
-          speed: randomBetween(1, 10),
+          speed: randomBetween(0, 10),
         }
       });
       //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
-      ghost.tracer = new PathTracer(ghost.light, color);
+      //ghost.tracer = new PathTracer(ghost.light, color);
       this.ghosts.push(ghost);
       this.mesh.add(ghost.light, ghost.helper);
-      ghost.tracer.addTo(this.mesh);
+      //ghost.tracer.addTo(this.mesh);
     });
   }
 
   animate(elapsedTime) {
     this.ghosts.forEach((ghost) => {
-      const { light, pacing, radius, multipliers, wobblingX, wobblingZ } = ghost;
+      const { displacement, light, multipliers, pacing, radius, wobblingX, wobblingZ } = ghost;
       const angle = elapsedTime * pacing;
-      light.position.x = Math.cos(angle) * (radius + Math.cos(angle*wobblingX.speed)*wobblingX.amplitude);
-      light.position.z = Math.sin(angle) * (radius + Math.sin(angle*wobblingZ.speed)*wobblingZ.amplitude);
-      light.position.y = Math.sin(angle) * Math.sin(angle * multipliers[0]) * Math.sin(angle * multipliers[1]);
+      light.position.x = Math.cos(angle + displacement) * (radius + Math.cos(angle*wobblingX.speed)*wobblingX.amplitude);
+      light.position.z = Math.sin(angle + displacement) * (radius + Math.sin(angle*wobblingZ.speed)*wobblingZ.amplitude);
+      light.position.y = Math.sin(angle + displacement) * Math.sin(angle * multipliers[0]) * Math.sin(angle * multipliers[1]);
       //ghost.tracer.update();
     })
   }
@@ -411,7 +412,7 @@ export class Ghosts extends SceneObject {
     this.mesh.clear();
     this.ghosts.forEach(ghost => {
       ghost.light.dispose();
-      ghost.helper.dispose();
+      //ghost.helper.dispose();
       //ghost.tracer.dispose();
     });
   }
