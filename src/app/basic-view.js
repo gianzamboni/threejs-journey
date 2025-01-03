@@ -44,6 +44,7 @@ export class BasicView {
 
   show(scene) {
     scene.add(this.camera);
+    console.log(scene);
     this.renderer.render(scene, this.camera);
   }
 
@@ -57,7 +58,11 @@ export class BasicView {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
-  run(exercise) {
+  async run(exercise) {
+    if(this.runningExercise !== null) {
+      this.runningExercise.dispose();
+    }
+    await this.stop();
     this.runningExercise = new exercise(this);
     this.runningExercise.init();
     if(this.tick || this.orbitControls.enablePan) {
@@ -80,7 +85,6 @@ export class BasicView {
     this.toggleOrbitControls(false);
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
-    this.runningExercise.dispose();
     this.camera.position.set(0, 0, 3);
     this.camera.lookAt(0, 0, 0);
   }

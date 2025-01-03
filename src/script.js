@@ -19,10 +19,6 @@ class App {
     this.menu.deselectExercise(this.activeExercise.id);
     this.activeExercise = exercise;
     this.menu.selectExercise(exercise.id);
-
-    if(this.view.isRunning) {
-      await this.view.stop();
-    }
     this.view.run(exercise.class);
   };
 
