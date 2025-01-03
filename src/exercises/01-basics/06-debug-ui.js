@@ -12,7 +12,6 @@ export class DebugUI {
       subdivision: 2
     }
     this.gui = new GUI({
-      width: 300,
       title: 'Nice debug UI',
       closeFolders: false
     })

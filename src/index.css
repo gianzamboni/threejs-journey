@@ -67,3 +67,24 @@ ul {
 .hidden {
 	display: none;
 }
+
+.lil-gui {
+	--background-color: #ffffff;
+	--text-color: #000000;
+	--title-background-color: #ffffff;
+	--title-text-color: #000000;
+	--widget-color: #ededed;
+	--hover-color: #ededed;
+	--focus-color: #ededed;
+	--number-color: #c20000;
+	--string-color: #0c00b8;
+	--font-size: 1rem;
+	--input-font-size: 12px;
+	--font-family: "Roboto";
+	--widget-border-radius: 0.375rem;
+
+	top: 1rem !important;
+	border-radius: 0.375rem;
+	padding: 0.25em; 
+
+}
