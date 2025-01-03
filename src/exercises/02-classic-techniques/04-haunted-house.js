@@ -510,7 +510,6 @@ export class HauntedHouse {
     Object.values(this.lights).forEach(light => this.scene.add(light));
     this.children.forEach(mesh => mesh.addTo(this.scene));
 
-    this.view.toggleOrbitControls();
     this.view.enableShadows();
     this.view.show(this.scene);
     this.view.setTick(this.animate.bind(this));

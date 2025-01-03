@@ -8,7 +8,6 @@ export class OrbitControlsCube extends CenteredCube {
 
   init() {
     super.init();
-    this.view.toggleOrbitControls(true);
     this.view.show(this.scene);
   }
   

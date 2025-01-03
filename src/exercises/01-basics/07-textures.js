@@ -13,7 +13,6 @@ export class TextureExercise {
 
   init() {
     this.scene.add(this.mesh);
-    this.view.toggleOrbitControls(true);
     this.view.setCamera({
       position: { x: 2, y: 2, z: 2 },
       lookAt: { x: 0, y: 0, z: 0 }

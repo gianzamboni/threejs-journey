@@ -14,46 +14,67 @@ import { HauntedHouse } from '../exercises/02-classic-techniques/04-haunted-hous
 
 const journey = [
   {
-    id: '01-basics',
+    id: 'basics',
     title: "Basics",
     exercises: [
       {
         id: 'first-threejs-project',
         title: "First Three.js Project",
         class: CenteredCube,
+        config: {}
       }, {
         id: 'transform-objects',
         title: "Transform objects",
         class: CubeGroup,
+        config: {}
       }, {
         id: 'animations',
         title: "Animations",
         class: RotatingCube,
+        config: {}
       }, {
         id: 'cameras',
         title: "Cameras",
         class: OrbitControlsCube,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: 'geometries',
         title: "Geometries",
-        class: RandomTriangles, 
+        class: RandomTriangles,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: 'debug-ui',
         title: "Debug UI",
         class: DebugUI,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: 'textures',
         title: "Textures",
         class: TextureExercise,
+        config: {
+          enableOrbitControls: true
+        }
       },
       {
         id: 'materials',
         title: "Materials",
-        class: MaterialExercise
+        class: MaterialExercise,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: '3d-text',
         title: "3D Text",
-        class: Text3D
+        class: Text3D,
+        config: {
+          enableOrbitControls: true
+        }
       }
     ]
   },
@@ -63,19 +84,31 @@ const journey = [
       {
         id: 'lights',
         title: "Lights",
-        class: LightsExercise
+        class: LightsExercise,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: 'shadows',
         title: "Dynamic Shadows",
-        class: ShadowExercise
+        class: ShadowExercise,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: 'baked-shadows',
         title: "Baked Shadows",
-        class: BakedShadow
+        class: BakedShadow,
+        config: {
+          enableOrbitControls: true
+        }
       }, {
         id: 'haunted-house',
         title: "Haunted House",
-        class: HauntedHouse
+        class: HauntedHouse,
+        config: {
+          enableOrbitControls: true
+        }
       }
     ]
   },

@@ -84,7 +84,6 @@ export class LightsExercise {
       position: { x: 2, y: 1, z: 3 }, 
       lookAt: { x: 0, y: 0, z: 0 } 
     });
-    this.view.toggleOrbitControls(true);
     this.scene.add(...this.objects);
     this.lights.forEach(light => {
       light.addControls(this.gui);

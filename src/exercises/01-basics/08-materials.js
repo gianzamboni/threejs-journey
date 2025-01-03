@@ -23,12 +23,12 @@ export class MaterialExercise {
   }
 
   async init() {
-    this.envMap = await this.loadEnvironmentMap();
+    this.envMap = this.loadEnvironmentMap();
     this.meshes.forEach((mesh, index) => {
       mesh.position.x = index * 1.5 - 1.5;
       this.scene.add(mesh)
     });
-    this.view.toggleOrbitControls(true);
+
     this.view.setCamera({
       position: { x: 2, y: 1, z: 3 },
       lookAt: { x: 0, y: 0, z: 0 }
@@ -39,6 +39,7 @@ export class MaterialExercise {
   }
   
   animation() {
+    console.log('animation');
     const elapsedTime = this.clock.getElapsedTime();
     this.meshes.forEach(mesh => {
       mesh.rotation.x = -0.15 * elapsedTime;
@@ -46,14 +47,15 @@ export class MaterialExercise {
     });
   }
 
-  async loadEnvironmentMap() {
+  loadEnvironmentMap() {
     const rgbeLoader = new RGBELoader();
-    const environmentMap = await rgbeLoader.loadAsync('./textures/environmentMap/2k.hdr');
-    environmentMap.mapping = THREE.EquirectangularReflectionMapping;
+    rgbeLoader.load('./textures/environmentMap/2k.hdr', (environmentMap) => {
+      environmentMap.mapping = THREE.EquirectangularReflectionMapping;
 
-    this.scene.background = environmentMap;
-    this.scene.environment = environmentMap;
-    return environmentMap;
+      this.scene.background = environmentMap;
+      this.scene.environment = environmentMap;
+      this.envMap = environmentMap;
+    });
   }
 
   addGuiTweaks() {

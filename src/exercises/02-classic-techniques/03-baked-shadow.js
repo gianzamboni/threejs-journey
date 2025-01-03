@@ -55,10 +55,9 @@ export class BakedShadow {
     this.scene.add(this.sphere, this.plane, this.sphereShadow);
 
     this.view.setCamera({
-      position: { x: 1, y: 1, z: 2 },
+      position: { x: 3, y: 1, z: 3 },
       lookAt: { x: 0, y: 0, z: 0 }
     });
-    this.view.toggleOrbitControls(true);
     this.view.show(this.scene);
     this.view.setTick(this.animate.bind(this));
   }

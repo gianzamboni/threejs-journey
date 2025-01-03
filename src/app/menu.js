@@ -1,18 +1,14 @@
-import { journey } from './journey.js';
-
-export class Menu {
-  constructor(activeDefault, actionOnClick) {
-    this.activeItem = activeDefault;
-
+export class Menu extends EventTarget {
+  constructor(exercises) {
+    super();
+    this.items = {};
     const offCanvasElement = document.getElementById('exercisesMenu');
+    this.offCanvasBody = offCanvasElement.querySelector('#offcanvas-body');
     this.offCanvas = new bootstrap.Offcanvas(offCanvasElement);
-    this.offCanvasBody = document.getElementById('offcanvas-body');
-    journey.forEach((chapter) => {
+    exercises.forEach((chapter) => {
       this.generateChapter(chapter);
     });
-    this.actionOnClick = actionOnClick;
-    history.pushState(activeDefault.id, "", activeDefault.id);
-  }
+}
 
   generateChapter(chapter) {
     const h5 = document.createElement('h5');
@@ -34,20 +30,31 @@ export class Menu {
   generateExersiceItem(exercise, list, idPreffix) {
     const li = document.createElement('li');
     li.innerHTML = exercise.title;
-    li.id = `${idPreffix}-${exercise.id}`;
+    li.id = `${exercise.id}`;
 
     if(exercise.id === this.activeItem?.id) {
       li.classList.add("active");
     }
 
     li.onclick = () => {
-      this.activeItem.menuLiItem.classList.remove("active");
-      this.actionOnClick(exercise);
-      li.classList.add("active");
-      this.activeItem = exercise;
+      this.dispatchEvent(new CustomEvent('select', {
+        detail: exercise
+      }));
       this.offCanvas.hide();
     }
     list.appendChild(li);
-    exercise.menuLiItem = li;
+    this.items[exercise.id] = {
+      exerciseData: exercise,
+      htmlItem: li,
+    };
+  }
+
+  selectExercise(exerciseId) {
+    this.items[exerciseId].htmlItem.classList.add("active");
+  }
+
+  deselectExercise(exerciseId) {
+    console.log('deselectExercise', exerciseId);
+    this.items[exerciseId].htmlItem.classList.remove("active");
   }
 }

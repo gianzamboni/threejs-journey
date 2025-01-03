@@ -1,58 +1,32 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { addOrbitControlHelp } from '../utils/orbit-control-help';
 import { AnimationLoop } from '../utils/animation-loop';
-
-const DEFAULT_SIZE = {
-  width: 800,
-  height: 600
-}
 
 
 export class BasicView {
   constructor() {
+    this.size = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
+     
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
     this.animationLoop = new AnimationLoop(() => this.animation())
     this.tick = null;
 
-    this.camera = new THREE.PerspectiveCamera(75, DEFAULT_SIZE.width / DEFAULT_SIZE.height, 0.1, 100);
-    this.camera.position.z = 3;
+    this.camera = new THREE.PerspectiveCamera(75, this.size.width / this.size.height, 0.1, 100);
 
-    this.activeExercise = {
-      data: null,
-      instance: null
-    };
-
-    this.helpBox = {
-      content: document.getElementById('help-box-content'),
-      title: document.getElementById('help-box-title'), 
-    }
+    this.runningExercise = null;
 
     this.orbitControls = new OrbitControls(this.camera, this.canvas);
     this.orbitControls.enableDamping = true;
 
-    this.setSize();
-
-    window.addEventListener('resize', () => {
-      this.setSize();
-      this.renderer.render(this.activeExercise.instance.scene, this.camera);
-    });
+    this.updateSize();
 
   }
 
-  setCamera({ position, lookAt}) {
-    this.camera.position.x = position.x;
-    this.camera.position.y = position.y;
-    this.camera.position.z = position.z;
-    this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
-  }
-
-  setTick(tick) {
-    this.tick = tick;
-  }
-
-  setSize(){
+  updateSize(){
     const size = {
       height: window.innerHeight,
       width: window.innerWidth
@@ -61,6 +35,10 @@ export class BasicView {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.camera.aspect = size.width / size.height;
     this.camera.updateProjectionMatrix();
+
+    if(this.runningExercise) {
+      this.renderer.render(this.runningExercise.scene, this.camera);
+    }
   }
 
   show(scene) {
@@ -73,36 +51,22 @@ export class BasicView {
     this.renderer.render(scene, this.camera);
   }
   
-  resetCamera() {
-    this.camera.position.set(0, 0, 3);
-    this.camera.lookAt(0, 0, 0);
-  }
-
   enableShadows() {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
   async run(exercise) {
-    document.title = `${exercise.title} - Three.js Journey`;
-    if(this.tick || this.orbitControls.enablePan) {
-      await this.animationLoop.stop();
+    if(this.runningExercise !== null) {
+      this.runningExercise.dispose();
     }
-    this.toggleOrbitControls(false);
-    this.renderer.shadowMap.enabled = false;
-    this.tick = null;
-    if(this.activeExercise.instance) {
-      await this.activeExercise.instance.dispose();
-    }
-    this.resetCamera();
-    this.activeExercise.data = exercise;
-    this.activeExercise.instance = new exercise.class(this);
-    await this.activeExercise.instance.init();
-    if(this.tick || this.orbitControls.enablePan) {
+    await this.stop();
+    this.runningExercise = new exercise.class(this);
+    this.runningExercise.init();
+    this.toggleOrbitControls(exercise.config.enableOrbitControls);
+    if(this.tick || exercise.config.enableOrbitControls) {
       this.animationLoop.start();
     }
-    this.createHelpBox();
-    console.log(this.renderer.info);
   }
 
   animation() {
@@ -110,37 +74,35 @@ export class BasicView {
     if(this.tick) {
       this.tick();
     }
-    this.render(this.activeExercise.instance.scene);
+    this.renderer.render(this.runningExercise.scene, this.camera);
   }
 
-  createHelpBox() {
-    this.helpBox.title.innerHTML = this.activeExercise.data.title;
-    this.helpBox.content.innerHTML = "";
-
-
-    if(!this.orbitControls.enablePan && !this.activeExercise.instance.helpMessage) {
-      this.helpBox.content.style.display = 'none';
-      return;
+  async stop() {
+    if(this.tick || this.orbitControls.enablePan) {
+      await this.animationLoop.stop();
     }
-
-    const list = document.createElement('ul');
-    this.helpBox.content.appendChild(list);
-
-    if(this.orbitControls.enablePan) {
-      addOrbitControlHelp(list);
-    }
-
-    if(this.activeExercise.instance.helpMessage) {
-      const items = this.activeExercise.instance.helpMessage();
-      items.forEach(item => {
-        list.appendChild(item);
-      });
-    }
-     
-    this.helpBox.content.style.display = 'block';
+    this.renderer.shadowMap.enabled = false;
+    this.tick = null;
+    this.camera.position.set(0, 0, 3);
+    this.camera.lookAt(0, 0, 0);
   }
 
-  toggleOrbitControls(activate = true) {
+  get isRunning() {
+    return this.runningExercise !== null;
+  }
+
+  setCamera({ position, lookAt }) {
+    this.camera.position.x = position.x;
+    this.camera.position.y = position.y;
+    this.camera.position.z = position.z;
+    this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+  }
+
+  setTick(tick) {
+    this.tick = tick;
+  }
+
+  toggleOrbitControls(activate = false) {
     if(activate) {
       this.orbitControls.enablePan = true;
       this.orbitControls.enableZoom = true;
