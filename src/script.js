@@ -2,32 +2,39 @@ import { BasicView } from './app/basic-view.js';
 import { Menu } from './app/menu.js';
 import { journey } from './app/journey.js';
 
-function selectExercise() {
-  const url = new URL(window.location.href);
-  const exerciseId = url.pathname.slice(1);
-  if(exerciseId === '') {
-    const lastChapterExercises = journey[journey.length - 1].exercises;
-    return lastChapterExercises[lastChapterExercises.length - 1];
-  } else {
-    return journey.map((chapter) => chapter.exercises)
-      .flat()
-      .find((exercise) => exercise.id === exerciseId);
+Array.prototype.last = function() { return this[this.length - 1] };
+
+class App {
+  constructor(journey) {
+    this.activeExercise = journey.last().exercises.last();
+    this.view = new BasicView();
+    this.menu = new Menu(journey, this.activeExercise.id);
+    this.menu.addEventListener('select', (event) => {
+      this.execute(event.detail);
+    });
+    
+    this.setupWidowsListeners();
+  };
+
+  execute(exercise) {
+    history.pushState(exercise.id, "", exercise.id);
+    this.menu.deselectExercise(this.activeExercise.id);
+    this.activeExercise = exercise;
+    this.menu.selectExercise(exercise.id);
+    this.view.run(exercise);
+  };
+
+  run() {
+    this.execute(this.activeExercise);
+  };
+
+  setupWidowsListeners() {
+    window.addEventListener('popstate', (event) => {
+      const exercise = journey.map((chapter) => chapter.exercises).flat().find((exercise) => exercise.id === event.state);
+      this.execute(exercise);
+    });
   }
 }
 
-const initialExercise = selectExercise();
-
-const view = new BasicView();
-const menu = new Menu(initialExercise, async (exercise) => {
-  console.log(`Loading exercise: ${exercise.title}`);
-  history.pushState(exercise.id, "", exercise.id);
-  await view.run(exercise);
-});
-
-view.run(initialExercise);
-
-window.addEventListener('popstate', async (event) => {
-  const exercise = selectExercise();
-  console.log(`Loading exercise: ${exercise.title}`);
-  await view.run(exercise);
-});
+const app = new App(journey);
+app.run();

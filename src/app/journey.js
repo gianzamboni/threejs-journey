@@ -14,7 +14,7 @@ import { HauntedHouse } from '../exercises/02-classic-techniques/04-haunted-hous
 
 const journey = [
   {
-    id: '01-basics',
+    id: 'basics',
     title: "Basics",
     exercises: [
       {
