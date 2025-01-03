@@ -20,7 +20,6 @@ export class HelpBox {
       this.exerciseHelp.innerHTML = exercise.help;
       this.content.classList.remove('hidden');
     }
-    console.log(exercise)
     if(exercise.config.enableOrbitControls) {
       this.orbitControlHelp.classList.remove('hidden');
       this.content.classList.remove('hidden');

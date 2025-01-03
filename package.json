@@ -2,7 +2,7 @@
   "name": "three-js-journey",
   "version": "1.6.3",
   "description": "",
-  "main": "index.js", 
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,9 +16,8 @@
     "gsap": "^3.12.5",
     "lil-gui": "^0.20.0",
     "three": "^0.170.0"
-  }, 
+  },
   "devDependencies": {
-    "vercel": "^39.2.2",
     "vite": "^5.4.11",
     "vite-plugin-restart": "^0.4.1"
   }
