@@ -12,29 +12,44 @@ class App {
     this.menu.addEventListener('select', (event) => {
       this.execute(event.detail);
     });
-    
-    this.setupWidowsListeners();
   };
 
-  execute(exercise) {
+  async execute(exercise) {
     history.pushState(exercise.id, "", exercise.id);
     this.menu.deselectExercise(this.activeExercise.id);
     this.activeExercise = exercise;
     this.menu.selectExercise(exercise.id);
-    this.view.run(exercise);
+
+    if(this.view.isRunning) {
+      await this.view.stop();
+    }
+    this.view.run(exercise.class);
   };
 
-  run() {
-    this.execute(this.activeExercise);
+  init(exerciseId) {
+    const exercise = exerciseId !== "" ? this.findExercise(exerciseId) : this.activeExercise;
+    this.execute(exercise);
   };
 
-  setupWidowsListeners() {
-    window.addEventListener('popstate', (event) => {
-      const exercise = journey.map((chapter) => chapter.exercises).flat().find((exercise) => exercise.id === event.state);
-      this.execute(exercise);
-    });
+  findExercise(id) {
+    return journey.map((chapter) => chapter.exercises).flat().find((exercise) => exercise.id === id);
+  }
+
+  updateViewSize() {
+    this.view.updateSize();
   }
 }
 
+const url = new URL(window.location.href);
+const exercise = url.pathname.split('/').last();
 const app = new App(journey);
-app.run();
+app.init(exercise);
+
+window.addEventListener('popstate', (event) => {
+  const exercise = app.findExercise(event.state);
+  app.execute(exercise);
+})
+
+window.addEventListener('resize', (event) => {
+  app.updateViewSize();
+})
