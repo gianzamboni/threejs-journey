@@ -4,7 +4,6 @@ export class PathTracer {
   constructor(obj, color) {
     this.obj = obj;
     this.material = new THREE.LineBasicMaterial({ color: color });
-    console.log(obj.position);
     this.path = [obj.position.clone()];
     this.mesh = new THREE.Group();
   }

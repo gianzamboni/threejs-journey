@@ -54,7 +54,6 @@ export class Menu extends EventTarget {
   }
 
   deselectExercise(exerciseId) {
-    console.log('deselectExercise', exerciseId);
     this.items[exerciseId].htmlItem.classList.remove("active");
   }
 }

@@ -39,7 +39,6 @@ export class MaterialExercise {
   }
   
   animation() {
-    console.log('animation');
     const elapsedTime = this.clock.getElapsedTime();
     this.meshes.forEach(mesh => {
       mesh.rotation.x = -0.15 * elapsedTime;
