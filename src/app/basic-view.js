@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { addOrbitControlHelp } from '../utils/orbit-control-help';
 import { AnimationLoop } from '../utils/animation-loop';
 
 
@@ -44,7 +43,6 @@ export class BasicView {
 
   show(scene) {
     scene.add(this.camera);
-    console.log(scene);
     this.renderer.render(scene, this.camera);
   }
 
@@ -63,9 +61,10 @@ export class BasicView {
       this.runningExercise.dispose();
     }
     await this.stop();
-    this.runningExercise = new exercise(this);
+    this.runningExercise = new exercise.class(this);
     this.runningExercise.init();
-    if(this.tick || this.orbitControls.enablePan) {
+    this.toggleOrbitControls(exercise.config.enableOrbitControls);
+    if(this.tick || exercise.config.enableOrbitControls) {
       this.animationLoop.start();
     }
   }
@@ -82,7 +81,6 @@ export class BasicView {
     if(this.tick || this.orbitControls.enablePan) {
       await this.animationLoop.stop();
     }
-    this.toggleOrbitControls(false);
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.camera.position.set(0, 0, 3);
@@ -92,39 +90,6 @@ export class BasicView {
   get isRunning() {
     return this.runningExercise !== null;
   }
-  // async run(exerciseClass) {
-  //   document.title = `${exercise.title} - Three.js Journey`;
-  //   this.createHelpBox();
-  //   console.log(this.renderer.info);
-  // }
-
-
-  // createHelpBox() {
-  //   this.helpBox.title.innerHTML = this.activeExercise.data.title;
-  //   this.helpBox.content.innerHTML = "";
-
-
-  //   if(!this.orbitControls.enablePan && !this.activeExercise.instance.helpMessage) {
-  //     this.helpBox.content.style.display = 'none';
-  //     return;
-  //   }
-
-  //   const list = document.createElement('ul');
-  //   this.helpBox.content.appendChild(list);
-
-  //   if(this.orbitControls.enablePan) {
-  //     addOrbitControlHelp(list);
-  //   }
-
-  //   if(this.activeExercise.instance.helpMessage) {
-  //     const items = this.activeExercise.instance.helpMessage();
-  //     items.forEach(item => {
-  //       list.appendChild(item);
-  //     });
-  //   }
-     
-  //   this.helpBox.content.style.display = 'block';
-  // }
 
   setCamera({ position, lookAt }) {
     this.camera.position.x = position.x;
@@ -137,7 +102,7 @@ export class BasicView {
     this.tick = tick;
   }
 
-  toggleOrbitControls(activate = true) {
+  toggleOrbitControls(activate = false) {
     if(activate) {
       this.orbitControls.enablePan = true;
       this.orbitControls.enableZoom = true;

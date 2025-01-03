@@ -63,3 +63,7 @@ ul {
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+.hidden {
+	display: none;
+}

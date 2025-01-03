@@ -25,7 +25,6 @@ export class DebugUI {
   init() {
     this.scene.add(this.mesh)
     this.addGuiTweaks();
-    this.view.toggleOrbitControls(true);
     this.view.show(this.scene);
   }
 

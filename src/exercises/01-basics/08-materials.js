@@ -28,7 +28,7 @@ export class MaterialExercise {
       mesh.position.x = index * 1.5 - 1.5;
       this.scene.add(mesh)
     });
-    this.view.toggleOrbitControls(true);
+
     this.view.setCamera({
       position: { x: 2, y: 1, z: 3 },
       lookAt: { x: 0, y: 0, z: 0 }

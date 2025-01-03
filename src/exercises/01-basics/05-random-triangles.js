@@ -11,7 +11,6 @@ export class RandomTriangles {
   }
 
   init() {
-    this.view.toggleOrbitControls(true);
     this.scene.add(this.mesh);
     this.view.show(this.scene);
   }

@@ -99,7 +99,6 @@ export class ShadowExercise {
 
     this.view.enableShadows()
       
-    this.view.toggleOrbitControls(true);
     this.view.show(this.scene);
     this.view.setTick(() => this.animation());
   }

@@ -17,7 +17,6 @@ export class Text3D {
   }
 
   init() {
-    this.view.toggleOrbitControls(true);
     this.view.setCamera({
       position: { x: 1, y: 1, z: 3 },
       lookAt: { x: 0, y: 0, z: 0 }
