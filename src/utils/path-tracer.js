@@ -18,6 +18,9 @@ export class PathTracer {
     const geometry = new THREE.BufferGeometry().setFromPoints([this.path[lastPositionIndex], this.path[lastPositionIndex + 1]]);
     const line = new THREE.Line(geometry, this.material);
     this.mesh.add(line);
+    if (this.mesh.children.length > 5000) {
+      this.mesh.remove(this.mesh.children[0]);
+    }
   }
 
   dispose() {

@@ -58,11 +58,11 @@ export class MaterialExercise {
   }
 
   addGuiTweaks() {
-    this.gui.add(this.physicalMaterial, 'metalness').min(0).max(1).step(0.0001);
-    this.gui.add(this.physicalMaterial, 'roughness').min(0).max(1).step(0.0001);
-    this.gui.add(this.physicalMaterial, 'transmission').min(0).max(1).step(0.0001);
-    this.gui.add(this.physicalMaterial, 'ior').min(1).max(10).step(0.0001);
-    this.gui.add(this.physicalMaterial, 'thickness').min(0).max(1).step(0.0001);
+    this.gui.add(this.physicalMaterial, 'metalness').min(0).max(1).step(0.0001).name('Metalness');
+    this.gui.add(this.physicalMaterial, 'roughness').min(0).max(1).step(0.0001).name('Roughness');
+    this.gui.add(this.physicalMaterial, 'transmission').min(0).max(1).step(0.0001).name('Transmission');
+    this.gui.add(this.physicalMaterial, 'ior').min(1).max(10).step(0.0001).name('IOR');
+    this.gui.add(this.physicalMaterial, 'thickness').min(0).max(1).step(0.0001).name('Thickness');
   }
 
   createMaterial() {

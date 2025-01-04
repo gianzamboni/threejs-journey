@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { Sky } from 'three/addons/objects/Sky.js'
-//import { PathTracer } from '../../utils/path-tracer';
-//import GUI from 'lil-gui';
+import { PathTracer } from '../../utils/path-tracer';
+import GUI from 'lil-gui';
 
 const textureMaps = {
   color: 'diff',
@@ -276,7 +276,6 @@ class Bushes extends SceneObject {
     this.textures = loadTexturesMaps('bushes/scattered_leaves_008', ['color', 'normal', 'ao', 'displacement', 'roug']);
     this.material = this.generateMaterial();
     this.mesh = new THREE.Group();
-
     this.bushes = this.generateBushes();
   }
 
@@ -388,8 +387,8 @@ export class Ghosts extends SceneObject {
       const ghost = this.generateGhost(color);
       this.ghosts.push(ghost);
       this.mesh.add(ghost.light);
-      //this.mesh.add(ghost.helper);
-      //this.mesh.add(ghost.tracer.mesh);
+      this.mesh.add(ghost.helper);
+      this.mesh.add(ghost.tracer.mesh);
     });
   }
 
@@ -404,8 +403,9 @@ export class Ghosts extends SceneObject {
 
     this.generateGhostWobblingConstants(ghost);
     this.setupGhostShadows(ghost);
-    //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
-    //ghost.tracer = new PathTracer(ghost.light, color);
+    ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+    ghost.tracer = new PathTracer(ghost.light, color);
+    console.log(ghost)
     return ghost;
   }
 
@@ -432,7 +432,7 @@ export class Ghosts extends SceneObject {
       light.position.x = Math.cos(angle + displacement) * (radius + Math.cos(angle*wobblingX.speed)*wobblingX.amplitude);
       light.position.z = Math.sin(angle + displacement) * (radius + Math.sin(angle*wobblingZ.speed)*wobblingZ.amplitude);
       light.position.y = Math.sin(angle + displacement) * Math.sin(angle * multipliers[0]) * Math.sin(angle * multipliers[1]);
-      //ghost.tracer.update();
+      ghost.tracer.update();
     })
   }
 
@@ -440,8 +440,8 @@ export class Ghosts extends SceneObject {
     this.mesh.clear();
     this.ghosts.forEach(ghost => {
       ghost.light.dispose();
-      //ghost.helper.dispose();
-      //ghost.tracer.dispose();
+      ghost.helper.dispose();
+      ghost.tracer.dispose();
     });
   }
 }
@@ -461,7 +461,6 @@ export class HauntedHouse {
       new Graves(),
       this.ghosts,
     ];
-    
   }
 
   createLights() {

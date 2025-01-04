@@ -31,7 +31,6 @@ const journey = [
         id: 'animations',
         title: "Animations",
         class: RotatingCube,
-        config: {}
       }, {
         id: 'cameras',
         title: "Cameras",
