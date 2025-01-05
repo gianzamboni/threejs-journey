@@ -5,7 +5,8 @@
 - Crear pantalla de carga
 - Pasar texturas a WEBP
 - Update viten
-
+- Helpbox necesita un refactor - La animacion de Bootstrap en mobile anda trabada
+- Modificar las instrucciones de control de camera para dispositivos moviles
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 

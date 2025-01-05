@@ -12,7 +12,7 @@ export class BasicView {
      
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
-    this.animationLoop = new AnimationLoop(() => this.animation())
+    this.animationLoop = new AnimationLoop(this.animation.bind(this));
     this.tick = null;
 
     this.camera = new THREE.PerspectiveCamera(75, this.size.width / this.size.height, 0.1, 100);
@@ -67,12 +67,13 @@ export class BasicView {
     if(this.tick || exercise.config.enableOrbitControls) {
       this.animationLoop.start();
     }
+    return this.runningExercise;
   }
 
-  animation() {
+  animation(timer) {
     this.orbitControls.update();
     if(this.tick) {
-      this.tick();
+      this.tick(timer);
     }
     this.renderer.render(this.runningExercise.scene, this.camera);
   }

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { dispose } from './dispose';
 export class RedCube {
   constructor() {
-    this.geometry = new THREE.BoxGeometry(1, 1, 1);
+    this.geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
   }

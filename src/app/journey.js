@@ -3,7 +3,7 @@ import { CubeGroup } from '../exercises/01-basics/02-cube-group.js';
 import { RotatingCube } from '../exercises/01-basics/03-rotating-cube.js';
 import { OrbitControlsCube } from '../exercises/01-basics/04-orbit-control.js';
 import { RandomTriangles } from '../exercises/01-basics/05-random-triangles.js';
-import { DebugUI } from '../exercises/01-basics/06-debug-ui.js';
+import { DebugUIExercise } from '../exercises/01-basics/06-debug-ui.js';
 import { TextureExercise } from '../exercises/01-basics/07-textures.js';
 import { MaterialExercise } from '../exercises/01-basics/08-materials.js';
 import { Text3D } from '../exercises/01-basics/09-text.js';
@@ -31,6 +31,9 @@ const journey = [
         id: 'animations',
         title: "Animations",
         class: RotatingCube,
+        config: {
+          debugable: true
+        }
       }, {
         id: 'cameras',
         title: "Cameras",
@@ -48,7 +51,7 @@ const journey = [
       }, {
         id: 'debug-ui',
         title: "Debug UI",
-        class: DebugUI,
+        class: DebugUIExercise,
         config: {
           enableOrbitControls: true
         }

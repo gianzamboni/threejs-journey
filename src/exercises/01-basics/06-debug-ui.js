@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import GUI from 'lil-gui'
 import { dispose } from '../../utils/dispose';
 
-export class DebugUI {
+export class DebugUIExercise {
   constructor(view) {
     this.view = view;
     this.debugOject = {

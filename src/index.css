@@ -44,20 +44,36 @@ ul {
 	border-bottom: 1px solid #000;
 }
 
+.icon {
+	height: 30px;
+	aspect-ratio: 1;
+}
+
 #help-box {
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	margin: 1em;
 	z-index: 1000;
+
+	@media screen and (max-width: 768px) {
+		width: 90vw;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 }
 
-#debug-ui {
+#debug-ui-control-box {
 	position: fixed;
-	bottom: 0;
+	top: 0;
 	right: 0;
-	margin: 1em;
 	z-index: 1000;
+	color: white;
+	margin: 1em;
+}
+
+.debug-data-value {
+	font-weight: normal;
+	color: rgb(255, 60, 60);
 }
 
 .help-box-item {
