@@ -387,8 +387,8 @@ export class Ghosts extends SceneObject {
       const ghost = this.generateGhost(color);
       this.ghosts.push(ghost);
       this.mesh.add(ghost.light);
-      this.mesh.add(ghost.helper);
-      this.mesh.add(ghost.tracer.mesh);
+      //this.mesh.add(ghost.helper);
+      //this.mesh.add(ghost.tracer.mesh);
     });
   }
 
@@ -403,9 +403,8 @@ export class Ghosts extends SceneObject {
 
     this.generateGhostWobblingConstants(ghost);
     this.setupGhostShadows(ghost);
-    ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
-    ghost.tracer = new PathTracer(ghost.light, color);
-    console.log(ghost)
+    //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+    //ghost.tracer = new PathTracer(ghost.light, color);
     return ghost;
   }
 
@@ -440,8 +439,8 @@ export class Ghosts extends SceneObject {
     this.mesh.clear();
     this.ghosts.forEach(ghost => {
       ghost.light.dispose();
-      ghost.helper.dispose();
-      ghost.tracer.dispose();
+      //ghost.helper.dispose();
+      //ghost.tracer.dispose();
     });
   }
 }
