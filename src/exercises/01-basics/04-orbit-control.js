@@ -13,5 +13,5 @@ export class OrbitControlsCube extends CenteredCube {
   
   async dispose() {
     super.dispose();
-  }
+  }    
 }

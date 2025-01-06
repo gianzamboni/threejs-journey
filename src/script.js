@@ -3,8 +3,9 @@ import { Menu } from './app/menu.js';
 import { HelpBox } from './app/help-box.js';
 import { journey } from './app/journey.js';
 import { DebugUI } from './app/debug-ui.js';
+import { DebugableExercise } from './utils/debugable-exercise.js';
+
 Array.prototype.last = function() { return this[this.length - 1] };
-let tappedCallback = null;
 
 class App {
   constructor(journey) {
@@ -20,13 +21,21 @@ class App {
   };
 
   async execute(exercise) {
+    await this.stopCurrentExercise();
     history.pushState(exercise.id, "", exercise.id);
     document.title = `${exercise.title} - Three.js Journey`;
     this.menu.deselectExercise(this.activeExercise.id);
     this.activeExercise = exercise;
+
+    const exerciseInstance = new exercise.class(this.view); 
+    if(exercise.config.debugable) {
+      this.exerciseInstance = new DebugableExercise(exerciseInstance, this.debugUI, this.view);
+    } else {
+      this.exerciseInstance = exerciseInstance;
+    }
+
     this.menu.selectExercise(exercise.id);
-    this.exerciseInstance = await this.view.run(exercise);
-    this.debugUI.setUp(exercise, this.exerciseInstance);
+    await this.view.run(exercise, this.exerciseInstance);
     this.helpBox.show(exercise);
   };
 
@@ -44,14 +53,26 @@ class App {
   }
 
   toggleDebugUI() {
-    this.debugUI.toggle();
+    if(this.activeExercise.config.debugable) {
+      this.exerciseInstance.toggleDebugUI();
+    }
+  }
+
+  async stopCurrentExercise() {
+    await this.view.stop();
+    if(this.exerciseInstance) {
+      await this.exerciseInstance.dispose();
+    }
   }
 }
 
-const url = new URL(window.location.href);
-const exercise = url.pathname.split('/').last();
-const app = new App(journey);
-app.init(exercise);
+let app = null;
+window.addEventListener('load', () => {
+  const url = new URL(window.location.href);
+  const exercise = url.pathname.split('/').last();
+  app = new App(journey);
+  app.init(exercise);
+});
 
 window.addEventListener('popstate', (event) => {
   const exercise = app.findExercise(event.state);

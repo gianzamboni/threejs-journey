@@ -39,7 +39,7 @@ const journey = [
         title: "Cameras",
         class: OrbitControlsCube,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
         }
       }, {
         id: 'geometries',

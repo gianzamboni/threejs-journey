@@ -14,13 +14,14 @@ export class DebugUI {
     this.lastGUIUpdate = performance.now();
   }
 
-  setUp(exerciseData, exerciseInstance) {
-    this.debugDataContainer.innerHTML = "";
+  reset() {
+    this.hide();
+    this.shouldShow = false;
+    Object.keys(this.info).forEach((key) => {
+      console.log(this.info[key].element);
+      this.info[key].row.remove();
+    });
     this.info = {};
-    if(exerciseData.config.debugable) {
-      this.shouldShow = true;
-      this.currentExercise = exerciseInstance;
-    }
   }
 
   toggle() {
@@ -35,14 +36,12 @@ export class DebugUI {
     this.lilGuiContainer.style.display = "block";
     this.debugDataContainer.style.display = "block";
     this.isShown = true;
-    this.currentExercise.startDebug(this);
   }
 
   hide() {
     this.lilGuiContainer.style.display = "none";
     this.debugDataContainer.style.display = "none";
     this.isShown = false;
-    this.currentExercise.stopDebug();
   }
 
   register(dataLabel, config) {
@@ -60,6 +59,7 @@ export class DebugUI {
 
     this.debugDataContainer.appendChild(rowData);
     this.info[dataLabel] = {
+      row: rowData,
       element: valueSpan,
       value: 0,
       updateType: config.updateType ?? "replace"
@@ -79,4 +79,10 @@ export class DebugUI {
       this.info[dataLabel].element.textContent = Math.round(this.info[dataLabel].value);
     }
   }
+
+  enable() {
+    this.shouldShow = true;
+  }
+
+
 }

@@ -56,15 +56,11 @@ export class BasicView {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
-  async run(exercise) {
-    if(this.runningExercise !== null) {
-      this.runningExercise.dispose();
-    }
-    await this.stop();
-    this.runningExercise = new exercise.class(this);
+  async run(exerciseData, exerciseInstence) {
+    this.runningExercise = exerciseInstence;
     this.runningExercise.init();
-    this.toggleOrbitControls(exercise.config.enableOrbitControls);
-    if(this.tick || exercise.config.enableOrbitControls) {
+    this.toggleOrbitControls(exerciseData.config.enableOrbitControls);
+    if(this.tick || exerciseData.config.enableOrbitControls) {
       this.animationLoop.start();
     }
     return this.runningExercise;

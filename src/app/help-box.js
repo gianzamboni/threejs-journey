@@ -64,7 +64,7 @@ export class HelpBox {
       this.helpSections.debugUI.classList.remove('hidden');
       this.collapsable.classList.remove('hidden');
     } else {
-      this.collapsable.debugUI.classList.add('hidden');
+      this.helpSections.debugUI.classList.add('hidden');
     }
   }
 }
