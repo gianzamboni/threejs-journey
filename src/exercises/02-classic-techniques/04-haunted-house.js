@@ -431,7 +431,7 @@ export class Ghosts extends SceneObject {
       light.position.x = Math.cos(angle + displacement) * (radius + Math.cos(angle*wobblingX.speed)*wobblingX.amplitude);
       light.position.z = Math.sin(angle + displacement) * (radius + Math.sin(angle*wobblingZ.speed)*wobblingZ.amplitude);
       light.position.y = Math.sin(angle + displacement) * Math.sin(angle * multipliers[0]) * Math.sin(angle * multipliers[1]);
-      ghost.tracer.update();
+      //ghost.tracer.update();
     })
   }
 
