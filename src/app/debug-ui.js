@@ -4,8 +4,7 @@ export class DebugUI {
     this.lilGuiContainer = document.getElementById("lil-gui-container");
     this.debugDataContainer = document.getElementById("debug-data");
 
-    this.lilGuiContainer.style.display = "none";
-    this.debugDataContainer.style.display = "none";
+    this.container.style.display = "none";
 
     this.shouldShow = false;
     this.isShown = false;
@@ -32,14 +31,12 @@ export class DebugUI {
   }
 
   show() {
-    this.lilGuiContainer.style.display = "block";
-    this.debugDataContainer.style.display = "block";
+    this.container.style.display = "block";
     this.isShown = true;
   }
 
   hide() {
-    this.lilGuiContainer.style.display = "none";
-    this.debugDataContainer.style.display = "none";
+    this.container.style.display = "none";
     this.isShown = false;
   }
 

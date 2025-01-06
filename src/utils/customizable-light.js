@@ -90,7 +90,6 @@ export class CustomizableLight {
     this.createOnOffControl();
     this.createLightParamsControls();
     this.createExtraControls();
-    this.lightSettingFolder.close();
   }
 
   createPositionalControl(param, onChange) {

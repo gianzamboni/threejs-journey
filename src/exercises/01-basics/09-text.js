@@ -67,7 +67,7 @@ export class Text3D {
     });
   }
 
-  animate() {
+  animation() {
     this.donuts.forEach(donut => {
       donut.rotation.x += 0.01;
       donut.rotation.y += 0.01;

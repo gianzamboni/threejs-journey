@@ -115,7 +115,8 @@ const journey = [
         title: "Haunted House",
         class: HauntedHouse,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }
     ]

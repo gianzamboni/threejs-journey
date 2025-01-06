@@ -59,7 +59,7 @@ export class BakedShadow {
       lookAt: { x: 0, y: 0, z: 0 }
     });
     this.view.show(this.scene);
-    this.view.setTick(this.animate.bind(this));
+    this.view.setTick(this.animation.bind(this));
   }
 
   dispose() {
@@ -72,7 +72,7 @@ export class BakedShadow {
     this.simpleBakedShadow.dispose();
   }
 
-  animate() {
+  animation() {
     const elapsedTime = this.clock.getElapsedTime();
     this.sphere.position.x = Math.cos(elapsedTime) * 1.5;
     this.sphere.position.z = Math.sin(elapsedTime) * 1.5;

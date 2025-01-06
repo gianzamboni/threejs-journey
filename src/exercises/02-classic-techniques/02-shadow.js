@@ -3,10 +3,15 @@ import * as THREE from 'three';
 import { CustomizableLight } from '../../utils/customizable-light';
 
 export class ShadowExercise {
-  constructor(view) {
+  constructor(view, debugUI) {
     this.view = view;
     this.scene = new THREE.Scene();
-    this.gui = new GUI();
+    this.debugUI = debugUI;
+    this.gui = new GUI({
+      name: "Settings",
+      closeFolders: true,
+      container: this.debugUI.lilGuiContainer
+    });
 
     this.lights = {
       ambient: new CustomizableLight('AmbientLight', {

@@ -3,9 +3,15 @@ import * as THREE from 'three';
 import { CustomizableLight } from '../../utils/customizable-light';
 
 export class LightsExercise {
-  constructor(view) {
+  constructor(view, debugUI) {
     this.view = view;
-    this.gui = new GUI();
+    this.debugUI = debugUI;
+    this.gui = new GUI({
+      title: "Settings",
+      container: debugUI.lilGuiContainer,
+      closeFolders: true,
+    });
+
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
     this.lights = [
@@ -77,6 +83,7 @@ export class LightsExercise {
     this.plane.rotation.x = -Math.PI * 0.5;
     this.plane.position.y = -0.65;
     this.scene.add(this.plane);
+
   }
 
   init() {
@@ -97,7 +104,7 @@ export class LightsExercise {
 
   }
 
-  animationFrame() {
+  animation() {
     const elapsedTime = this.clock.getElapsedTime();
     this.lights.forEach(light => light.update());
     this.objects.forEach(object => {

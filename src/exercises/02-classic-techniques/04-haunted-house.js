@@ -511,10 +511,10 @@ export class HauntedHouse {
 
     this.view.enableShadows();
     this.view.show(this.scene);
-    this.view.setTick(this.animate.bind(this));
+    this.view.setTick(this.animation.bind(this));
   }
 
-  animate() {
+  animation() {
     this.timer.update();
     const elapsedTime = this.timer.getElapsed();
     this.ghosts.animate(elapsedTime);
