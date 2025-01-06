@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
+import GUI from 'lil-gui';
 
 export class Text3D {
   constructor(view) {
@@ -18,7 +19,7 @@ export class Text3D {
 
   init() {
     this.view.setCamera({
-      position: { x: 1, y: 1, z: 3 },
+      position: { x: 1, y: 1, z: 2.5},
       lookAt: { x: 0, y: 0, z: 0 }
     });
 
@@ -66,7 +67,7 @@ export class Text3D {
     });
   }
 
-  animate() {
+  animation() {
     this.donuts.forEach(donut => {
       donut.rotation.x += 0.01;
       donut.rotation.y += 0.01;

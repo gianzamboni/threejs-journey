@@ -25,3 +25,11 @@ export function screenResolutionName() {
     return '1k';
   }
 }
+
+export function label(name) {
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+export function deviceIsTouchable() {
+  return window.matchMedia('(pointer: coarse)').matches;
+}

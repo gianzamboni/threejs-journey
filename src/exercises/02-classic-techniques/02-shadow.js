@@ -3,10 +3,15 @@ import * as THREE from 'three';
 import { CustomizableLight } from '../../utils/customizable-light';
 
 export class ShadowExercise {
-  constructor(view) {
+  constructor(view, debugUI) {
     this.view = view;
     this.scene = new THREE.Scene();
-    this.gui = new GUI();
+    this.debugUI = debugUI;
+    this.gui = new GUI({
+      name: "Settings",
+      closeFolders: true,
+      container: this.debugUI.lilGuiContainer
+    });
 
     this.lights = {
       ambient: new CustomizableLight('AmbientLight', {
@@ -50,9 +55,10 @@ export class ShadowExercise {
   }
   
   init() {
+    const lightFolder = this.gui.addFolder('Lights');
     Object.values(this.lights).forEach((light) => {
       light.addTo(this.scene);
-      light.addControls(this.gui);
+      light.addControls(lightFolder);
     });
 
     
@@ -75,7 +81,8 @@ export class ShadowExercise {
     this.pointLightCameraHelper = new THREE.CameraHelper(this.lights.point.shadow.camera);
     this.pointLightCameraHelper.visible = false;
   
-    this.material.roughness = 0.7;
+    this.material.roughness = 0.476;
+    this.material.metalness = 0.7;
     this.addMaterialControls();
 
     this.plane.rotation.x = -Math.PI * 0.5;

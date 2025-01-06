@@ -30,24 +30,31 @@
   <div class="text-center help-box-item">
     <span id="help-box-title" class="exercise-title">Help Box</span>
   </div>
-  <div id="help-box-content" class="help-box-item">
-    <div id="help-box-exercise-help">
-    </div>
-    <div id="help-box-orbit-controls-help">
-      <ul>
-        <li>Click and drag to rotate the camera</li>
-        <li>Scroll to zoom in and out</li>
-        <li>Right click and drag to pan</li>
-      </ul>
-    </div>
-    <div id="help-box-debug-ui-help">
-      <ul>
-        <li>Press "H" to activate Settings UI</li>
-      </ul>
+  <div id="help-box-collapsable">
+    <div id="help-box-content" class="help-box-item">
+      <div id="help-box-exercise-help">
+      </div>
+      <div id="help-box-orbit-controls-help">
+        <ul>
+          <li>Click and drag to rotate the camera</li>
+          <li>Scroll to zoom in and out</li>
+          <li>Right click and drag to pan</li>
+        </ul>
+      </div>
+      <div id="help-box-debug-ui-help">
+        <ul>
+          <li>Double <span class="click-action">click</span> to see debug info</li>
+        </ul>
+      </div>
     </div>
   </div>
+
 </div>
-    
+<div id="debug-ui-control-box">
+  <div id="lil-gui-container"></div>
+  <div id="debug-data">
+  </div>
+</div> 
 </div>
   <canvas class="webgl"></canvas>
   <script defer type="module" src="script.js"></script>

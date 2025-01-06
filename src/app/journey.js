@@ -3,7 +3,7 @@ import { CubeGroup } from '../exercises/01-basics/02-cube-group.js';
 import { RotatingCube } from '../exercises/01-basics/03-rotating-cube.js';
 import { OrbitControlsCube } from '../exercises/01-basics/04-orbit-control.js';
 import { RandomTriangles } from '../exercises/01-basics/05-random-triangles.js';
-import { DebugUI } from '../exercises/01-basics/06-debug-ui.js';
+import { DebugUIExercise } from '../exercises/01-basics/06-debug-ui.js';
 import { TextureExercise } from '../exercises/01-basics/07-textures.js';
 import { MaterialExercise } from '../exercises/01-basics/08-materials.js';
 import { Text3D } from '../exercises/01-basics/09-text.js';
@@ -31,34 +31,39 @@ const journey = [
         id: 'animations',
         title: "Animations",
         class: RotatingCube,
-        config: {}
+        config: {
+          debugable: true
+        }
       }, {
         id: 'cameras',
         title: "Cameras",
         class: OrbitControlsCube,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'geometries',
         title: "Geometries",
         class: RandomTriangles,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'debug-ui',
         title: "Debug UI",
-        class: DebugUI,
+        class: DebugUIExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'textures',
         title: "Textures",
         class: TextureExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
         }
       },
       {
@@ -66,14 +71,15 @@ const journey = [
         title: "Materials",
         class: MaterialExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: '3d-text',
         title: "3D Text",
         class: Text3D,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
         }
       }
     ]
@@ -86,28 +92,31 @@ const journey = [
         title: "Lights",
         class: LightsExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'shadows',
         title: "Dynamic Shadows",
         class: ShadowExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'baked-shadows',
         title: "Baked Shadows",
         class: BakedShadow,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
         }
       }, {
         id: 'haunted-house',
         title: "Haunted House",
         class: HauntedHouse,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }
     ]

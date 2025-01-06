@@ -12,7 +12,7 @@ export class BasicView {
      
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
-    this.animationLoop = new AnimationLoop(() => this.animation())
+    this.animationLoop = new AnimationLoop(this.animation.bind(this));
     this.tick = null;
 
     this.camera = new THREE.PerspectiveCamera(75, this.size.width / this.size.height, 0.1, 100);
@@ -56,23 +56,20 @@ export class BasicView {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
-  async run(exercise) {
-    if(this.runningExercise !== null) {
-      this.runningExercise.dispose();
-    }
-    await this.stop();
-    this.runningExercise = new exercise.class(this);
+  async run(exerciseData, exerciseInstence) {
+    this.runningExercise = exerciseInstence;
     this.runningExercise.init();
-    this.toggleOrbitControls(exercise.config.enableOrbitControls);
-    if(this.tick || exercise.config.enableOrbitControls) {
+    this.toggleOrbitControls(exerciseData.config.enableOrbitControls);
+    if(this.tick || exerciseData.config.enableOrbitControls) {
       this.animationLoop.start();
     }
+    return this.runningExercise;
   }
 
-  animation() {
+  animation(timer) {
     this.orbitControls.update();
     if(this.tick) {
-      this.tick();
+      this.tick(timer);
     }
     this.renderer.render(this.runningExercise.scene, this.camera);
   }
@@ -112,5 +109,13 @@ export class BasicView {
       this.orbitControls.enableZoom = false;
       this.orbitControls.enableRotate = false;
     }
+  }
+
+  get trianglesCount() {
+    return this.renderer.info.render.triangles;
+  }
+
+  get linesCount() {
+    return this.renderer.info.render.lines;
   }
 }

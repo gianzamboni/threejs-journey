@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { Sky } from 'three/addons/objects/Sky.js'
-//import { PathTracer } from '../../utils/path-tracer';
-//import GUI from 'lil-gui';
+import { PathTracer } from '../../utils/path-tracer';
+import GUI from 'lil-gui';
 
 const textureMaps = {
   color: 'diff',
@@ -276,7 +276,6 @@ class Bushes extends SceneObject {
     this.textures = loadTexturesMaps('bushes/scattered_leaves_008', ['color', 'normal', 'ao', 'displacement', 'roug']);
     this.material = this.generateMaterial();
     this.mesh = new THREE.Group();
-
     this.bushes = this.generateBushes();
   }
 
@@ -461,7 +460,6 @@ export class HauntedHouse {
       new Graves(),
       this.ghosts,
     ];
-    
   }
 
   createLights() {
@@ -512,10 +510,10 @@ export class HauntedHouse {
 
     this.view.enableShadows();
     this.view.show(this.scene);
-    this.view.setTick(this.animate.bind(this));
+    this.view.setTick(this.animation.bind(this));
   }
 
-  animate() {
+  animation() {
     this.timer.update();
     const elapsedTime = this.timer.getElapsed();
     this.ghosts.animate(elapsedTime);

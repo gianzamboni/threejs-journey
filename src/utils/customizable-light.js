@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper";
-import { nearestPowerOfTwo, screenResolution } from "./utils";
+import { label, nearestPowerOfTwo, screenResolution } from "./utils";
 
 const MIN_MAX = {
   angle: { min: 0, max: Math.PI / 2, step: 0.01 },
@@ -93,7 +93,7 @@ export class CustomizableLight {
   }
 
   createPositionalControl(param, onChange) {
-    const positionFolder = this.lightSettingFolder.addFolder(param);
+    const positionFolder = this.lightSettingFolder.addFolder(label(param));
     positionFolder.close();
     ["x", "y", "z"].forEach((axis) => {
       const minMax = MIN_MAX[axis];
@@ -106,7 +106,7 @@ export class CustomizableLight {
         .name(axis)
         .onChange(() => {
           onChange(axis);
-        });
+        }).name(label(axis));
 
       this.lightControls.push(control);
     });
@@ -166,7 +166,7 @@ export class CustomizableLight {
       .name(param)
       .onChange(() => {
         this.light[param].set(this.params[param]);
-      });
+      }).name(label(param));
 
     this.lightControls.push(control);
   }
@@ -181,7 +181,7 @@ export class CustomizableLight {
       .name(param)
       .onChange(() => {
         this.light[param] = this.params[param];
-    });
+    }).name(label(param));
     this.lightControls.push(control);
   }
 

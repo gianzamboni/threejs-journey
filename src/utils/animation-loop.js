@@ -1,7 +1,10 @@
+import { Timer } from 'three/addons/misc/Timer.js'
+
 export class AnimationLoop {
   constructor(tick) {
     this.animationStatus = "STOPPED";
     this.tick = tick;
+    this.timer = new Timer();
   }
 
   start() {
@@ -10,7 +13,8 @@ export class AnimationLoop {
   }
   
   animate() {
-    this.tick();
+    this.timer.update();
+    this.tick(this.timer);
     if (this.animationStatus === "RUNNING") {
       window.requestAnimationFrame(() => this.animate());
     } else {
@@ -32,6 +36,7 @@ export class AnimationLoop {
     if (this.animationStatus === "STOPPED") {
       return;
     }
+    this.timer.reset();
     this.animationStatus = "STOPPING";
     await this.animationStopped();
   }
