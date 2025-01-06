@@ -64,7 +64,6 @@ const journey = [
         class: TextureExercise,
         config: {
           enableOrbitControls: true,
-          debugable: true
         }
       },
       {
@@ -72,14 +71,15 @@ const journey = [
         title: "Materials",
         class: MaterialExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: '3d-text',
         title: "3D Text",
         class: Text3D,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
         }
       }
     ]
@@ -92,21 +92,23 @@ const journey = [
         title: "Lights",
         class: LightsExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'shadows',
         title: "Dynamic Shadows",
         class: ShadowExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'baked-shadows',
         title: "Baked Shadows",
         class: BakedShadow,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
         }
       }, {
         id: 'haunted-house',

@@ -72,6 +72,15 @@ ul {
 	background-color: #00000080;
 }
 
+#debug-data {
+	padding: 0.5em;
+
+	.debug-data-row {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5em;
+	}
+}
 .debug-data-value {
 	font-weight: normal;
 	color: rgb(255, 60, 60);
@@ -94,19 +103,19 @@ ul {
 }
 
 .lil-gui {
-	--background-color: #f8f9fa;
-	--text-color: #000000;
-	--title-background-color: #f8f9fa;
-	--title-text-color: #000000;
-	--widget-color: #ededed;
-	--hover-color: #ededed;
-	--focus-color: #ededed;
-	--number-color: hsl(214, 85%, 45%);
-	--string-color: hsl(214, 85%, 45%);
+	--background-color: #ffffff19;
+	--text-color: white;
+	--title-background-color: #ffffff19;
+	--title-text-color: white;
+	--widget-color: #ffffff19;
+	--hover-color: #ffffff33;
+	--focus-color: #ffffff33;
+	--number-color: white;
+	--string-color: white;
 	--font-size: 1rem;
 	--input-font-size: 12px;
 	--font-family: var(--bs-font-sans-serif);
-	--widget-border-radius: 0.375rem;
+	--widget-border-radius: 0.2rem;
 
 	top: 1rem !important;
 	border-radius: 0.375rem;
