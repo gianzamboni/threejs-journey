@@ -6,7 +6,7 @@ export class TextureExercise {
     this.view = view;
     this.scene = new THREE.Scene();
     this.colorTexture = this.loadMinecrafTexture();
-    this.geometry = new THREE.BoxGeometry(1, 1, 1);
+    this.geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
     this.material = new THREE.MeshBasicMaterial({ map: this.colorTexture });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
   }

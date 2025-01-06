@@ -63,7 +63,8 @@ const journey = [
         title: "Textures",
         class: TextureExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       },
       {
