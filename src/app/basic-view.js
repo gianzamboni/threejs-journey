@@ -110,4 +110,12 @@ export class BasicView {
       this.orbitControls.enableRotate = false;
     }
   }
+
+  get trianglesCount() {
+    return this.renderer.info.render.triangles;
+  }
+
+  get linesCount() {
+    return this.renderer.info.render.lines;
+  }
 }

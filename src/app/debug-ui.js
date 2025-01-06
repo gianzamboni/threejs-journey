@@ -18,7 +18,6 @@ export class DebugUI {
     this.hide();
     this.shouldShow = false;
     Object.keys(this.info).forEach((key) => {
-      console.log(this.info[key].element);
       this.info[key].row.remove();
     });
     this.info = {};
@@ -44,7 +43,7 @@ export class DebugUI {
     this.isShown = false;
   }
 
-  register(dataLabel, config) {
+  register(dataLabel, config = {}) {
     const rowData = document.createElement("div");
     rowData.classList.add("debug-data-row");
     
@@ -62,21 +61,31 @@ export class DebugUI {
       row: rowData,
       element: valueSpan,
       value: 0,
-      updateType: config.updateType ?? "replace"
+      updateType: config.updateType ?? "replace",
     };
+
+    if(config.updateType === "mean") {
+      this.info[dataLabel].samples = 0; 
+    }
   }
 
   update(dataLabel, value) {
     if(this.info[dataLabel].updateType === "mean") {
-      this.info[dataLabel].value = (this.info[dataLabel].value + value) / 2;
+      this.info[dataLabel].samples++;
+      this.info[dataLabel].value = this.info[dataLabel].value  + (value - this.info[dataLabel].value)/this.info[dataLabel].samples;
     } else {
       this.info[dataLabel].value = value;
     }
 
-    const now = performance.now();
-    if(now - this.lastGUIUpdate > 500) {
-      this.lastGUIUpdate = now;
-      this.info[dataLabel].element.textContent = Math.round(this.info[dataLabel].value);
+    this.updateGUI();
+  }
+
+  updateGUI() {
+    if(performance.now() - this.lastGUIUpdate > 100) {
+      Object.keys(this.info).forEach((key) => {
+        this.info[key].element.textContent = Math.round(this.info[key].value);
+      });
+      this.lastGUIUpdate = performance.now();
     }
   }
 

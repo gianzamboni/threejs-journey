@@ -27,11 +27,10 @@ class App {
     this.menu.deselectExercise(this.activeExercise.id);
     this.activeExercise = exercise;
 
-    const exerciseInstance = new exercise.class(this.view); 
     if(exercise.config.debugable) {
-      this.exerciseInstance = new DebugableExercise(exerciseInstance, this.debugUI, this.view);
+      this.exerciseInstance = new DebugableExercise(exercise.class, this.debugUI, this.view);
     } else {
-      this.exerciseInstance = exerciseInstance;
+      this.exerciseInstance = new exercise.class(this.view);
     }
 
     this.menu.selectExercise(exercise.id);

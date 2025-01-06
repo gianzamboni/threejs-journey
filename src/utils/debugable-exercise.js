@@ -1,14 +1,9 @@
 export class DebugableExercise {
   
   constructor(exercise, debugUI, view) {
-    this.exercise = exercise;
+    this.exercise = new exercise(view, debugUI);
     this.debugUI = debugUI;
     this.view = view;
-
-    this.debugUI.register('FPS', {
-      type: "mean"
-    })
-
     this.sendDebugData = false;
     this.debugUI.enable();
   }
@@ -18,7 +13,11 @@ export class DebugableExercise {
   }
 
   init() {
-    this.exercise.init();
+    this.debugUI.register('FPS', {
+      updateType: "mean"
+    })
+    
+    this.exercise.init(this.debugUI);
     this.view.setTick(this.animation.bind(this));
   }
 
@@ -32,8 +31,7 @@ export class DebugableExercise {
   }
 
   toggleDebugUI() {
-    this.sendDebugData = true;
-    this.debugShouldShow = true;
+    this.sendDebugData = !this.sendDebugData;
     this.debugUI.toggle();
   }
 
