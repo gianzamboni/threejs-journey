@@ -1,5 +1,4 @@
 ## TO DOs
-- Agregar modulo de debugging
 - Selector de resoluciones
 - Refactor loadManager para que sea una clase y no un modulo
 - Crear pantalla de carga
