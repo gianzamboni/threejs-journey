@@ -69,6 +69,7 @@ ul {
 	z-index: 1000;
 	color: white;
 	margin: 1em;
+	background-color: #00000080;
 }
 
 .debug-data-value {

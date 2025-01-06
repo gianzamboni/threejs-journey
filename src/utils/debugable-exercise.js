@@ -23,7 +23,9 @@ export class DebugableExercise {
   }
 
   animation(timer) {
-    this.exercise.animation(timer);
+    if(this.exercise.animation) {
+      this.exercise.animation(timer);
+    }
     if(this.sendDebugData) {
       this.debugUI.update('FPS', 1/timer.getDelta()); 
     }

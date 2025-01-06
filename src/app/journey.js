@@ -40,20 +40,23 @@ const journey = [
         class: OrbitControlsCube,
         config: {
           enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'geometries',
         title: "Geometries",
         class: RandomTriangles,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'debug-ui',
         title: "Debug UI",
         class: DebugUIExercise,
         config: {
-          enableOrbitControls: true
+          enableOrbitControls: true,
+          debugable: true
         }
       }, {
         id: 'textures',
