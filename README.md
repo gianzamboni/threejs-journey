@@ -10,6 +10,8 @@
 - Refactor funciones muy largas
 - Selector automatico de resolucion
 - Crear opciones de debug para los ejercicios
+- Habilitar autorotacion para los ejercicios que lo necesiten
+
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 
