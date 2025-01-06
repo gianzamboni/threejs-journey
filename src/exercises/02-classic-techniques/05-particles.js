@@ -28,6 +28,7 @@ export class Particles {
       //alphaTest: 0.001,
       //depthTest: false,
       depthWrite: false,
+      blending: THREE.AdditiveBlending,
     });
 
     this.particles = new THREE.Points(this.particleGeometry, this.pointMaterial);
@@ -42,14 +43,10 @@ export class Particles {
       near: 0.01,
     })
 
-    this.cube = new THREE.Mesh(
-      new THREE.BoxGeometry(),
-      new THREE.MeshBasicMaterial()
-    );
   }
 
   init() {
-    this.scene.add(this.particles, this.cube);
+    this.scene.add(this.particles);
     this.view.show(this.scene);
   }
 
