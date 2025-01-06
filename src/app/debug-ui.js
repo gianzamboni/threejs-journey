@@ -4,7 +4,9 @@ export class DebugUI {
     this.lilGuiContainer = document.getElementById("lil-gui-container");
     this.debugDataContainer = document.getElementById("debug-data");
 
-    this.container.style.display = "none";
+    if(process.env.NODE_ENV !== "development") {
+      this.container.style.display = "none";
+    }
 
     this.shouldShow = false;
     this.isShown = false;

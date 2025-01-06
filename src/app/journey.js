@@ -11,6 +11,7 @@ import { LightsExercise } from '../exercises/02-classic-techniques/01-lights.js'
 import { ShadowExercise } from '../exercises/02-classic-techniques/02-shadow.js';
 import { BakedShadow } from '../exercises/02-classic-techniques/03-baked-shadow.js';
 import { HauntedHouse } from '../exercises/02-classic-techniques/04-haunted-house.js';
+import { Particles } from '../exercises/02-classic-techniques/05-particles.js';
 
 const journey = [
   {
@@ -114,6 +115,14 @@ const journey = [
         id: 'haunted-house',
         title: "Haunted House",
         class: HauntedHouse,
+        config: {
+          enableOrbitControls: true,
+          debugable: true
+        }
+      }, {
+        id: 'particles',
+        title: "Particles",
+        class: Particles,
         config: {
           enableOrbitControls: true,
           debugable: true
