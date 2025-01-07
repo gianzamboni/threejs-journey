@@ -12,7 +12,7 @@
 - Crear opciones de debug para los ejercicios
 - Habilitar autorotacion para los ejercicios que lo necesiten
 - Sacar setTick de los ejercicios debugueables
-
+- Make all path load script.js
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 
