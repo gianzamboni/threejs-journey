@@ -78,25 +78,54 @@ export class BasicView {
     if(this.tick || this.orbitControls.enablePan) {
       await this.animationLoop.stop();
     }
+    this.resetOrbitControls();
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
-    this.camera.position.set(0, 0, 3);
-    this.camera.lookAt(0, 0, 0);
+    this.resetCamera();
   }
 
   get isRunning() {
     return this.runningExercise !== null;
   }
 
-  setCamera({ position, lookAt }) {
-    this.camera.position.x = position.x;
-    this.camera.position.y = position.y;
-    this.camera.position.z = position.z;
-    this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+  setCamera(config) {
+    if(config.position) {
+      this.camera.position.x = position.x;
+      this.camera.position.y = position.y;
+      this.camera.position.z = position.z;
+    }
+
+    if(config.lookAt) {
+      this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+    }
+
+    if(config.near) {
+      this.camera.near = config.near;
+      this.camera.updateProjectionMatrix();
+    }
+  }
+
+  resetCamera() {
+    this.camera.position.set(0, 0, 3);
+    this.camera.lookAt(0, 0, 0);
+    this.camera.near = 0.1;
+    this.camera.updateProjectionMatrix();
   }
 
   setTick(tick) {
     this.tick = tick;
+  }
+
+  setOrbitControlSettings(settings) {
+    Object.keys(settings).forEach((key) => {
+      this.orbitControls[key] = settings[key];
+    });
+  }
+
+  resetOrbitControls() {
+    this.orbitControls.reset();
+    this.orbitControls.autoRotate = false;
+    this.orbitControls.autoRotateSpeed = 2.0;
   }
 
   toggleOrbitControls(activate = false) {
