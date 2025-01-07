@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui';
 import { randomSign } from '../../utils/utils';
-
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
 export class GalaxyGenerator {
   constructor(view, debugUI) {
     this.view = view;
@@ -10,7 +10,7 @@ export class GalaxyGenerator {
 
     this.galaxySettings = {
       count: 100000,
-      size: 0.002,
+      size: 0.01,
       radius: 10,
       branches: 5,
       spin: 1,
@@ -29,6 +29,8 @@ export class GalaxyGenerator {
     this.geometry = null;
     this.material = null;
     this.points = null;
+    this.particleTexture = TEXTURE_LOADER.load('/textures/particles/4.png');
+    
   }
 
   init() {
@@ -45,7 +47,7 @@ export class GalaxyGenerator {
     this.gui.controllers.forEach(controller => controller.onChange(this.generateGalaxy.bind(this)));
     this.view.setOrbitControlSettings({
       autoRotate: true,
-      autoRotateSpeed: 0.25,
+      autoRotateSpeed: 0.125,
     });
 
     this.view.setCamera({
@@ -69,6 +71,7 @@ export class GalaxyGenerator {
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       vertexColors: true,
+      alphaMap: this.particleTexture
     });
 
     this.points = new THREE.Points(this.geometry, this.material);
@@ -122,5 +125,6 @@ export class GalaxyGenerator {
   dispose() {
     this.gui.destroy();
     this.disposeGalaxy();
+    this.particleTexture.dispose();
   }
 }
