@@ -15,6 +15,14 @@ export function screenResolution() {
   };
 }
 
+export function randomBetween(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+export function randomSign() {
+  return Math.random() > 0.5 ? 1 : -1;
+}
+
 export function screenResolutionName() {
   const { width, height } = screenResolution();
   if(width >= 3840 && height >= 2160) {

@@ -12,6 +12,7 @@ import { ShadowExercise } from '../exercises/02-classic-techniques/02-shadow.js'
 import { BakedShadow } from '../exercises/02-classic-techniques/03-baked-shadow.js';
 import { HauntedHouse } from '../exercises/02-classic-techniques/04-haunted-house.js';
 import { Particles } from '../exercises/02-classic-techniques/05-particles.js';
+import { GalaxyGenerator } from '../exercises/02-classic-techniques/06-galaxy-generator.js';
 
 const journey = [
   {
@@ -123,6 +124,14 @@ const journey = [
         id: 'particles',
         title: "Particles",
         class: Particles,
+        config: {
+          enableOrbitControls: true,
+          debugable: true
+        }
+      }, {
+        id: 'galaxy-generator',
+        title: "Galaxy Generator",
+        class: GalaxyGenerator,
         config: {
           enableOrbitControls: true,
           debugable: true
