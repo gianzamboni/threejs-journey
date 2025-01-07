@@ -90,13 +90,13 @@ export class BasicView {
 
   setCamera(config) {
     if(config.position) {
-      this.camera.position.x = position.x;
-      this.camera.position.y = position.y;
-      this.camera.position.z = position.z;
+      this.camera.position.x = config.position.x;
+      this.camera.position.y = config.position.y;
+      this.camera.position.z = config.position.z;
     }
 
     if(config.lookAt) {
-      this.camera.lookAt(lookAt.x, lookAt.y, lookAt.z);
+      this.camera.lookAt(config.lookAt.x, config.lookAt.y, config.lookAt.z);
     }
 
     if(config.near) {

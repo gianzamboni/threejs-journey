@@ -25,7 +25,7 @@ export class Text3D {
 
     this.generateText();
     this.generateDonuts();
-    this.view.setTick(() => this.animate());
+    this.view.setTick(() => this.animation());
     this.view.show(this.scene);
   }
 
