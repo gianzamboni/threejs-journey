@@ -20,7 +20,7 @@ export class Particles {
     this.particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     this.particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    this.particleTexture = TEXTURE_LOADER.load('/textures/particles/3.png');
+    this.particleTexture = TEXTURE_LOADER.load('/textures/particles/4.png');
 
     this.pointMaterial = new THREE.PointsMaterial({
       size: 0.1,
