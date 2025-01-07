@@ -8,11 +8,11 @@ export class Particles {
     this.scene = new THREE.Scene();
 
     this.particleGeometry = new THREE.BufferGeometry();
-    const count = 50000;
+    this.count = 6250;
 
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    for (let i = 0; i < count * 3; i++) {
+    const positions = new Float32Array(this.count * 3);
+    const colors = new Float32Array(this.count * 3);
+    for (let i = 0; i < this.count * 3; i++) {
       positions[i] = (Math.random() - 0.5) * 10;
       colors[i] = Math.random();
     }
@@ -26,7 +26,7 @@ export class Particles {
       size: 0.1,
       sizeAttenuation: true,
       transparent: true,
-      //color: new THREE.Color(0xff88cc),
+      color: new THREE.Color("#ffa8db"),
       alphaMap: this.particleTexture,
       //alphaTest: 0.001,
       //depthTest: false,
@@ -38,8 +38,8 @@ export class Particles {
     this.particles = new THREE.Points(this.particleGeometry, this.pointMaterial);
 
     this.view.setOrbitControlSettings({
-      zoomSpeed: 0.1,
-      autoRotate: true,
+      //zoomSpeed: 0.1,
+      //autoRotate: true,
       autoRotateSpeed: 0.03,
     })
 
@@ -47,6 +47,17 @@ export class Particles {
       near: 0.01,
     })
 
+  }
+
+  animation(timer) {
+    const elapsedTime = timer.getElapsed();
+    for (let i = 0; i < this.count; i++){
+      const i3 = i * 3;
+      const x = this.particleGeometry.attributes.position.array[i3];
+      this.particleGeometry.attributes.position.array[i3 + 1] = Math.sin(elapsedTime*0.01 + x * i) ;
+    }
+    this.particleGeometry.attributes.position.needsUpdate = true;
+    this.particles.rotation.y = elapsedTime * 0.002;
   }
 
   init() {
