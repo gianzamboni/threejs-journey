@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js'
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import { Sky } from 'three/addons/objects/Sky.js'
+import { randomBetween, randomSign } from '../../utils/utils.js';
 import { PathTracer } from '../../utils/path-tracer';
 import GUI from 'lil-gui';
 
@@ -22,14 +23,6 @@ function loadTexturesMaps(filePrefix, mapTypes) {
 
   textures.color.colorSpace = THREE.SRGBColorSpace;
   return textures;
-}
-
-function randomBetween(min, max) {
-  return min + Math.random() * (max - min);
-}
-
-function randomSign() {
-  return Math.random() > 0.5 ? 1 : -1;
 }
 
 class SceneObject {
