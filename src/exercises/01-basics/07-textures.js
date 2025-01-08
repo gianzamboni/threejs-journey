@@ -17,6 +17,10 @@ export class TextureExercise {
       position: { x: 2, y: 2, z: 2 },
       lookAt: { x: 0, y: 0, z: 0 }
     });
+    this.view.setOrbitControlSettings({
+      autoRotate: true,
+      autoRotateSpeed: 1,
+    });
     this.view.show(this.scene);
   }
 

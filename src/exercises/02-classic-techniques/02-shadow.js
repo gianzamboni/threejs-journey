@@ -105,9 +105,13 @@ export class ShadowExercise {
     });
 
     this.view.enableShadows()
+
+    this.view.setOrbitControlSettings({
+      autoRotate: true,
+      autoRotateSpeed: 0.5,
+    });
       
     this.view.show(this.scene);
-    this.view.setTick(() => this.animation());
   }
 
   animation() {

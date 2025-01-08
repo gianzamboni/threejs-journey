@@ -8,7 +8,6 @@ export class MaterialExercise {
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
     this.debugUI = debugUI;
-    console.log(debugUI)
     this.gui = new GUI({
       container: debugUI.lilGuiContainer,
     });
@@ -33,7 +32,6 @@ export class MaterialExercise {
       position: { x: 2, y: 1, z: 3 },
       lookAt: { x: 0, y: 0, z: 0 }
     });
-    this.view.setTick(() => this.animation());
     this.view.show(this.scene);
     this.addGuiTweaks();
     this.debugUI.update("Triangles", this.view.trianglesCount);

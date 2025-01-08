@@ -52,6 +52,7 @@ export class GalaxyGenerator {
 
     this.view.setCamera({
       position: { x: 3, y: 2, z: 3 },
+      near: 0.001,
     })
 
     this.generateGalaxy();

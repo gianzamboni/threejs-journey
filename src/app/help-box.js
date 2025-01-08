@@ -1,4 +1,4 @@
-import { deviceIsTouchable } from "../utils/utils";
+import { deviceIsSmall } from "../utils/utils";
 
 export class HelpBox {
   constructor() {
@@ -18,7 +18,7 @@ export class HelpBox {
     
     this.collapsable.classList.add('hidden');
 
-    if(deviceIsTouchable()) {
+    if(deviceIsSmall()) {
       this.title.setAttribute('data-bs-toggle', 'collapse');
       this.title.setAttribute('data-bs-target', '#help-box-content');
       this.title.setAttribute('aria-expanded', 'false');
@@ -30,12 +30,27 @@ export class HelpBox {
       Array.from(clickActions).forEach((element) => {
         element.innerHTML = 'tap';
       });
+
+      const scrollActions = document.getElementsByClassName('scroll-action');
+      Array.from(scrollActions).forEach((element) => {
+        element.innerHTML = 'pinch / stretch';
+      });
+
+      const rightClickActions = document.getElementsByClassName('right-click-action');
+      Array.from(rightClickActions).forEach((element) => {
+        element.innerHTML = 'Two finger tap';
+      });
+
+      const doubleClickActions = document.getElementsByClassName('double-click-action');
+      Array.from(doubleClickActions).forEach((element) => {
+        element.innerHTML = 'double tap';
+      });
     }
   }
 
   show(exercise) {
     
-    if(deviceIsTouchable() && (exercise.help || exercise.config.enableOrbitControls || exercise.config.debugable)) {
+    if(deviceIsSmall() && (exercise.help || exercise.config.enableOrbitControls || exercise.config.debugable)) {
       this.title.classList.add('d-flex', 'justify-content-center', 'gap-3');
       this.title.innerHTML =  '';
       this.title.appendChild(document.createTextNode(exercise.title));           

@@ -28,6 +28,10 @@ export class DebugUIExercise {
     this.debugUI.register("Triangles");
     this.debugUI.register("Lines");
     this.addGuiTweaks();
+    this.view.setOrbitControlSettings({
+      autoRotate: true,
+      autoRotateSpeed: 1,   
+    });
     this.view.show(this.scene);
     this.debugUI.update("Triangles", this.view.trianglesCount);
     this.debugUI.update("Lines", this.view.linesCount);

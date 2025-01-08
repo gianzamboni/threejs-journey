@@ -10,7 +10,6 @@ export class RotatingCube extends CenteredCube {
 
   init() {
     super.init();
-    this.view.setTick(this.animation.bind(this));
     this.view.show(this.scene);
   }
 

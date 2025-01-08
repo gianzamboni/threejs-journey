@@ -37,12 +37,6 @@ export class Particles {
 
     this.particles = new THREE.Points(this.particleGeometry, this.pointMaterial);
 
-    this.view.setOrbitControlSettings({
-      //zoomSpeed: 0.1,
-      //autoRotate: true,
-      autoRotateSpeed: 0.03,
-    })
-
     this.view.setCamera({
       near: 0.01,
     })
