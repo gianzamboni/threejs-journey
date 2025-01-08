@@ -8,6 +8,9 @@ export class OrbitControlsCube extends CenteredCube {
 
   init() {
     super.init();
+    this.view.setOrbitControlSettings({
+      autoRotate: true,
+    });
     this.view.show(this.scene);
   }
   

@@ -12,6 +12,10 @@ export class RandomTriangles {
 
   init() {
     this.scene.add(this.mesh);
+    this.view.setOrbitControlSettings({
+      autoRotate: true,
+      autoRotateSpeed: 0.5,
+    });
     this.view.show(this.scene);
   }
   

@@ -493,7 +493,7 @@ export class HauntedHouse {
 
   init() {
     this.view.setCamera({
-      position: { x: 4, y: 2, z: 5 },
+      position: { x: 5, y: 2, z: 7 },
       lookAt: { x: 0, y: 0, z: 0 }
     })
     
