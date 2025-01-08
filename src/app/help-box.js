@@ -1,4 +1,4 @@
-import { deviceIsTouchable } from "../utils/utils";
+import { deviceIsSmall } from "../utils/utils";
 
 export class HelpBox {
   constructor() {
@@ -18,7 +18,7 @@ export class HelpBox {
     
     this.collapsable.classList.add('hidden');
 
-    if(deviceIsTouchable()) {
+    if(deviceIsSmall()) {
       this.title.setAttribute('data-bs-toggle', 'collapse');
       this.title.setAttribute('data-bs-target', '#help-box-content');
       this.title.setAttribute('aria-expanded', 'false');
@@ -35,7 +35,7 @@ export class HelpBox {
 
   show(exercise) {
     
-    if(deviceIsTouchable() && (exercise.help || exercise.config.enableOrbitControls || exercise.config.debugable)) {
+    if(deviceIsSmall() && (exercise.help || exercise.config.enableOrbitControls || exercise.config.debugable)) {
       this.title.classList.add('d-flex', 'justify-content-center', 'gap-3');
       this.title.innerHTML =  '';
       this.title.appendChild(document.createTextNode(exercise.title));           

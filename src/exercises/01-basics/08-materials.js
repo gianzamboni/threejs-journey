@@ -8,7 +8,6 @@ export class MaterialExercise {
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
     this.debugUI = debugUI;
-    console.log(debugUI)
     this.gui = new GUI({
       container: debugUI.lilGuiContainer,
     });

@@ -38,6 +38,6 @@ export function label(name) {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-export function deviceIsTouchable() {
-  return window.matchMedia('(pointer: coarse)').matches;
+export function deviceIsSmall() {
+  return window.matchMedia('(max-width: 768px)').matches;
 }
