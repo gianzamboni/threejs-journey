@@ -12,6 +12,7 @@ export class BasicView {
      
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+    this.specialRenderer = false;
     this.animationLoop = new AnimationLoop(this.animation.bind(this));
     this.tick = null;
 
@@ -82,6 +83,9 @@ export class BasicView {
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.resetCamera();
+    if(this.specialRenderer) {
+      this.changeRenderer({});
+    }
   }
 
   get isRunning() {
@@ -140,6 +144,16 @@ export class BasicView {
     }
   }
 
+  changeRenderer(config) {
+    this.renderer.dispose();
+    this.renderer = new THREE.WebGLRenderer({ 
+      canvas: this.canvas, 
+      antialias: true, 
+      ...config 
+    });
+    this.specialRenderer = true;
+  }
+  
   get trianglesCount() {
     return this.renderer.info.render.triangles;
   }
