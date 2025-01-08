@@ -75,7 +75,7 @@ export class BasicView {
     this.renderer.render(this.runningExercise.scene, this.camera);
   }
 
-  async stop() {
+  async stop(skipRenderReset = false) {
     if(this.tick || this.orbitControls.enablePan) {
       await this.animationLoop.stop();
     }
@@ -83,7 +83,7 @@ export class BasicView {
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.resetCamera();
-    if(this.specialRenderer) {
+    if(this.specialRenderer && !skipRenderReset) {
       this.changeRenderer({}, false);
     }
   }
@@ -144,7 +144,8 @@ export class BasicView {
     }
   }
 
-  changeRenderer(config, special = true) {
+  async changeRenderer(config, special = true) {
+    await this.stop(true);
     this.renderer.dispose();
     this.renderer = new THREE.WebGLRenderer({ 
       canvas: this.canvas, 

@@ -43,7 +43,6 @@ export class ThemeManager {
   setTheme(theme = "dark") {
     if(theme !== this.activeTheme) {
       this.activeTheme = theme;
-      console.log('Setting theme to', theme);
 
       this.setButtonTheme();
       this.setHelpBoxTheme();

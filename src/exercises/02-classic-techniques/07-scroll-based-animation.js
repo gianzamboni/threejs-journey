@@ -30,6 +30,7 @@ export class ScrollBasedAnimation {
     });
 
     document.body.style.overflow = 'auto';
+    document.body.style.background = '#1e1a20';
 
     this.cube = new THREE.Mesh(
       new THREE.BoxGeometry(1, 1, 1),
@@ -37,8 +38,8 @@ export class ScrollBasedAnimation {
     );
   }
 
-  init() {
-    this.view.changeRenderer({
+  async init() {
+    await this.view.changeRenderer({
       alpha: true
     });
     this.gui.add(this.settings.material, 'color').name('Material Color');
