@@ -82,6 +82,7 @@ const journey = [
         class: Text3D,
         config: {
           enableOrbitControls: true,
+          debugable: true
         }
       }
     ]

@@ -107,7 +107,6 @@ export class ShadowExercise {
     this.view.enableShadows()
       
     this.view.show(this.scene);
-    this.view.setTick(() => this.animation());
   }
 
   animation() {

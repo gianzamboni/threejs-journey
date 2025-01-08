@@ -100,8 +100,6 @@ export class LightsExercise {
       }
     });
     this.view.show(this.scene);
-    this.view.setTick(() => this.animationFrame());
-
   }
 
   animation() {

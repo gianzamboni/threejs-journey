@@ -503,7 +503,6 @@ export class HauntedHouse {
 
     this.view.enableShadows();
     this.view.show(this.scene);
-    this.view.setTick(this.animation.bind(this));
   }
 
   animation() {
