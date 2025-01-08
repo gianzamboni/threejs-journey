@@ -6,6 +6,7 @@
 - Eliminar las funciones que no se usan en ninguna clase
 - Refactor funciones muy largas
 - Selector automatico de resolucion
+- Eliminar bootstrap
 
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise

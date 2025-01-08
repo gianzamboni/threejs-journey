@@ -35,7 +35,7 @@ class App {
     }
 
     this.menu.selectExercise(exercise.id);
-    await this.view.run(exercise, this.exerciseInstance);
+    this.view.run(exercise, this.exerciseInstance);
     this.helpBox.show(exercise);
 
     if(process.env.NODE_ENV === 'development') {

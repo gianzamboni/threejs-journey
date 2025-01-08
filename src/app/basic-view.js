@@ -57,7 +57,7 @@ export class BasicView {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
-  async run(exerciseData, exerciseInstence) {
+  run(exerciseData, exerciseInstence) {
     this.runningExercise = exerciseInstence;
     this.runningExercise.init();
     this.toggleOrbitControls(exerciseData.config.enableOrbitControls);
@@ -75,7 +75,7 @@ export class BasicView {
     this.renderer.render(this.runningExercise.scene, this.camera);
   }
 
-  async stop(skipRenderReset = false) {
+  async stop() {
     if(this.tick || this.orbitControls.enablePan) {
       await this.animationLoop.stop();
     }
@@ -83,9 +83,7 @@ export class BasicView {
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.resetCamera();
-    if(this.specialRenderer && !skipRenderReset) {
-      this.changeRenderer({}, false);
-    }
+    this.setClearAlpha(1);
   }
 
   get isRunning() {
@@ -161,5 +159,9 @@ export class BasicView {
 
   get linesCount() {
     return this.renderer.info.render.lines;
+  }
+
+  setClearAlpha(alpha) {
+    this.renderer.setClearAlpha(alpha);
   }
 }
