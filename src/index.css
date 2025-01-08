@@ -122,3 +122,8 @@ ul {
 	padding: 0.25em; 
 
 }
+
+span[class$='-action'] {
+	font-weight: bold;
+	text-transform: capitalize;
+}

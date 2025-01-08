@@ -30,6 +30,21 @@ export class HelpBox {
       Array.from(clickActions).forEach((element) => {
         element.innerHTML = 'tap';
       });
+
+      const scrollActions = document.getElementsByClassName('scroll-action');
+      Array.from(scrollActions).forEach((element) => {
+        element.innerHTML = 'pinch / stretch';
+      });
+
+      const rightClickActions = document.getElementsByClassName('right-click-action');
+      Array.from(rightClickActions).forEach((element) => {
+        element.innerHTML = 'Two finger tap';
+      });
+
+      const doubleClickActions = document.getElementsByClassName('double-click-action');
+      Array.from(doubleClickActions).forEach((element) => {
+        element.innerHTML = 'double tap';
+      });
     }
   }
 
