@@ -84,7 +84,7 @@ export class BasicView {
     this.tick = null;
     this.resetCamera();
     if(this.specialRenderer) {
-      this.changeRenderer({});
+      this.changeRenderer({}, false);
     }
   }
 
@@ -144,14 +144,14 @@ export class BasicView {
     }
   }
 
-  changeRenderer(config) {
+  changeRenderer(config, special = true) {
     this.renderer.dispose();
     this.renderer = new THREE.WebGLRenderer({ 
       canvas: this.canvas, 
       antialias: true, 
       ...config 
     });
-    this.specialRenderer = true;
+    this.specialRenderer = special;
   }
   
   get trianglesCount() {

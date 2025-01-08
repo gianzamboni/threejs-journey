@@ -4,6 +4,7 @@ import { HelpBox } from './app/help-box.js';
 import { journey } from './app/journey.js';
 import { DebugUI } from './app/debug-ui.js';
 import { DebugableExercise } from './utils/debugable-exercise.js';
+import { ThemeManager } from './app/theme-manager.js';
 
 Array.prototype.last = function() { return this[this.length - 1] };
 
@@ -18,6 +19,7 @@ class App {
     this.menu.addEventListener('select', (event) => {
       this.execute(event.detail);
     });
+    this.themeManager = new ThemeManager();
   };
 
   async execute(exercise) {
@@ -26,7 +28,6 @@ class App {
     document.title = `${exercise.title} - Three.js Journey`;
     this.menu.deselectExercise(this.activeExercise.id);
     this.activeExercise = exercise;
-
     if(exercise.config.debugable) {
       this.exerciseInstance = new DebugableExercise(exercise.class, this.debugUI, this.view);
     } else {
@@ -40,6 +41,7 @@ class App {
     if(process.env.NODE_ENV === 'development') {
       this.toggleDebugUI();
     }
+    this.themeManager.setTheme(exercise.config.theme);
   };
 
   init(exerciseId) {

@@ -11,7 +11,6 @@ export class ScrollBasedAnimation {
       container: debugUI.lilGuiContainer
     });
 
-    debugUI.setTheme('light');
     this.settings = {
       material: {
         color: "#ffeded",

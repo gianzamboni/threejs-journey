@@ -143,7 +143,8 @@ const journey = [
         title: "Scroll Based Animation",
         class: ScrollBasedAnimation,
         config: {
-          debugable: true
+          debugable: true,
+          theme: "light"
         }
       }
     ]

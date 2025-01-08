@@ -27,7 +27,6 @@ body {
 	align-items: center;
   display: flex !important;
   gap: 5px;
-	border: 1px solid #000;
 }
 
 ol li {
@@ -90,6 +89,11 @@ ul {
 	padding: 0.5em 1em 0.5em 1em;
 	border-radius: 5px;
 	margin: 1em;
+}
+
+.dark-item {
+	background-color: #212529;
+	color: white;
 }
 
 .exercise-title {

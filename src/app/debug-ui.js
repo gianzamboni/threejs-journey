@@ -1,3 +1,5 @@
+
+
 export class DebugUI {
   constructor() {
     this.container = document.getElementById("debug-ui-control-box");
@@ -89,6 +91,4 @@ export class DebugUI {
   enable() {
     this.shouldShow = true;
   }
-
-
 }
