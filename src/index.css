@@ -127,3 +127,7 @@ span[class$='-action'] {
 	font-weight: bold;
 	text-transform: capitalize;
 }
+
+.fit-content {
+	width: fit-content !important;
+}
