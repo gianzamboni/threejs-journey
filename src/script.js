@@ -22,7 +22,7 @@ class App {
 
   async execute(exercise) {
     await this.stopCurrentExercise();
-    history.pushState(exercise.id, "", `?exerciseId=${exercise.id}`);
+    history.pushState(exercise.id, "", `?demoId=${exercise.id}`);
     document.title = `${exercise.title} - Three.js Journey`;
     this.menu.deselectExercise(this.activeExercise.id);
     this.activeExercise = exercise;
@@ -73,7 +73,7 @@ let app = null;
 window.addEventListener('load', () => {
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
-  const exerciseId = searchParams.get("exerciseId");
+  const exerciseId = searchParams.get("demoId");
   app = new App(journey);
   app.init(exerciseId);
 });
