@@ -57,7 +57,9 @@ export class ScrollBasedAnimation {
     ];
 
     this.scrollPostion = window.scrollY;
+    this.cursorPosition = { x: 0, y: 0 };
     this.directionaLight = new THREE.DirectionalLight(0xffffff, 3);
+    this.cameraGroup = new THREE.Group();
   }
 
   async init() {
@@ -86,12 +88,13 @@ export class ScrollBasedAnimation {
       this.material.color.set(new THREE.Color(this.settings.materialColor));
     });
 
-    this.scene.add(...this.meshes, this.directionaLight);
-    this.view.show(this.scene);
+    this.scene.add(...this.meshes, this.directionaLight, this.cameraGroup);
+    this.view.show(this.scene, this.cameraGroup);
   }
 
   animation(timer) {
     const elapsedTime = timer.getElapsed();
+    const deltaTime = timer.getDelta();
 
     this.meshes.forEach(mesh => {
       mesh.rotation.x = elapsedTime * 0.1;
@@ -100,12 +103,24 @@ export class ScrollBasedAnimation {
 
     this.view.camera.position.y = -this.scrollPostion / this.view.size.height * this.settings.objectDistance;
 
-    // This should not be necessary
-    this.view.camera.lookAt(0, -this.scrollPostion / this.view.size.height * this.settings.objectDistance, 0);
+    const parallax = {
+      x: this.cursorPosition.x * 0.5,
+      y: -this.cursorPosition.y * 0.5,
+    }
+
+    this.cameraGroup.position.x += (parallax.x - this.cameraGroup.position.x)*deltaTime*5;
+    this.cameraGroup.position.y += (parallax.y - this.cameraGroup.position.y)*deltaTime*5;
   }
 
   scroll(value) {
     this.scrollPostion = value;
+  }
+
+  mouseMove(x, y) {
+    this.cursorPosition = {
+      x: x / this.view.size.width - 0.5,
+      y: y / this.view.size.height - 0.5
+    }
   }
 
   dispose() {

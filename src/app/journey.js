@@ -144,6 +144,7 @@ const journey = [
         class: ScrollBasedAnimation,
         config: {
           debugable: true,
+          events: ['scroll', 'mouseMove']
         }
       }
     ]

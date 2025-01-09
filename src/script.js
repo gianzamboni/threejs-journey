@@ -20,6 +20,10 @@ class App {
       this.execute(event.detail);
     });
     this.themeManager = new ThemeManager();
+    this.activeEvents = {
+      scroll: false,
+      mouseMove: false
+    }
   };
 
   async execute(exercise) {
@@ -42,6 +46,9 @@ class App {
       this.toggleDebugUI();
     }
     this.themeManager.setTheme(exercise.config.theme);
+    this.activeExercise.config.events?.forEach((event) => {
+      this.activeEvents[event] = true;
+    });
   };
 
   init(exerciseId) {
@@ -65,14 +72,24 @@ class App {
 
   async stopCurrentExercise() {
     await this.view.stop();
+    this.activeExercise.config.events?.forEach((event) => {
+      this.activeEvents[event] = false;
+    });
+
     if(this.exerciseInstance) {
       await this.exerciseInstance.dispose();
     }
   }
 
   scroll(value) {
-    if(this.exerciseInstance.scroll) {
+    if(this.activeEvents.scroll) {
       this.exerciseInstance.scroll(value);
+    }
+  }
+
+  mouseMove(x, y) {
+    if(this.activeEvents.mouseMove) {
+      this.exerciseInstance.mouseMove(x, y);
     }
   }
 }
@@ -84,21 +101,26 @@ window.addEventListener('load', () => {
   const exerciseId = searchParams.get("demoId");
   app = new App(journey);
   app.init(exerciseId);
+
+  
+  window.addEventListener('popstate', (event) => {
+    const exercise = app.findExercise(event.state);
+    app.execute(exercise);
+  })
+
+  window.addEventListener('resize', (event) => {
+    app.updateViewSize();
+  })
+
+  window.addEventListener('dblclick', (event) => {
+    app.toggleDebugUI();
+  })
+
+  window.addEventListener('scroll', () => {
+    app.scroll(window.scrollY);
+  })
+
+  window.addEventListener('mousemove', (event) => {
+    app.mouseMove(event.clientX, event.clientY);
+  });
 });
-
-window.addEventListener('popstate', (event) => {
-  const exercise = app.findExercise(event.state);
-  app.execute(exercise);
-})
-
-window.addEventListener('resize', (event) => {
-  app.updateViewSize();
-})
-
-window.addEventListener('dblclick', (event) => {
-  app.toggleDebugUI();
-})
-
-window.addEventListener('scroll', () => {
-  app.scroll(window.scrollY);
-})

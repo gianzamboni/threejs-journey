@@ -41,8 +41,12 @@ export class BasicView {
     }
   }
 
-  show(scene) {
-    scene.add(this.camera);
+  show(scene, cameraContainer = null) {
+    if(cameraContainer) {
+      cameraContainer.add(this.camera);
+    } else {
+      scene.add(this.camera);
+    }
     this.renderer.render(scene, this.camera);
   }
 
@@ -58,11 +62,13 @@ export class BasicView {
 
   run(exerciseData, exerciseInstence) {
     this.runningExercise = exerciseInstence;
-    this.runningExercise.init();
-    if(exerciseData.config.enableOrbitControls) {
+    if(exerciseData.config.enableOrbitControls && !this.orbitControls) {
       this.orbitControls = new OrbitControls(this.camera, this.canvas);
       this.orbitControls.enableDamping = true;
     }
+
+    this.runningExercise.init();
+
     if(this.tick || exerciseData.config.enableOrbitControls) {
       this.animationLoop.start();
     }
@@ -81,10 +87,7 @@ export class BasicView {
     if(this.tick || this.orbitControls) {
       await this.animationLoop.stop();
     }
-    if(this.orbitControls) {
-      this.orbitControls.disconnect();
-      this.orbitControls.dispose();
-    }
+    this.removeOrbitControls();
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.resetCamera();
@@ -132,22 +135,13 @@ export class BasicView {
     });
   }
 
-  resetOrbitControls() {
-    this.orbitControls.reset();
-    this.orbitControls.autoRotate = false;
-    this.orbitControls.autoRotateSpeed = 2.0;
-  }
-
-  toggleOrbitControls(activate = false) {
-    if(activate) {
-      this.orbitControls.enablePan = true;
-      this.orbitControls.enableZoom = true;
-      this.orbitControls.enableRotate = true;
-    } else {
-      this.orbitControls.enablePan = false;
-      this.orbitControls.enableZoom = false;
-      this.orbitControls.enableRotate = false;
+  removeOrbitControls() {
+    if(!this.orbitControls) {
+      return;
     }
+    this.orbitControls.disconnect();
+    this.orbitControls.dispose();
+    this.orbitControls = null;
   }
 
   async changeRenderer(config, special = true) {

@@ -8,6 +8,8 @@
 - Selector automatico de resolucion
 - Eliminar bootstrap
 - Fix orbit controls autorotation. should be created by each exercise
+- Hacer bien los checkeos de existencia de propiedades
+
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 

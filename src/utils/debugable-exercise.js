@@ -45,4 +45,10 @@ export class DebugableExercise {
       this.exercise.scroll(value);
     }
   }
+
+  mouseMove(x, y) {
+    if(this.exercise.mouseMove) {
+      this.exercise.mouseMove(x, y);
+    }
+  }
 }
