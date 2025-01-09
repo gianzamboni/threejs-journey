@@ -1,59 +1,20 @@
-export class Menu extends EventTarget {
-  constructor(exercises) {
-    super();
-    this.items = {};
-    const offCanvasElement = document.getElementById('exercisesMenu');
-    this.offCanvasBody = offCanvasElement.querySelector('#offcanvas-body');
-    this.offCanvas = new bootstrap.Offcanvas(offCanvasElement);
-    exercises.forEach((chapter) => {
-      this.generateChapter(chapter);
+export class Menu {
+  constructor() {
+    this.button = this.createMenuButton();
+  }
+
+  createMenuButton() {
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.className = "py-2 px-4 my-5 mx-5 inline-flex items-center gap-x-1 text-base rounded-md bg-gray-100 text-black hover:bg-gray-300 focus:outline-none focus:bg-gray-300 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 font-medium";
+    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+    </svg> Demos
+    `
+    button.addEventListener('click', () => {
+      alert('Menu button clicked');
     });
-}
-
-  generateChapter(chapter) {
-    const h5 = document.createElement('h5');
-    h5.innerHTML = chapter.title;
-    this.offCanvasBody.appendChild(h5);
-    if (chapter.exercises) {
-      this.generateExerciseList(chapter);
-    }
-  }
-
-  generateExerciseList(chapter) {
-    const list = document.createElement('ol');
-    this.offCanvasBody.appendChild(list);
-    chapter.exercises.forEach((exercise) => {
-      this.generateExersiceItem(exercise, list, chapter.id);
-    });
-  }
-
-  generateExersiceItem(exercise, list, idPreffix) {
-    const li = document.createElement('li');
-    li.innerHTML = exercise.title;
-    li.id = `${exercise.id}`;
-
-    if(exercise.id === this.activeItem?.id) {
-      li.classList.add("active");
-    }
-
-    li.onclick = () => {
-      this.dispatchEvent(new CustomEvent('select', {
-        detail: exercise
-      }));
-      this.offCanvas.hide();
-    }
-    list.appendChild(li);
-    this.items[exercise.id] = {
-      exerciseData: exercise,
-      htmlItem: li,
-    };
-  }
-
-  selectExercise(exerciseId) {
-    this.items[exerciseId].htmlItem.classList.add("active");
-  }
-
-  deselectExercise(exerciseId) {
-    this.items[exerciseId].htmlItem.classList.remove("active");
+    document.body.appendChild(button);
+    return button;
   }
 }

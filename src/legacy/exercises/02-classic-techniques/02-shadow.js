@@ -1,6 +1,6 @@
 import GUI from 'lil-gui';
 import * as THREE from 'three';
-import { CustomizableLight } from '../../utils/customizable-light';
+import { CustomizableLight } from '../../../utils/customizable-light';
 
 export class ShadowExercise {
   constructor(view, debugUI) {
