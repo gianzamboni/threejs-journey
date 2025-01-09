@@ -15,7 +15,6 @@
 	outline: none;
 }
 
-html,
 body {
 	overflow: hidden;
 }
@@ -28,7 +27,6 @@ body {
 	align-items: center;
   display: flex !important;
   gap: 5px;
-	border: 1px solid #000;
 }
 
 ol li {
@@ -93,6 +91,11 @@ ul {
 	margin: 1em;
 }
 
+.dark-item {
+	background-color: #212529;
+	color: white;
+}
+
 .exercise-title {
 	font-size: 1.25em;
 	font-weight: bold;
@@ -130,4 +133,22 @@ span[class$='-action'] {
 
 .fit-content {
 	width: fit-content !important;
+}
+
+.scroll-based-animation--section {
+	display: flex;
+	align-items: center;
+	height: 100vh;
+	position: relative;
+	font-family: 'Cabin', sans-serif;
+	color: #ffeded;
+	text-transform: uppercase;
+	font-size: 7vmin;
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+section:nth-child(odd)
+{
+    justify-content: flex-end;
 }

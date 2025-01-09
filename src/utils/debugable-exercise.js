@@ -39,4 +39,16 @@ export class DebugableExercise {
     this.exercise.dispose();
     this.debugUI.reset();
   }
+
+  scroll(value) {
+    if(this.exercise.scroll) {
+      this.exercise.scroll(value);
+    }
+  }
+
+  mouseMove(x, y) {
+    if(this.exercise.mouseMove) {
+      this.exercise.mouseMove(x, y);
+    }
+  }
 }

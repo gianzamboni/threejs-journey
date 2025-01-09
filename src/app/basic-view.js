@@ -12,6 +12,7 @@ export class BasicView {
      
     this.canvas = document.querySelector('canvas.webgl');
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+    this.specialRenderer = false;
     this.animationLoop = new AnimationLoop(this.animation.bind(this));
     this.tick = null;
 
@@ -19,8 +20,7 @@ export class BasicView {
 
     this.runningExercise = null;
 
-    this.orbitControls = new OrbitControls(this.camera, this.canvas);
-    this.orbitControls.enableDamping = true;
+
 
     this.updateSize();
 
@@ -41,8 +41,12 @@ export class BasicView {
     }
   }
 
-  show(scene) {
-    scene.add(this.camera);
+  show(scene, cameraContainer = null) {
+    if(cameraContainer) {
+      cameraContainer.add(this.camera);
+    } else {
+      scene.add(this.camera);
+    }
     this.renderer.render(scene, this.camera);
   }
 
@@ -56,10 +60,15 @@ export class BasicView {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
-  async run(exerciseData, exerciseInstence) {
+  run(exerciseData, exerciseInstence) {
     this.runningExercise = exerciseInstence;
+    if(exerciseData.config.enableOrbitControls && !this.orbitControls) {
+      this.orbitControls = new OrbitControls(this.camera, this.canvas);
+      this.orbitControls.enableDamping = true;
+    }
+
     this.runningExercise.init();
-    this.toggleOrbitControls(exerciseData.config.enableOrbitControls);
+
     if(this.tick || exerciseData.config.enableOrbitControls) {
       this.animationLoop.start();
     }
@@ -67,7 +76,7 @@ export class BasicView {
   }
 
   animation(timer) {
-    this.orbitControls.update();
+    this.orbitControls?.update();
     if(this.tick) {
       this.tick(timer);
     }
@@ -75,13 +84,14 @@ export class BasicView {
   }
 
   async stop() {
-    if(this.tick || this.orbitControls.enablePan) {
+    if(this.tick || this.orbitControls) {
       await this.animationLoop.stop();
     }
-    this.resetOrbitControls();
+    this.removeOrbitControls();
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.resetCamera();
+    this.setClearAlpha(1);
   }
 
   get isRunning() {
@@ -99,16 +109,19 @@ export class BasicView {
       this.camera.lookAt(config.lookAt.x, config.lookAt.y, config.lookAt.z);
     }
 
-    if(config.near) {
-      this.camera.near = config.near;
-      this.camera.updateProjectionMatrix();
-    }
+    ['near', 'fov'].forEach((key) => {
+      if(config[key]) {
+        this.camera[key] = config[key];
+      }
+    });
+    this.camera.updateProjectionMatrix();
+
   }
 
   resetCamera() {
     this.camera.position.set(0, 0, 3);
-    this.camera.lookAt(0, 0, 0);
     this.camera.near = 0.1;
+    this.camera.fov = 75;
     this.camera.updateProjectionMatrix();
   }
 
@@ -122,29 +135,35 @@ export class BasicView {
     });
   }
 
-  resetOrbitControls() {
-    this.orbitControls.reset();
-    this.orbitControls.autoRotate = false;
-    this.orbitControls.autoRotateSpeed = 2.0;
-  }
-
-  toggleOrbitControls(activate = false) {
-    if(activate) {
-      this.orbitControls.enablePan = true;
-      this.orbitControls.enableZoom = true;
-      this.orbitControls.enableRotate = true;
-    } else {
-      this.orbitControls.enablePan = false;
-      this.orbitControls.enableZoom = false;
-      this.orbitControls.enableRotate = false;
+  removeOrbitControls() {
+    if(!this.orbitControls) {
+      return;
     }
+    this.orbitControls.disconnect();
+    this.orbitControls.dispose();
+    this.orbitControls = null;
   }
 
+  async changeRenderer(config, special = true) {
+    await this.stop(true);
+    this.renderer.dispose();
+    this.renderer = new THREE.WebGLRenderer({ 
+      canvas: this.canvas, 
+      antialias: true, 
+      ...config 
+    });
+    this.specialRenderer = special;
+  }
+  
   get trianglesCount() {
     return this.renderer.info.render.triangles;
   }
 
   get linesCount() {
     return this.renderer.info.render.lines;
+  }
+
+  setClearAlpha(alpha) {
+    this.renderer.setClearAlpha(alpha);
   }
 }

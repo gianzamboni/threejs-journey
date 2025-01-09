@@ -13,6 +13,7 @@ import { BakedShadow } from '../exercises/02-classic-techniques/03-baked-shadow.
 import { HauntedHouse } from '../exercises/02-classic-techniques/04-haunted-house.js';
 import { Particles } from '../exercises/02-classic-techniques/05-particles.js';
 import { GalaxyGenerator } from '../exercises/02-classic-techniques/06-galaxy-generator.js';
+import { ScrollBasedAnimation } from '../exercises/02-classic-techniques/07-scroll-based-animation.js';
 
 const journey = [
   {
@@ -136,6 +137,14 @@ const journey = [
         config: {
           enableOrbitControls: true,
           debugable: true
+        }
+      }, {
+        id: "scroll-based-animation",
+        title: "Scroll Based Animation",
+        class: ScrollBasedAnimation,
+        config: {
+          debugable: true,
+          events: ['scroll', 'mouseMove']
         }
       }
     ]
