@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui';
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
+
 export class ScrollBasedAnimation {
   constructor(view, debugUI) {
     this.view = view;
@@ -13,6 +14,7 @@ export class ScrollBasedAnimation {
 
     this.settings = {
       materialColor: "#ffeded",
+      objectDistance: 4,
     }
 
     this.htmlSections = ['My Portfolio', "My projects", "Contact me"].map((text, index) => {
@@ -31,8 +33,9 @@ export class ScrollBasedAnimation {
     document.body.style.background = '#1e1a20';
 
     this.gradientTexture = TEXTURE_LOADER.load('textures/gradients/3.jpg');
+    this.gradientTexture.colorSpace = THREE.SRGBColorSpace;
     this.gradientTexture.magFilter = THREE.NearestFilter;
-    
+
     this.material = new THREE.MeshToonMaterial({
       color: this.settings.materialColor,
       gradientMap: this.gradientTexture,
@@ -53,11 +56,30 @@ export class ScrollBasedAnimation {
       ),
     ];
 
+    this.scrollPostion = window.scrollY;
     this.directionaLight = new THREE.DirectionalLight(0xffffff, 3);
   }
 
   async init() {
     this.view.setClearAlpha(0);
+
+    this.view.setCamera({
+      position: {
+        x: 0,
+        y: 0,
+        z: 6
+      },
+      lookAt: {
+        x: 0,
+        y: 0,
+        z: 0
+      },
+      fov: 35,
+    })
+    
+    this.meshes.forEach((mesh, index) => {
+      mesh.position.y = - this.settings.objectDistance * index;
+    })
 
     this.directionaLight.position.set(1, 0, 0);
     this.gui.addColor(this.settings, 'materialColor').name('Material Color').onChange((event) => {
@@ -66,6 +88,24 @@ export class ScrollBasedAnimation {
 
     this.scene.add(...this.meshes, this.directionaLight);
     this.view.show(this.scene);
+  }
+
+  animation(timer) {
+    const elapsedTime = timer.getElapsed();
+
+    this.meshes.forEach(mesh => {
+      mesh.rotation.x = elapsedTime * 0.1;
+      mesh.rotation.y = elapsedTime * 0.12;
+    })
+
+    this.view.camera.position.y = -this.scrollPostion / this.view.size.height * this.settings.objectDistance;
+
+    // This should not be necessary
+    this.view.camera.lookAt(0, -this.scrollPostion / this.view.size.height * this.settings.objectDistance, 0);
+  }
+
+  scroll(value) {
+    this.scrollPostion = value;
   }
 
   dispose() {

@@ -69,6 +69,12 @@ class App {
       await this.exerciseInstance.dispose();
     }
   }
+
+  scroll(value) {
+    if(this.exerciseInstance.scroll) {
+      this.exerciseInstance.scroll(value);
+    }
+  }
 }
 
 let app = null;
@@ -91,4 +97,8 @@ window.addEventListener('resize', (event) => {
 
 window.addEventListener('dblclick', (event) => {
   app.toggleDebugUI();
+})
+
+window.addEventListener('scroll', () => {
+  app.scroll(window.scrollY);
 })

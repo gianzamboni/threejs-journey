@@ -20,8 +20,7 @@ export class BasicView {
 
     this.runningExercise = null;
 
-    this.orbitControls = new OrbitControls(this.camera, this.canvas);
-    this.orbitControls.enableDamping = true;
+
 
     this.updateSize();
 
@@ -60,7 +59,10 @@ export class BasicView {
   run(exerciseData, exerciseInstence) {
     this.runningExercise = exerciseInstence;
     this.runningExercise.init();
-    this.toggleOrbitControls(exerciseData.config.enableOrbitControls);
+    if(exerciseData.config.enableOrbitControls) {
+      this.orbitControls = new OrbitControls(this.camera, this.canvas);
+      this.orbitControls.enableDamping = true;
+    }
     if(this.tick || exerciseData.config.enableOrbitControls) {
       this.animationLoop.start();
     }
@@ -68,7 +70,7 @@ export class BasicView {
   }
 
   animation(timer) {
-    this.orbitControls.update();
+    this.orbitControls?.update();
     if(this.tick) {
       this.tick(timer);
     }
@@ -76,10 +78,13 @@ export class BasicView {
   }
 
   async stop() {
-    if(this.tick || this.orbitControls.enablePan) {
+    if(this.tick || this.orbitControls) {
       await this.animationLoop.stop();
     }
-    this.resetOrbitControls();
+    if(this.orbitControls) {
+      this.orbitControls.disconnect();
+      this.orbitControls.dispose();
+    }
     this.renderer.shadowMap.enabled = false;
     this.tick = null;
     this.resetCamera();
@@ -101,16 +106,19 @@ export class BasicView {
       this.camera.lookAt(config.lookAt.x, config.lookAt.y, config.lookAt.z);
     }
 
-    if(config.near) {
-      this.camera.near = config.near;
-      this.camera.updateProjectionMatrix();
-    }
+    ['near', 'fov'].forEach((key) => {
+      if(config[key]) {
+        this.camera[key] = config[key];
+      }
+    });
+    this.camera.updateProjectionMatrix();
+
   }
 
   resetCamera() {
     this.camera.position.set(0, 0, 3);
-    this.camera.lookAt(0, 0, 0);
     this.camera.near = 0.1;
+    this.camera.fov = 75;
     this.camera.updateProjectionMatrix();
   }
 

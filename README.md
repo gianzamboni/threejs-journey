@@ -7,7 +7,7 @@
 - Refactor funciones muy largas
 - Selector automatico de resolucion
 - Eliminar bootstrap
-
+- Fix orbit controls autorotation. should be created by each exercise
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 

@@ -39,4 +39,10 @@ export class DebugableExercise {
     this.exercise.dispose();
     this.debugUI.reset();
   }
+
+  scroll(value) {
+    if(this.exercise.scroll) {
+      this.exercise.scroll(value);
+    }
+  }
 }
