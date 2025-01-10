@@ -1,6 +1,6 @@
 import {HSAccordion, HSCollapse, HSOverlay, HSStaticMethods} from "preline";
-import { createElement } from "./html-utils";
-import { CLOSE_ICON, HAMBURGER_ICON, MENU_BUTTON_CLASSES, SIDE_BAR_CLASSES, CLASS_TOKENS, SCROLLBAR_CLASSES, CHAPTER_BUTTON_CLASSES, DOWN_ARROW_ICON, UP_ARROW_ICON } from "./html-constants";
+import { createElement } from "./utils/html-utils";
+import { CLOSE_ICON, HAMBURGER_ICON, MENU_BUTTON_CLASSES, SIDE_BAR_CLASSES, CLASS_TOKENS, SCROLLBAR_CLASSES, CHAPTER_BUTTON_CLASSES, DOWN_ARROW_ICON, UP_ARROW_ICON, YELLOW_STAR_ICON } from "./utils/html-constants";
 
 import { journey } from "./journey";
 
@@ -130,7 +130,7 @@ export class Menu {
     });
 
     const exerciseList = createElement("ul", {
-      class: "ps-4 space-y-1"
+      class: "ps-6 space-y-1"
     });
     
     chapter.exercises.forEach((exercise) => this.createExercise(exerciseList, exercise));
@@ -140,8 +140,23 @@ export class Menu {
   }
 
   createExercise(exerciseList, exercise) {
-    const exerciseLi = createElement("li", {});
-    exerciseLi.innerHTML = `${exercise.title}`;
+    const exerciseLi = createElement("li", {
+      class: "flex items-center relative",
+    });
+
+    if(exercise.config.starred) {
+      const starContainer = createElement("div", {});
+      starContainer.innerHTML = `${YELLOW_STAR_ICON}`;
+      starContainer.style.position="absolute";
+      starContainer.style['left']="-1.5rem";
+      starContainer.style['top']="0";
+      exerciseLi.appendChild(starContainer);
+    }
+   
+    const exerciseTitle = createElement("span", {});
+    exerciseTitle.textContent = exercise.title;
+    exerciseLi.appendChild(exerciseTitle);
+
     exerciseList.appendChild(exerciseLi);
   }
 }

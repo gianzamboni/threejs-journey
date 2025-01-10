@@ -17,56 +17,39 @@ const journey = [
         id: 'animations',
         title: "Animations",
         class: null,
-        config: {
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'cameras',
         title: "Cameras",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'geometries',
         title: "Geometries",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'debug-ui',
         title: "Debug UI",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'textures',
         title: "Textures",
         class: null,
-        config: {
-          enableOrbitControls: true,
-        }
+        config: {}
       },
       {
         id: 'materials',
         title: "Materials",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: '3d-text',
         title: "3D Text",
         class: null,
         config: {
-          enableOrbitControls: true,
-          debugable: true
+          starred: true,
         }
       }
     ]
@@ -79,57 +62,39 @@ const journey = [
         id: 'lights',
         title: "Lights",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'shadows',
         title: "Dynamic Shadows",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'baked-shadows',
         title: "Baked Shadows",
         class: null,
-        config: {
-          enableOrbitControls: true,
-        }
+        config: {}
       }, {
         id: 'haunted-house',
         title: "Haunted House",
         class: null,
         config: {
-          enableOrbitControls: true,
-          debugable: true
+          starred: true,
         }
       }, {
         id: 'particles',
         title: "Particles",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: 'galaxy-generator',
         title: "Galaxy Generator",
         class: null,
-        config: {
-          enableOrbitControls: true,
-          debugable: true
-        }
+        config: {}
       }, {
         id: "scroll-based-animation",
         title: "Scroll Based Animation",
         class: null,
-        config: {
-          debugable: true,
-          events: ['scroll', 'mouseMove']
-        }
+        config: {}
       }
     ]
   },
