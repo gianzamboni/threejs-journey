@@ -1,6 +1,6 @@
 import {HSAccordion, HSCollapse, HSOverlay, HSStaticMethods} from "preline";
 import { createElement } from "./utils/html-utils";
-import { CLOSE_ICON, HAMBURGER_ICON, MENU_BUTTON_CLASSES, SIDE_BAR_CLASSES, CLASS_TOKENS, SCROLLBAR_CLASSES, CHAPTER_BUTTON_CLASSES, DOWN_ARROW_ICON, UP_ARROW_ICON, YELLOW_STAR_ICON } from "./utils/html-constants";
+import { CLASSES, ICONS, CLASS_TOKENS } from "./utils/html-constants";
 
 import { journey } from "./journey";
 
@@ -13,21 +13,21 @@ export class Menu {
   createButton() {
     const button = createElement("button", {
       type: "button",
-      class: MENU_BUTTON_CLASSES,
+      class: CLASSES.menuButton,
       'aria-haspopup': "dialog",
       'aria-expanded': "false",
       'aria-controls': "exercise-menu",
       'aria-label': "Open exercise menu",
       'data-hs-overlay': '#exercise-menu',
     });
-    button.innerHTML = `${HAMBURGER_ICON} <span>Demos</span>`;
+    button.innerHTML = `${ICONS.hamburguer} <span>Demos</span>`;
     document.body.appendChild(button);
   }
 
   createSideBar() {
     const sidebar = createElement("div", {
       id: "exercise-menu",
-      class: SIDE_BAR_CLASSES,
+      class: CLASSES.sideBar,
       role: "dialog",
       tabindex: "-1",
       'aria-label': "Exercise menu sidebar",
@@ -41,16 +41,33 @@ export class Menu {
       class: "relative flex flex-col h-full max-h-full"
     });
     
-    const header = this.createSideBarHeader(sidebarBody);
-    sidebarBody.appendChild(header);
-
+    const header = this.createSideBarHeader();
     const exerciseJourneyList = this.createJourneyList();
-    sidebarBody.appendChild(exerciseJourneyList);
+    const footer = this.createFooter();
 
+    sidebarBody.appendChild(header);
+    sidebarBody.appendChild(exerciseJourneyList);
+    sidebarBody.appendChild(footer);
     sidebar.appendChild(sidebarBody);
   }
 
-  createSideBarHeader(body) {
+  createFooter() {
+    const footer = createElement("footer", {
+      class: "flex justify-center items-center p-4"
+    });
+
+    const githubLink = createElement("a", {
+      class: "flex items-center gap-x-2",
+      href: "https://github.com/gianzamboni"
+    });
+
+    githubLink.innerHTML = `${ICONS.github} Gianfranco Zamboni`;
+    
+    footer.appendChild(githubLink);
+    return footer;
+  }
+
+  createSideBarHeader() {
     const header = createElement("header", {
       class: "p-4 flex justify-between items-center gap-x-2"
     });
@@ -65,7 +82,7 @@ export class Menu {
       class: `flex items-center justify-center size-6 rounded-full ${CLASS_TOKENS.hover} ${CLASS_TOKENS.text}`,
       'data-hs-overlay':"#exercise-menu",
     });
-    closeButton.innerHTML = `${CLOSE_ICON}`;
+    closeButton.innerHTML = `${ICONS.close}`;
     
     header.appendChild(title);
     header.appendChild(closeButton);
@@ -74,16 +91,16 @@ export class Menu {
 
   createJourneyList() {
     const nav = createElement("nav", {
-      class: `overflow-y-auto ${SCROLLBAR_CLASSES} h-full`
+      class: `overflow-y-auto ${CLASSES.scrollbar} h-full`
     });
     
     const accordionContainer = createElement("div", {
-      class: "hs-accordion-group pb-0 px-2 w-full flex flex-col flex-wrap",
+      class: "pb-0 px-2 w-full flex flex-col flex-wrap",
       'data-hs-accordion-always-open': "true"
     }); 
 
     const chaptersList = createElement("ul", {
-      class: "space-y-1"
+      class: "space-y-1 hs-accordion-group "
     });
 
     journey.forEach((chapter) => this.createChapter(chaptersList, chapter));
@@ -112,12 +129,12 @@ export class Menu {
   createChapterButton(chapter, collapsableId) {
     const chapterButton = createElement("button", {
       type: 'button',
-      class: CHAPTER_BUTTON_CLASSES,
+      class: CLASSES.chapterButton,
       'aria-expanded': "true",
       'aria-controls': collapsableId,
     });
 
-    chapterButton.innerHTML = `${chapter.title}${DOWN_ARROW_ICON} ${UP_ARROW_ICON}`; 
+    chapterButton.innerHTML = `${chapter.title}${ICONS.downArrow} ${ICONS.upArrow}`; 
     return chapterButton;
   }
 
@@ -146,7 +163,7 @@ export class Menu {
 
     if(exercise.config.starred) {
       const starContainer = createElement("div", {});
-      starContainer.innerHTML = `${YELLOW_STAR_ICON}`;
+      starContainer.innerHTML = `${ICONS.yellowStar}`;
       starContainer.style.position="absolute";
       starContainer.style['left']="-1.5rem";
       starContainer.style['top']="0";
