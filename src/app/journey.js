@@ -89,7 +89,9 @@ const journey = [
         id: 'galaxy-generator',
         title: "Galaxy Generator",
         class: null,
-        config: {}
+        config: {
+          starred: true,
+        }
       }, {
         id: "scroll-based-animation",
         title: "Scroll Based Animation",
