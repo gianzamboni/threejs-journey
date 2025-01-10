@@ -1,4 +1,3 @@
-import 'preline/preline.js';
 import { Menu } from './app/menu';
 
 export class JourneyApp {
@@ -9,4 +8,5 @@ export class JourneyApp {
 
 window.addEventListener('load', () => {
   const journeyApp = new JourneyApp();
+  window.HSStaticMethods.autoInit();
 });

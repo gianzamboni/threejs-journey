@@ -1,20 +1,147 @@
+import {HSAccordion, HSCollapse, HSOverlay, HSStaticMethods} from "preline";
+import { createElement } from "./html-utils";
+import { CLOSE_ICON, HAMBURGER_ICON, MENU_BUTTON_CLASSES, SIDE_BAR_CLASSES, CLASS_TOKENS, SCROLLBAR_CLASSES, CHAPTER_BUTTON_CLASSES, DOWN_ARROW_ICON, UP_ARROW_ICON } from "./html-constants";
+
+import { journey } from "./journey";
+
 export class Menu {
   constructor() {
-    this.button = this.createMenuButton();
+    this.createButton();
+    this.createSideBar();
   }
 
-  createMenuButton() {
-    const button = document.createElement('button');
-    button.setAttribute('type', 'button');
-    button.className = "py-2 px-4 my-5 mx-5 inline-flex items-center gap-x-1 text-base rounded-md bg-gray-100 text-black hover:bg-gray-300 focus:outline-none focus:bg-gray-300 dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 font-medium";
-    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-    </svg> Demos
-    `
-    button.addEventListener('click', () => {
-      alert('Menu button clicked');
+  createButton() {
+    const button = createElement("button", {
+      type: "button",
+      class: MENU_BUTTON_CLASSES,
+      'aria-haspopup': "dialog",
+      'aria-expanded': "false",
+      'aria-controls': "exercise-menu",
+      'aria-label': "Open exercise menu",
+      'data-hs-overlay': '#exercise-menu',
     });
+    button.innerHTML = `${HAMBURGER_ICON} <span>Demos</span>`;
     document.body.appendChild(button);
-    return button;
+  }
+
+  createSideBar() {
+    const sidebar = createElement("div", {
+      id: "exercise-menu",
+      class: SIDE_BAR_CLASSES,
+      role: "dialog",
+      tabindex: "-1",
+      'aria-label': "Exercise menu sidebar",
+    });
+    this.fillSideBar(sidebar);
+    document.body.appendChild(sidebar);
+  }
+
+  fillSideBar(sidebar) {
+    const sidebarBody = createElement("div", {
+      class: "relative flex flex-col h-full max-h-full"
+    });
+    
+    const header = this.createSideBarHeader(sidebarBody);
+    sidebarBody.appendChild(header);
+
+    const exerciseJourneyList = this.createJourneyList();
+    sidebarBody.appendChild(exerciseJourneyList);
+
+    sidebar.appendChild(sidebarBody);
+  }
+
+  createSideBarHeader(body) {
+    const header = createElement("header", {
+      class: "p-4 flex justify-between items-center gap-x-2"
+    });
+
+    const title = createElement("h2", {
+      class: "font-semibold text-xl dark:text-white"
+    });
+    title.textContent = "Three.js Journey";
+
+    const closeButton = createElement("button", {
+      type: 'button',
+      class: `flex items-center justify-center size-6 rounded-full ${CLASS_TOKENS.hover} ${CLASS_TOKENS.text}`,
+      'data-hs-overlay':"#exercise-menu",
+    });
+    closeButton.innerHTML = `${CLOSE_ICON}`;
+    
+    header.appendChild(title);
+    header.appendChild(closeButton);
+    return header;
+  }
+
+  createJourneyList() {
+    const nav = createElement("nav", {
+      class: `overflow-y-auto ${SCROLLBAR_CLASSES} h-full`
+    });
+    
+    const accordionContainer = createElement("div", {
+      class: "hs-accordion-group pb-0 px-2 w-full flex flex-col flex-wrap",
+      'data-hs-accordion-always-open': "true"
+    }); 
+
+    const chaptersList = createElement("ul", {
+      class: "space-y-1"
+    });
+
+    journey.forEach((chapter) => this.createChapter(chaptersList, chapter));
+
+    accordionContainer.appendChild(chaptersList);
+    nav.appendChild(accordionContainer);
+    return nav;
+  }
+
+  createChapter(chaptersList, chapter) {
+      const achordionId = `${chapter.id}-accordion`;
+      const collapsableId = `${achordionId}-collapse`;
+      const chapterLi = createElement("li", {
+        class: "hs-accordion",
+        id: achordionId,
+      });
+
+      const chapterButton = this.createChapterButton(chapter, collapsableId);
+      const chapterCollapsable = this.createChapterCollapsable(chapter, collapsableId, achordionId);
+    
+      chapterLi.appendChild(chapterButton);
+      chapterLi.appendChild(chapterCollapsable);
+      chaptersList.appendChild(chapterLi);
+  }
+
+  createChapterButton(chapter, collapsableId) {
+    const chapterButton = createElement("button", {
+      type: 'button',
+      class: CHAPTER_BUTTON_CLASSES,
+      'aria-expanded': "true",
+      'aria-controls': collapsableId,
+    });
+
+    chapterButton.innerHTML = `${chapter.title}${DOWN_ARROW_ICON} ${UP_ARROW_ICON}`; 
+    return chapterButton;
+  }
+
+  createChapterCollapsable(chapter, collapsableId, achordionId) {
+    const collapsable = createElement("div", {
+      id: collapsableId,
+      class: "hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden",
+      role: "region",
+      'aria-labelledby': achordionId,
+    });
+
+    const exerciseList = createElement("ul", {
+      class: "ps-4 space-y-1"
+    });
+    
+    chapter.exercises.forEach((exercise) => this.createExercise(exerciseList, exercise));
+    
+    collapsable.appendChild(exerciseList);
+    return collapsable;
+  }
+
+  createExercise(exerciseList, exercise) {
+    const exerciseLi = createElement("li", {});
+    exerciseLi.innerHTML = `${exercise.title}`;
+    exerciseList.appendChild(exerciseLi);
   }
 }
