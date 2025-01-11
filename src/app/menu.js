@@ -5,9 +5,17 @@ import { CLASSES, ICONS, CLASS_TOKENS } from "./utils/html-constants";
 import { journey } from "./journey";
 
 export class Menu {
-  constructor() {
+  constructor(stateManager) {
     this.createButton();
     this.createSideBar();
+
+    this.activeSection = null;
+    this.activeExercise = null;
+    this.activeCollapsable = null;
+
+    stateManager.addEventListener('exercise-changed', (event) => {
+      this.setActiveExercise(event.detail.old, event.detail.new);
+    });
   }
 
   createButton() {
@@ -95,12 +103,11 @@ export class Menu {
     });
     
     const accordionContainer = createElement("div", {
-      class: "pb-0 px-2 w-full flex flex-col flex-wrap",
-      'data-hs-accordion-always-open': "true"
+      class: "pb-0 px-2 w-full flex flex-col flex-wrap"
     }); 
 
     const chaptersList = createElement("ul", {
-      class: "space-y-1 hs-accordion-group "
+      class: "space-y-1"
     });
 
     journey.forEach((chapter) => this.createChapter(chaptersList, chapter));
@@ -111,37 +118,38 @@ export class Menu {
   }
 
   createChapter(chaptersList, chapter) {
-      const achordionId = `${chapter.id}-accordion`;
-      const collapsableId = `${achordionId}-collapse`;
+      const sectionId = this.sectionItemId(chapter.id);
+      const collapsableId = `${sectionId}-collapse`;
       const chapterLi = createElement("li", {
-        class: "hs-accordion",
-        id: achordionId,
+        id: sectionId,
       });
 
       const chapterButton = this.createChapterButton(chapter, collapsableId);
-      const chapterCollapsable = this.createChapterCollapsable(chapter, collapsableId, achordionId);
-    
+      const chapterCollapsable = this.createChapterCollapsable(chapter, collapsableId, sectionId);
       chapterLi.appendChild(chapterButton);
       chapterLi.appendChild(chapterCollapsable);
+      HSCollapse.show(`#{collapsableId}`);
       chaptersList.appendChild(chapterLi);
   }
 
   createChapterButton(chapter, collapsableId) {
+    console.log(collapsableId);
     const chapterButton = createElement("button", {
       type: 'button',
-      class: CLASSES.chapterButton,
+      class: `${CLASSES.chapterButton}`,
       'aria-expanded': "true",
       'aria-controls': collapsableId,
+      'data-hs-collapse': `#${collapsableId}`,
     });
 
-    chapterButton.innerHTML = `${chapter.title}${ICONS.downArrow} ${ICONS.upArrow}`; 
+    chapterButton.innerHTML = `${chapter.title}${ICONS.downArrow}`; 
     return chapterButton;
   }
 
   createChapterCollapsable(chapter, collapsableId, achordionId) {
     const collapsable = createElement("div", {
       id: collapsableId,
-      class: "hs-accordion-content w-full overflow-hidden transition-[height] duration-300 hidden",
+      class: "hs-collapse w-full overflow-hidden transition-[height] duration-300",
       role: "region",
       'aria-labelledby': achordionId,
     });
@@ -150,14 +158,15 @@ export class Menu {
       class: "ps-6 space-y-1"
     });
     
-    chapter.exercises.forEach((exercise) => this.createExercise(exerciseList, exercise));
+    chapter.exercises.forEach((exercise) => this.createExercise(exerciseList, exercise, chapter.id));
     
     collapsable.appendChild(exerciseList);
     return collapsable;
   }
 
-  createExercise(exerciseList, exercise) {
+  createExercise(exerciseList, exercise, chapterId) {
     const exerciseLi = createElement("li", {
+      id: this.exerciseItemId(chapterId, exercise.id),
       class: "flex items-center relative",
     });
 
@@ -175,5 +184,32 @@ export class Menu {
     exerciseLi.appendChild(exerciseTitle);
 
     exerciseList.appendChild(exerciseLi);
+  }
+
+  setActiveExercise(newExerciseData) {
+    if(this.activeSection) {
+      this.activeSection.classList.remove('active');
+    }
+  }
+
+  toggleSection(section, exercise, status) {
+    this.sectionItemId = this.sectionItemId(section);
+    this.exerciseItemId = this.exerciseItemId(section, exercise);
+
+    const sectionElement = document.getElementById(this.sectionItemId);
+    const collapsableElement = sectionElement.querySelector(`#${this.sectionItemId}-collapse`);
+    const exerciseElement = collapsableElement.querySelector(`#${this.exerciseItemId}`);
+
+    sectionElement.classList[status == 'active' ? 'add' : 'remove']('active');
+    collapsableElement.style.display = status == 'active' ? "block" : "none";
+    exerciseElement.classList[status == 'active' ? 'add' : 'remove']('border-b', 'border-black');
+  }
+
+  exerciseItemId(section, exercise) {
+    return `${section}-${exercise}`;
+  }
+
+  sectionItemId(section) {
+    return `${section}`;
   }
 }
