@@ -1,11 +1,11 @@
 {
   "name": "three-js-journey",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "deploy": "vercel --prod"
   },
   "keywords": [],
@@ -14,13 +14,13 @@
   "dependencies": {
     "gsap": "^3.12.5",
     "lil-gui": "^0.20.0",
-    "preline": "^2.7.0",
     "three": "^0.170.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
     "vite": "^5.4.11",
     "vite-plugin-restart": "^0.4.1"
   }

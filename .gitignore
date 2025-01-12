@@ -2,3 +2,5 @@ node_modules/
 .vercel
 dist
 src/index.css
+legacy/
+legacy_2/

@@ -8,8 +8,6 @@ module.exports = {
     extend: {},
   },
   darkMode: 'selector',
-  plugins: [
-    require('preline/plugin')
-  ],
+  plugins: [  ],
 }
 
