@@ -1,5 +1,4 @@
 import { THEME } from "@/theme";
-import { Button } from "./button";
 
 type SideBarOptions = {
   buttonTitle: string;
@@ -22,7 +21,7 @@ export default class SideBar {
     this.sidePanel.appendChild(this.sideBarContent);
 
     const button = this.createButton(options.buttonTitle);
-    button.addTo(parent);
+    parent.appendChild(button);
   }
 
   addContent(content: HTMLElement) {
@@ -49,9 +48,11 @@ export default class SideBar {
   }
 
   private createButton(buttonTitle: string) {
-    return new Button(buttonTitle, {
-      onClick: this.toggleSidePanel.bind(this),
-    });
+    const button = document.createElement('button');
+    button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-sm ${THEME.background} ${THEME.border} ${THEME.text} ${THEME.hover}`;
+    button.innerHTML = buttonTitle;
+    button.onclick = this.toggleSidePanel.bind(this);
+    return button;
   }
 
   toggleSidePanel() {

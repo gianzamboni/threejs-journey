@@ -1,49 +1,47 @@
 import SideBar from "@/components/sidebar";
 import { GITHUB_ICON, HAMBURGER_ICON } from "@/constants/icons";
 import { THEME } from "@/theme";
-import { JOURNEY, Section, Exercise } from "@/journey";
+import { JOURNEY, Section } from "@/journey";
 import { pascalCaseToText } from "@/utils";
+import { Collapsable } from "@/components/collapsable";
 export default class Menu {
   constructor(parent: HTMLElement) {
     const sideBar = new SideBar(parent, {
       buttonTitle: `${HAMBURGER_ICON} Ejercicios`,
     });
-    sideBar.toggleSidePanel();
 
     const header = this.createHeader();
     sideBar.addContent(header);
 
-    const exerciseMenu = this.createExerciseMenu();
-    sideBar.addContent(exerciseMenu);
+    this.createExerciseMenu(sideBar);
 
     const footer = this.createFooter();
     sideBar.addContent(footer);
 
   }
 
-  private createExerciseMenu() {
+  private createExerciseMenu(sidebar: SideBar) {
     const menu = document.createElement('nav');
-    menu.className = `overflow-y-auto h-full flex-col flex-wrap ${THEME.scrollBar}`;
-    console.log(JOURNEY);
+    menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${THEME.scrollBar}`;
+    sidebar.addContent(menu);
     JOURNEY.forEach((section: Section) => {
-      const header = document.createElement('h3');
-      header.textContent = pascalCaseToText(section.id);
-      header.className = 'font-semibold text-lg dark:text-white mb-2';
-      menu.appendChild(header);
-
-      const exercisesList = document.createElement('ul');
-      exercisesList.className = 'ms-3';
-      section.exercises.forEach((exercise: Exercise) => {
-        const exerciseItem = document.createElement('li');
-        exerciseItem.className = 'cursor-pointer';
-        exerciseItem.textContent = pascalCaseToText(exercise.id);
-        exercisesList.appendChild(exerciseItem);
-      });
-
-      menu.appendChild(exercisesList);
+      this.createSection(section, menu);
     });
+  }
 
-    return menu;
+  private createSection(section: Section, menu: HTMLElement) {
+    const title = pascalCaseToText(section.id);
+    const collapsable = new Collapsable(title);
+    const exerciseList = document.createElement('ul');
+
+    section.exercises.forEach((exercise) => {
+      const exerciseItem = document.createElement('li');
+      exerciseItem.textContent = pascalCaseToText(exercise.id);
+      exerciseList.appendChild(exerciseItem);
+    });
+    collapsable.addContent(exerciseList);
+    collapsable.addTo(menu);
+    collapsable.toggle();
   }
 
   private createHeader() {
