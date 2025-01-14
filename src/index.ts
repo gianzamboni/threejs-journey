@@ -1,19 +1,15 @@
 import Menu from "@/layout/menu";
+import { InfoBox } from "./layout/info-box";
 
-export class JourneyApp {
-
-  private menu: Menu;
-  
-  constructor() {
-    const container = document.body;
-    this.menu = new Menu(container);
-  }
-
-  init() {
-  }
-}
+let menu: Menu;
+let infoBox: InfoBox;
 
 window.addEventListener('load', () => {
-  const journeyApp = new JourneyApp();
-  journeyApp.init();
+  menu = new Menu(document.body);
+  infoBox = new InfoBox(document.body);
+  
+  menu.addEventListener('exercise-selected', (event: CustomEventInit) => {
+    console.log(event.detail);
+  });
+  
 });

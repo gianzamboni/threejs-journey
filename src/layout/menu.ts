@@ -4,8 +4,12 @@ import { THEME } from "@/theme";
 import { JOURNEY, Section } from "@/journey";
 import { pascalCaseToText } from "@/utils";
 import { Collapsable } from "@/components/collapsable";
-export default class Menu {
+export default class Menu extends EventTarget {
+
+  private selected: HTMLElement | null = null;
+
   constructor(parent: HTMLElement) {
+    super();
     const sideBar = new SideBar(parent, {
       buttonTitle: `${HAMBURGER_ICON} Ejercicios`,
     });
@@ -17,7 +21,6 @@ export default class Menu {
 
     const footer = this.createFooter();
     sideBar.addContent(footer);
-
   }
 
   private createExerciseMenu(sidebar: SideBar) {
@@ -31,12 +34,26 @@ export default class Menu {
 
   private createSection(section: Section, menu: HTMLElement) {
     const title = pascalCaseToText(section.id);
+
     const collapsable = new Collapsable(title);
     const exerciseList = document.createElement('ul');
 
     section.exercises.forEach((exercise) => {
       const exerciseItem = document.createElement('li');
       exerciseItem.textContent = pascalCaseToText(exercise.id);
+      exerciseItem.className = 'cursor-pointer';
+      exerciseItem.addEventListener('click', () => {
+        if (this.selected) {
+          this.selected.classList.remove('border-b-1', 'border-black');
+        }
+
+        this.selected = exerciseItem;
+        this.selected.classList.add('border-b-[1px]', 'border-black');
+
+        this.dispatchEvent(new CustomEvent('exercise-selected', {
+          detail: exercise,
+        }));
+      });
       exerciseList.appendChild(exerciseItem);
     });
     collapsable.addContent(exerciseList);
@@ -68,9 +85,5 @@ export default class Menu {
 
     footer.appendChild(githubLink);
     return footer;
-  }
-
-  init() {
-    console.log('Menu initialized');
   }
 }
