@@ -50,11 +50,12 @@ export class Collapsable {
     const arrow = parser.parseFromString(DOWN_ARROW, 'image/svg+xml').documentElement;
     arrow.setAttribute('width', `${settings?.iconSize ?? 24}px`);
     arrow.setAttribute('height', `${settings?.iconSize ?? 24}px`);
+    arrow.classList.add('hidden')
     const button = document.createElement('button');
     const className = settings?.className ?? `flex items-center justify-between font-medium`;
     button.className = `${THEME.background} ${THEME.text} ${className} transition-all duration-500`;
     button.innerHTML = `
-      <span>${title}</span>
+      <span class='collapsable-title'>${title}</span>
     `;
     button.appendChild(arrow);
     button.addEventListener('click', () => this.toggle());
@@ -68,11 +69,27 @@ export class Collapsable {
   }
 
   addTo(parent: HTMLElement) {
+    this.button.icon.classList.remove('hidden');
     parent.appendChild(this.container);
   }
 
   addContent(content: HTMLElement) {
     this.collapsable.appendChild(content);
+  }
+
+  updateTitle(title: string) {
+    this.button.element.querySelector('.collapsable-title')!.textContent = title
+  }
+
+  replaceContent(content: HTMLElement | undefined) {
+    this.collapsable.innerHTML = '';
+
+    if(!content) {
+      this.button.icon.classList.add('hidden');
+    } else {
+      this.button.icon.classList.remove('hidden');
+      this.collapsable.appendChild(content);
+    }
   }
 
   toggle() {

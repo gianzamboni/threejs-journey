@@ -1,12 +1,16 @@
 import { Collapsable } from "@/components/collapsable";
+import { Exercise } from "@/journey";
+import { pascalCaseToText } from "@/utils";
 
 export class InfoBox {
 
   private container: HTMLElement;
+  private collapsable: Collapsable;
+
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
 
-    const collapsable = new Collapsable('Información', {
+    this.collapsable = new Collapsable('Información', {
       className: 'm-5',
       button: {
         className: 'flex items-center justify-center font-bold text-2xl gap-1 py-2 px-16 rounded-lg mb-0',
@@ -21,10 +25,15 @@ export class InfoBox {
     const element = document.createElement('div');
     element.className = 'p-5';
     element.innerHTML = `Esta es una caja de información`;
-    collapsable.addContent(element);
-    collapsable.addTo(this.container);
+    this.collapsable.addContent(element);
+    this.collapsable.addTo(this.container);
 
     this.container.className = 'fixed bottom-0 left-0';
     parent.appendChild(this.container);
+  }
+
+  updateContent(exercise: Exercise) {
+    this.collapsable.updateTitle(pascalCaseToText(exercise.id));
+    this.collapsable.replaceContent(exercise.generator.description);
   }
 }

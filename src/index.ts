@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
   infoBox = new InfoBox(document.body);
   
   menu.addEventListener('exercise-selected', (event: CustomEventInit) => {
-    console.log(event.detail);
+    infoBox.updateContent(event.detail);
   });
   
 });
