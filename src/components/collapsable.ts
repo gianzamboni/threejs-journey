@@ -31,7 +31,7 @@ export class Collapsable {
 
   constructor(title: string, settings: CollapsableSettings = {}) {
     this.container = document.createElement('div');
-    this.container.className = `flex flex-col mb-5 ${settings?.className ?? ''}`;
+    this.container.className = `flex flex-col mb-5 transition-all duration-500 ${settings?.className ?? ''}`;
     this.button = this.createButton(title, settings?.button);
     this.collapsable = this.createCollapsable(settings?.collapsable);
     this.isOpen = false;
@@ -81,15 +81,18 @@ export class Collapsable {
     this.button.element.querySelector('.collapsable-title')!.textContent = title
   }
 
-  replaceContent(content: HTMLElement[] | undefined) {
+  replaceContent(content: string[] | undefined) {
     this.collapsable.innerHTML = '';
 
-    if(!content) {
+    if(!content || content.length === 0) {
       this.button.icon.classList.add('hidden');
     } else {
       this.button.icon.classList.remove('hidden');
       content.forEach((element) => {
-        this.collapsable.appendChild(element);
+        const container = document.createElement('div');
+        container.className = 'p-5';
+        container.textContent = element;
+        this.collapsable.appendChild(container);
       });
     }
   }

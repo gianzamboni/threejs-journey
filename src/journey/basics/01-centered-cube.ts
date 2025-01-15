@@ -1,6 +1,11 @@
 import * as THREE from 'three';
 import  BaseExercise from '@/journey/base-exercise';
+import { Exercise } from '../decorators';
 
+@Exercise({
+  id: 'first-threejs-project',
+  description: "A centered cube. It doesn't do anything, but it's a start."
+})
 export class CenteredCube extends BaseExercise {
 
   private cube: THREE.Mesh;

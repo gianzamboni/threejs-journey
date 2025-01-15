@@ -20,7 +20,7 @@ window.addEventListener('load', () => {
       activeExercise.dispose();
     } 
     
-    activeExercise = new event.detail.generator() as BaseExercise;
+    activeExercise = new event.detail() as BaseExercise;
     renderView.setScene(activeExercise.scene);
   });
 

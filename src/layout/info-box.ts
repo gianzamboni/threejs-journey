@@ -11,7 +11,7 @@ export class InfoBox {
     this.container = document.createElement('div');
 
     this.collapsable = new Collapsable('Información', {
-      className: 'm-5',
+      className: 'm-5 w-[16vw]',
       button: {
         className: 'flex items-center justify-center font-bold text-2xl gap-1 py-2 px-16 rounded-lg mb-0',
         iconSize: 32,
@@ -22,8 +22,8 @@ export class InfoBox {
       }
     });
 
-    const element = document.createElement('div');
-    element.className = 'p-5';
+    const element = document.createElement('p');
+    element.className = 'p-5 text-wrap';
     element.innerHTML = `Esta es una caja de información`;
     this.collapsable.addContent(element);
     this.collapsable.addTo(this.container);
@@ -34,6 +34,6 @@ export class InfoBox {
 
   updateContent(exercise: Exercise) {
     this.collapsable.updateTitle(pascalCaseToText(exercise.id));
-    this.collapsable.replaceContent(exercise.generator.description);
+    this.collapsable.replaceContent(exercise.description);
   }
 }
