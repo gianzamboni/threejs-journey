@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
     if(activeExercise !== undefined) {
       activeExercise.dispose();
     } 
-    
+    window.history.pushState({exerciseId: event.detail.id}, '', `?exercise=${event.detail.id}`);
     activeExercise = new event.detail() as BaseExercise;
     renderView.setScene(activeExercise.scene);
   });
@@ -28,7 +28,13 @@ window.addEventListener('load', () => {
     renderView.updateSize();
   });
   
- 
-  menu.selectLastExercise();
+  const urlParams = new URLSearchParams(window.location.search);
+  const exerciseId = urlParams.get('exercise');
+
+  if(exerciseId !== null) {
+    menu.selectExercise(exerciseId);
+  } else {
+    menu.selectLastExercise();
+  }
 
 });

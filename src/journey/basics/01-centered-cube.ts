@@ -4,7 +4,6 @@ import { Exercise } from '../decorators';
 
 @Exercise({
   id: 'first-threejs-project',
-  description: "A centered cube. It doesn't do anything, but it's a start."
 })
 export class CenteredCube extends BaseExercise {
 

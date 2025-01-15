@@ -37,6 +37,7 @@ export default class Menu extends EventTarget {
 
   private createExerciseItem(exercise: Exercise) {
     const exerciseItem = document.createElement('li');
+    exerciseItem.id = exercise.id;
     exerciseItem.textContent = pascalCaseToText(exercise.id);
     exerciseItem.className = 'cursor-pointer';
     exerciseItem.addEventListener('click', () => {
@@ -56,16 +57,16 @@ export default class Menu extends EventTarget {
     return exerciseItem;
   }
 
-  selectLastExercise() {
-    const lastExercise = this.getLastExercise();
-    if (lastExercise) {
-      lastExercise.click();
+  selectExercise(exerciseId: string) {
+    const exercise = this.menuContent.querySelector(`#${exerciseId}`) as HTMLElement;
+    if (exercise) {
+      exercise.click();
     }
   }
-  
-  private getLastExercise() {
-    const exercises = this.menuContent.querySelectorAll('li');
-    return exercises[exercises.length - 1];
+
+  selectLastExercise() {
+    const lastExercise =  this.menuContent.querySelectorAll('li');
+    lastExercise[lastExercise.length - 1].click();
   }
 
   private createSection(section: Section, menu: HTMLElement) {

@@ -8,6 +8,9 @@ export function Exercise(settings: ExerciseSettings) {
   }
   return function(target: any) {
     target.id = settings.id;
-    target.description = [settings.description];
+    target.info = [];
+    if(settings.description) {
+      target.info.push(settings.description);
+    }
   }
 }
