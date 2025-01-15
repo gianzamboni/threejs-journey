@@ -8,17 +8,18 @@ export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;
   private sideBar: SideBar;
+  private menuContent: HTMLElement;
 
   constructor(parent: HTMLElement) {
     super();
     this.sideBar = new SideBar(parent, {
-      buttonTitle: `${HAMBURGER_ICON} Ejercicios`,
+      buttonTitle: `${HAMBURGER_ICON} Demos`,
     });
 
     const header = this.createHeader();
     this.sideBar.addContent(header);
 
-    this.createExerciseMenu(this.sideBar);
+    this.menuContent = this.createExerciseMenu(this.sideBar);
 
     const footer = this.createFooter();
     this.sideBar.addContent(footer);
@@ -31,6 +32,7 @@ export default class Menu extends EventTarget {
     JOURNEY.forEach((section: Section) => {
       this.createSection(section, menu);
     });
+    return menu;
   }
 
   private createExerciseItem(exercise: Exercise) {
@@ -44,12 +46,26 @@ export default class Menu extends EventTarget {
 
       this.selected = exerciseItem;
       this.selected.classList.add('border-b-[1px]', 'border-black');
-      this.sideBar.toggleSidePanel();
+      if(this.sideBar.opened) {
+        this.sideBar.toggleSidePanel();
+      }
       this.dispatchEvent(new CustomEvent('exercise-selected', {
         detail: exercise,
       }));
     });
     return exerciseItem;
+  }
+
+  selectLastExercise() {
+    const lastExercise = this.getLastExercise();
+    if (lastExercise) {
+      lastExercise.click();
+    }
+  }
+  
+  private getLastExercise() {
+    const exercises = this.menuContent.querySelectorAll('li');
+    return exercises[exercises.length - 1];
   }
 
   private createSection(section: Section, menu: HTMLElement) {

@@ -28,4 +28,7 @@ window.addEventListener('load', () => {
     renderView.updateSize();
   });
   
+ 
+  menu.selectLastExercise();
+
 });

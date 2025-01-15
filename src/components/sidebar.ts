@@ -28,6 +28,10 @@ export default class SideBar {
     this.sideBarContent.appendChild(content);
   }
 
+  get opened() {
+    return !this.overlay.classList.contains('hidden');
+  }
+
   private createBody() {
     const body = document.createElement('div');
     body.className = 'relative flex flex-col h-full max-h-full px-3 pt-3';

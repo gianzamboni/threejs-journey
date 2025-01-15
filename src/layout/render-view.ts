@@ -26,7 +26,6 @@ export default class RenderView {
 
   setScene(scene: THREE.Scene) {
     this.scene = scene;
-    console.log(this.scene);
     this.renderer.render(this.scene, this.camera);
   }
   
