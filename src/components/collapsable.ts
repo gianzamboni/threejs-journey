@@ -27,7 +27,8 @@ export class Collapsable {
     toggle: string[];
   };
 
-  private isOpen: boolean = false;
+  private isOpen: boolean;
+  private isActive: boolean;
 
   constructor(title: string, settings: CollapsableSettings = {}) {
     this.container = document.createElement('div');
@@ -35,6 +36,7 @@ export class Collapsable {
     this.button = this.createButton(title, settings?.button);
     this.collapsable = this.createCollapsable(settings?.collapsable);
     this.isOpen = false;
+    this.isActive = true;
   }
 
   private createCollapsable(settings: CollapsableSectionSettings | undefined) {
@@ -86,6 +88,8 @@ export class Collapsable {
 
     if(!content || content.length === 0) {
       this.button.icon.classList.add('hidden');
+      this.button.element.setAttribute('disabled', 'true');
+      this.isActive = false;
     } else {
       this.button.icon.classList.remove('hidden');
       content.forEach((element) => {
@@ -98,25 +102,28 @@ export class Collapsable {
   }
 
   toggle() {
-    this.isOpen = !this.isOpen;
-    if(this.isOpen) {
-      this.collapsable.classList.remove('hidden');
-      this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
-      setTimeout(() => {
-        this.collapsable.style.height = 'auto';
-      }, 500);
-    } else {
-      this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
-      setTimeout(() => {
-        this.collapsable.style.height = '0';
-        this.collapsable.addEventListener('transitionend', () => {
-          this.collapsable.classList.add('hidden');
-        }, { once: true });
-      }, 0);
+    if(this.isActive) {
+      this.isOpen = !this.isOpen;
+      if(this.isOpen) {
+        this.collapsable.classList.remove('hidden');
+        this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
+        setTimeout(() => {
+          this.collapsable.style.height = 'auto';
+        }, 500);
+      } else {
+        this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
+        setTimeout(() => {
+          this.collapsable.style.height = '0';
+          this.collapsable.addEventListener('transitionend', () => {
+            this.collapsable.classList.add('hidden');
+          }, { once: true });
+        }, 0);
+      }
+      this.button.toggle.forEach((className) => {
+        this.button.element.classList.toggle(className);
+      });
+      this.button.icon.classList.toggle('rotate-[270deg]');
     }
-    this.button.toggle.forEach((className) => {
-      this.button.element.classList.toggle(className);
-    });
-    this.button.icon.classList.toggle('rotate-[270deg]');
   }
+   
 }
