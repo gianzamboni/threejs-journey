@@ -81,14 +81,16 @@ export class Collapsable {
     this.button.element.querySelector('.collapsable-title')!.textContent = title
   }
 
-  replaceContent(content: HTMLElement | undefined) {
+  replaceContent(content: HTMLElement[] | undefined) {
     this.collapsable.innerHTML = '';
 
     if(!content) {
       this.button.icon.classList.add('hidden');
     } else {
       this.button.icon.classList.remove('hidden');
-      this.collapsable.appendChild(content);
+      content.forEach((element) => {
+        this.collapsable.appendChild(element);
+      });
     }
   }
 

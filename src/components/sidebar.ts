@@ -42,14 +42,14 @@ export default class SideBar {
 
   private createOverlay() {
     const overlay = document.createElement('div');
-    overlay.className = `fixed top-0 start-0 bottom-0 end-0 z-[50] bg-black bg-opacity-50 hidden`;
+    overlay.className = `fixed top-0 start-0 bottom-0 end-0 z-50 bg-black bg-opacity-50 hidden`;
     overlay.onclick = this.toggleSidePanel.bind(this);
     return overlay;
   }
 
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
-    button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-sm ${THEME.background} ${THEME.border} ${THEME.text} ${THEME.hover}`;
+    button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-sm ${THEME.background} ${THEME.border} ${THEME.text} ${THEME.hover} z-50`;
     button.innerHTML = buttonTitle;
     button.onclick = this.toggleSidePanel.bind(this);
     return button;
