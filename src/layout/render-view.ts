@@ -1,4 +1,5 @@
 import BaseExercise from '@/journey/base-exercise';
+import { Exercise } from '@/journey/types';
 import * as THREE from 'three';
 
 export default class RenderView {
@@ -6,7 +7,7 @@ export default class RenderView {
   private canvas: HTMLElement;
   private renderer: THREE.WebGLRenderer;
 
-  private exercise: BaseExercise | undefined;
+  private exercise: Exercise | undefined;
 
   constructor(parent: HTMLElement) {
     this.canvas = document.createElement('canvas');
@@ -21,9 +22,19 @@ export default class RenderView {
     this.updateSize();
   }
 
-  run(exercise: BaseExercise) {
+  run(exercise: Exercise) {
     this.exercise = exercise;
-    this.renderer.render(exercise.scene, exercise.camera);
+    if(this.exercise.isAnimated) {
+      this.exercise.startAnimation!(this);
+    } else {
+      this.renderer.render(exercise.scene, exercise.camera);
+    }
+  }
+
+  update() {
+    if(this.exercise === undefined) return;
+
+    this.renderer.render(this.exercise.scene, this.exercise.camera);
   }
   
   updateSize() {

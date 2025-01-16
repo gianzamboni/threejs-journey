@@ -2,11 +2,12 @@ import Menu from "@/layout/menu";
 import { InfoBox } from "./layout/info-box";
 import RenderView from "./layout/render-view";
 import BaseExercise from "./journey/base-exercise";
+import { Exercise } from "./journey/types";
 
 let menu: Menu;
 let infoBox: InfoBox;
 let renderView: RenderView;
-let activeExercise: BaseExercise | undefined;
+let activeExercise: Exercise | undefined;
 
 
 window.addEventListener('load', () => {
@@ -21,7 +22,7 @@ window.addEventListener('load', () => {
       activeExercise.dispose();
     } 
     window.history.pushState({exerciseId: event.detail.id}, '', `?exercise=${event.detail.id}`);
-    activeExercise = new event.detail() as BaseExercise;
+    activeExercise = new event.detail() as Exercise;
     renderView.run(activeExercise);
   });
 

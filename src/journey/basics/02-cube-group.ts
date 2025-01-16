@@ -1,11 +1,16 @@
 import * as THREE from 'three';
 import BaseExercise from "../base-exercise";
-import { Exercise } from "../decorators";
+import { Exercise, SceneObject } from "../decorators";
 
-@Exercise({ id: 'object-transformation' })
+@Exercise({ 
+  id: 'object-transformation',
+})
 export class CubeGroup extends BaseExercise {
 
+  @SceneObject
   private group: THREE.Group;
+
+  @SceneObject
   private axesHelper: THREE.AxesHelper;
   
   private cubeGeometry: THREE.BoxGeometry;
@@ -20,7 +25,6 @@ export class CubeGroup extends BaseExercise {
     this.group = this.createCubeGroup();
     this.axesHelper = new THREE.AxesHelper(2);
 
-    this._scene.add(this.group, this.axesHelper);
   }
 
   private createCubeGroup() {

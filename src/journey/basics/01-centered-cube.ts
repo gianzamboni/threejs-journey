@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import  BaseExercise from '@/journey/base-exercise';
-import { Exercise } from '../decorators';
+import { Exercise, SceneObject } from '../decorators';
 
 @Exercise({
   id: 'first-threejs-project',
 })
 export class CenteredCube extends BaseExercise {
 
+  @SceneObject
   private cube: THREE.Mesh;
   
   constructor() {
@@ -16,7 +17,6 @@ export class CenteredCube extends BaseExercise {
       new THREE.BoxGeometry(1, 1, 1),
       new THREE.MeshBasicMaterial({ color: 0xff0000 })
     );
-    this._scene.add(this.cube);
   }
 
   dispose() {

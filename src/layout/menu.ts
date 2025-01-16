@@ -1,8 +1,8 @@
 import SideBar from "@/components/sidebar";
 import { GITHUB_ICON, HAMBURGER_ICON } from "@/constants/icons";
 import { THEME } from "@/theme";
-import { Exercise, JOURNEY, Section } from "@/journey";
-import { pascalCaseToText } from "@/utils";
+import { JOURNEY, Section } from "@/journey";
+import { pascalCaseToText } from "@/utils/text-utils";
 import { Collapsable } from "@/components/collapsable";
 export default class Menu extends EventTarget {
 

@@ -22,7 +22,7 @@ export class Collapsable {
   private container: HTMLElement;
   private collapsable: HTMLElement;
   private button: {
-    element: HTMLElement;
+    element: HTMLButtonElement;
     icon: HTMLElement;
     toggle: string[];
   };
@@ -86,7 +86,7 @@ export class Collapsable {
   replaceContent(content: string[] | undefined) {
     this.collapsable.innerHTML = '';
     this.isActive = content !== undefined && content.length > 0;
-    this.button.element.setAttribute('disabled', (!this.isActive).toString());
+    this.button.element.disabled = !this.isActive;
     if(this.isActive) {
       this.button.icon.classList.remove('hidden');
       content!.forEach((element) => {
