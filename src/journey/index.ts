@@ -1,11 +1,7 @@
 import { CenteredCube } from "./basics/01-centered-cube";
 import { CubeGroup } from "./basics/02-cube-group";
 import { RotatingCube } from "./basics/03-rotating-cube";
-
-export type Exercise = Function & { 
-  id: string; 
-  description?: string[];
-};
+import { Exercise } from "./types";
 
 export type Section = {
   id: string;

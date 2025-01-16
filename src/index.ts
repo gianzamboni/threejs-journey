@@ -1,7 +1,6 @@
 import Menu from "@/layout/menu";
 import { InfoBox } from "./layout/info-box";
 import RenderView from "./layout/render-view";
-import BaseExercise from "./journey/base-exercise";
 import { Exercise } from "./journey/types";
 
 let menu: Menu;
