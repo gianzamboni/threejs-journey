@@ -1,12 +1,12 @@
+import BaseExercise from '@/journey/base-exercise';
 import * as THREE from 'three';
 
 export default class RenderView {
 
   private canvas: HTMLElement;
   private renderer: THREE.WebGLRenderer;
-  private camera: THREE.PerspectiveCamera;
 
-  private scene: THREE.Scene | undefined;
+  private exercise: BaseExercise | undefined;
 
   constructor(parent: HTMLElement) {
     this.canvas = document.createElement('canvas');
@@ -18,15 +18,12 @@ export default class RenderView {
       antialias: true,
     });
 
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.camera.position.set(0,0,3);
-    this.camera.lookAt(0,0,0);
     this.updateSize();
   }
 
-  setScene(scene: THREE.Scene) {
-    this.scene = scene;
-    this.renderer.render(this.scene, this.camera);
+  run(exercise: BaseExercise) {
+    this.exercise = exercise;
+    this.renderer.render(exercise.scene, exercise.camera);
   }
   
   updateSize() {
@@ -37,11 +34,10 @@ export default class RenderView {
 
     this.renderer.setSize(size.width, size.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.camera.aspect = size.width / size.height;
-    this.camera.updateProjectionMatrix();
 
-    if(this.scene) {
-      this.renderer.render(this.scene, this.camera);
+    if(this.exercise) {
+      this.exercise.updateCamera(size.width / size.height)
+      this.renderer.render(this.exercise.scene, this.exercise.camera);
     }
   }
 }

@@ -1,16 +1,34 @@
-type ExerciseSettings = {
-  id: string;
-  description?: string;
-}
+import { CameraSettings, ExerciseSettings } from "../types";
+
 export function Exercise(settings: ExerciseSettings) {
   if(!settings.id) {
     throw new Error('Exercise id is required');
   }
-  return function(target: any) {
-    target.id = settings.id;
-    target.info = [];
-    if(settings.description) {
-      target.info.push(settings.description);
+  return function(constructor: any): any {
+    return class extends constructor {
+      public static id: string = settings.id;
+      public static info: string[] = [];
+
+      constructor() {
+        super();
+        if(settings.description) {
+          this.info.push(settings.description);
+        }
+      }
     }
   }
 }
+
+export function Camera(settings: CameraSettings): any {
+  return function(constructor: any) {
+    return class extends constructor {
+      constructor() {
+        super();
+        if(settings.initialPosition) {
+          this.settings.camera.initialPosition = settings.initialPosition;
+        }
+      }
+    }
+  }
+};
+

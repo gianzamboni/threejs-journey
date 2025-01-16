@@ -8,6 +8,7 @@ let infoBox: InfoBox;
 let renderView: RenderView;
 let activeExercise: BaseExercise | undefined;
 
+
 window.addEventListener('load', () => {
   menu = new Menu(document.body);
   infoBox = new InfoBox(document.body);
@@ -21,7 +22,7 @@ window.addEventListener('load', () => {
     } 
     window.history.pushState({exerciseId: event.detail.id}, '', `?exercise=${event.detail.id}`);
     activeExercise = new event.detail() as BaseExercise;
-    renderView.setScene(activeExercise.scene);
+    renderView.run(activeExercise);
   });
 
   window.addEventListener('resize', () => {

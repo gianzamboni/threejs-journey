@@ -85,19 +85,18 @@ export class Collapsable {
 
   replaceContent(content: string[] | undefined) {
     this.collapsable.innerHTML = '';
-
-    if(!content || content.length === 0) {
-      this.button.icon.classList.add('hidden');
-      this.button.element.setAttribute('disabled', 'true');
-      this.isActive = false;
-    } else {
+    this.isActive = content !== undefined && content.length > 0;
+    this.button.element.setAttribute('disabled', (!this.isActive).toString());
+    if(this.isActive) {
       this.button.icon.classList.remove('hidden');
-      content.forEach((element) => {
+      content!.forEach((element) => {
         const container = document.createElement('div');
         container.className = 'p-5';
         container.textContent = element;
         this.collapsable.appendChild(container);
       });
+    } else {
+      this.button.icon.classList.add('hidden');
     }
   }
 
