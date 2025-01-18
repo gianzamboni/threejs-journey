@@ -1,5 +1,8 @@
-import { AnimationLoop } from "@/utils/animation-loop";
 import { ExerciseSettings } from "../types";
+import { Timer } from 'three/addons/misc/Timer.js'
+import { getDebugInfo, getDecoratorSettings } from './decorator-settings';
+import { addSceneObjectsToScene } from './scene-objects';
+import { setupAnimation } from './animation';
 
 function assertValidSettings(settings: ExerciseSettings) {
   if(!settings.id) {
@@ -25,36 +28,54 @@ export function Exercise(settings: ExerciseSettings) {
 
       constructor() {
         super();
-        this._addSceneObjectsToScene();
-        this._generateAnimationMethods();
+        const settings = getDecoratorSettings(constructor);
+        addSceneObjectsToScene(this, settings.sceneMeshes);
+        //this._addDebugInfo();
+        setupAnimation(this, settings.animationMethod);
       }
 
-      private _addSceneObjectsToScene() {
-        const objectsKeys = constructor._sceneObjects;
-        if(!objectsKeys) return;
-
-        const objects = objectsKeys.map((key: string) => this[key]);
-        this.scene.add(...objects);
+      private _addDebugInfo() {
+        this.isDebuggable = constructor._debuggable;
+        if(this.isDebuggable) {
+          this._debug_info = {};
+          if(constructor._fpsMethod) {
+            this._createFPSCalculator();
+          }
+        }
       }
 
-      private _generateAnimationMethods() {
-        this.isAnimated = constructor._animationMethod !== undefined;
-        if(!this.isAnimated) return;
+      private _createFPSCalculator() {
+        this._debug_info.fps = {
+          samples: 0,
+          value: 0,
+        }
 
-        this._animationLoop = new AnimationLoop(this[constructor._animationMethod].bind(this));
-        this.startAnimation = this._animationLoop.init.bind(this._animationLoop);
+        const frame = this[constructor._fpsMethod].bind(this);
+
+        this[constructor._fpsMethod] = (timer: Timer) => {
+          const fpsInfo = this._debug_info.fps;
+          fpsInfo.samples++;
+          const newSampleValue = 1/timer.getDelta();
+          fpsInfo.value = fpsInfo.value + (newSampleValue - fpsInfo.value) / fpsInfo.samples;
+          this.dispatchEvent(new CustomEvent('debug-info', {
+            detail: {
+              fps: Math.round(this._debug_info.fps.value),
+            },
+          }));
+          frame(timer);
+        };
+        console.log(this.frame);
       }
     }
   }
 }
 
-export function SceneObject(targetClass: any, propertyKey: string) {
-  if(!targetClass.constructor._sceneObjects) {
-    targetClass.constructor._sceneObjects = []
+export function DebugFPS(targetClass: any, methodName: string, descriptor: any) {
+  const debugInfo = getDebugInfo(targetClass.constructor);
+  debugInfo.fps = {
+    method: methodName,
+    samples: 0,
+    value: 0,
   }
-  targetClass.constructor._sceneObjects.push(propertyKey);
-}
-
-export function Animation(targetClass: any, methodName: string) {
-  targetClass.constructor._animationMethod = methodName;
+  targetClass.constructor._fpsMethod = methodName;
 }

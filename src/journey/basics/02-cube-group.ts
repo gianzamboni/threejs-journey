@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import BaseExercise from "../base-exercise";
-import { Exercise, SceneObject } from "../decorators";
+import { Exercise } from "../decorators";
+import { SceneObject } from '../decorators/scene-objects';
 
 @Exercise({ 
   id: 'object-transformation',

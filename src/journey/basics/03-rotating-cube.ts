@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import BaseExercise from "../base-exercise";
-import { Animation, Exercise, SceneObject } from "../decorators";
+import { Exercise } from "../decorators";
 import { Timer } from 'three/addons/misc/Timer.js';
-
+import { SceneObject } from '../decorators/scene-objects';
+import { Animation } from '../decorators/animation';
 @Exercise({ id: 'animations' })
 export class RotatingCube extends BaseExercise {
 

@@ -8,21 +8,23 @@ let infoBox: InfoBox;
 let renderView: RenderView;
 let activeExercise: Exercise | undefined;
 
-
+async function selectExercise(newExercise: Exercise) {
+  infoBox.updateContent(newExercise);
+ 
+  if(activeExercise !== undefined) {
+    await activeExercise.dispose();
+  } 
+  window.history.pushState({exerciseId: newExercise.id}, '', `?exercise=${newExercise.id}`);
+  activeExercise = new (newExercise as any)() as Exercise;
+  renderView.run(activeExercise);
+}
 window.addEventListener('load', () => {
   menu = new Menu(document.body);
   infoBox = new InfoBox(document.body);
   renderView = new RenderView(document.body);
 
-  menu.addEventListener('exercise-selected', (event: CustomEventInit) => {
-    infoBox.updateContent(event.detail);
-  
-    if(activeExercise !== undefined) {
-      activeExercise.dispose();
-    } 
-    window.history.pushState({exerciseId: event.detail.id}, '', `?exercise=${event.detail.id}`);
-    activeExercise = new event.detail() as Exercise;
-    renderView.run(activeExercise);
+  menu.addEventListener('exercise-selected', async (event: CustomEventInit) => {
+    selectExercise(event.detail);
   });
 
   window.addEventListener('resize', () => {
@@ -37,5 +39,4 @@ window.addEventListener('load', () => {
   } else {
     menu.selectLastExercise();
   }
-
 });

@@ -4,6 +4,7 @@ import { THEME } from "@/theme";
 import { JOURNEY, Section } from "@/journey";
 import { pascalCaseToText } from "@/utils/text-utils";
 import { Collapsable } from "@/components/collapsable";
+import { Exercise } from "@/journey/types";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;
@@ -41,12 +42,17 @@ export default class Menu extends EventTarget {
     exerciseItem.textContent = pascalCaseToText(exercise.id);
     exerciseItem.className = 'cursor-pointer';
     exerciseItem.addEventListener('click', () => {
+      const selectedClasses = [
+        'border-b-[1px]',
+        'border-black',
+        'dark:border-white',
+      ]
       if (this.selected) {
-        this.selected.classList.remove('border-b-1', 'border-black');
+        this.selected.classList.remove(...selectedClasses);
       }
 
       this.selected = exerciseItem;
-      this.selected.classList.add('border-b-[1px]', 'border-black');
+      this.selected.classList.add(...selectedClasses);
       if(this.sideBar.opened) {
         this.sideBar.toggleSidePanel();
       }

@@ -19,4 +19,5 @@ export type Exercise = BaseExercise & {
   info?: string[];
   isAnimated?: boolean;
   startAnimation?: (view: RenderView) => void;
+  isDebuggable?: boolean;
 };
