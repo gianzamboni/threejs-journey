@@ -1,5 +1,5 @@
 import { DOWN_ARROW } from "@/constants/icons";
-import { THEME } from "@/theme";
+import { CSS_CLASSES } from "@/theme";
 
 type CollapsableButtonSettings = {
   className?: string;
@@ -21,6 +21,7 @@ export class Collapsable {
 
   private container: HTMLElement;
   private collapsable: HTMLElement;
+
   private button: {
     element: HTMLButtonElement;
     icon: HTMLElement;
@@ -41,7 +42,7 @@ export class Collapsable {
 
   private createCollapsable(settings: CollapsableSectionSettings | undefined) {
     const collapsable = document.createElement('div');
-    const className = `overflow-hidden transition-all duration-500 hidden h-0 ${THEME.background} ${settings?.className ?? ''}`;
+    const className = `overflow-hidden transition-all duration-500 hidden h-0 ${CSS_CLASSES.background} ${settings?.className ?? ''}`;
     collapsable.className = `${className}`;
     this.container.appendChild(collapsable);
     return collapsable;
@@ -55,7 +56,7 @@ export class Collapsable {
     arrow.classList.add('hidden')
     const button = document.createElement('button');
     const className = settings?.className ?? `flex items-center justify-between font-medium`;
-    button.className = `${THEME.background} ${THEME.text} ${className} transition-all duration-500`;
+    button.className = `${CSS_CLASSES.background} ${CSS_CLASSES.text} ${className} transition-all duration-500`;
     button.innerHTML = `
       <span class='collapsable-title'>${title}</span>
     `;

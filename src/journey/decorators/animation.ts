@@ -1,13 +1,13 @@
 import { AnimationLoop } from "@/utils/animation-loop";
-import { getDecoratorExtraProperies, getDecoratorSettings } from "./decorator-settings";
+import { DecoratorsUtils } from "./decorator-utils";
 
 export function Animation(targetClass: any, methodName: string) {
-  let settings = getDecoratorSettings(targetClass.constructor);
+  let settings = DecoratorsUtils.getSettings(targetClass.constructor);
   settings.animationMethod = methodName;
 }
 
 export function setupAnimation(exerciseInstance: any, methodName: string | undefined) {
-  const instanceExtras = getDecoratorExtraProperies(exerciseInstance);
+  const instanceExtras = DecoratorsUtils.getExtraProperties(exerciseInstance);
 
   exerciseInstance.isAnimated = methodName !== undefined;
   if(!exerciseInstance.isAnimated) return;

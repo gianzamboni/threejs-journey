@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
-import { getDecoratorSettings } from "./decorator-settings";
+import {DecoratorsUtils} from "./decorator-utils";
 
 export function SceneObject(targetClass: any, propertyKey: string) {
-  let settings = getDecoratorSettings(targetClass.constructor);
+  let settings = DecoratorsUtils.getSettings(targetClass.constructor);
   if(!settings.sceneMeshes) {
     settings.sceneMeshes = []
   }

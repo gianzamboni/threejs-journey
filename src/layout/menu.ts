@@ -1,10 +1,10 @@
 import SideBar from "@/components/sidebar";
 import { GITHUB_ICON, HAMBURGER_ICON } from "@/constants/icons";
-import { THEME } from "@/theme";
 import { JOURNEY, Section } from "@/journey";
 import { pascalCaseToText } from "@/utils/text-utils";
 import { Collapsable } from "@/components/collapsable";
 import { Exercise } from "@/journey/types";
+import { CSS_CLASSES } from "@/theme";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;
@@ -28,7 +28,7 @@ export default class Menu extends EventTarget {
 
   private createExerciseMenu(sidebar: SideBar) {
     const menu = document.createElement('nav');
-    menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${THEME.scrollBar}`;
+    menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${CSS_CLASSES.scrollBar}`;
     sidebar.addContent(menu);
     JOURNEY.forEach((section: Section) => {
       this.createSection(section, menu);

@@ -1,5 +1,5 @@
 import { ExerciseSettings } from "../types";
-import { getDecoratorSettings } from './decorator-settings';
+import { DecoratorsUtils } from './decorator-utils';
 import { addSceneObjectsToScene } from './scene-objects';
 import { setupAnimation } from './animation';
 import { addDebugInfo } from "./debug-info";
@@ -28,7 +28,7 @@ export function Exercise(settings: ExerciseSettings) {
 
       constructor() {
         super();
-        const settings = getDecoratorSettings(constructor);
+        const settings = DecoratorsUtils.getSettings(constructor);
         addSceneObjectsToScene(this, settings.sceneMeshes);
         addDebugInfo(this, settings.debugInfo);
         setupAnimation(this, settings.animationMethod);

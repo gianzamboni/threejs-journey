@@ -1,4 +1,6 @@
 import restart from 'vite-plugin-restart'
+import checker from 'vite-plugin-checker'
+
 import path from 'path';
 export default {
   root: 'src/', // Sources files (typically where index.html is)
@@ -22,5 +24,9 @@ export default {
   plugins:
     [
       restart({ restart: ['static/**',] }), // Restart server on static file change
+      checker({
+        // e.g. use TypeScript check
+        typescript: true,
+      }),
     ],
 }

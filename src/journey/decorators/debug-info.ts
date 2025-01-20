@@ -1,14 +1,14 @@
 /// <reference types="vite/client" />
 
-import { DebugInfo, getDebugInfo } from "./decorator-settings";
+import { DecoratorsUtils } from "./decorator-utils";
 import { Timer } from 'three/addons/misc/Timer.js'
 
 export function DebugFPS(targetClass: any, methodName: string) {
-  const debugInfo = getDebugInfo(targetClass.constructor);
+  const debugInfo = DecoratorsUtils.getDebugInfo(targetClass.constructor);
   debugInfo.fpsMethod = methodName;
 }
 
-export function addDebugInfo(exerciseInstance: any, debugInfo: DebugInfo | undefined) {
+export function addDebugInfo(exerciseInstance: any, debugInfo: DecoratorsUtils.DebugInfo | undefined) {
   exerciseInstance.isDebuggable = debugInfo !== undefined;
   exerciseInstance.debugActive = import.meta.env.MODE === 'development';
   if(!exerciseInstance.isDebuggable) return;
