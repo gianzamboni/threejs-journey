@@ -1,110 +1,96 @@
 import { COLORS } from "@/theme";
 
+function pixelRatioed(value: number) {
+  return Math.round(window.devicePixelRatio || 1) * value;
+}
 export class GraphPanel {
-  
-  private canvas: HTMLCanvasElement;
+
+  private context: CanvasRenderingContext2D;
+  private canvasElement: HTMLCanvasElement;
+
+  private title: string;
+
+  private canvas = {
+    width: pixelRatioed(80),
+    height: pixelRatioed(48),
+  }
+
+  private text = {
+    x: pixelRatioed(3),
+    y: pixelRatioed(2),
+  }
+
+  private graph = {
+    x: pixelRatioed(3),
+    y: pixelRatioed(10),
+    width: pixelRatioed(74),
+    height: pixelRatioed(30),
+  };
+
+  private min = Infinity;
+  private max = 0;
+
   constructor(name: string, parent: HTMLElement) {
-    const pixelRatio = Math.round(window.devicePixelRatio || 1);
-    const width = 80 //* pixelRatio;
-    const height = 48 //* pixelRatio;
-    const textX = 3 * pixelRatio;
-    const textY = 2 * pixelRatio;  
-    const graphX = 3 * pixelRatio;
-    const graphY = 15 * pixelRatio;
-    const graphWidth = 74 * pixelRatio;
-    const graphHeight = 30 * pixelRatio;
-    
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = width;
-    this.canvas.height = height;
-    this.canvas.style.cssText = 'width:80px;height:48px';
+    this.title = name;
 
-    const context = this.canvas.getContext('2d');
-    if(context === null) {
+    const canvas = this.initCanvas();
+    const context = canvas.getContext('2d');
+    if (context === null) {
       throw new Error('Unable to get canvas context');
-    }
-    context.font = 'bold ' + (5 * pixelRatio) + 'px Helvetica,Arial,sans-serif';
-    context.textBaseline = 'top';
+    };
 
-    context.fillStyle = COLORS.blackAlpha;
-    context.fillRect(0, 0, width, height);
+    this.context = context;
+    this.canvasElement = canvas;
+    context.font = `${pixelRatioed(7)}px ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`;
+    context.textBaseline = 'top';
+    context.textRendering = 'optimizeLegibility';
+
+    context.fillStyle = COLORS.backgroundAlpha[50];
+    context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     context.fillStyle = COLORS.debugLabel;
-    context.fillText(name, textX, textY);
-    context.fillRect(graphX, graphY, graphWidth, graphHeight);
+    context.fillText(name, this.text.x, this.text.y);
 
-    const bg = COLORS.blackAlpha;
-    context.fillStyle = bg;
-    context.globalAlpha = 0.9;
-    context.fillRect(graphX, graphY, graphWidth, graphHeight);
-
-    parent.appendChild(this.canvas);
+    context.fillStyle = "#000";
+    context.fillRect(this.graph.x, this.graph.y, this.graph.width, this.graph.height);
+    parent.appendChild(canvas);
   }
 
-  
+
   update(value: number) {
-    console.log(value);
+    this.min = Math.min(this.min, value);
+    this.max = Math.max(this.max, value);
+
+    this.context.clearRect(0, 0, this.canvas.width, this.graph.y);
+    this.context.fillStyle = COLORS.backgroundAlpha[100];
+    this.context.fillRect(0, 0, this.canvas.width, this.graph.y);
+
+    this.context.fillStyle = COLORS.debugLabel;
+    this.context.fillText(`${value} ${this.title} (${this.min}-${this.max})`, this.text.x, this.text.y);
+
+    this.context.fillStyle = COLORS.graphColor;
+    this.context.drawImage(this.canvasElement, 
+      this.graph.x + pixelRatioed(1), 
+      this.graph.y,
+      this.graph.width - pixelRatioed(1), 
+      this.graph.height, 
+      this.graph.x, 
+      this.graph.y, 
+      this.graph.width - pixelRatioed(1), 
+      this.graph.height
+    );
+
+    this.context.fillRect(this.graph.x + this.graph.width - pixelRatioed(1), this.graph.y, pixelRatioed(1), this.graph.height);
+
+    this.context.fillStyle = "#000";
+    this.context.fillRect(this.graph.x + this.graph.width - pixelRatioed(1), this.graph.y, pixelRatioed(1), Math.round((1 - (value / this.max)) * this.graph.height));
   }
-  
+
+  private initCanvas(): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = this.canvas.width;
+    canvas.height = this.canvas.height;
+    return canvas;
+  }
+
 }
-
-
-
-// Stats.Panel = function (name, fg, bg) {
-
-//   var min = Infinity, max = 0, round = Math.round;
-//   var PR = round(window.devicePixelRatio || 1);
-
-//   var WIDTH = 80 * PR, HEIGHT = 48 * PR,
-//     TEXT_X = 3 * PR, TEXT_Y = 2 * PR,
-//     GRAPH_X = 3 * PR, GRAPH_Y = 15 * PR,
-//     GRAPH_WIDTH = 74 * PR, GRAPH_HEIGHT = 30 * PR;
-
-//   var canvas = document.createElement('canvas');
-//   canvas.width = WIDTH;
-//   canvas.height = HEIGHT;
-//   canvas.style.cssText = 'width:80px;height:48px';
-
-//   var context = canvas.getContext('2d');
-//   context.font = 'bold ' + (9 * PR) + 'px Helvetica,Arial,sans-serif';
-//   context.textBaseline = 'top';
-
-//   context.fillStyle = bg;
-//   context.fillRect(0, 0, WIDTH, HEIGHT);
-
-//   context.fillStyle = fg;
-//   context.fillText(name, TEXT_X, TEXT_Y);
-//   context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);
-
-//   context.fillStyle = bg;
-//   context.globalAlpha = 0.9;
-//   context.fillRect(GRAPH_X, GRAPH_Y, GRAPH_WIDTH, GRAPH_HEIGHT);
-
-//   return {
-
-//     dom: canvas,
-
-//     update: function (value, maxValue) {
-
-//       min = Math.min(min, value);
-//       max = Math.max(max, value);
-
-//       context.fillStyle = bg;
-//       context.globalAlpha = 1;
-//       context.fillRect(0, 0, WIDTH, GRAPH_Y);
-//       context.fillStyle = fg;
-//       context.fillText(round(value) + ' ' + name + ' (' + round(min) + '-' + round(max) + ')', TEXT_X, TEXT_Y);
-
-//       context.drawImage(canvas, GRAPH_X + PR, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT, GRAPH_X, GRAPH_Y, GRAPH_WIDTH - PR, GRAPH_HEIGHT);
-
-//       context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, GRAPH_HEIGHT);
-
-//       context.fillStyle = bg;
-//       context.globalAlpha = 0.9;
-//       context.fillRect(GRAPH_X + GRAPH_WIDTH - PR, GRAPH_Y, PR, round((1 - (value / maxValue)) * GRAPH_HEIGHT));
-
-//     }
-
-//   };
-
-// };

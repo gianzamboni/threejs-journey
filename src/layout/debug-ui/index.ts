@@ -11,7 +11,7 @@ export default class DebugUI {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = `fixed top-0 right-0 bg-alpha-black text-white m-5`;
+    this.container.className = `fixed top-0 right-0 text-white m-5`;
     this.container.innerHTML = ``;
     parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
@@ -27,6 +27,7 @@ export default class DebugUI {
   update(info: any) {
     const now = performance.now();
     if(now - this.lastGuiUpdate > 1000) {
+      console.log('update', now, this.lastGuiUpdate, now - this.lastGuiUpdate);
       Object.keys(info).forEach(key => {
         const dataRow = this.getDataRow(key);
         dataRow.update(info[key]);

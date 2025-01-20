@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        "alpha-black": 'rgba(255, 255, 255, 0.0625)',
+        "alpha-black": 'rgba(255, 255, 255, 0.5)',
       }
     },
   },
