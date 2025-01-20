@@ -10,6 +10,8 @@
 - Fix orbit controls autorotation. should be created by each exercise
 - Hacer bien los checkeos de existencia de propiedades
 
+
+- Agregar pre-commit para hacer chequeos basicos antes de pushear
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 

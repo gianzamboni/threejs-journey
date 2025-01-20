@@ -1,4 +1,3 @@
-import BaseExercise from '@/journey/base-exercise';
 import { Exercise } from '@/journey/types';
 import * as THREE from 'three';
 

@@ -20,7 +20,7 @@ export function setupAnimation(exerciseInstance: any, methodName: string | undef
 
   const originalDispose = exerciseInstance.dispose.bind(exerciseInstance);
   exerciseInstance.dispose = async function() {
-    instanceExtras.animationLoop.stop();
+    instanceExtras.animationLoop!.stop();
     originalDispose();
   }
 }

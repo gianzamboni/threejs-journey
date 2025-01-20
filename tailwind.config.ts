@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{html,ts,js}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "alpha-black": 'rgba(0, 0, 0, 0.5)',
+      }
+    },
   },
   darkMode: 'selector',
   plugins: [

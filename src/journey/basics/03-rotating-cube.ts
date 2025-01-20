@@ -4,7 +4,9 @@ import { Exercise } from "../decorators";
 import { Timer } from 'three/addons/misc/Timer.js';
 import { SceneObject } from '../decorators/scene-objects';
 import { Animation } from '../decorators/animation';
-@Exercise({ id: 'animations' })
+import { DebugFPS } from '../decorators/debug-info';
+
+@Exercise({ id: 'animations', description: 'Rotating cube' })
 export class RotatingCube extends BaseExercise {
 
   @SceneObject
@@ -23,6 +25,7 @@ export class RotatingCube extends BaseExercise {
   }
 
   @Animation
+  @DebugFPS
   frame(timer: Timer) {
     const elapsed = timer.getElapsed();
     this.cube.rotation.y = Math.sin(elapsed);

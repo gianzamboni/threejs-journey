@@ -1,11 +1,7 @@
 import { AnimationLoop } from "@/utils/animation-loop";
 
 export type DebugInfo = {
-  fps?: {
-    method: string;
-    samples: number;
-    value: number;
-  }
+  fpsMethod?: string;
 }
 
 export type DecoratorSettings = {
@@ -16,6 +12,7 @@ export type DecoratorSettings = {
 
 export type DecoratorExtraProperties = {
   animationLoop?: AnimationLoop;
+  debugInfo?: DebugInfo;
 }
 
 export function getDecoratorSettings(constructor: any): DecoratorSettings {
@@ -33,7 +30,7 @@ export function getDebugInfo(constructor: any): DebugInfo {
   return settings.debugInfo;
 }
 
-export function getDecoratorExtraProperies(exerciseInstance: any) {
+export function getDecoratorExtraProperies(exerciseInstance: any): DecoratorExtraProperties {
   if(exerciseInstance._extraProperties === undefined) {
     exerciseInstance._extraProperties = {};
   }
