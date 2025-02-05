@@ -7,6 +7,11 @@ export const CSS_CLASSES = {
 };
 
 export const COLORS = {
-  blackAlpha: `rgba(255, 255, 255, 0.0625)`,
+  black: {
+    50: `rgba(0, 0, 0, 0.5)`,
+    90: `rgba(0, 0, 0, 0.9)`,
+    100: `rgba(0, 0, 0, 1)`,
+  },
+  white: `rgba(255, 255, 255, 0.0625)`,
   debugLabel: `#DC2626`,
 };
