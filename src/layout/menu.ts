@@ -40,7 +40,7 @@ export default class Menu extends EventTarget {
     const exerciseItem = document.createElement('li');
     exerciseItem.id = exercise.id;
     exerciseItem.textContent = pascalCaseToText(exercise.id);
-    exerciseItem.className = 'cursor-pointer';
+    exerciseItem.className = 'cursor-pointer ml-2';
     exerciseItem.addEventListener('click', () => {
       const selectedClasses = [
         'border-b-[1px]',

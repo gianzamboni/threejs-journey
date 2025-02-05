@@ -7,11 +7,11 @@ export const CSS_CLASSES = {
 };
 
 export const COLORS = {
-  backgroundAlpha: {
-    0:  `#ffffff00`,
-    50: `#ffffff7f`,
-    100: `#ffffff`,
+  black: {
+    50: `rgba(0, 0, 0, 0.5)`,
+    90: `rgba(0, 0, 0, 0.9)`,
+    100: `rgba(0, 0, 0, 1)`,
   },
-  debugLabel: `#f00`,
-  graphColor: `#0f0`,
+  white: `rgba(255, 255, 255, 0.0625)`,
+  debugLabel: `#DC2626`,
 };

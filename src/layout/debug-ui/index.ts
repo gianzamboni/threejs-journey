@@ -26,8 +26,7 @@ export default class DebugUI {
 
   update(info: any) {
     const now = performance.now();
-    if(now - this.lastGuiUpdate > 1000) {
-      console.log('update', now, this.lastGuiUpdate, now - this.lastGuiUpdate);
+    if(now - this.lastGuiUpdate > 150) {
       Object.keys(info).forEach(key => {
         const dataRow = this.getDataRow(key);
         dataRow.update(info[key]);
