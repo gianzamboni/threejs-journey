@@ -27,7 +27,7 @@ export class RotatingCube extends BaseExercise {
   @Animation
   @DebugFPS
   frame(timer: Timer) {
-    const elapsed = timer.getElapsed();
+    const elapsed = timer.getElapsed() * 0.25;
     this.cube.rotation.y = Math.sin(elapsed);
     this.cube.rotation.x = Math.cos(elapsed);
     this.camera.lookAt(this.cube.position);
