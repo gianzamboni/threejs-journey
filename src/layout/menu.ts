@@ -3,7 +3,7 @@ import { GITHUB_ICON, HAMBURGER_ICON } from "@/constants/icons";
 import { JOURNEY, Section } from "@/journey";
 import { pascalCaseToText } from "@/utils/text-utils";
 import { Collapsable } from "@/components/collapsable";
-import { Exercise } from "@/journey/types";
+import { ExerciseClass } from "@/journey/types";
 import { CSS_CLASSES } from "@/theme";
 export default class Menu extends EventTarget {
 
@@ -36,7 +36,7 @@ export default class Menu extends EventTarget {
     return menu;
   }
 
-  private createExerciseItem(exercise: Exercise) {
+  private createExerciseItem(exercise: ExerciseClass) {
     const exerciseItem = document.createElement('li');
     exerciseItem.id = exercise.id;
     exerciseItem.textContent = pascalCaseToText(exercise.id);

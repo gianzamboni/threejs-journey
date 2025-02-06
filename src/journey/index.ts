@@ -1,11 +1,11 @@
 import { CenteredCube } from "./01-basics/01-centered-cube";
 import { CubeGroup } from "./01-basics/02-cube-group";
 import { RotatingCube } from "./01-basics/03-rotating-cube";
-import { Exercise } from "./types";
+import { ExerciseClass } from "./types";
 
 export type Section = {
   id: string;
-  exercises: Exercise[];
+  exercises: ExerciseClass[];
 }
 
 export const JOURNEY: Section[] = [{

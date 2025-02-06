@@ -1,5 +1,5 @@
 import { Collapsable } from "@/components/collapsable";
-import { Exercise } from "@/journey/types";
+import { ExerciseClass } from "@/journey/types";
 import { pascalCaseToText } from "@/utils/text-utils";
 
 export class InfoBox {
@@ -32,8 +32,8 @@ export class InfoBox {
     parent.appendChild(this.container);
   }
 
-  updateContent(exercise: Exercise) {
+  updateContent(exercise: ExerciseClass) {
     this.collapsable.updateTitle(pascalCaseToText(exercise.id));
-    this.collapsable.replaceContent(exercise.info);
+    this.collapsable.replaceContent(exercise.description);
   }
 }

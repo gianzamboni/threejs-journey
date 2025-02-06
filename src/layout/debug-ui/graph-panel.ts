@@ -58,6 +58,10 @@ export class GraphPanel {
     this.drawGraph(value);    
   }
   
+  dispose() {
+    this.canvas.remove();
+  }
+
   private drawTitle(value: number) {
     this.context.clearRect(0, 0, this.canvas.width, this.sizes.fontSize + 4);
     this.context.fillStyle = COLORS.white;

@@ -14,9 +14,12 @@ export type ViewSettings = {
   camera?: CameraSettings;
 }
 
+export type ExerciseClass = Function & {
+  id: string;
+  description?: string[];
+};
+
 export type Exercise = BaseExercise & { 
-  id: string; 
-  info?: string[];
   isAnimated?: boolean;
   isDebuggable?: boolean;
   startAnimation?: (view: RenderView) => void;

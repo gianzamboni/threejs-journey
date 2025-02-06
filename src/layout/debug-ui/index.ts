@@ -15,18 +15,18 @@ export default class DebugUI {
     this.container.innerHTML = ``;
     parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
-    if(import.meta.env.MODE === 'production') {
-      this.toggle();
-    }
+    this.toggle();
   }
 
   toggle() {
+    this.lastGuiUpdate = performance.now();
     this.container.classList.toggle('hidden');
   }
 
   update(info: any) {
+    console.log('update', info);
     const now = performance.now();
-    if(now - this.lastGuiUpdate > 150) {
+    if(now - this.lastGuiUpdate > 1000) {
       Object.keys(info).forEach(key => {
         const dataRow = this.getDataRow(key);
         dataRow.update(info[key]);
@@ -46,5 +46,13 @@ export default class DebugUI {
       }
     }
     return this.dataRows[key];
+  }
+
+  reset() {
+    this.container.classList.add('hidden');
+    Object.entries(this.dataRows).forEach(([_, dataRow]) => {
+      dataRow.dispose();
+    });
+    this.dataRows = {};
   }
 }

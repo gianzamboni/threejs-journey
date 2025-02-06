@@ -10,7 +10,7 @@ export function DebugFPS(targetClass: any, methodName: string) {
 
 export function addDebugInfo(exerciseInstance: any, debugInfo: DecoratorsUtils.DebugInfo | undefined) {
   exerciseInstance.isDebuggable = debugInfo !== undefined;
-  exerciseInstance.debugActive = import.meta.env.MODE === 'development';
+  exerciseInstance.debugActive = false;
   if(!exerciseInstance.isDebuggable) return;
   exerciseInstance.toggleDebug = () => {
     exerciseInstance.debugActive = !exerciseInstance.debugActive;
