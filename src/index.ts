@@ -10,6 +10,8 @@ let renderView: RenderView;
 let debugUI: DebugUI;
 let activeExercise: Exercise | undefined;
 
+let tappedTwice = false;
+
 function updateDebugUI(evt: CustomEvent): void {
   debugUI.update(evt.detail);
 }
@@ -21,8 +23,17 @@ function toggleDebug() {
   } 
 }
 
+function doubleTapHandler() {
+  if(!tappedTwice) {
+    tappedTwice = true;
+    setTimeout(() => {
+      tappedTwice = false;
+    }, 300);
+    return false;
+  }
+}
+
 async function selectExercise(newExercise: ExerciseClass) {
-  infoBox.updateContent(newExercise);
   if(activeExercise !== undefined) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
     debugUI.reset();
@@ -33,7 +44,8 @@ async function selectExercise(newExercise: ExerciseClass) {
   activeExercise = new (newExercise as any)() as Exercise;
 
   activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
-
+  infoBox.updateContent(activeExercise);
+  
   renderView.run(activeExercise);
 
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
@@ -56,7 +68,14 @@ window.addEventListener('load', () => {
   });
   
   window.addEventListener('dblclick', toggleDebug);
-  
+
+  window.addEventListener('touch', () => {
+    doubleTapHandler();
+    if(tappedTwice) {
+      toggleDebug();
+    }
+  });
+
   const urlParams = new URLSearchParams(window.location.search);
   const exerciseId = urlParams.get('exercise');
 

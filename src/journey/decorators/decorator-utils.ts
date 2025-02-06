@@ -1,21 +1,6 @@
-import { AnimationLoop } from "@/utils/animation-loop";
+import { DebugInfo, ExtraProperties, Settings } from "../types";
 
 export namespace DecoratorsUtils {
-  export type DebugInfo = {
-    fpsMethod?: string;
-  }
-
-  export type Settings = {
-    sceneMeshes?: string[];
-    animationMethod?: string;
-    debugInfo?: DebugInfo
-  }
-
-  export type ExtraProperties = {
-    animationLoop?: AnimationLoop;
-    debugInfo?: DebugInfo;
-  }
-
   export function getSettings(constructor: any): Settings {
     if (constructor._decoratorSettings === undefined) {
       constructor._decoratorSettings = {};

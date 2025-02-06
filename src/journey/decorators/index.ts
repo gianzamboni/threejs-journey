@@ -21,17 +21,28 @@ function getInitialInfo(settings: ExerciseSettings) {
 export function Exercise(settings: ExerciseSettings) {
   assertValidSettings(settings);
   const initialInfo = getInitialInfo(settings);
+  const exerciseId = settings.id;
   return function(constructor: any): any {
     return class extends constructor {
-      public static id: string = settings.id;
-      public static description: string[] = initialInfo;
-
+      public static id: string = exerciseId;
+      
       constructor() {
         super();
         const settings = DecoratorsUtils.getSettings(constructor);
+        const extraProperties = DecoratorsUtils.getExtraProperties(this);
+        extraProperties.description = initialInfo;
+
         addSceneObjectsToScene(this, settings.sceneMeshes);
         addDebugInfo(this, settings.debugInfo);
         setupAnimation(this, settings.animationMethod);
+      }
+
+      get description() {
+        return DecoratorsUtils.getExtraProperties(this).description;
+      }
+
+      get id() {
+        return exerciseId;
       }
     }
   }

@@ -92,8 +92,8 @@ export class Collapsable {
       this.button.icon.classList.remove('hidden');
       content!.forEach((element) => {
         const container = document.createElement('div');
-        container.className = 'p-5';
-        container.textContent = element;
+        container.className = 'px-5 py-2';
+        container.innerHTML = element;
         this.collapsable.appendChild(container);
       });
     } else {

@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 
+import { DebugInfo } from "../types";
 import { DecoratorsUtils } from "./decorator-utils";
 import { Timer } from 'three/addons/misc/Timer.js'
 
@@ -8,13 +9,15 @@ export function DebugFPS(targetClass: any, methodName: string) {
   debugInfo.fpsMethod = methodName;
 }
 
-export function addDebugInfo(exerciseInstance: any, debugInfo: DecoratorsUtils.DebugInfo | undefined) {
+export function addDebugInfo(exerciseInstance: any, debugInfo: DebugInfo | undefined) {
+  const extraProperties = DecoratorsUtils.getExtraProperties(exerciseInstance);
   exerciseInstance.isDebuggable = debugInfo !== undefined;
   exerciseInstance.debugActive = false;
   if(!exerciseInstance.isDebuggable) return;
   exerciseInstance.toggleDebug = () => {
     exerciseInstance.debugActive = !exerciseInstance.debugActive;
   }
+  extraProperties.description.push('<strong>Toggle Debug UI:</strong> Double click/tap');
   createFPSCalculator(exerciseInstance, debugInfo?.fpsMethod);   
 }
 

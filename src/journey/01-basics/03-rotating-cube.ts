@@ -6,7 +6,7 @@ import { SceneObject } from '../decorators/scene-objects';
 import { Animation } from '../decorators/animation';
 import { DebugFPS } from '../decorators/debug-info';
 
-@Exercise({ id: 'animations', description: 'Rotating cube' })
+@Exercise({ id: 'animations' })
 export class RotatingCube extends BaseExercise {
 
   @SceneObject
