@@ -69,7 +69,7 @@ export class GraphPanel {
     this.context.fillRect(0, 0, this.canvas.width, this.sizes.fontSize + 4);
     this.context.fillStyle = COLORS.debugLabel;
     this.context.fillText(`${Math.round(value)} ${this.name} (${Math.round(this.minValue)} - ${Math.round(this.maxValue)})`, 
-      this.sizes.title.xPos, this.sizes.title.yPos);
+    this.sizes.title.xPos, this.sizes.title.yPos);
   }
 
   private drawGraph(value: number) {
@@ -93,8 +93,7 @@ export class GraphPanel {
       this.sizes.graph.height,
     );
 
-    this.context.fillStyle = COLORS.black[90];
-    //this.context.globalAlpha = 0.9;
+    this.context.fillStyle = COLORS.black[100];
     this.context.fillRect(
       this.sizes.graph.xPos + this.sizes.graph.width - devicePixelRatio,
       this.sizes.graph.yPos,

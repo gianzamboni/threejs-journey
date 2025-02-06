@@ -36,7 +36,6 @@ async function selectExercise(newExercise: ExerciseClass) {
 
   renderView.run(activeExercise);
 
-  console.log(import.meta.env)
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
     toggleDebug();
   }

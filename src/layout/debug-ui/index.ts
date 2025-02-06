@@ -24,7 +24,6 @@ export default class DebugUI {
   }
 
   update(info: any) {
-    console.log('update', info);
     const now = performance.now();
     if(now - this.lastGuiUpdate > 1000) {
       Object.keys(info).forEach(key => {

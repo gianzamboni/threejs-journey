@@ -24,7 +24,7 @@ export function Exercise(settings: ExerciseSettings) {
   return function(constructor: any): any {
     return class extends constructor {
       public static id: string = settings.id;
-      public static info: string[] = initialInfo;
+      public static description: string[] = initialInfo;
 
       constructor() {
         super();
