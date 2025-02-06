@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import  BaseExercise from '@/journey/base-exercise';
 import { Exercise } from '../decorators';
 import { SceneObject } from '../decorators/scene-objects';
+import { createRedCube } from '@/utils/default-shapes';
 
 @Exercise({
   id: 'first-threejs-project',
@@ -14,10 +15,7 @@ export class CenteredCube extends BaseExercise {
   constructor() {
     super();
 
-    this.cube = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    );
+    this.cube = createRedCube();
   }
 
   dispose() {

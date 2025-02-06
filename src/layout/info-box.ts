@@ -33,7 +33,6 @@ export class InfoBox {
   }
 
   updateContent(exercise: Exercise) {
-    console.log(exercise)
     this.collapsable.updateTitle(pascalCaseToText(exercise.id));
     this.collapsable.replaceContent(exercise.description);
   }

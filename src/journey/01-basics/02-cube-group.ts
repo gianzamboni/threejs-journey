@@ -20,8 +20,11 @@ export class CubeGroup extends BaseExercise {
 
   constructor() {
     super();
-    this.cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-    this.cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.cubeGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+    this.cubeMaterial = new THREE.MeshBasicMaterial({ 
+      color: 0xff0000, 
+      wireframe: true 
+    });
     
     this.group = this.createCubeGroup();
     this.axesHelper = new THREE.AxesHelper(2);

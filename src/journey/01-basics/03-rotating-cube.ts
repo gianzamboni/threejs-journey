@@ -5,6 +5,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { SceneObject } from '../decorators/scene-objects';
 import { Animation } from '../decorators/animation';
 import { DebugFPS } from '../decorators/debug-info';
+import { createRedCube } from '@/utils/default-shapes';
 
 @Exercise({ id: 'animations' })
 export class RotatingCube extends BaseExercise {
@@ -14,14 +15,7 @@ export class RotatingCube extends BaseExercise {
 
   constructor() {
     super();
-    this.cube = this.createCube();
-  }
-
-  private createCube() {
-    const geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000});
-    const cube = new THREE.Mesh(geometry, material);
-    return cube;
+    this.cube = createRedCube();
   }
 
   @Animation
