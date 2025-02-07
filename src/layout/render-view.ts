@@ -1,4 +1,4 @@
-import AnimatedExercise from '@/constants/exercises/animated-exercise';
+import AnimatedExercise from '@/journey/exercises/animated-exercise';
 import { Exercise } from '@/journey/types';
 import * as THREE from 'three';
 

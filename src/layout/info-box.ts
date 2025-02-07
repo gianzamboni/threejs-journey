@@ -1,5 +1,5 @@
 import { Collapsable } from "@/components/collapsable";
-import BaseExercise from "@/constants/exercises/base-exercise";
+import BaseExercise from "@/journey/exercises/base-exercise";
 import { pascalCaseToText } from "@/utils/text-utils";
 
 export class InfoBox {
@@ -22,10 +22,6 @@ export class InfoBox {
       }
     });
 
-    const element = document.createElement('p');
-    element.className = 'p-5 text-wrap';
-    element.innerHTML = `Esta es una caja de información`;
-    this.collapsable.addContent(element);
     this.collapsable.addTo(this.container);
 
     this.container.className = 'fixed bottom-0 left-0';
@@ -34,6 +30,18 @@ export class InfoBox {
 
   updateContent(exercise: BaseExercise) {
     this.collapsable.updateTitle(pascalCaseToText(exercise.id));
-    this.collapsable.replaceContent(exercise.descriptions);
+    const parser = new DOMParser();
+    if(exercise.descriptions.length === 0) {
+      this.collapsable.replaceContent([]);
+      return;
+    }
+    
+    const htmlSpans = exercise.descriptions.map((description) => {
+      return parser.parseFromString(description, 'text/html').body as HTMLElement; 
+    });
+    const container = document.createElement('div');
+    htmlSpans.forEach((span) => container.appendChild(span));
+    container.className ='px-5 py-3';
+    this.collapsable.replaceContent([container]);
   }
 }

@@ -84,17 +84,15 @@ export class Collapsable {
     this.button.element.querySelector('.collapsable-title')!.textContent = title
   }
 
-  replaceContent(content: string[] | undefined) {
+  replaceContent(content: HTMLElement[]) {
     this.collapsable.innerHTML = '';
+    if(this.isOpen) this.toggle();
     this.isActive = content !== undefined && content.length > 0;
     this.button.element.disabled = !this.isActive;
     if(this.isActive) {
       this.button.icon.classList.remove('hidden');
       content!.forEach((element) => {
-        const container = document.createElement('div');
-        container.className = 'px-5 py-2';
-        container.innerHTML = element;
-        this.collapsable.appendChild(container);
+        this.collapsable.appendChild(element);
       });
     } else {
       this.button.icon.classList.add('hidden');

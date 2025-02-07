@@ -4,7 +4,7 @@ import Menu from "@/layout/menu";
 import { InfoBox } from "./layout/info-box";
 import RenderView from "./layout/render-view";
 import DebugUI from "./layout/debug-ui";
-import BaseExercise from "./constants/exercises/base-exercise";
+import BaseExercise from "./journey/exercises/base-exercise";
 import { ExerciseClass } from "./journey/types";
 
 let menu: Menu;

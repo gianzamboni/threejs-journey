@@ -1,8 +1,8 @@
 import { AnimationLoop } from "@/utils/animation-loop";
-import BaseExercise from "../../constants/exercises/base-exercise";
+import BaseExercise from "../exercises/base-exercise";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import AnimatedExercise from "@/constants/exercises/animated-exercise";
-import OrbitControlledExercise from "@/constants/exercises/orbit-controlled-exercise";
+import AnimatedExercise from "@/journey/exercises/animated-exercise";
+import OrbitControlledExercise from "@/journey/exercises/orbit-controlled-exercise";
 
 export type ExerciseSettings = {
   id: string;

@@ -12,6 +12,12 @@ export default class OrbitControlledExercise extends AnimatedExercise {
     super();
     this.controls = new OrbitControls(this.camera, view.canvas);
     this.controls.enableDamping = true;
+
+    this.descriptions.push(
+      '<strong>Rotate:</strong> Click/Tap & drag',
+      '<strong>Zoom:</strong> Scroll or pinch',
+      '<strong>Pan:</strong> Two-finger Tap/Right click & drag'
+    )
   }
 
   frame() {

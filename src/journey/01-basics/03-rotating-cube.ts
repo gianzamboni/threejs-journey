@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { createRedCube } from '@/utils/default-shapes';
-import AnimatedExercise from '@/constants/exercises/animated-exercise';
+import AnimatedExercise from '@/journey/exercises/animated-exercise';
 
 export class RotatingCube extends AnimatedExercise {
 

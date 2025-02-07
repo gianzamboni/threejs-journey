@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import OrbitControlledExercise from "@/constants/exercises/orbit-controlled-exercise";
+import OrbitControlledExercise from "@/journey/exercises/orbit-controlled-exercise";
 import { createRedCube } from "@/utils/default-shapes";
 import RenderView from "@/layout/render-view";
 
