@@ -1,10 +1,13 @@
 import { AnimationLoop } from "@/utils/animation-loop";
-import BaseExercise from "../base-exercise";
-import RenderView from "@/layout/render-view";
+import BaseExercise from "../../constants/exercises/base-exercise";
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import AnimatedExercise from "@/constants/exercises/animated-exercise";
+import OrbitControlledExercise from "@/constants/exercises/orbit-controlled-exercise";
 
 export type ExerciseSettings = {
   id: string;
   description?: string;
+  enableOrbitControls?: boolean;
 }
 
 export type CameraSettings = {
@@ -15,24 +18,17 @@ export type ViewSettings = {
   camera?: CameraSettings;
 }
 
-export type ExerciseClass = Function & {
+export type ExerciseClass = (new (...args: any) => BaseExercise) & { 
   id: string;
-  description?: string[];
 };
 
-export type Exercise = BaseExercise & { 
-  isAnimated?: boolean;
-  isDebuggable?: boolean;
-  id: string;
-  description: string[];
-  startAnimation?: (view: RenderView) => void;
-  toggleDebug?: () => void;
-};
+export type Exercise = BaseExercise  | AnimatedExercise | OrbitControlledExercise;
 
 export type ExtraProperties = {
   animationLoop?: AnimationLoop;
   debugInfo?: DebugInfo;
   description: string[];
+  orbitControls?: OrbitControls;
 }
 
 export type DebugInfo = {

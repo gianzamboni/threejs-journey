@@ -1,9 +1,10 @@
+import AnimatedExercise from '@/constants/exercises/animated-exercise';
 import { Exercise } from '@/journey/types';
 import * as THREE from 'three';
 
 export default class RenderView {
 
-  private canvas: HTMLElement;
+  public canvas: HTMLElement;
   private renderer: THREE.WebGLRenderer;
 
   private exercise: Exercise | undefined;
@@ -20,11 +21,11 @@ export default class RenderView {
 
     this.updateSize();
   }
-
+  
   run(exercise: Exercise) {
     this.exercise = exercise;
     if(this.exercise.isAnimated) {
-      this.exercise.startAnimation!(this);
+      (this.exercise as AnimatedExercise).startAnimation(this);
     } else {
       this.renderer.render(exercise.scene, exercise.camera);
     }

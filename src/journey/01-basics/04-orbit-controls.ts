@@ -1,0 +1,23 @@
+import * as THREE from "three";
+import OrbitControlledExercise from "@/constants/exercises/orbit-controlled-exercise";
+import { createRedCube } from "@/utils/default-shapes";
+import RenderView from "@/layout/render-view";
+
+export class OrbitControlsTest extends OrbitControlledExercise {
+
+  public static id = 'cameras';
+ 
+  private cube: THREE.Mesh;
+
+  constructor(view: RenderView) {
+    super(view);
+    this.cube = createRedCube();
+    this.scene.add(this.cube);
+  }
+  
+  async dispose() {
+    this.cube.geometry.dispose();
+    (this.cube.material as THREE.Material).dispose();
+    await super.dispose();
+  }
+}

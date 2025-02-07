@@ -1,25 +1,24 @@
 import * as THREE from 'three';
-import BaseExercise from "../base-exercise";
-import { Exercise } from "../decorators";
 import { Timer } from 'three/addons/misc/Timer.js';
-import { SceneObject } from '../decorators/scene-objects';
-import { Animation } from '../decorators/animation';
-import { DebugFPS } from '../decorators/debug-info';
 import { createRedCube } from '@/utils/default-shapes';
+import AnimatedExercise from '@/constants/exercises/animated-exercise';
 
-@Exercise({ id: 'animations' })
-export class RotatingCube extends BaseExercise {
+export class RotatingCube extends AnimatedExercise {
 
-  @SceneObject
+  public static id = 'animations';
+  
   private cube: THREE.Mesh;
 
   constructor() {
-    super();
+    super({
+      isAnimated: true,
+    });
+
     this.cube = createRedCube();
+    this.scene.add(this.cube);
   }
 
-  @Animation
-  @DebugFPS
+  //@DebugFPS
   frame(timer: Timer) {
     const elapsed = timer.getElapsed() * 0.25;
     this.cube.rotation.y = Math.sin(elapsed);
@@ -27,9 +26,9 @@ export class RotatingCube extends BaseExercise {
     this.camera.lookAt(this.cube.position);
   }
 
-  dispose() {
-    super.dispose();
+  async dispose() {
     this.cube.geometry.dispose();
     (this.cube.material as THREE.Material).dispose();
+    await super.dispose();
   }
 }

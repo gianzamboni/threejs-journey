@@ -25,5 +25,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "legacy_2/components"]
+  "include": ["src", "legacy_2/components", "legacy/decorators"]
 }

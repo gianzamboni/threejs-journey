@@ -33,23 +33,24 @@ export class AnimationLoop {
     }
   }
 
+
+  private waitTillStopped(resolve: Function) {
+    if(this.animationStatus === AnimationStatus.Stopped) {
+      resolve();
+    } else {
+      setTimeout(() => this.waitTillStopped(resolve), 100);
+    }
+  }
+
   private async untilStopped() {
     return new Promise((resolve) => {
-      if(this.animationStatus === AnimationStatus.Stopped) {
-        resolve(true);
-      } else {
-        setTimeout(() => this.untilStopped(), 100);
-      }
+      this.waitTillStopped(resolve);
     });
   }
 
   async stop() {
     this.animationStatus = AnimationStatus.Stopping;
     await this.untilStopped();
-    this.timer.reset();
-  }
-
-  dispose() {
-    this.timer.dispose(); 
+    this.timer.dispose();
   }
 }

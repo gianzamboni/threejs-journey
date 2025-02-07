@@ -1,7 +1,11 @@
 import { CenteredCube } from "./01-basics/01-centered-cube";
+import { ExerciseClass } from "./types";
 import { CubeGroup } from "./01-basics/02-cube-group";
 import { RotatingCube } from "./01-basics/03-rotating-cube";
-import { ExerciseClass } from "./types";
+import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
+//import { OrbitControlCube } from "./01-basics/04-orbit-controls";
+//import { ExerciseClass } from "./types";
+
 
 export type Section = {
   id: string;
@@ -12,9 +16,10 @@ export const JOURNEY: Section[] = [{
   id: 'basics',
 
   exercises: [ 
-    CenteredCube as any,
+    CenteredCube,
     CubeGroup,
-    RotatingCube
+    RotatingCube,
+    OrbitControlsTest
   ]
 }];
 

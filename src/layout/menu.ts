@@ -3,8 +3,8 @@ import { GITHUB_ICON, HAMBURGER_ICON } from "@/constants/icons";
 import { JOURNEY, Section } from "@/journey";
 import { pascalCaseToText } from "@/utils/text-utils";
 import { Collapsable } from "@/components/collapsable";
-import { ExerciseClass } from "@/journey/types";
 import { CSS_CLASSES } from "@/theme";
+import { ExerciseClass } from "@/journey/types";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;
@@ -81,7 +81,7 @@ export default class Menu extends EventTarget {
     const collapsable = new Collapsable(title);
     const exerciseList = document.createElement('ul');
 
-    section.exercises.forEach((exercise) => {
+    section.exercises.forEach((exercise: ExerciseClass) => {
       const exerciseItem = this.createExerciseItem(exercise);
       exerciseList.appendChild(exerciseItem);
     });

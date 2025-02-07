@@ -1,14 +1,17 @@
+/// <reference types="vite/client" />
+
 import Menu from "@/layout/menu";
 import { InfoBox } from "./layout/info-box";
 import RenderView from "./layout/render-view";
-import { Exercise, ExerciseClass } from "./journey/types";
 import DebugUI from "./layout/debug-ui";
+import BaseExercise from "./constants/exercises/base-exercise";
+import { ExerciseClass } from "./journey/types";
 
 let menu: Menu;
 let infoBox: InfoBox;
 let renderView: RenderView;
 let debugUI: DebugUI;
-let activeExercise: Exercise | undefined;
+let activeExercise: BaseExercise | undefined;
 
 let tappedTwice = false;
 
@@ -18,7 +21,7 @@ function updateDebugUI(evt: CustomEvent): void {
 
 function toggleDebug() {
   if(activeExercise?.isDebuggable === true) {
-    activeExercise!.toggleDebug!();
+    activeExercise.toggleDebug();
     debugUI.toggle();
   } 
 }
@@ -41,13 +44,12 @@ async function selectExercise(newExercise: ExerciseClass) {
   }
   
   window.history.pushState({exerciseId: newExercise.id}, '', `?exercise=${newExercise.id}`);
-  activeExercise = new (newExercise as any)() as Exercise;
+  activeExercise = new newExercise(renderView);
 
   activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
   infoBox.updateContent(activeExercise);
   
   renderView.run(activeExercise);
-
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
     toggleDebug();
   }

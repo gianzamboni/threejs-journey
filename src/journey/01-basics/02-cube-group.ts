@@ -1,17 +1,11 @@
 import * as THREE from 'three';
-import BaseExercise from "../base-exercise";
-import { Exercise } from "../decorators";
-import { SceneObject } from '../decorators/scene-objects';
+import BaseExercise from "../../constants/exercises/base-exercise";
 
-@Exercise({ 
-  id: 'object-transformation',
-})
 export class CubeGroup extends BaseExercise {
 
-  @SceneObject
+  public static id = 'object-transformation';
+  
   private group: THREE.Group;
-
-  @SceneObject
   private axesHelper: THREE.AxesHelper;
   
   private cubeGeometry: THREE.BoxGeometry;
@@ -29,6 +23,7 @@ export class CubeGroup extends BaseExercise {
     this.group = this.createCubeGroup();
     this.axesHelper = new THREE.AxesHelper(2);
 
+    this.scene.add(this.group, this.axesHelper);
   }
 
   private createCubeGroup() {
@@ -45,11 +40,12 @@ export class CubeGroup extends BaseExercise {
     return group;
   }
 
-  dispose() {
-    super.dispose();
+  async dispose() {
     this.axesHelper.dispose();
     this.group.clear();
     this.cubeMaterial.dispose();
     this.cubeGeometry.dispose();
+    super.dispose();
+
   }
 }
