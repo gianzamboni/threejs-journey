@@ -1,9 +1,4 @@
 import * as THREE from 'three';
-export type BaseExerciseConfig = {
-  initialInfo?: string;
-  isAnimated?: boolean;
-  isDebuggable?: boolean;
-}
 
 export default class BaseExercise extends EventTarget {
   
@@ -11,19 +6,11 @@ export default class BaseExercise extends EventTarget {
   public scene: THREE.Scene;
   public camera: THREE.PerspectiveCamera;
 
-  public readonly isDebuggable: boolean;
-  public readonly isAnimated: boolean;
+  public isDebuggable: boolean = false;
+  public isAnimated: boolean = false;
 
-  constructor(config: BaseExerciseConfig = {}) {
+  constructor() {
     super();
-
-    this.isAnimated = config.isAnimated || false;
-    this.isDebuggable = config.isDebuggable || false;
-
-    if(config.initialInfo) {
-      this.descriptions.push(config.initialInfo);
-    }
-
     [this.scene, this.camera] = this.createBasicScene();
   }
 

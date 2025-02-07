@@ -1,16 +1,15 @@
 import RenderView from "@/layout/render-view";
 import { AnimationLoop } from "@/utils/animation-loop";
 import { Timer } from "three/examples/jsm/Addons.js";
-import BaseExercise, { BaseExerciseConfig } from "./base-exercise";
+import BaseExercise from "./base-exercise";
 
 export default class AnimatedExercise extends BaseExercise {
+
   private animationLoop: AnimationLoop;
 
-  constructor(config: BaseExerciseConfig = {}) {
-    super({
-      ...config,
-      isAnimated: true,
-    });
+  public isAnimated: boolean = true;
+  constructor() {
+    super();
 
     this.animationLoop = this.createAnimationLoop();
   }

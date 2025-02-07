@@ -3,8 +3,6 @@ import AnimatedExercise from "./animated-exercise";
 import RenderView from "@/layout/render-view";
 
 export default class OrbitControlledExercise extends AnimatedExercise {
-
-  public static isOrbitControlled = true;
   
   private controls: OrbitControls;
 

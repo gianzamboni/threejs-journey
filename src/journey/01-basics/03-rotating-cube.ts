@@ -10,15 +10,12 @@ export class RotatingCube extends AnimatedExercise {
   private cube: THREE.Mesh;
 
   constructor() {
-    super({
-      isAnimated: true,
-    });
+    super();
 
     this.cube = createRedCube();
     this.scene.add(this.cube);
   }
 
-  //@DebugFPS
   frame(timer: Timer) {
     const elapsed = timer.getElapsed() * 0.25;
     this.cube.rotation.y = Math.sin(elapsed);
