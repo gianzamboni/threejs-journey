@@ -34,8 +34,8 @@ export class RandomTraingles extends OrbitControlledExercise {
   }
 
   async dispose() {
+    await super.dispose();
     this.triangles.geometry.dispose();
     (this.triangles.material as THREE.Material).dispose();
-    await super.dispose();
   }
 }

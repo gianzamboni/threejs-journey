@@ -41,11 +41,10 @@ export class CubeGroup extends BaseExercise {
   }
 
   async dispose() {
+    super.dispose();
     this.axesHelper.dispose();
     this.group.clear();
     this.cubeMaterial.dispose();
     this.cubeGeometry.dispose();
-    super.dispose();
-
   }
 }

@@ -1,3 +1,4 @@
+import GUI from "lil-gui";
 import { GraphPanel } from "./graph-panel";
 
 type DataRow = GraphPanel;
@@ -9,9 +10,12 @@ export default class DebugUI {
 
   private dataRows: Record<string, DataRow> = {};
 
+  private lilGui: GUI | null = null;
+
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = `fixed top-0 right-0 text-white m-5`;
+    this.container.className = `fixed top-0 right-0 text-white m-5 justify-items-end
+`;
     this.container.innerHTML = ``;
     parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
@@ -47,11 +51,24 @@ export default class DebugUI {
     return this.dataRows[key];
   }
 
+  get gui() {
+    if(this.lilGui === null) {
+      this.lilGui = new GUI({
+        title: 'Settings',
+        closeFolders: false,
+        container: this.container
+      });
+    }
+    return this.lilGui;
+  }
+
   reset() {
     this.container.classList.add('hidden');
     Object.entries(this.dataRows).forEach(([_, dataRow]) => {
       dataRow.dispose();
     });
     this.dataRows = {};
+    this.lilGui?.destroy();
+    this.lilGui = null;
   }
 }

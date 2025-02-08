@@ -18,8 +18,8 @@ export class OrbitControlsTest extends OrbitControlledExercise {
   }
   
   async dispose() {
+    await super.dispose();
     this.cube.geometry.dispose();
     (this.cube.material as THREE.Material).dispose();
-    await super.dispose();
   }
 }

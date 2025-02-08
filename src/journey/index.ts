@@ -4,6 +4,7 @@ import { CubeGroup } from "./01-basics/02-cube-group";
 import { RotatingCube } from "./01-basics/03-rotating-cube";
 import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
 import { RandomTraingles } from "./01-basics/05-random-triangles";
+import { DebugUITest } from "./01-basics/06-debug-ui";
 //import { OrbitControlCube } from "./01-basics/04-orbit-controls";
 //import { ExerciseClass } from "./types";
 
@@ -31,7 +32,8 @@ export const JOURNEY: Section[] = [{
     CubeGroup,
     RotatingCube,
     OrbitControlsTest,
-    RandomTraingles
+    RandomTraingles,
+    DebugUITest,
   ]
 }];
 

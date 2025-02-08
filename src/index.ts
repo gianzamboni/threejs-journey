@@ -44,11 +44,10 @@ async function selectExercise(newExercise: ExerciseClass) {
   }
   
   window.history.pushState({exerciseId: newExercise.id}, '', `?exercise=${newExercise.id}`);
-  activeExercise = new newExercise(renderView);
+  activeExercise = new newExercise(renderView, debugUI);
 
   activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
   infoBox.updateContent(activeExercise);
-  
   renderView.run(activeExercise);
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
     toggleDebug();
@@ -69,7 +68,7 @@ window.addEventListener('load', () => {
     renderView.updateSize();
   });
   
-  window.addEventListener('dblclick', toggleDebug);
+  renderView.canvas.addEventListener('dblclick', toggleDebug);
 
   window.addEventListener('touch', () => {
     doubleTapHandler();
