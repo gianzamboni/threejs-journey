@@ -5,7 +5,7 @@ import { createRedCube } from '@/utils/default-shapes';
 
 export class TextureTest extends OrbitControlledExercise {
 
-  public static id = 'debug-ui';
+  public static id = 'textures';
 
   private cube: THREE.Mesh;
 
