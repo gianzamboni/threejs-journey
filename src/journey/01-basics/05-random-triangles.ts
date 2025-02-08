@@ -1,0 +1,41 @@
+import * as THREE from "three";
+import OrbitControlledExercise from "@/journey/exercises/orbit-controlled-exercise";
+import RenderView from "@/layout/render-view";
+
+export class RandomTraingles extends OrbitControlledExercise {
+
+  public static id = 'geometries';
+ 
+  private triangles: THREE.Mesh;
+
+  constructor(view: RenderView) {
+    super(view);
+    const geometry = this.generateTriangleGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.triangles = new THREE.Mesh(geometry, material);
+
+    this.camera.position.y = 1;
+    this.camera.position.z = 1;
+    this.controls.autoRotateSpeed = 0.5;
+    this.scene.add(this.triangles);
+  }
+  
+  generateTriangleGeometry() {
+    const geometry = new THREE.BufferGeometry();
+    const count = 50;
+    const positionsArray = new Float32Array(count * 3 * 3);
+    for (let i = 0; i < count * 3 * 3; i++) {
+      positionsArray[i] = (Math.random() - 0.5) * 4;
+    }
+
+    const bufferAtrribute = new THREE.BufferAttribute(positionsArray, 3);
+    geometry.setAttribute('position', bufferAtrribute)
+    return geometry;
+  }
+
+  async dispose() {
+    this.triangles.geometry.dispose();
+    (this.triangles.material as THREE.Material).dispose();
+    await super.dispose();
+  }
+}

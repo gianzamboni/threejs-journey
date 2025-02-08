@@ -3,9 +3,21 @@ import { ExerciseClass } from "./types";
 import { CubeGroup } from "./01-basics/02-cube-group";
 import { RotatingCube } from "./01-basics/03-rotating-cube";
 import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
+import { RandomTraingles } from "./01-basics/05-random-triangles";
 //import { OrbitControlCube } from "./01-basics/04-orbit-controls";
 //import { ExerciseClass } from "./types";
 
+function verifyUniqueExerciseIds(sections: Section[]) {
+  const ids = new Set<string>();
+  sections.forEach(section => {
+    section.exercises.forEach(exercise => {
+      if (ids.has(exercise.id)) {
+        throw new Error(`Duplicate exercise id: ${exercise.id}`);
+      }
+      ids.add(exercise.id);
+    });
+  });
+}
 
 export type Section = {
   id: string;
@@ -14,25 +26,17 @@ export type Section = {
 
 export const JOURNEY: Section[] = [{
   id: 'basics',
-
   exercises: [ 
     CenteredCube,
     CubeGroup,
     RotatingCube,
-    OrbitControlsTest
+    OrbitControlsTest,
+    RandomTraingles
   ]
 }];
 
+verifyUniqueExerciseIds(JOURNEY);
 /* {
-  id: 'transform-objects',
-  generator: null,
-}, {
-  id: 'animations',
-  generator: null,
-}, {
-  id: 'cameras',
-  generator: null,
-}, {
   id: 'geometries',
   generator: null,
 }, {
