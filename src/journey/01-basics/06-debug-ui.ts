@@ -62,41 +62,7 @@ export class DebugUITest extends OrbitControlledExercise {
 
   async dispose() {
     super.dispose();
-    this.scene.remove(this.cube);
+    this.material.dispose();
+    this.geometry.dispose();
   }
 }
-// export class DebugUIExercise {
-//   constructor(view, debugUI) {
-//     this.debugOject = {
-//       color: '#a778d8',
-//       spin: this.spin.bind(this),
-//       subdivision: 2
-//     };
-//   }
-  
-//   init() {
-//     this.debugUI.update("Triangles", this.view.trianglesCount);
-//     this.debugUI.update("Lines", this.view.linesCount);
-//   }
-
-//   spin() {
-//     gsap.to(this.mesh.rotation, { duration: 1, y: this.mesh.rotation.y + Math.PI * 2 });
-//   }
-
-//   addGuiTweaks() {
-//     cubeTweaks.add(this.debugOject, 'spin').name("Spin");
-//     cubeTweaks.add(this.debugOject, 'subdivision').min(1).max(20).step(1).onFinishChange(() => {
-//       this.mesh.geometry.dispose();
-//       this.mesh.geometry = new THREE.BoxGeometry(1, 1, 1, this.debugOject.subdivision, this.debugOject.subdivision, this.debugOject.subdivision);
-//       this.updateRenderData();
-//     }).name('Subdivision');
-//   }
-
-//   updateRenderData() {
-//     setTimeout(() => {
-//       this.debugUI.update("Triangles", this.view.trianglesCount);
-//       this.debugUI.update("Lines", this.view.linesCount);
-//     }, 100);
-
-//   }
-// }

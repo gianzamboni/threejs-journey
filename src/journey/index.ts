@@ -5,6 +5,7 @@ import { RotatingCube } from "./01-basics/03-rotating-cube";
 import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
 import { RandomTraingles } from "./01-basics/05-random-triangles";
 import { DebugUITest } from "./01-basics/06-debug-ui";
+import { TextureTest } from "./01-basics/07-textures";
 //import { OrbitControlCube } from "./01-basics/04-orbit-controls";
 //import { ExerciseClass } from "./types";
 
@@ -34,6 +35,7 @@ export const JOURNEY: Section[] = [{
     OrbitControlsTest,
     RandomTraingles,
     DebugUITest,
+    TextureTest
   ]
 }];
 
