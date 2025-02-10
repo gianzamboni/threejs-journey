@@ -1,4 +1,5 @@
 import { CSS_CLASSES } from "@/theme";
+import { Overlay } from "./overlay";
 
 type SideBarOptions = {
   buttonTitle: string;
@@ -7,15 +8,15 @@ type SideBarOptions = {
 export default class SideBar {
 
   private sidePanel: HTMLElement;
-  private overlay: HTMLElement;
+  private overlay: Overlay;
   private sideBarContent: HTMLElement;
 
   constructor(parent: HTMLElement, options: SideBarOptions) {
     this.sidePanel = this.createPanel();
     parent.appendChild(this.sidePanel);
 
-    this.overlay = this.createOverlay();
-    parent.appendChild(this.overlay);
+    this.overlay = Overlay.getInstance(parent);
+    this.overlay.addEventListener('click', this.toggleSidePanel.bind(this));
 
     this.sideBarContent = this.createBody();
     this.sidePanel.appendChild(this.sideBarContent);
@@ -29,7 +30,7 @@ export default class SideBar {
   }
 
   get opened() {
-    return !this.overlay.classList.contains('hidden');
+    return this.overlay.opened;
   }
 
   private createBody() {
@@ -44,13 +45,6 @@ export default class SideBar {
     return panel;
   }
 
-  private createOverlay() {
-    const overlay = document.createElement('div');
-    overlay.className = `fixed top-0 start-0 bottom-0 end-0 z-50 bg-black bg-opacity-50 hidden`;
-    overlay.onclick = this.toggleSidePanel.bind(this);
-    return overlay;
-  }
-
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
     button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-sm ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} z-50`;
@@ -60,7 +54,7 @@ export default class SideBar {
   }
 
   toggleSidePanel() {
-    this.overlay.classList.toggle('hidden');
+    this.overlay.toggle();
     this.sidePanel.classList.toggle('-translate-x-full');
   }
 }
