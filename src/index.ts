@@ -6,14 +6,20 @@ import RenderView from "./app/layout/render-view";
 import DebugUI from "./app/layout/debug-ui";
 import BaseExercise from "./app/journey/exercises/base-exercise";
 import { ExerciseClass } from "./app/journey/types";
+import { AssetLoader, LoadingData } from "./app/utils/assets-loader";
+import { LoadingScreen } from "./app/layout/loading-screen";
+
+let tappedTwice = false;
+
+let loader: AssetLoader = AssetLoader.getInstance();
+let activeExercise: BaseExercise | undefined;
 
 let menu: Menu;
 let infoBox: InfoBox;
 let renderView: RenderView;
 let debugUI: DebugUI;
-let activeExercise: BaseExercise | undefined;
+let loadingScreen: LoadingScreen;
 
-let tappedTwice = false;
 
 function updateDebugUI(evt: CustomEvent): void {
   debugUI.update(evt.detail);
@@ -36,10 +42,23 @@ function doubleTapHandler() {
   }
 }
 
+function showLoadingScreen(evt: CustomEvent<LoadingData>) {
+  loadingScreen.show(evt.detail);
+}
+
+function updateLoadingScreen(evt: CustomEvent<LoadingData>) {
+  loadingScreen.update(evt.detail);
+}
+
+function hideLoadingScreen() {
+  loadingScreen.hide();
+}
+
 async function selectExercise(newExercise: ExerciseClass) {
   if(activeExercise !== undefined) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
     debugUI.reset();
+    loader.reset();
     await activeExercise.dispose();
   }
   
@@ -47,6 +66,7 @@ async function selectExercise(newExercise: ExerciseClass) {
   activeExercise = new newExercise(renderView, debugUI);
 
   activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
+
   infoBox.updateContent(activeExercise);
   renderView.run(activeExercise);
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
@@ -59,10 +79,15 @@ window.addEventListener('load', () => {
   infoBox = new InfoBox(document.body);
   renderView = new RenderView(document.body);
   debugUI = new DebugUI(document.body);
+  loadingScreen = new LoadingScreen(document.body);
 
   menu.addEventListener('exercise-selected', async (event: CustomEventInit) => {
     selectExercise(event.detail);
   });
+
+  loader.addEventListener('loading-started', showLoadingScreen as EventListener);
+  loader.addEventListener('loading-progress', updateLoadingScreen as EventListener);
+  loader.addEventListener('loading-complete', hideLoadingScreen); 
 
   window.addEventListener('resize', () => {
     renderView.updateSize();

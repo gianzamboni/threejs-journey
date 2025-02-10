@@ -1,26 +1,42 @@
 import * as THREE from 'three';
 
-export class AssetLoader {
+export type LoadingData = {
+  url: string;
+  itemsLoaded: number;
+  itemsTotal: number;
+}
+
+export class AssetLoader extends EventTarget{
+
+  private static instance: AssetLoader | undefined;
 
   private loadingManager: THREE.LoadingManager;
   private textureLoader: THREE.TextureLoader;
 
-  constructor() {
+  public static getInstance() {
+    if (!AssetLoader.instance) {
+      AssetLoader.instance = new AssetLoader();
+    }
+    return AssetLoader.instance;
+  }
+
+  private constructor() {
+    super();
     this.loadingManager = new THREE.LoadingManager();
-    this.loadingManager.onStart = this.onStart;
-    this.loadingManager.onProgress = this.onProgress;
-    this.loadingManager.onError = this.onError;
-    this.loadingManager.onLoad = this.onLoad;
+    this.loadingManager.onStart = this.onStart.bind(this);
+    this.loadingManager.onProgress = this.onProgress.bind(this);
+    this.loadingManager.onError = this.onError.bind(this);
+    this.loadingManager.onLoad = this.onLoad.bind(this);
 
     this.textureLoader = new THREE.TextureLoader(this.loadingManager);
   }
 
   onStart(url: string, itemsLoaded: number, itemsTotal: number) {
-    console.log( `Started loading file: ${url}. Loaded ${itemsLoaded} of ${itemsTotal} files.` );
+    this.dispatchEvent(new CustomEvent('loading-started', { detail: { url, itemsLoaded, itemsTotal } }));
   }
 
   onProgress(url: string, itemsLoaded: number, itemsTotal: number) {
-    console.log(`Loading file: ${url}. Loaded ${itemsLoaded} of ${itemsTotal} files.`);
+    this.dispatchEvent(new CustomEvent('loading-progress', { detail: { url, itemsLoaded, itemsTotal } }));
   }
 
   onError(url: string) {
@@ -28,7 +44,17 @@ export class AssetLoader {
   }
 
   onLoad() {
-    console.log('Loading complete!');
+    this.dispatchEvent(new CustomEvent('loading-complete'));
+  }
+
+  reset() {
+    this.loadingManager = new THREE.LoadingManager();
+    this.loadingManager.onStart = this.onStart.bind(this);
+    this.loadingManager.onProgress = this.onProgress.bind(this);
+    this.loadingManager.onError = this.onError.bind(this);
+    this.loadingManager.onLoad = this.onLoad.bind(this);
+
+    this.textureLoader = new THREE.TextureLoader(this.loadingManager);
   }
 
   loadTexture(url: string) {

@@ -11,18 +11,18 @@ export class TextureTest extends OrbitControlledExercise {
   private geometry: THREE.BoxGeometry;
   private material: THREE.MeshBasicMaterial;
   private cube: THREE.Mesh;
-  private loader: AssetLoader;
 
+  private loader: AssetLoader;
+  
   constructor(view: RenderView) {
     super(view);
-    this.loader = new AssetLoader();
+
+    this.loader = AssetLoader.getInstance();
 
     this.minecraftTexture = this.loadMinecrafTexture();
-    console.log(this.minecraftTexture);
     this.geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
     this.material = new THREE.MeshBasicMaterial({ map: this.minecraftTexture });
     this.cube = new THREE.Mesh(this.geometry, this.material);
-    console.log(this.cube);
     this.camera.position.set(2, 2, 2);
     this.scene.add(this.cube);
   }
