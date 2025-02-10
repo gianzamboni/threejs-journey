@@ -1,6 +1,6 @@
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import AnimatedExercise from "./animated-exercise";
-import RenderView from "@/layout/render-view";
+import RenderView from "@/app/layout/render-view";
 
 export default class OrbitControlledExercise extends AnimatedExercise {
   

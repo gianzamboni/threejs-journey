@@ -1,7 +1,7 @@
 import { Timer } from 'three/addons/misc/Timer.js';
 import { ExerciseClass } from '../types';
-import RenderView from '@/layout/render-view';
-import DebugUI from '@/layout/debug-ui';
+import RenderView from '@/app/layout/render-view';
+import DebugUI from '@/app/layout/debug-ui';
 import GUI, { Controller } from 'lil-gui';
 
 type DebuggableExercise =  ExerciseClass & {

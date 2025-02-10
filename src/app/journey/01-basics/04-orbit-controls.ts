@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import OrbitControlledExercise from "@/journey/exercises/orbit-controlled-exercise";
-import { createRedCube } from "@/utils/default-shapes";
-import RenderView from "@/layout/render-view";
+import OrbitControlledExercise from "@/app/journey/exercises/orbit-controlled-exercise";
+import { createRedCube } from "@/app/utils/default-shapes";
+import RenderView from "@/app/layout/render-view";
 
 export class OrbitControlsTest extends OrbitControlledExercise {
 

@@ -1,24 +1,48 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
-import RenderView from '@/layout/render-view';
-import { createRedCube } from '@/utils/default-shapes';
+import RenderView from '@/app/layout/render-view';
+import { AssetLoader } from '@/app/utils/assets-loader';
 
 export class TextureTest extends OrbitControlledExercise {
 
   public static id = 'textures';
 
+  private minecraftTexture: THREE.Texture;
+  private geometry: THREE.BoxGeometry;
+  private material: THREE.MeshBasicMaterial;
   private cube: THREE.Mesh;
+  private loader: AssetLoader;
 
   constructor(view: RenderView) {
     super(view);
-    this.cube = createRedCube();
+    this.loader = new AssetLoader();
+
+    this.minecraftTexture = this.loadMinecrafTexture();
+    console.log(this.minecraftTexture);
+    this.geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    this.cube = new THREE.Mesh(this.geometry, this.material);
+    console.log(this.cube);
+    this.camera.position.set(2, 2, 2);
     this.scene.add(this.cube);
+  }
+
+  loadMinecrafTexture() {
+    const colorTexture = this.loader.loadTexture('/textures/minecraft.png');
+    colorTexture.colorSpace = THREE.SRGBColorSpace;
+    colorTexture.wrapS = THREE.RepeatWrapping;
+    colorTexture.wrapT = THREE.RepeatWrapping;
+    colorTexture.generateMipmaps = false;
+    colorTexture.minFilter = THREE.NearestFilter;
+    colorTexture.magFilter = THREE.NearestFilter;
+    return colorTexture;
   }
 
   async dispose() {
     super.dispose();
-    this.cube.geometry.dispose();
-    (this.cube.material as THREE.Material).dispose();
+    this.geometry.dispose();
+    this.material.dispose();
+    this.minecraftTexture.dispose();
   }
 }
 

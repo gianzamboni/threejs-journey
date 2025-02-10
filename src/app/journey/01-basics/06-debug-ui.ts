@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import { Callable, Customizable, Debuggable } from '../exercises/debug-decorators';
-import RenderView from '@/layout/render-view';
+import RenderView from '@/app/layout/render-view';
 import gsap from 'gsap';
 
 @Debuggable

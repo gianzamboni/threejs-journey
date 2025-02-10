@@ -1,5 +1,5 @@
-import RenderView from "@/layout/render-view";
-import { AnimationLoop } from "@/utils/animation-loop";
+import RenderView from "@/app/layout/render-view";
+import { AnimationLoop } from "@/app/utils/animation-loop";
 import { Timer } from "three/examples/jsm/Addons.js";
 import BaseExercise from "./base-exercise";
 

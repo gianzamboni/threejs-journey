@@ -1,6 +1,6 @@
-import { Collapsable } from "@/components/collapsable";
-import BaseExercise from "@/journey/exercises/base-exercise";
-import { pascalCaseToText } from "@/utils/text-utils";
+import { Collapsable } from "@/app/components/collapsable";
+import BaseExercise from "@/app/journey/exercises/base-exercise";
+import { pascalCaseToText } from "@/app/utils/text-utils";
 
 export class InfoBox {
 

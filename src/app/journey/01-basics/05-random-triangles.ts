@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import OrbitControlledExercise from "@/journey/exercises/orbit-controlled-exercise";
-import RenderView from "@/layout/render-view";
+import OrbitControlledExercise from "@/app/journey/exercises/orbit-controlled-exercise";
+import RenderView from "@/app/layout/render-view";
 
 export class RandomTraingles extends OrbitControlledExercise {
 

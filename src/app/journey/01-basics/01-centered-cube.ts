@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import  BaseExercise from '@/journey/exercises/base-exercise';
-import { createRedCube } from '@/utils/default-shapes';
+import  BaseExercise from '@/app/journey/exercises/base-exercise';
+import { createRedCube } from '@/app/utils/default-shapes';
 
 export class CenteredCube extends BaseExercise {
 

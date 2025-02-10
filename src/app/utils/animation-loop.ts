@@ -1,4 +1,4 @@
-import RenderView from '@/layout/render-view';
+import RenderView from '@/app/layout/render-view';
 import { Timer } from 'three/addons/misc/Timer.js'
 
 enum AnimationStatus {

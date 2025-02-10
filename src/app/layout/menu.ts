@@ -1,10 +1,10 @@
-import SideBar from "@/components/sidebar";
-import { GITHUB_ICON, HAMBURGER_ICON } from "@/constants/icons";
-import { JOURNEY, Section } from "@/journey";
-import { pascalCaseToText } from "@/utils/text-utils";
-import { Collapsable } from "@/components/collapsable";
+import SideBar from "@/app/components/sidebar";
+import { GITHUB_ICON, HAMBURGER_ICON } from "@/app/constants/icons";
+import { JOURNEY, Section } from "@/app/journey";
+import { pascalCaseToText } from "@/app/utils/text-utils";
+import { Collapsable } from "@/app/components/collapsable";
 import { CSS_CLASSES } from "@/theme";
-import { ExerciseClass } from "@/journey/types";
+import { ExerciseClass } from "@/app/journey/types";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;

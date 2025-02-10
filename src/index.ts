@@ -1,11 +1,11 @@
 /// <reference types="vite/client" />
 
-import Menu from "@/layout/menu";
-import { InfoBox } from "./layout/info-box";
-import RenderView from "./layout/render-view";
-import DebugUI from "./layout/debug-ui";
-import BaseExercise from "./journey/exercises/base-exercise";
-import { ExerciseClass } from "./journey/types";
+import Menu from "@/app/layout/menu";
+import { InfoBox } from "./app/layout/info-box";
+import RenderView from "./app/layout/render-view";
+import DebugUI from "./app/layout/debug-ui";
+import BaseExercise from "./app/journey/exercises/base-exercise";
+import { ExerciseClass } from "./app/journey/types";
 
 let menu: Menu;
 let infoBox: InfoBox;
