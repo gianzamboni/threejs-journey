@@ -1,5 +1,5 @@
 import { Timer } from 'three/addons/misc/Timer.js';
-import { ExerciseClass } from '../types';
+import { ExerciseClass } from '@/app/journey/types';
 import RenderView from '@/app/layout/render-view';
 import DebugUI from '@/app/layout/debug-ui';
 import GUI, { Controller } from 'lil-gui';
@@ -69,12 +69,7 @@ export function Customizable(folderPath: string, controllers: CustomizableContro
 
       controllers.forEach((controller) => {
         const [customizableObject, customizableProperty] = findeCustomizableObject(this[property], controller.propertyPath);
-        let guiController;
-        if(controller.isColor) {
-          guiController = folder.addColor(customizableObject, customizableProperty);
-        } else {
-          guiController = folder.add(customizableObject, customizableProperty);
-        }
+        let guiController = createGUIController(folder, customizableObject, customizableProperty, controller.isColor);
 
         if(controller.configuration) {
           Object.entries(controller.configuration).forEach(([key, value]) => {
@@ -100,6 +95,11 @@ export function Callable(folderPath: string, name: string) {
       folder.add(this, property).name(name);
     }
   }
+}
+
+function createGUIController(folder: GUI, customizableObject: any, customizableProperty: string, isColor: boolean = false): Controller {
+  const addMethod = isColor ? 'addColor' : 'add';
+  return folder[addMethod](customizableObject, customizableProperty);
 }
 
 function findeCustomizableObject(object: any, propertyPath: string): [any, string] {

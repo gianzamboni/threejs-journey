@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
-import { Customizable, DebugFPS, Debuggable } from '../exercises/debug-decorators';
+import { Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 
