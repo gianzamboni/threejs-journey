@@ -8,7 +8,7 @@ export class LoadingScreen {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = 'fixed top-0 left-0 right-0 bottom-0 flex justify-center flex-col items-center text-white text-2xl bg-black bg-opacity-50 hidden transition-all duration-300';
+    this.container.className = 'fixed top-0 left-0 right-0 bottom-0 flex justify-center flex-col items-center text-white text-2xl bg-black bg-opacity-50 hidden transition-all duration-300 w-full';
     parent.appendChild(this.container);
 
     const textRow = document.createElement('div');
@@ -24,11 +24,11 @@ export class LoadingScreen {
 
 
     const progressBar = document.createElement('div');
-    progressBar.className = 'w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 w-1/2';
+    progressBar.className = 'bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 w-1/2';
     this.container.appendChild(progressBar);
 
     this.progress = document.createElement('div');
-    this.progress.className = 'bg-blue-600 h-2.5 rounded-full transition-all duration-300';
+    this.progress.className = 'bg-blue-600 h-2.5 rounded-full transition-all duration-300 w-1/2';
 
     progressBar.appendChild(this.progress);
   }

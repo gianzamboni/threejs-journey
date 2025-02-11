@@ -25,7 +25,11 @@ function updateDebugUI(evt: CustomEvent): void {
   debugUI.update(evt.detail);
 }
 
-function toggleDebug() {
+function toggleDebug(event?: MouseEvent) {
+  if(event !== undefined) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
   if(activeExercise?.isDebuggable === true) {
     activeExercise.toggleDebug();
     debugUI.toggle();

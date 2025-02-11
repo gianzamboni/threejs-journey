@@ -1,44 +1,103 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
-import { DebugFPS, Debuggable } from '../exercises/debug-decorators';
+import { Customizable, DebugFPS, Debuggable } from '../exercises/debug-decorators';
 import { AssetLoader } from '@/app/utils/assets-loader';
+import { Timer } from 'three/addons/misc/Timer.js';
 
 @Debuggable
 export class MaterialsTest extends OrbitControlledExercise {
 
   public static id = 'materials';
   
-  private physicalMaterial: THREE.MeshPhysicalMaterial;//THREE.MeshPhysicalMaterial;
+  @Customizable("Material", [
+    {
+      propertyPath: 'metalness',
+      configuration: {
+        min: 0,
+        max: 1,
+        step: 0.0001,
+        name: 'Metalness'
+      }
+    }, {
+      propertyPath: 'roughness',
+      configuration: {
+        min: 0,
+        max: 1,
+        step: 0.0001,
+        name: 'Roughness'
+      }
+    }, {
+      propertyPath: 'transmission',
+      configuration: {
+        min: 0,
+        max: 1,
+        step: 0.0001,
+        name: 'Transmission'
+      }
+    }, {
+      propertyPath: 'ior',
+      configuration: {
+        min: 1,
+        max: 2.5,
+        step: 0.0001,
+        name: 'IOR'
+      }
+    }, {
+      propertyPath: 'thickness',
+      configuration: {
+        min: 0,
+        max: 1,
+        step: 0.0001,
+        name: 'Thickness'
+      }
+    }
+  ])
+  private physicalMaterial: THREE.MeshPhysicalMaterial;
+
   private geometries: THREE.BufferGeometry[];
   private meshes: THREE.Mesh[];
-  private envMap: THREE.Texture;
+  private envMap: THREE.Texture | undefined;
   private loader: AssetLoader;
 
   constructor(view: RenderView) {
     super(view);
     this.loader = AssetLoader.getInstance();
+    this.controls.autoRotate = false;
+    this.camera.position.set(2, 1, 3);
     this.setupEnvironment();
-
     this.physicalMaterial = this.createMaterial();
 
     this.geometries = [
       new THREE.SphereGeometry(0.5, 64, 64),
       new THREE.BoxGeometry(1, 1, 1, 100, 100),
-      new THREE.ConeGeometry(0.3, 0.2, 64, 128),
+      new THREE.TorusGeometry(0.3, 0.2, 64, 128),
     ];
 
-    this.meshes = this.geometries.map(g => new THREE.Mesh(g, this.physicalMaterial));
+    this.meshes = this.createMeshes();
     this.scene.add(...this.meshes);
   }
 
   @DebugFPS
-  frame() {
-    super.frame();
+  frame(timer: Timer) {
+    super.frame(timer);
+    const elapsed = timer.getElapsed();
+
+    this.meshes.forEach((mesh) => {
+      mesh.rotation.y = 0.01 * elapsed;
+      mesh.rotation.x = -0.15 * elapsed;
+    });
   }
 
+  private createMeshes() {
+    return this.geometries.map((geometry, index) => {
+      const mesh = new THREE.Mesh(geometry, this.physicalMaterial);
+      mesh.position.x = index * 1.5 - 1.5;
+      return mesh;
+    });
+  }
   private setupEnvironment() {
-    this.loader.loadEnvironment('envMaps/alley_2k.hdr', (envMap) => {
+    this.loader.loadEnvironment('textures/alley_2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       this.scene.environment = envMap;
       this.scene.background = envMap;
@@ -60,5 +119,10 @@ export class MaterialsTest extends OrbitControlledExercise {
     super.dispose();
     this.geometries.forEach(g => g.dispose());
     this.physicalMaterial.dispose();
+    this.scene.environment?.dispose();
+    (this.scene.background as THREE.Texture).dispose();
+    if(this.envMap) {
+      this.envMap.dispose();
+    }
   }
 }

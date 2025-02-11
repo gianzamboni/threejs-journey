@@ -66,6 +66,8 @@ export class AssetLoader extends EventTarget{
   }
 
   loadEnvironment(url: string, onLoad: (texture: THREE.Texture) => void) {
-    return this.rgbeLoader.load(url, onLoad);
+    return this.rgbeLoader.load(url, onLoad, undefined, (error) => {
+      throw new Error(`Error loading environment map: ${error}`);
+    });
   }
 }

@@ -1,10 +1,7 @@
 ## TO DOs
 - Selector manual de resoluciones
-- Refactor loadManager para que sea una clase y no un modulo
-- Crear pantalla de carga
 - Selector automatico de resolucion
-
-- Agregar pre-commit para hacer chequeos basicos antes de pushear
+- Agregar un warning si algun asset no se pudo cargar. Y un boton para cambiar la resolucion si hay bajos fps.
 ## Temas interesantes para investigar
 https://en.wikipedia.org/wiki/Perlin_noise
 

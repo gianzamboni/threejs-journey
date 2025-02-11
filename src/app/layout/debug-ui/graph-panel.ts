@@ -41,7 +41,7 @@ export class GraphPanel {
     this.context.textBaseline = 'top';
     
 
-    this.context.fillStyle = COLORS.white;
+    this.context.fillStyle = COLORS.black[60];
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.context.fillStyle = COLORS.black[100];
@@ -64,7 +64,7 @@ export class GraphPanel {
 
   private drawTitle(value: number) {
     this.context.clearRect(0, 0, this.canvas.width, this.sizes.fontSize + 4);
-    this.context.fillStyle = COLORS.white;
+    this.context.fillStyle = COLORS.black[60];
     this.context.globalAlpha = 1;
     this.context.fillRect(0, 0, this.canvas.width, this.sizes.fontSize + 4);
     this.context.fillStyle = COLORS.debugLabel;

@@ -47,9 +47,9 @@ export function DebugFPS(_: any, _1: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value;
 
   descriptor.value = function(timer: Timer) {
-    if((this as DebuggableExercise).shouldDebug) {
-      originalMethod.call(this, timer);
+    originalMethod.call(this, timer);
 
+    if((this as DebuggableExercise).shouldDebug) {
       const fps = 1/timer.getDelta();
       (this as EventTarget).dispatchEvent(new CustomEvent('debug-info', { detail: { fps } }));
     }

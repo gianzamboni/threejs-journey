@@ -9,9 +9,9 @@ export const CSS_CLASSES = {
 export const COLORS = {
   black: {
     50: `rgba(0, 0, 0, 0.5)`,
+    60: `rgba(0, 0, 0, 0.6)`,
     90: `rgba(0, 0, 0, 0.9)`,
     100: `rgba(0, 0, 0, 1)`,
   },
-  white: `rgba(255, 255, 255, 0.0625)`,
   debugLabel: `#DC2626`,
 };

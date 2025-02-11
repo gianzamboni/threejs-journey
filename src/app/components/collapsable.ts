@@ -42,7 +42,7 @@ export class Collapsable {
 
   private createCollapsable(settings: CollapsableSectionSettings | undefined) {
     const collapsable = document.createElement('div');
-    const className = `overflow-hidden transition-all duration-500 hidden h-0 ${CSS_CLASSES.background} ${settings?.className ?? ''}`;
+    const className = `overflow-hidden transition-all duration-500 hidden h-0 ${CSS_CLASSES.background} ${CSS_CLASSES.text} ${settings?.className ?? ''}`;
     collapsable.className = `${className}`;
     this.container.appendChild(collapsable);
     return collapsable;
