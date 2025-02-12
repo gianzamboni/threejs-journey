@@ -34,6 +34,9 @@ export class WarningBox {
     this.errorContainer.innerHTML = '';
     this.errorContainer.appendChild(error.message);
     this.actionButton.innerHTML = error.actionIcon;
-    this.actionButton.addEventListener('click', error.action);
+    this.actionButton.addEventListener('click', () => {
+      this.warningBox.classList.add('hidden');
+      error.action()
+    });
   }
 } 

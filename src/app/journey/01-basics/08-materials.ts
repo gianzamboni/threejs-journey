@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
-import { Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
+import { Callable, Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -70,7 +70,7 @@ export class MaterialsTest extends OrbitControlledExercise {
 
     this.geometries = [
       new THREE.SphereGeometry(0.5, 64, 64),
-      new THREE.BoxGeometry(1, 1, 1, 100, 100),
+      new THREE.BoxGeometry(1, 1, 1, 1, 1, 1),
       new THREE.TorusGeometry(0.3, 0.2, 64, 128),
     ];
 
@@ -96,6 +96,7 @@ export class MaterialsTest extends OrbitControlledExercise {
       return mesh;
     });
   }
+
   private setupEnvironment() {
     this.loader.loadEnvironment('textures/alley_2k.hdr', (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
@@ -115,6 +116,20 @@ export class MaterialsTest extends OrbitControlledExercise {
       side: THREE.DoubleSide,
     });
   }
+
+  @Callable('Quality', 'Low')
+  public simplify() {
+    this.geometries[0].dispose();
+    this.geometries[2].dispose();
+
+    this.geometries[0] = new THREE.SphereGeometry(0.5, 8, 8);
+    this.geometries[2] = new THREE.TorusGeometry(0.3, 0.2, 8, 16);
+
+    this.meshes[0].geometry = this.geometries[0];
+    this.meshes[2].geometry = this.geometries[2];
+    this.physicalMaterial.side = THREE.FrontSide;
+  }
+  
   async dispose() {
     super.dispose();
     this.geometries.forEach(g => g.dispose());

@@ -1,5 +1,6 @@
 import RenderView from '@/app/layout/render-view';
 import { Timer } from 'three/addons/misc/Timer.js'
+import { waitForCondition } from './sleep';
 
 enum AnimationStatus {
   Stopped,
@@ -43,9 +44,9 @@ export class AnimationLoop {
   }
 
   private async untilStopped() {
-    return new Promise((resolve) => {
-      this.waitTillStopped(resolve);
-    });
+    return await waitForCondition(
+      () => this.animationStatus === AnimationStatus.Stopped
+    );
   }
 
   async stop() {

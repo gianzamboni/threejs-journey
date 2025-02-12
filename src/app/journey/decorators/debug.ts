@@ -19,6 +19,7 @@ type CustomizableController = {
     step?: number;
     name?: string;
     onChange?: string;
+    onFinishChange?: string;
   };
 }
 

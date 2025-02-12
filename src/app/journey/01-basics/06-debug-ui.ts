@@ -39,6 +39,18 @@ export class DebugUITest extends OrbitControlledExercise {
   }])
   private material: THREE.MeshBasicMaterial;
 
+  @Customizable('Awesome Cube', [{
+    propertyPath: 'subdivisions',
+    configuration: {
+      min: 1,
+      max: 20,
+      step: 1,
+      onFinishChange: 'updateSubdivisions',
+      name: 'Subdivisions'
+    }
+  }])
+  private subdivisions: number = 1;
+
   private geometry: THREE.BoxGeometry;
 
   constructor(view: RenderView) {
@@ -60,6 +72,11 @@ export class DebugUITest extends OrbitControlledExercise {
     this.material.color.set(newColor);
   }
 
+  updateSubdivisions() {
+    this.geometry.dispose();
+    this.geometry = new THREE.BoxGeometry(1, 1, 1, this.subdivisions, this.subdivisions, this.subdivisions);
+    this.cube.geometry = this.geometry;
+  }
   async dispose() {
     super.dispose();
     this.material.dispose();
