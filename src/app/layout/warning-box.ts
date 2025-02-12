@@ -12,7 +12,7 @@ export class WarningBox {
 
   constructor(parent: HTMLElement) {
     this.warningBox = document.createElement('div');
-    this.warningBox.className = "mb-5 mr-5 bg-red-600 flex items-center w-100 text-white py-2 px-3 gap-2 rounded-lg hidden";
+    this.warningBox.className = "mb-5 mr-5 bg-red-600 flex items-center justify-center w-100 text-white py-2 px-3 gap-2 rounded-lg max-sm:w-[90vw] hidden";
 
     const warningSymbol = document.createElement('span');
     warningSymbol.innerHTML = WARNING;
