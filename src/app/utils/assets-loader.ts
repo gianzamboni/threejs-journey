@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RELOAD } from '../constants/icons';
 
 export type LoadingData = {
   url: string;
@@ -44,7 +45,15 @@ export class AssetLoader extends EventTarget{
   }
 
   onError(url: string) {
-    throw new Error(`Error loading file: ${url}`);
+    const p = document.createElement('p');
+    p.textContent = `Error loading "${url}"`;
+    this.dispatchEvent(new CustomEvent('loading-error', { detail: { 
+      message: p,
+      actionIcon: RELOAD,
+      action: () => {
+        window.location.reload()
+      }
+    } }));
   }
 
   onLoad() {

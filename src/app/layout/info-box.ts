@@ -24,7 +24,6 @@ export class InfoBox {
 
     this.collapsable.addTo(this.container);
 
-    this.container.className = 'fixed bottom-0 left-0';
     parent.appendChild(this.container);
   }
 

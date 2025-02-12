@@ -8,6 +8,7 @@ import BaseExercise from "./app/journey/exercises/base-exercise";
 import { ExerciseClass } from "./app/journey/types";
 import { AssetLoader, LoadingData } from "./app/utils/assets-loader";
 import { LoadingScreen } from "./app/layout/loading-screen";
+import { ErrorData, WarningBox } from "./app/layout/warning-box";
 
 let tappedTwice = false;
 
@@ -19,7 +20,7 @@ let infoBox: InfoBox;
 let renderView: RenderView;
 let debugUI: DebugUI;
 let loadingScreen: LoadingScreen;
-
+let warningBox: WarningBox;
 
 function updateDebugUI(evt: CustomEvent): void {
   debugUI.update(evt.detail);
@@ -58,6 +59,10 @@ function hideLoadingScreen() {
   loadingScreen.hide();
 }
 
+function showErrorMessage(evt: CustomEvent<ErrorData>) {
+  warningBox.setMessage(evt.detail);
+}
+
 async function selectExercise(newExercise: ExerciseClass) {
   if(activeExercise !== undefined) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
@@ -78,13 +83,7 @@ async function selectExercise(newExercise: ExerciseClass) {
   }
 }
 
-window.addEventListener('load', () => {
-  menu = new Menu(document.body);
-  infoBox = new InfoBox(document.body);
-  renderView = new RenderView(document.body);
-  debugUI = new DebugUI(document.body);
-  loadingScreen = new LoadingScreen(document.body);
-
+function setupListeners() {
   menu.addEventListener('exercise-selected', async (event: CustomEventInit) => {
     selectExercise(event.detail);
   });
@@ -92,7 +91,7 @@ window.addEventListener('load', () => {
   loader.addEventListener('loading-started', showLoadingScreen as EventListener);
   loader.addEventListener('loading-progress', updateLoadingScreen as EventListener);
   loader.addEventListener('loading-complete', hideLoadingScreen); 
-
+  loader.addEventListener('loading-error', showErrorMessage as EventListener);
   window.addEventListener('resize', () => {
     renderView.updateSize();
   });
@@ -106,6 +105,26 @@ window.addEventListener('load', () => {
     }
   });
 
+}
+
+window.addEventListener('load', () => {
+  menu = new Menu(document.body);
+  renderView = new RenderView(document.body);
+  debugUI = new DebugUI(document.body);
+  loadingScreen = new LoadingScreen(document.body);
+
+  
+  const bottomRow = document.createElement('div');
+  bottomRow.id = "bottom-row";
+  bottomRow.className = "fixed bottom-0 left-0 w-full flex flex-col md:flex-row items-end justify-between align-center";
+
+  infoBox = new InfoBox(bottomRow);
+  warningBox = new WarningBox(bottomRow);
+
+  document.body.appendChild(bottomRow);
+
+  setupListeners();
+  
   const urlParams = new URLSearchParams(window.location.search);
   const exerciseId = urlParams.get('exercise');
 
