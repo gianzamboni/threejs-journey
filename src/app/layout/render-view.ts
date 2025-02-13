@@ -19,6 +19,7 @@ export default class RenderView {
       antialias: true,
     });
 
+    this.renderer.setClearColor(0x1E1A20, 1);
     this.updateSize();
   }
   
