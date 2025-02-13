@@ -77,6 +77,7 @@ export class DebugUITest extends OrbitControlledExercise {
     this.geometry = new THREE.BoxGeometry(1, 1, 1, this.subdivisions, this.subdivisions, this.subdivisions);
     this.cube.geometry = this.geometry;
   }
+  
   async dispose() {
     super.dispose();
     this.material.dispose();

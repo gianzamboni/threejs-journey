@@ -70,13 +70,13 @@ export function Customizable(folderPath: string, controllers: CustomizableContro
       const folder = findFolder(gui, folderPath);
 
       controllers.forEach((controller) => {
-        const [customizableObject, customizableProperty] = findeCustomizableObject(this[property], controller.propertyPath);
+        const [customizableObject, customizableProperty] = findeCustomizableObject(this, property, controller.propertyPath);
         let guiController = createGUIController(folder, customizableObject, customizableProperty, controller.isColor);
 
         if(controller.configuration) {
           Object.entries(controller.configuration).forEach(([key, value]) => {
-            if(key === 'onChange') {
-              guiController.onChange(this[value].bind(this))
+            if(key === 'onChange' || key === 'onFinishChange') {
+              guiController[key](this[value].bind(this))
             } else {
               guiController[key as keyof Controller](value);
             }
@@ -104,15 +104,25 @@ function createGUIController(folder: GUI, customizableObject: any, customizableP
   return folder[addMethod](customizableObject, customizableProperty);
 }
 
-function findeCustomizableObject(object: any, propertyPath: string): [any, string] {
+function findeCustomizableObject(object: any, property: string, propertyPath: string): [any, string] {
+  console.log(object, property, propertyPath);
+  
+  let customizableObject = typeof object[property] === 'object' ? object[property] : object;
+  console.log(customizableObject);
+
   const propertyPathParts = propertyPath.split('.');
+  console.log(propertyPathParts);
+
   const customizableProperty = propertyPathParts.pop();
+  console.log(customizableProperty);
+
   if(!customizableProperty) {
     throw new Error(`Invalid property path: ${propertyPath} for object: ${object}`);
   }
-  const customizableObject =  propertyPathParts.reduce((obj: any, prop: string) => {
+  
+  customizableObject =  propertyPathParts.reduce((obj: any, prop: string) => {
     return obj[prop];
-  }, object);
+  }, customizableObject);
 
   return [customizableObject, customizableProperty];
 }
