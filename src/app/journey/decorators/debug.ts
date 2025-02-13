@@ -3,6 +3,7 @@ import { ExerciseClass } from '@/app/journey/types';
 import RenderView from '@/app/layout/render-view';
 import DebugUI from '@/app/layout/debug-ui';
 import GUI, { Controller } from 'lil-gui';
+import { Quality } from '@/app/layout/quality-selector';
 
 type DebuggableExercise =  ExerciseClass & {
   isDebuggable: boolean;
@@ -30,8 +31,8 @@ export function Debuggable(constructor: ExerciseClass ): any {
 
     public shouldDebug = false;
 
-    constructor(view: RenderView, debugUi: DebugUI) {
-      super(view);
+    constructor(view: RenderView, quality: Quality, debugUi: DebugUI) {
+      super(view, quality);
       this.descriptions.push('<strong>Toggle Debug:</strong> Double click/tap');
       if(constructor.isCustomizable) {
         (this as any).buildGui(debugUi.gui);  

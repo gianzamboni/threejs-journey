@@ -14,8 +14,7 @@ export default class DebugUI {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = `fixed top-0 right-0 text-white m-5 justify-items-end
-`;
+    this.container.className = `text-white justify-items-end`;
     this.container.innerHTML = ``;
     parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
@@ -58,6 +57,7 @@ export default class DebugUI {
         closeFolders: false,
         container: this.container
       });
+      this.lilGui.close();
     }
     return this.lilGui;
   }

@@ -1,0 +1,54 @@
+
+export enum Quality {
+  Low = 'low',
+  High = 'high'
+}
+
+export function qualityFromString(quality: string | null) {
+  switch (quality) {
+    case 'low':
+      return Quality.Low;
+    case 'high':
+    default:
+      return Quality.High;
+  }
+} 
+export class QualitySelector extends EventTarget {
+
+  private qualitySelector: HTMLDivElement;
+  private selectedQuality: Quality = Quality.High;
+
+  constructor(parent: HTMLElement, defaultQuality: Quality) {
+    super();
+    this.selectedQuality = defaultQuality;
+    this.qualitySelector = document.createElement('div');
+    this.qualitySelector.className = 'flex justify-center items-center bg-white px-3 py-2 rounded-md gap-2';
+
+    const label = document.createElement('label');
+    label.textContent = 'Quality:';
+    this.qualitySelector.appendChild(label);
+
+    const select = document.createElement('select');
+    select.className = 'border border-gray-300 rounded-md bg-gray-300 px-2 py-1';
+    select.addEventListener('change', this.onQualityChange.bind(this));
+    this.qualitySelector.appendChild(select);
+
+    const options =[ Quality.High, Quality.Low ];
+    options.forEach((option) => {
+      const optionElement = document.createElement('option');
+      optionElement.value = option.toString();
+      optionElement.textContent = option.toString();
+      if (option === this.selectedQuality) {
+        optionElement.selected = true;
+      }
+      select.appendChild(optionElement);
+    });
+
+    parent.appendChild(this.qualitySelector);
+  }
+
+  onQualityChange(event: Event) {
+    this.dispatchEvent(new CustomEvent('quality-changed', { detail: (event.target as HTMLSelectElement).value }));
+  }
+
+}

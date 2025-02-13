@@ -41,7 +41,6 @@ export class LoadingScreen {
   }
 
   async update(data: LoadingData) {
-    console.log(data);
     const progress = data.itemsLoaded * 100/ data.itemsTotal;
     this.label.innerHTML = `${progress}%`;
     this.progress.style.width = `${progress}%`;

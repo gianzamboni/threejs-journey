@@ -4,7 +4,34 @@ import RenderView from '@/app/layout/render-view';
 import { Callable, Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
+import { Quality } from '@/app/layout/quality-selector';
 
+type QualityConfig = {
+  sphereSegments: number;
+  torus: {
+    radialSegments: number;
+    tubularSegments: number;
+  };
+  materialSide: THREE.Side;
+}
+const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
+  [Quality.Low]: {
+    sphereSegments: 8,
+    torus: {
+      radialSegments: 8,
+      tubularSegments: 16,
+    },
+    materialSide: THREE.FrontSide,
+  },
+  [Quality.High]: {
+    sphereSegments: 64,
+    torus: {
+      radialSegments: 64,
+      tubularSegments: 128,
+    },
+    materialSide: THREE.DoubleSide,
+  }
+}
 @Debuggable
 export class MaterialsTest extends OrbitControlledExercise {
 
@@ -59,9 +86,12 @@ export class MaterialsTest extends OrbitControlledExercise {
   private meshes: THREE.Mesh[];
   private envMap: THREE.Texture | undefined;
   private loader: AssetLoader;
+  private qualityconfig: QualityConfig;
 
-  constructor(view: RenderView) {
+  constructor(view: RenderView, quality: Quality) {
     super(view);
+    this.qualityconfig = QUALITY_CONFIG[quality];
+
     this.loader = AssetLoader.getInstance();
     this.controls.autoRotate = false;
     this.camera.position.set(2, 1, 3);
@@ -69,9 +99,9 @@ export class MaterialsTest extends OrbitControlledExercise {
     this.physicalMaterial = this.createMaterial();
 
     this.geometries = [
-      new THREE.SphereGeometry(0.5, 64, 64),
+      new THREE.SphereGeometry(0.5, this.qualityconfig.sphereSegments, this.qualityconfig.sphereSegments),
       new THREE.BoxGeometry(1, 1, 1, 1, 1, 1),
-      new THREE.TorusGeometry(0.3, 0.2, 64, 128),
+      new THREE.TorusGeometry(0.3, 0.2, this.qualityconfig.torus.radialSegments, this.qualityconfig.torus.tubularSegments),
     ];
 
     this.meshes = this.createMeshes();
@@ -113,7 +143,7 @@ export class MaterialsTest extends OrbitControlledExercise {
       transmission: 1,
       ior: 1.5,
       thickness: 0.5,
-      side: THREE.DoubleSide,
+      side: this.qualityconfig.materialSide,
     });
   }
 

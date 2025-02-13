@@ -9,11 +9,13 @@ import { ExerciseClass } from "./app/journey/types";
 import { AssetLoader, LoadingData } from "./app/utils/assets-loader";
 import { LoadingScreen } from "./app/layout/loading-screen";
 import { ErrorData, WarningBox } from "./app/layout/warning-box";
+import { Quality, qualityFromString, QualitySelector } from "./app/layout/quality-selector";
 
 let tappedTwice = false;
 
 let loader: AssetLoader = AssetLoader.getInstance();
 let activeExercise: BaseExercise | undefined;
+let activeQuality: Quality;
 
 let menu: Menu;
 let infoBox: InfoBox;
@@ -21,6 +23,7 @@ let renderView: RenderView;
 let debugUI: DebugUI;
 let loadingScreen: LoadingScreen;
 let warningBox: WarningBox;
+let qualitySelector: QualitySelector;
 
 function updateDebugUI(evt: CustomEvent): void {
   debugUI.update(evt.detail);
@@ -71,8 +74,8 @@ async function selectExercise(newExercise: ExerciseClass) {
     await activeExercise.dispose();
   }
   
-  window.history.pushState({exerciseId: newExercise.id}, '', `?exercise=${newExercise.id}`);
-  activeExercise = new newExercise(renderView, debugUI);
+  window.history.pushState({exerciseId: newExercise.id}, '', `?exercise=${newExercise.id}&quality=${activeQuality}`);
+  activeExercise = new newExercise(renderView, activeQuality, debugUI);
 
   activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
 
@@ -81,6 +84,11 @@ async function selectExercise(newExercise: ExerciseClass) {
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
     toggleDebug();
   }
+}
+
+function changeQuality(evt: CustomEvent<string>) {
+  activeQuality = qualityFromString(evt.detail);
+  selectExercise(activeExercise?.constructor as ExerciseClass);
 }
 
 function setupListeners() {
@@ -105,14 +113,21 @@ function setupListeners() {
     }
   });
 
+  qualitySelector.addEventListener('quality-changed', changeQuality as EventListener);
 }
 
-window.addEventListener('load', () => {
+function initAllGUIParts() {
   menu = new Menu(document.body);
   renderView = new RenderView(document.body);
-  debugUI = new DebugUI(document.body);
-  loadingScreen = new LoadingScreen(document.body);
 
+  const rightColumn = document.createElement('div');
+  rightColumn.id = "right-column";
+  rightColumn.className = "fixed top-0 right-0 h-full m-5 flex flex-col items-end gap-2";
+  qualitySelector = new QualitySelector(rightColumn, activeQuality);
+  debugUI = new DebugUI(rightColumn);
+  document.body.appendChild(rightColumn);
+
+  loadingScreen = new LoadingScreen(document.body);
   
   const bottomRow = document.createElement('div');
   bottomRow.id = "bottom-row";
@@ -120,13 +135,18 @@ window.addEventListener('load', () => {
 
   infoBox = new InfoBox(bottomRow);
   warningBox = new WarningBox(bottomRow);
-
   document.body.appendChild(bottomRow);
+}
 
-  setupListeners();
-  
+window.addEventListener('load', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const exerciseId = urlParams.get('exercise');
+  const quality = urlParams.get('quality');
+  activeQuality = qualityFromString(quality);
+
+  initAllGUIParts();
+  setupListeners();
+  
 
   if(exerciseId !== null) {
     menu.selectExercise(exerciseId);
