@@ -11,6 +11,7 @@ export class OrbitControlsTest extends OrbitControlledExercise {
 
   constructor(view: RenderView) {
     super(view);
+    this.enableAutoRotation();
     this.cube = createRedCube();
 
     this.camera.position.y = 1;

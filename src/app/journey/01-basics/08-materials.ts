@@ -37,6 +37,9 @@ export class MaterialsTest extends OrbitControlledExercise {
 
   public static id = 'materials';
   
+  private loader: AssetLoader;
+  private qualityconfig: QualityConfig;
+
   @Customizable("Material", [
     {
       propertyPath: 'metalness',
@@ -85,15 +88,12 @@ export class MaterialsTest extends OrbitControlledExercise {
   private geometries: THREE.BufferGeometry[];
   private meshes: THREE.Mesh[];
   private envMap: THREE.Texture | undefined;
-  private loader: AssetLoader;
-  private qualityconfig: QualityConfig;
 
   constructor(view: RenderView, quality: Quality) {
     super(view);
     this.qualityconfig = QUALITY_CONFIG[quality];
 
     this.loader = AssetLoader.getInstance();
-    this.controls.autoRotate = false;
     this.camera.position.set(2, 1, 3);
     this.setupEnvironment();
     this.physicalMaterial = this.createMaterial();

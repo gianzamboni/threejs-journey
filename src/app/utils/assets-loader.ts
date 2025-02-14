@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { RELOAD } from '../constants/icons';
+import { FontLoader, Font } from 'three/addons/loaders/FontLoader.js';
 
 export type LoadingData = {
   url: string;
@@ -16,6 +17,7 @@ export class AssetLoader extends EventTarget{
 
   private textureLoader: THREE.TextureLoader;
   private rgbeLoader: RGBELoader;
+  private fontLoader: FontLoader;
 
   public static getInstance() {
     if (!AssetLoader.instance) {
@@ -34,6 +36,8 @@ export class AssetLoader extends EventTarget{
 
     this.textureLoader = new THREE.TextureLoader(this.loadingManager);
     this.rgbeLoader = new RGBELoader(this.loadingManager);
+    this.fontLoader = new FontLoader(this.loadingManager);
+
   }
 
   onStart(url: string, itemsLoaded: number, itemsTotal: number) {
@@ -68,6 +72,8 @@ export class AssetLoader extends EventTarget{
     this.loadingManager.onLoad = this.onLoad.bind(this);
 
     this.textureLoader = new THREE.TextureLoader(this.loadingManager);
+    this.rgbeLoader = new RGBELoader(this.loadingManager);
+    this.fontLoader = new FontLoader(this.loadingManager);
   }
 
   loadTexture(url: string) {
@@ -75,8 +81,10 @@ export class AssetLoader extends EventTarget{
   }
 
   loadEnvironment(url: string, onLoad: (texture: THREE.Texture) => void) {
-    return this.rgbeLoader.load(url, onLoad, undefined, (error) => {
-      throw new Error(`Error loading environment map: ${error}`);
-    });
+    return this.rgbeLoader.load(url, onLoad, undefined, () => this.onError(url));
+  }
+
+  loadFont(url: string, onLoad: (font: Font) => void) {
+    this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 }

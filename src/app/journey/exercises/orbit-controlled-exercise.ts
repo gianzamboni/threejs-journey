@@ -11,7 +11,7 @@ export default class OrbitControlledExercise extends AnimatedExercise {
     super();
     this.controls = new OrbitControls(this.camera, view.canvas);
     this.controls.enableDamping = true;
-    this.controls.autoRotate = true;
+
     this.descriptions.push(
       '<strong>Rotate:</strong> Click/Tap & drag',
       '<strong>Zoom:</strong> Scroll or pinch',
@@ -23,6 +23,10 @@ export default class OrbitControlledExercise extends AnimatedExercise {
     this.controls.update();
   }
 
+  enableAutoRotation() {
+    this.controls.autoRotate = true;
+  }
+  
   async dispose() {
     this.controls.dispose();
     super.dispose();

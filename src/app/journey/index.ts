@@ -7,8 +7,8 @@ import { RandomTraingles } from "./01-basics/05-random-triangles";
 import { DebugUITest } from "./01-basics/06-debug-ui";
 import { TextureTest } from "./01-basics/07-textures";
 import { MaterialsTest } from "./01-basics/08-materials";
-//import { OrbitControlCube } from "./01-basics/04-orbit-controls";
-//import { ExerciseClass } from "./types";
+import { Text3D } from "./01-basics/09-text";
+import { LightsExercise } from "./02-classic-techniques/01-lights";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -38,48 +38,19 @@ export const JOURNEY: Section[] = [{
     DebugUITest,
     TextureTest,
     MaterialsTest,
+    Text3D
+  ]
+}, {
+  id: 'classic-techniques',
+  exercises: [
+    LightsExercise,
+    // Shadows,
+    // BakedShadows,
+    // HauntedHouse,
+    // Particles,
+    // GalaxyGenerator,
+    // ScrollBasedAnimation
   ]
 }];
 
 verifyUniqueExerciseIds(JOURNEY);
-/* {
-  id: 'geometries',
-  generator: null,
-}, {
-  id: 'debug-ui',
-  generator: null,
-}, {
-  id: 'textures',
-  generator: null,
-}, {
-  id: 'materials',
-  generator: null,
-}, {
-  id: '3d-text',
-  generator: null,
-} ],
-}, {
-id: 'classic-techniques',
-exercises: [{
-  id: 'lights',
-  generator: null,
-}, {
-  id: 'shadows',
-  generator: null,
-}, {
-  id: 'baked-shadows',
-  generator: null,
-}, {
-  id: 'haunted-house',
-  generator: null,
-}, {
-  id: 'particles',
-  generator: null,
-}, {
-  id: 'galaxy-generator',
-  generator: null,
-}, {
-  id: 'scroll-based-animation',
-  generator: null,
-}],
-}*/

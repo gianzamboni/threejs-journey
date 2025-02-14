@@ -10,7 +10,6 @@ export class CenteredCube extends BaseExercise {
   
   constructor() {
     super();
-
     this.cube = createRedCube();
     this.scene.add(this.cube);
   }

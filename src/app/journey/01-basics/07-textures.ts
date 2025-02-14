@@ -16,7 +16,7 @@ export class TextureTest extends OrbitControlledExercise {
   
   constructor(view: RenderView) {
     super(view);
-
+    this.enableAutoRotation();
     this.loader = AssetLoader.getInstance();
 
     this.minecraftTexture = this.loadMinecrafTexture();

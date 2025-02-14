@@ -8,6 +8,7 @@ export default class AnimatedExercise extends BaseExercise {
   private animationLoop: AnimationLoop;
 
   public isAnimated: boolean = true;
+  
   constructor() {
     super();
 

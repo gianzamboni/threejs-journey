@@ -1,4 +1,5 @@
 import { LoadingData } from "../utils/assets-loader";
+import { sleep } from "../utils/sleep";
 
 export class LoadingScreen {
 
@@ -8,7 +9,7 @@ export class LoadingScreen {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = 'fixed top-0 left-0 right-0 bottom-0 flex justify-center flex-col items-center text-white text-2xl bg-black bg-opacity-50 hidden transition-all duration-300 w-full';
+    this.container.className = 'fixed top-0 left-0 right-0 bottom-0 flex justify-center flex-col items-center text-white text-2xl bg-opacity-50 bg-black  transition-[opacity] duration-300 w-full hidden';
     parent.appendChild(this.container);
 
     const textRow = document.createElement('div');
@@ -48,6 +49,7 @@ export class LoadingScreen {
 
   async hide() {
     this.container.style.opacity = '0';
+    await sleep(310);
     this.container.classList.add('hidden');
   }
 }

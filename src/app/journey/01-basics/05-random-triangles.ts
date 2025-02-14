@@ -10,6 +10,8 @@ export class RandomTraingles extends OrbitControlledExercise {
 
   constructor(view: RenderView) {
     super(view);
+    this.enableAutoRotation();
+    
     const geometry = this.generateTriangleGeometry();
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
     this.triangles = new THREE.Mesh(geometry, material);
