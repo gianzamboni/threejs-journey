@@ -1,4 +1,5 @@
 import DebugUI from "@/app/layout/debug-ui";
+import { capitalize } from "@/app/utils/text-utils";
 import GUI, { Controller } from "lil-gui";
 
 export type CustomizableController = {
@@ -7,6 +8,7 @@ export type CustomizableController = {
   isCallable?: boolean;
   initialValue?: any;
   folderPath?: string;
+  eventArgs?: any;
   configuration?: {
     min?: number;
     max?: number;
@@ -93,9 +95,22 @@ export class CustomizablePropertiesManager {
 
   private registerControllersForDictionary(dictionary: RegisteredDictionaries) {
     const instanceDict = this.instance[dictionary.name];
-    Object.entries(instanceDict).forEach((key, value) => {
-      console.log(key, value);
+    const propertyName = dictionary.name;
+    const controllers: CustomizableController[] = [];
+
+    Object.keys(instanceDict).forEach(key => {
+      dictionary.controllers.default?.forEach(controller => {
+        const newController: CustomizableController = { ...controller};
+        newController.propertyPath = `${key}.${controller.propertyPath}`;
+        newController.folderPath = controller.folderPath ? `${controller.folderPath}/${capitalize(key)}` : capitalize(key);
+        newController.eventArgs = [key];
+        
+        console.log(newController);
+        controllers.push(newController);
+      });
     });
+
+    this.addProperty(propertyName, controllers);
   }
 
   private addControllers(registeredProperty: RegisteredProperty) {
@@ -181,7 +196,9 @@ export class CustomizablePropertiesManager {
     }
     Object.entries(controller.configuration).forEach(([key, value]) => {
       if(key === 'onChange' || key === 'onFinishChange') {
-        guiController[key](this.instance[value as keyof Controller].bind(this.instance))
+        guiController[key](() => {
+          this.instance[value as keyof Controller](controller.eventArgs);
+        })
       } else {
         guiController[key as keyof Controller](value);
       }
@@ -198,7 +215,7 @@ export class CustomizablePropertiesManager {
     if(!folderPath) {
       return this.gui;
     }
-    
+
     return folderPath.split('/').reduce((folder: GUI, folderName: string) => {
       const existingFolder = folder.folders.find(f => f._title === folderName);
       if(existingFolder) {
