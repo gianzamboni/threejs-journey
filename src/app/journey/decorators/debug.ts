@@ -53,17 +53,26 @@ export function DebugFPS(_: any, _1: string, descriptor: PropertyDescriptor) {
 }
 
 
-export function Customizable(folderPath: string, controllers: CustomizableController[]) {
+export function Customizable(controllers: CustomizableController[]) {
   return function(target: any, property: string) {
     const propertiesManager = getCustomizablePropertiesManager(target.constructor);
-    propertiesManager.addProperty(folderPath, property, controllers);
+    propertiesManager.addProperty(property, controllers);
   }
 }
 
 export function Callable(folderPath: string, name: string) {
-  return function(target: any, property: string, descriptor: PropertyDescriptor) {
+  return function(target: any, property: string, _: PropertyDescriptor) {
     const propertiesManager = getCustomizablePropertiesManager(target.constructor);
-    propertiesManager.addCallable(folderPath, property, name, descriptor.value);
+    propertiesManager.addCallable(folderPath, property, name);
+  }
+}
+
+export function CustomizableEntries(controllers: {
+  default: CustomizableController[];
+}) {
+  return function(target: any, property: string) {
+    const propertiesManager = getCustomizablePropertiesManager(target.constructor);
+    propertiesManager.addPropertyToValues(property, controllers);
   }
 }
 

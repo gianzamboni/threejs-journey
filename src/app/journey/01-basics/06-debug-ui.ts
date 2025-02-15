@@ -8,8 +8,9 @@ import gsap from 'gsap';
 export class DebugUITest extends OrbitControlledExercise {
   public static id = 'debug-ui';
 
-  @Customizable('Awesome Cube', [{
+  @Customizable([{
       propertyPath: 'position.y',
+      folderPath: 'Awesome Cube',
       configuration: {
         min: -3,
         max: 3,
@@ -18,20 +19,23 @@ export class DebugUITest extends OrbitControlledExercise {
       }
   }, {
     propertyPath: 'visible',
+    folderPath: 'Awesome Cube',
     configuration: {
       name: 'Visible'
     }
   }])
   private cube: THREE.Mesh;
 
-  @Customizable('Awesome Cube', [{
+  @Customizable([{
     propertyPath: 'wireframe',
+    folderPath: 'Awesome Cube',
     configuration: {
       name: 'Wireframe',
     }
   }, {
     propertyPath: 'color',
     isColor: true,
+    folderPath: 'Awesome Cube',
     configuration: {
       name: 'Color',
       onChange: 'updateMaterialColor'
@@ -39,9 +43,10 @@ export class DebugUITest extends OrbitControlledExercise {
   }])
   private material: THREE.MeshBasicMaterial;
 
-  @Customizable('Awesome Cube', [{
+  @Customizable([{
     propertyPath: 'subdivisions',
     initialValue: 1,
+    folderPath: 'Awesome Cube',
     configuration: {
       min: 1,
       max: 20,

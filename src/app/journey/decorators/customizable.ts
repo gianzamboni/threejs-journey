@@ -6,6 +6,7 @@ export type CustomizableController = {
   isColor?: boolean;
   isCallable?: boolean;
   initialValue?: any;
+  folderPath?: string;
   configuration?: {
     min?: number;
     max?: number;
@@ -18,8 +19,14 @@ export type CustomizableController = {
 
 type RegisteredProperty = {
   name: string;
-  folderPath: string;
   controllers: CustomizableController[];
+}
+
+type RegisteredDictionaries = {
+  name: string;
+  controllers: {
+    default?: CustomizableController[]
+  };
 }
 
 type CustomizableData = {
@@ -31,7 +38,6 @@ type Callable = {
   propertyName: string;
   folderPath: string;
   name: string;
-  value: Function;
 }
 
 export class CustomizablePropertiesManager {
@@ -44,18 +50,25 @@ export class CustomizablePropertiesManager {
   private registeredProperties: RegisteredProperty[];
   private registeredCallables: Callable[];
 
+  private registeredDictionaries: RegisteredDictionaries[];
+
   constructor() {  
     this.registeredProperties = [];
     this.registeredCallables = [];
+    this.registeredDictionaries = [];
     this.debugObject = {};
   }
 
   init(instance: any, debugUI: DebugUI) {
     this.gui = debugUI.gui;
     this.instance = instance;
+
+    this.registeredDictionaries.forEach((dictionary) => {
+      this.registerControllersForDictionary(dictionary);
+    });
+
     this.registeredProperties.forEach((property) => {
-      const folder = this.getFolder(property.folderPath);
-      this.addControllers(folder, property);
+      this.addControllers(property);
     });
 
     this.registeredCallables.forEach((callable) => {
@@ -64,28 +77,41 @@ export class CustomizablePropertiesManager {
     });
   }
 
-  addProperty(folderPath: string, property: string, controllers: CustomizableController[]) {
+  addProperty(property: string, controllers: CustomizableController[]) {
     this.registeredProperties.push({
       name: property,
-      folderPath,
       controllers
     });
   }
 
-  private addControllers(folder: GUI, registeredProperty: RegisteredProperty) {
+  addPropertyToValues(property: string, controllers: { default: CustomizableController[]; }) {
+    this.registeredDictionaries.push({
+      name: property,
+      controllers
+    });
+  }
+
+  private registerControllersForDictionary(dictionary: RegisteredDictionaries) {
+    const instanceDict = this.instance[dictionary.name];
+    Object.entries(instanceDict).forEach((key, value) => {
+      console.log(key, value);
+    });
+  }
+
+  private addControllers(registeredProperty: RegisteredProperty) {
     registeredProperty.controllers.forEach(controller =>{
+      const folder = this.getFolder(controller.folderPath);
       const customizableData = this.findCustomizableObject(registeredProperty.name, controller);
       let guiController = this.createGUIController(folder, customizableData, controller);
       this.applyConfiguration(guiController, controller);
     });
   }
 
-  public addCallable(folderPath: string, propertyName: string, name: string, value: Function) {
+  public addCallable(folderPath: string, propertyName: string, name: string) {
     this.registeredCallables.push({
       folderPath,
       propertyName,
       name,
-      value
     });
   }
 
@@ -110,7 +136,6 @@ export class CustomizablePropertiesManager {
   }
 
   private createDebugPath(propertyPathParts: string[], controller: CustomizableController, property: string) {
-    console.log('createDebugPath', propertyPathParts, controller, property);
     const [object, original] = propertyPathParts.reduce(([obj, original]: any, prop: string) => {
       if(obj[prop] === undefined) {
         obj[prop] = {};
@@ -118,7 +143,6 @@ export class CustomizablePropertiesManager {
       return [obj[prop], original[prop]];
     }, [this.debugObject, this.instance]);
 
-    console.log(this.debugObject, original[property]);
     if(original[property] === undefined && controller.initialValue !== undefined) {
       object[property] = controller.initialValue;
     } else if(original[property] !== undefined) {
@@ -169,9 +193,12 @@ export class CustomizablePropertiesManager {
       && ['onChange', 'onFinishChange'].some((event) => event in controller.configuration!);
   }
 
-  private getFolder(folderPath: string): GUI {
+  private getFolder(folderPath: string | undefined): GUI {
     if(this.gui === undefined) throw new Error('GUI not initialized');
-
+    if(!folderPath) {
+      return this.gui;
+    }
+    
     return folderPath.split('/').reduce((folder: GUI, folderName: string) => {
       const existingFolder = folder.folders.find(f => f._title === folderName);
       if(existingFolder) {

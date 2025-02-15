@@ -40,9 +40,10 @@ export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
 
-  @Customizable("Material", [
+  @Customizable([
     {
       propertyPath: 'metalness',
+      folderPath: 'Material',
       configuration: {
         min: 0,
         max: 1,
@@ -51,6 +52,7 @@ export class MaterialsTest extends OrbitControlledExercise {
       }
     }, {
       propertyPath: 'roughness',
+      folderPath: 'Material',
       configuration: {
         min: 0,
         max: 1,
@@ -59,6 +61,7 @@ export class MaterialsTest extends OrbitControlledExercise {
       }
     }, {
       propertyPath: 'transmission',
+      folderPath: 'Material',
       configuration: {
         min: 0,
         max: 1,
@@ -67,6 +70,7 @@ export class MaterialsTest extends OrbitControlledExercise {
       }
     }, {
       propertyPath: 'ior',
+      folderPath: 'Material',
       configuration: {
         min: 1,
         max: 2.5,
@@ -75,6 +79,7 @@ export class MaterialsTest extends OrbitControlledExercise {
       }
     }, {
       propertyPath: 'thickness',
+      folderPath: 'Material',      
       configuration: {
         min: 0,
         max: 1,
