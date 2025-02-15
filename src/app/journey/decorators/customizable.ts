@@ -103,9 +103,7 @@ export class CustomizablePropertiesManager {
         const newController: CustomizableController = { ...controller};
         newController.propertyPath = `${key}.${controller.propertyPath}`;
         newController.folderPath = controller.folderPath ? `${controller.folderPath}/${capitalize(key)}` : capitalize(key);
-        newController.eventArgs = [key];
-        
-        console.log(newController);
+        newController.eventArgs = [key];        
         controllers.push(newController);
       });
     });
@@ -196,8 +194,8 @@ export class CustomizablePropertiesManager {
     }
     Object.entries(controller.configuration).forEach(([key, value]) => {
       if(key === 'onChange' || key === 'onFinishChange') {
-        guiController[key](() => {
-          this.instance[value as keyof Controller](controller.eventArgs);
+        guiController[key]((newValue: any) => {
+          this.instance[value as keyof Controller](newValue, ...controller.eventArgs);
         })
       } else {
         guiController[key as keyof Controller](value);

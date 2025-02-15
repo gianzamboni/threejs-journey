@@ -20,6 +20,21 @@ export class LightsExercise extends OrbitControlledExercise {
         name: "On/Off",
         onChange: "toggleLight"
       },
+    }, {
+      propertyPath: "color",
+      isColor: true,
+      configuration: {
+        name: "Color",
+        onChange: "updateColor"
+      }
+    }, {
+      propertyPath: "intensity",
+      configuration: {
+        name: "Intensity",
+        min: 0,
+        max: 6,
+        step: 0.1
+      }
     }]
   })
   private ligths: Record<string, THREE.Light>;
@@ -107,8 +122,13 @@ export class LightsExercise extends OrbitControlledExercise {
     this.material.dispose();
   }
 
-  toggleLight(lightName: keyof typeof LightsExercise.prototype.ligths) {
+  toggleLight(newValue: boolean, lightName: keyof typeof LightsExercise.prototype.ligths) {
     const light = this.ligths[lightName];
-    light.visible = !light.visible;
+    light.visible = newValue;
+  }
+
+  updateColor(color: string, lightName: keyof typeof LightsExercise.prototype.ligths) {
+    const light = this.ligths[lightName];
+    light.color.set(new THREE.Color(color));
   }
 }

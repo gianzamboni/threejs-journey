@@ -73,7 +73,7 @@ export class DebugUITest extends OrbitControlledExercise {
     }
 
   updateMaterialColor(newColor: string) {
-    this.material.color.set(newColor);
+    this.material.color.set(new THREE.Color(newColor));
   }
 
   updateSubdivisions(subdivisions: number) {
