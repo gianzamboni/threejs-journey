@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
-import { Callable, Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
+import {  Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { Quality } from '@/app/layout/quality-selector';
@@ -139,25 +139,12 @@ export class MaterialsTest extends OrbitControlledExercise {
   private createMaterial() {
     return new THREE.MeshPhysicalMaterial({
       metalness: 0,
-      roughness: 0.5,
+      roughness: 0.1,
       transmission: 1,
       ior: 1.5,
       thickness: 0.5,
       side: this.qualityconfig.materialSide,
     });
-  }
-
-  @Callable('Quality', 'Low')
-  public simplify() {
-    this.geometries[0].dispose();
-    this.geometries[2].dispose();
-
-    this.geometries[0] = new THREE.SphereGeometry(0.5, 8, 8);
-    this.geometries[2] = new THREE.TorusGeometry(0.3, 0.2, 8, 16);
-
-    this.meshes[0].geometry = this.geometries[0];
-    this.meshes[2].geometry = this.geometries[2];
-    this.physicalMaterial.side = THREE.FrontSide;
   }
   
   async dispose() {
