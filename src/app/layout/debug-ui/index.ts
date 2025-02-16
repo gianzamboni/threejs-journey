@@ -68,6 +68,9 @@ export default class DebugUI {
       dataRow.dispose();
     });
     this.dataRows = {};
+    this.lilGui?.controllersRecursive().forEach(controller => {
+      controller.destroy();
+    });
     this.lilGui?.destroy();
     this.lilGui = null;
   }

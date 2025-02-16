@@ -20,24 +20,17 @@ export class DebugUITest extends OrbitControlledExercise {
   }, {
     propertyPath: 'visible',
     folderPath: 'Awesome Cube',
-    configuration: {
-      name: 'Visible'
-    }
   }])
   private cube: THREE.Mesh;
 
   @Customizable([{
     propertyPath: 'wireframe',
     folderPath: 'Awesome Cube',
-    configuration: {
-      name: 'Wireframe',
-    }
   }, {
     propertyPath: 'color',
     isColor: true,
     folderPath: 'Awesome Cube',
     configuration: {
-      name: 'Color',
       onChange: 'updateMaterialColor'
     }
   }])
@@ -52,7 +45,6 @@ export class DebugUITest extends OrbitControlledExercise {
       max: 20,
       step: 1,
       onFinishChange: 'updateSubdivisions',
-      name: 'Subdivisions'
     }
   }])
   private geometry: THREE.BoxGeometry;

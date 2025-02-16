@@ -1,11 +1,12 @@
 import DebugUI from "@/app/layout/debug-ui";
-import { capitalize } from "@/app/utils/text-utils";
+import { printable } from "@/app/utils/text-utils";
 import GUI, { Controller } from "lil-gui";
 
 export type CustomizableController = {
   propertyPath: string;
   isColor?: boolean;
   isCallable?: boolean;
+  isMaster?: boolean;
   initialValue?: any;
   folderPath?: string;
   eventArgs?: any;
@@ -19,6 +20,7 @@ export type CustomizableController = {
   };
 }
 
+
 type RegisteredProperty = {
   name: string;
   controllers: CustomizableController[];
@@ -27,9 +29,11 @@ type RegisteredProperty = {
 type RegisteredDictionaries = {
   name: string;
   controllers: {
-    default?: CustomizableController[]
+    [key: string]: CustomizableController[];
   };
 }
+
+export type RegexControllerDict = Record<string, CustomizableController[]>;
 
 type CustomizableData = {
   object: any;
@@ -52,6 +56,7 @@ export class CustomizablePropertiesManager {
   private registeredProperties: RegisteredProperty[];
   private registeredCallables: Callable[];
 
+  private processDictionaries: boolean;
   private registeredDictionaries: RegisteredDictionaries[];
 
   constructor() {  
@@ -59,15 +64,19 @@ export class CustomizablePropertiesManager {
     this.registeredCallables = [];
     this.registeredDictionaries = [];
     this.debugObject = {};
+    this.processDictionaries = true;
   }
 
   init(instance: any, debugUI: DebugUI) {
     this.gui = debugUI.gui;
     this.instance = instance;
-
-    this.registeredDictionaries.forEach((dictionary) => {
-      this.registerControllersForDictionary(dictionary);
-    });
+    
+    if(this.processDictionaries) {
+      this.registeredDictionaries.forEach((dictionary) => {
+        this.registerControllersForDictionary(dictionary);
+      });
+      this.processDictionaries = false;
+    };
 
     this.registeredProperties.forEach((property) => {
       this.addControllers(property);
@@ -79,6 +88,10 @@ export class CustomizablePropertiesManager {
     });
   }
 
+  dispose() {
+    this.gui?.destroy();
+  }
+
   addProperty(property: string, controllers: CustomizableController[]) {
     this.registeredProperties.push({
       name: property,
@@ -86,7 +99,7 @@ export class CustomizablePropertiesManager {
     });
   }
 
-  addPropertyToValues(property: string, controllers: { default: CustomizableController[]; }) {
+  addPropertyToValues(property: string, controllers: RegexControllerDict) {
     this.registeredDictionaries.push({
       name: property,
       controllers
@@ -96,19 +109,28 @@ export class CustomizablePropertiesManager {
   private registerControllersForDictionary(dictionary: RegisteredDictionaries) {
     const instanceDict = this.instance[dictionary.name];
     const propertyName = dictionary.name;
-    const controllers: CustomizableController[] = [];
+    const customizableControllers: CustomizableController[] = [];
 
     Object.keys(instanceDict).forEach(key => {
-      dictionary.controllers.default?.forEach(controller => {
-        const newController: CustomizableController = { ...controller};
-        newController.propertyPath = `${key}.${controller.propertyPath}`;
-        newController.folderPath = controller.folderPath ? `${controller.folderPath}/${capitalize(key)}` : capitalize(key);
-        newController.eventArgs = [key];        
-        controllers.push(newController);
+      Object.entries(dictionary.controllers).forEach(([regex, controllers]) => {
+        const expression = new RegExp(regex);
+        if(expression.test(key)) {
+          controllers.forEach(controller => {
+            const newController: CustomizableController = { ...controller };
+            newController.propertyPath = `${key}.${controller.propertyPath}`;
+            newController.folderPath = controller.folderPath ? `${printable(key)}/${controller.folderPath}` : printable(key);
+            if(controller.eventArgs === undefined) {
+              newController.eventArgs = [key];
+            } else {
+              newController.eventArgs.unshift(key);
+            }
+            customizableControllers.push(newController);
+          });
+        }
       });
     });
 
-    this.addProperty(propertyName, controllers);
+    this.addProperty(propertyName, customizableControllers);
   }
 
   private addControllers(registeredProperty: RegisteredProperty) {
@@ -116,7 +138,7 @@ export class CustomizablePropertiesManager {
       const folder = this.getFolder(controller.folderPath);
       const customizableData = this.findCustomizableObject(registeredProperty.name, controller);
       let guiController = this.createGUIController(folder, customizableData, controller);
-      this.applyConfiguration(guiController, controller);
+      this.applyConfiguration(guiController, controller, customizableData, folder);
     });
   }
 
@@ -188,21 +210,37 @@ export class CustomizablePropertiesManager {
   }
 
 
-  private applyConfiguration(guiController: Controller, controller: CustomizableController) {
+  private applyConfiguration(guiController: Controller, controller: CustomizableController, customizableData: CustomizableData, folder: GUI) {
     if(!controller.configuration) {
-      return;
+      controller.configuration = {};
     }
     Object.entries(controller.configuration).forEach(([key, value]) => {
       if(key === 'onChange' || key === 'onFinishChange') {
         guiController[key]((newValue: any) => {
-          this.instance[value as keyof Controller](newValue, ...controller.eventArgs);
+          this.instance[value as keyof Controller](newValue, ...controller.eventArgs, customizableData.object);
+          if(controller.isMaster) {
+            this.toggleControllers(folder, newValue, guiController);
+          }
         })
       } else {
         guiController[key as keyof Controller](value);
       }
     });
+
+    if(!('name' in controller.configuration)) {
+      guiController.name(printable(customizableData.propertyName));
+    }
   }
   
+  private toggleControllers(folder: GUI, newValue: boolean, guiController: Controller) {
+    folder.controllersRecursive().forEach((controller) => {
+      if(newValue === true) {
+        controller.enable();
+      } else if(controller.$name !== guiController.$name) {
+        controller.disable();
+      }
+    });
+  }
   private controllerNeedsDebugObject(controller: CustomizableController) {
     return controller.configuration !== undefined 
       && ['onChange', 'onFinishChange'].some((event) => event in controller.configuration!);

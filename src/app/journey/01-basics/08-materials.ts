@@ -48,7 +48,6 @@ export class MaterialsTest extends OrbitControlledExercise {
         min: 0,
         max: 1,
         step: 0.0001,
-        name: 'Metalness'
       }
     }, {
       propertyPath: 'roughness',
@@ -57,7 +56,6 @@ export class MaterialsTest extends OrbitControlledExercise {
         min: 0,
         max: 1,
         step: 0.0001,
-        name: 'Roughness'
       }
     }, {
       propertyPath: 'transmission',
@@ -66,7 +64,6 @@ export class MaterialsTest extends OrbitControlledExercise {
         min: 0,
         max: 1,
         step: 0.0001,
-        name: 'Transmission'
       }
     }, {
       propertyPath: 'ior',
@@ -84,7 +81,6 @@ export class MaterialsTest extends OrbitControlledExercise {
         min: 0,
         max: 1,
         step: 0.0001,
-        name: 'Thickness'
       }
     }
   ])

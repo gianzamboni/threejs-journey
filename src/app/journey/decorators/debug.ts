@@ -3,7 +3,7 @@ import { ExerciseClass } from '@/app/journey/types';
 import RenderView from '@/app/layout/render-view';
 import DebugUI from '@/app/layout/debug-ui';
 import { Quality } from '@/app/layout/quality-selector';
-import { CustomizableController, CustomizablePropertiesManager } from './customizable';
+import { CustomizableController, CustomizablePropertiesManager, RegexControllerDict } from './customizable';
 
 type DebuggableExercise =  ExerciseClass & {
   isDebuggable: boolean;
@@ -30,7 +30,6 @@ export function Debuggable(constructor: ExerciseClass ): any {
     toggleDebug() {
       this.shouldDebug = !this.shouldDebug;
     }
-    
   }
 }
 
@@ -67,9 +66,7 @@ export function Callable(folderPath: string, name: string) {
   }
 }
 
-export function CustomizableEntries(controllers: {
-  default: CustomizableController[];
-}) {
+export function CustomizableEntries(controllers: RegexControllerDict) {
   return function(target: any, property: string) {
     const propertiesManager = getCustomizablePropertiesManager(target.constructor);
     propertiesManager.addPropertyToValues(property, controllers);
