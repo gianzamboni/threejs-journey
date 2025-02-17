@@ -19,7 +19,7 @@ export default class OrbitControlledExercise extends AnimatedExercise {
     )
   }
 
-  frame(_: Timer) {
+  frame(_: Timer): void {
     this.controls.update();
   }
 

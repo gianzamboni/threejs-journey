@@ -4,7 +4,7 @@ export class Overlay {
 
   private static instances: Record<string, Overlay> = {};
 
-  public addEventListener: Function;
+  public addEventListener: typeof HTMLElement.prototype.addEventListener;
   static getInstance(parent: HTMLElement) {
     if(parent.id === '')  {
       throw new Error('Parent element must have an id');

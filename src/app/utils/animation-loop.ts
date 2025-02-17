@@ -8,11 +8,13 @@ enum AnimationStatus {
   Running,
 }
 
+type TickFunction = (timer: Timer) => void;
+
 export class AnimationLoop {  
   private animationStatus: AnimationStatus;
-  private tick: Function;
+  private tick: TickFunction;
   private timer: Timer
-  constructor(tick: Function) {
+  constructor(tick: TickFunction) {
     this.animationStatus = AnimationStatus.Stopped;
     this.timer = new Timer();
     this.tick = tick;
@@ -31,15 +33,6 @@ export class AnimationLoop {
       window.requestAnimationFrame(() => this.animate(view));
     } else if(this.animationStatus === AnimationStatus.Stopping) {
       this.animationStatus = AnimationStatus.Stopped;
-    }
-  }
-
-
-  private waitTillStopped(resolve: Function) {
-    if(this.animationStatus === AnimationStatus.Stopped) {
-      resolve();
-    } else {
-      setTimeout(() => this.waitTillStopped(resolve), 100);
     }
   }
 

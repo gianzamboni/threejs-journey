@@ -4,9 +4,9 @@ export async function sleep(ms: number) {
 
 
 export function waitForCondition(condition: () => boolean) {
-  const helper = (resolve: Function) => {
+  const helper = (resolve: (_: unknown) => void) => {
     if(condition()) {
-      resolve();
+      resolve(undefined);
     } else {
       setTimeout(() => helper(resolve), 500);
     }

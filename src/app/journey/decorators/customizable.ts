@@ -217,7 +217,7 @@ export class CustomizablePropertiesManager {
     Object.entries(controller.configuration).forEach(([key, value]) => {
       if(key === 'onChange' || key === 'onFinishChange') {
         guiController[key]((newValue: any) => {
-          this.instance[value as keyof Controller](newValue, ...controller.eventArgs, customizableData.object);
+          this.instance[value as keyof Controller](newValue, ...(controller.eventArgs ?? []) , customizableData.object);
           if(controller.isMaster) {
             this.toggleControllers(folder, newValue, guiController);
           }

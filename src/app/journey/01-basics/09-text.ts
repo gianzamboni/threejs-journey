@@ -3,7 +3,6 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { AssetLoader } from "@/app/utils/assets-loader";
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
-import { Timer } from 'three/addons/misc/Timer.js';
 
 export class Text3D extends OrbitControlledExercise {
 
@@ -40,7 +39,7 @@ export class Text3D extends OrbitControlledExercise {
     this.generateText();
   }
 
-  frame(_: Timer): void {
+  frame(): void {
     this.donuts.forEach(donut => {
       donut.rotation.x += 0.01;
       donut.rotation.y += 0.01;

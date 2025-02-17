@@ -26,7 +26,7 @@ export default class DebugUI {
     this.container.classList.toggle('hidden');
   }
 
-  update(info: any) {
+  update(info: Record<string, number>) {
     const now = performance.now();
     if(now - this.lastGuiUpdate > 1000) {
       Object.keys(info).forEach(key => {

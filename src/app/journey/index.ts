@@ -1,5 +1,4 @@
 import { CenteredCube } from "./01-basics/01-centered-cube";
-import { ExerciseClass } from "./types";
 import { CubeGroup } from "./01-basics/02-cube-group";
 import { RotatingCube } from "./01-basics/03-rotating-cube";
 import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
@@ -9,6 +8,7 @@ import { TextureTest } from "./01-basics/07-textures";
 import { MaterialsTest } from "./01-basics/08-materials";
 import { Text3D } from "./01-basics/09-text";
 import { LightsExercise } from "./02-classic-techniques/01-lights";
+import { ExerciseClass } from "./types";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();

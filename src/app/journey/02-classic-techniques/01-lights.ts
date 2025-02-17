@@ -5,9 +5,38 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import RenderView from '@/app/layout/render-view';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
-import { CustomizableEntries, Debuggable } from '../decorators/debug';
+import { CustomizableEntries, DebugFPS, Debuggable } from '../decorators/debug';
 import { printable } from '@/app/utils/text-utils';
 import { CustomizableController } from '../decorators/customizable';
+import { Quality } from '@/app/layout/quality-selector';
+
+type QualityConfig = {
+  sphereSegments: number;
+  torus: {
+    radialSegments: number;
+    tubularSegments: number;
+  };
+  pointLightEnabled: boolean;
+}
+
+const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
+  [Quality.Low]: {
+    sphereSegments: 8,
+    torus: {
+      radialSegments: 8,
+      tubularSegments: 16,
+    },
+    pointLightEnabled: false,
+  },
+  [Quality.High]: {
+    sphereSegments: 64,
+    torus: {
+      radialSegments: 64,
+      tubularSegments: 128,
+    },
+    pointLightEnabled: true,
+  }
+}
 
 type Lights = {
   ambient: THREE.AmbientLight,
@@ -62,6 +91,7 @@ export class LightsExercise extends OrbitControlledExercise {
 
   public static id = 'lights';
 
+  private quality: QualityConfig;
   private material: THREE.MeshStandardMaterial;
   private animatedObjects: THREE.Mesh[];
   private plane: THREE.Mesh;
@@ -154,8 +184,9 @@ export class LightsExercise extends OrbitControlledExercise {
 
   private helpersVisibleStatus: HelperStatusDict;
 
-  constructor(view: RenderView) {
+  constructor(view: RenderView, quality: Quality) {
     super(view);
+    this.quality = QUALITY_CONFIG[quality];
     this.camera.position.set(2, 1, 3);
     this.material = new THREE.MeshStandardMaterial();
     this.material.roughness = 0.4;
@@ -177,6 +208,7 @@ export class LightsExercise extends OrbitControlledExercise {
     );
   }
 
+  @DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
 
@@ -226,17 +258,18 @@ export class LightsExercise extends OrbitControlledExercise {
     this.ligths.hemisphere.groundColor.set(new THREE.Color(color));
   }
 
-  updateLookAt(_: number, _1:string, lookAtCoords: any) {
+  updateLookAt(_: number, _1:string, lookAtCoords: {x: number, y: number, z: number}) {
     const newTarget = new THREE.Vector3(lookAtCoords.x, lookAtCoords.y, lookAtCoords.z);
     this.ligths.rectArea.lookAt(newTarget);
   }
   
   createAnimatedObjects() {
-    const objects = [
-      new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), this.material),
-      new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.75, 0.75), this.material),
-      new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.2, 32, 64), this.material),
-    ];
+    const geometries = [
+      new THREE.SphereGeometry(0.5, this.quality.sphereSegments, this.quality.sphereSegments),
+      new THREE.BoxGeometry(1, 1, 1, 1, 1, 1),
+      new THREE.TorusGeometry(0.3, 0.2, this.quality.torus.radialSegments, this.quality.torus.tubularSegments),
+    ]
+    const objects = geometries.map(geometry => new THREE.Mesh(geometry, this.material));
 
     objects[0].position.x = -1.5;
     objects[2].position.x = 1.5;
@@ -245,7 +278,7 @@ export class LightsExercise extends OrbitControlledExercise {
   }
 
   createPlane() {
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), this.material);
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5, 1, 1), this.material);
     plane.rotation.x = -Math.PI * 0.5;
     plane.position.y = -0.65;
     return plane;
@@ -256,9 +289,9 @@ export class LightsExercise extends OrbitControlledExercise {
       ambient: new THREE.AmbientLight(0xffffff, 0.2),
       directional: new THREE.DirectionalLight(0x00fffc, 0.9),
       hemisphere: new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.9),
-      point: new THREE.PointLight(0xff9000, 1.5, 0, 2),
+      point: new THREE.PointLight(0xff9000, 1.5, 0, 2/*0, 2*/),
       rectArea: new THREE.RectAreaLight(0x4e00ff, 6, 1, 1),
-      spot: new THREE.SpotLight(0x78ff00, 4.5, 0, Math.PI * 0.1, 0.25, 1)
+      spot: new THREE.SpotLight(0x78ff00, 4.5, 5, Math.PI * 0.1, 0.25, 1)
     };
 
     lights.directional.position.set(1, 0, 0);
@@ -268,7 +301,8 @@ export class LightsExercise extends OrbitControlledExercise {
 
     lights.rectArea.lookAt(0, 0, 0);
     lights.spot.target.position.set(-0.75, 0, 0);
-
+    
+    lights.point.visible = this.quality.pointLightEnabled;
     return lights;
   }
 
@@ -284,6 +318,10 @@ export class LightsExercise extends OrbitControlledExercise {
       acc[key as keyof Helpers] = true;
       return acc;
     }, {} as HelperStatusDict);
+
+    helpers.point.visible = this.quality.pointLightEnabled;
+    status.point = this.quality.pointLightEnabled;
+    
     return [helpers, status];
   }
 }

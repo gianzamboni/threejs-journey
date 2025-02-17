@@ -34,7 +34,7 @@ export class LoadingScreen {
     progressBar.appendChild(this.progress);
   }
 
-  async show(_: LoadingData) {
+  async show() {
     this.container.classList.remove('hidden');
     this.container.style.opacity = '1';
     this.label.innerHTML = '0%';

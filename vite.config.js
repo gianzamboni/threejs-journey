@@ -1,5 +1,6 @@
 import restart from 'vite-plugin-restart'
 import checker from 'vite-plugin-checker'
+import eslint from 'vite-plugin-eslint'
 
 import path from 'path';
 export default {
@@ -28,5 +29,6 @@ export default {
         // e.g. use TypeScript check
         typescript: true,
       }),
+      //eslint({ include: ['src/**/*.js', 'src/**/*.ts'] }) // Lint JS and TS files
     ],
 }

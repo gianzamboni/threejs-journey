@@ -80,11 +80,11 @@ export class AssetLoader extends EventTarget{
     return this.textureLoader.load(url);
   }
 
-  loadEnvironment(url: string, onLoad: (texture: THREE.Texture) => void) {
+  loadEnvironment(url: string, onLoad: (_: THREE.Texture) => void) {
     return this.rgbeLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 
-  loadFont(url: string, onLoad: (font: Font) => void) {
+  loadFont(url: string, onLoad: (_: Font) => void) {
     this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 }
