@@ -1,6 +1,8 @@
 import restart from 'vite-plugin-restart'
 import checker from 'vite-plugin-checker'
 import eslint from 'vite-plugin-eslint'
+import tailwindcss from "@tailwindcss/vite";
+
 
 import path from 'path';
 export default {
@@ -29,6 +31,7 @@ export default {
         // e.g. use TypeScript check
         typescript: true,
       }),
+      tailwindcss(),
       //eslint({ include: ['src/**/*.js', 'src/**/*.ts'] }) // Lint JS and TS files
     ],
 }

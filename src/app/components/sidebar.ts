@@ -41,13 +41,13 @@ export default class SideBar {
 
   private createPanel() {
     const panel = document.createElement('div');
-    panel.className = `w-64 transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 bottom-0 z-[60] border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
+    panel.className = `w-64 transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 z-[60] border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
     return panel;
   }
 
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
-    button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-sm ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} z-50`;
+    button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} z-50`;
     button.innerHTML = buttonTitle;
     button.onclick = this.toggleSidePanel.bind(this);
     return button;
