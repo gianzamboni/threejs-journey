@@ -24,6 +24,9 @@ export default {
     emptyOutDir: true, // Empty the folder first
     sourcemap: true // Add sourcemap
   },
+  esbuild: {
+    target: 'es6'
+  },
   plugins:
     [
       restart({ restart: ['static/**',] }), // Restart server on static file change

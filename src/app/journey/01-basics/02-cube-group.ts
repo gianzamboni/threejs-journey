@@ -1,10 +1,11 @@
 import * as THREE from 'three';
-import BaseExercise from "../exercises/base-exercise";
+import { Exercise } from '@/app/decorators/exercise';
+import BaseExercise from '@/app/types/exercises/base-exercise';
 
-export class CubeGroup extends BaseExercise {
-
-  public static id = 'object-transformation';
-  
+@Exercise({
+  id: 'object-transformation'
+})
+export class CubeGroup extends BaseExercise {  
   private group: THREE.Group;
   private axesHelper: THREE.AxesHelper;
   

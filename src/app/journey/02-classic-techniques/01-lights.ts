@@ -4,11 +4,12 @@ import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUnifo
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import RenderView from '@/app/layout/render-view';
-import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 // import { CustomizableEntries, DebugFPS, Debuggable } from '../decorators/debug';
 // import { printable } from '@/app/utils/text-utils';
 // import { CustomizableController } from '../decorators/customizable';
 import { Quality } from '@/app/layout/quality-selector';
+import { Exercise } from '@/app/decorators/exercise';
+import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
 type QualityConfig = {
   sphereSegments: number;
@@ -87,10 +88,10 @@ type HelperStatusDict = Record<keyof Helpers, boolean>;
 // }
 
 //@Debuggable
+@Exercise({
+  id: 'lights'
+})
 export class LightsExercise extends OrbitControlledExercise {
-
-  public static id = 'lights';
-
   private quality: QualityConfig;
   private material: THREE.MeshStandardMaterial;
   private animatedObjects: THREE.Mesh[];

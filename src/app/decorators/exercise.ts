@@ -1,19 +1,16 @@
-import BaseExercise from "../types/exercises/base-exercise";
-import DebugUI from "../layout/debug-ui";
-import { Quality } from "../layout/quality-selector";
-import RenderView from "../layout/render-view";
+import { ExerciseClass } from "../types/exercise";
 
-type ExerciseMetadata = {
+type ExerciseInitialMetadata = {
   id: string;
+  descriptions?: string[];
 }
 
-export type ExerciseClass = new (renderView: RenderView, quality: Quality, debugUI? : DebugUI) => BaseExercise;
+export type ExerciseMetadata = Required<ExerciseInitialMetadata>;
 
-export function Exercise(data: ExerciseMetadata) {
+export function Exercise(data: ExerciseInitialMetadata) {
   return function<T extends ExerciseClass>(target: T, context: ClassDecoratorContext) {
-    //console.log('Exercise', data, target, context);
     context.metadata.id = data.id;
-    //console.log(context.metadata);
+    context.metadata.descriptions = data.descriptions ?? [];
     return target;
   }
 }

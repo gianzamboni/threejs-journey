@@ -4,7 +4,8 @@ import { JOURNEY, Section } from "@/app/journey";
 import { pascalCaseToText } from "@/app/utils/text-utils";
 import { Collapsable } from "@/app/components/collapsable";
 import { CSS_CLASSES } from "@/theme";
-import { ExerciseClass } from "@/app/journey/types";
+import { ExerciseClass } from "../types/exercise";
+import { getMetadata } from "../decorators/exercise";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;
@@ -38,8 +39,9 @@ export default class Menu extends EventTarget {
 
   private createExerciseItem(exercise: ExerciseClass) {
     const exerciseItem = document.createElement('li');
-    exerciseItem.id = exercise.id;
-    exerciseItem.textContent = pascalCaseToText(exercise.id);
+    const metadata = getMetadata(exercise);
+    exerciseItem.id = metadata.id;
+    exerciseItem.textContent = pascalCaseToText(metadata.id);
     exerciseItem.className = 'cursor-pointer ml-2';
     exerciseItem.addEventListener('click', () => {
       const selectedClasses = [

@@ -1,12 +1,13 @@
 import * as THREE from 'three';
-import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
 import { AssetLoader } from '@/app/utils/assets-loader';
+import { Exercise } from '@/app/decorators/exercise';
+import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
+@Exercise({
+  id: 'textures'
+})
 export class TextureTest extends OrbitControlledExercise {
-
-  public static id = 'textures';
-
   private minecraftTexture: THREE.Texture;
   private geometry: THREE.BoxGeometry;
   private material: THREE.MeshBasicMaterial;

@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { AssetLoader } from "@/app/utils/assets-loader";
-import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
+import { Exercise } from '@/app/decorators/exercise';
+import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
+@Exercise({
+  id: 'text-3d'
+})
 export class Text3D extends OrbitControlledExercise {
-
-  public static id = 'text-3d';
-
   private loader: AssetLoader;
 
   private matcapTexture: THREE.Texture;

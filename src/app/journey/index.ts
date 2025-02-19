@@ -1,3 +1,5 @@
+import { getMetadata } from "../decorators/exercise";
+import { ExerciseClass } from "../types/exercise";
 import { CenteredCube } from "./01-basics/01-centered-cube";
 import { CubeGroup } from "./01-basics/02-cube-group";
 import { RotatingCube } from "./01-basics/03-rotating-cube";
@@ -8,16 +10,16 @@ import { TextureTest } from "./01-basics/07-textures";
 import { MaterialsTest } from "./01-basics/08-materials";
 import { Text3D } from "./01-basics/09-text";
 import { LightsExercise } from "./02-classic-techniques/01-lights";
-import { ExerciseClass } from "./types";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
   sections.forEach(section => {
     section.exercises.forEach(exercise => {
-      if (ids.has(exercise.id)) {
-        throw new Error(`Duplicate exercise id: ${exercise.id}`);
+      const meta = getMetadata(exercise);
+      if (ids.has(meta.id)) {
+        throw new Error(`Duplicate exercise id: ${meta.id}`);
       }
-      ids.add(exercise.id);
+      ids.add(meta.id);
     });
   });
 }

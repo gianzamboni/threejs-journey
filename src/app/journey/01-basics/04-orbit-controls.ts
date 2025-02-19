@@ -1,12 +1,13 @@
 import * as THREE from "three";
-import OrbitControlledExercise from "@/app/journey/exercises/orbit-controlled-exercise";
 import { createRedCube } from "@/app/utils/default-shapes";
 import RenderView from "@/app/layout/render-view";
+import { Exercise } from "@/app/decorators/exercise";
+import OrbitControlledExercise from "@/app/types/exercises/orbit-controlled-exercise";
 
+@Exercise({
+  id: 'cameras'
+})
 export class OrbitControlsTest extends OrbitControlledExercise {
-
-  public static id = 'cameras';
- 
   private cube: THREE.Mesh;
 
   constructor(view: RenderView) {

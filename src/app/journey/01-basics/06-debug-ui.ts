@@ -1,13 +1,14 @@
 import * as THREE from 'three';
-import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
-//import { Callable, Customizable, Debuggable } from '@/app/journey/decorators/debug';
 import RenderView from '@/app/layout/render-view';
 import gsap from 'gsap';
+import { Exercise } from '@/app/decorators/exercise';
+import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
 //@Debuggable
+@Exercise({
+  id: 'debug-ui'
+})
 export class DebugUITest extends OrbitControlledExercise {
-  public static id = 'debug-ui';
-
   // @Customizable([{
   //     propertyPath: 'position.y',
   //     folderPath: 'Awesome Cube',

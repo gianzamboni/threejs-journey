@@ -9,13 +9,11 @@ declare global {
 }
 
 (Symbol as any).metadata ??= Symbol.for('Symbol.metadata');
-
-const _metadata = Object.create(null);
-
-if (typeof Symbol === 'function' && Symbol.metadata)
-  Object.defineProperty(this, Symbol.metadata, {
-    enumerable: true,
+if (typeof Symbol === 'function' && Symbol.metadata) {
+  Object.defineProperty(Symbol, 'metadata', {
+    value: Symbol.metadata,
     configurable: true,
-    writable: true,
-    value: _metadata
+    enumerable: false,
+    writable: false
   });
+}

@@ -1,10 +1,11 @@
 import * as THREE from 'three';
-import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
 //import {  Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { Quality } from '@/app/layout/quality-selector';
+import { Exercise } from '@/app/decorators/exercise';
+import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
 type QualityConfig = {
   sphereSegments: number;
@@ -32,11 +33,12 @@ const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
     materialSide: THREE.DoubleSide,
   }
 }
+
+@Exercise({
+  id: 'materials'
+})
 //@Debuggable
 export class MaterialsTest extends OrbitControlledExercise {
-
-  public static id = 'materials';
-  
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
 

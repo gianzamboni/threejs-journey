@@ -1,20 +1,20 @@
 /// <reference types="vite/client" />
-
+import '../pollyfills/symbol-pollyfill';
 import Menu from "@/app/layout/menu";
 import { InfoBox } from "./app/layout/info-box";
 import RenderView from "./app/layout/render-view";
 import DebugUI from "./app/layout/debug-ui";
-import BaseExercise from "./app/journey/exercises/base-exercise";
 import { AssetLoader, LoadingData } from "./app/utils/assets-loader";
 import { LoadingScreen } from "./app/layout/loading-screen";
 import { ErrorData, WarningBox } from "./app/layout/warning-box";
 import { Quality, qualityFromString, QualitySelector } from "./app/layout/quality-selector";
-import { ExerciseClass } from "./app/journey/types";
+import { getMetadata } from "./app/decorators/exercise";
+import { ExerciseClass } from './app/types/exercise';
 
 let tappedTwice = false;
 
 const loader: AssetLoader = AssetLoader.getInstance();
-let activeExercise: BaseExercise | undefined;
+let activeExercise: InstanceType<ExerciseClass> | undefined;
 let activeQuality: Quality;
 
 let menu: Menu;
@@ -73,13 +73,14 @@ async function selectExercise(newExercise: ExerciseClass) {
     loader.reset();
     await activeExercise.dispose();
   }
-  
-  window.history.pushState({exerciseId: newExercise.id}, '', `?exercise=${newExercise.id}&quality=${activeQuality}`);
+
+  const metadata = getMetadata(newExercise);
+  window.history.pushState({exerciseId: metadata.id}, '', `?exercise=${metadata.id}&quality=${activeQuality}`);
   activeExercise = new newExercise(renderView, activeQuality, debugUI);
 
   activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
 
-  infoBox.updateContent(activeExercise);
+  infoBox.updateContent(metadata);
   renderView.run(activeExercise);
   if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
     toggleDebug();

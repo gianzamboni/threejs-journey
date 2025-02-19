@@ -1,7 +1,11 @@
 import * as THREE from "three";
-import OrbitControlledExercise from "@/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "@/app/layout/render-view";
+import { Exercise } from "@/app/decorators/exercise";
+import OrbitControlledExercise from "@/app/types/exercises/orbit-controlled-exercise";
 
+@Exercise({
+  id: 'geometries'
+})
 export class RandomTraingles extends OrbitControlledExercise {
 
   public static id = 'geometries';

@@ -1,6 +1,6 @@
-import AnimatedExercise from '@/app/journey/exercises/animated-exercise';
-import { Exercise } from '@/app/journey/types';
 import * as THREE from 'three';
+import { Exercise } from '../types/exercise';
+import AnimatedExercise from '../types/exercises/animated-exercise';
 
 export default class RenderView {
 

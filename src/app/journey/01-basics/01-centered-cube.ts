@@ -1,11 +1,12 @@
 import * as THREE from 'three';
-import  BaseExercise from '@/app/journey/exercises/base-exercise';
 import { createRedCube } from '@/app/utils/default-shapes';
+import { Exercise } from '@/app/decorators/exercise';
+import BaseExercise from '@/app/types/exercises/base-exercise';
 
+@Exercise({
+  id: 'first-three-js-project'
+})
 export class CenteredCube extends BaseExercise {
-
-  public static id: string = 'first-threejs-project';
-
   private cube: THREE.Mesh;
   
   constructor() {

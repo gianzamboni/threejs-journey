@@ -6,9 +6,6 @@ export default class BaseExercise extends EventTarget {
   public scene: THREE.Scene;
   public camera: THREE.PerspectiveCamera;
 
-  public isDebuggable: boolean = false;
-  public isAnimated: boolean = false;
-
   constructor() {
     super();
     [this.scene, this.camera] = this.createBasicScene();
@@ -38,8 +35,4 @@ export default class BaseExercise extends EventTarget {
       this.scene.remove(child);  
     });
   }; 
-
-  toggleDebug() {
-    throw new Error('Method not implemented.');
-  }
 }

@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { createRedCube } from '@/app/utils/default-shapes';
-import AnimatedExercise from '@/app/journey/exercises/animated-exercise';
+import { Exercise } from '@/app/decorators/exercise';
+import AnimatedExercise from '@/app/types/exercises/animated-exercise';
 
+@Exercise({
+  id: 'animations'
+})
 export class RotatingCube extends AnimatedExercise {
-
-  public static id = 'animations';
-  
+    
   private cube: THREE.Mesh;
 
   constructor() {
