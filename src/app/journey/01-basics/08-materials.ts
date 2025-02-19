@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import RenderView from '@/app/layout/render-view';
-import {  Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
+//import {  Customizable, DebugFPS, Debuggable } from '@/app/journey/decorators/debug';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { Quality } from '@/app/layout/quality-selector';
@@ -32,7 +32,7 @@ const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
     materialSide: THREE.DoubleSide,
   }
 }
-@Debuggable
+//@Debuggable
 export class MaterialsTest extends OrbitControlledExercise {
 
   public static id = 'materials';
@@ -40,50 +40,50 @@ export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
 
-  @Customizable([
-    {
-      propertyPath: 'metalness',
-      folderPath: 'Material',
-      configuration: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }, {
-      propertyPath: 'roughness',
-      folderPath: 'Material',
-      configuration: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }, {
-      propertyPath: 'transmission',
-      folderPath: 'Material',
-      configuration: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }, {
-      propertyPath: 'ior',
-      folderPath: 'Material',
-      configuration: {
-        min: 1,
-        max: 2.5,
-        step: 0.0001,
-        name: 'IOR'
-      }
-    }, {
-      propertyPath: 'thickness',
-      folderPath: 'Material',      
-      configuration: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }
-  ])
+  // @Customizable([
+  //   {
+  //     propertyPath: 'metalness',
+  //     folderPath: 'Material',
+  //     configuration: {
+  //       min: 0,
+  //       max: 1,
+  //       step: 0.0001,
+  //     }
+  //   }, {
+  //     propertyPath: 'roughness',
+  //     folderPath: 'Material',
+  //     configuration: {
+  //       min: 0,
+  //       max: 1,
+  //       step: 0.0001,
+  //     }
+  //   }, {
+  //     propertyPath: 'transmission',
+  //     folderPath: 'Material',
+  //     configuration: {
+  //       min: 0,
+  //       max: 1,
+  //       step: 0.0001,
+  //     }
+  //   }, {
+  //     propertyPath: 'ior',
+  //     folderPath: 'Material',
+  //     configuration: {
+  //       min: 1,
+  //       max: 2.5,
+  //       step: 0.0001,
+  //       name: 'IOR'
+  //     }
+  //   }, {
+  //     propertyPath: 'thickness',
+  //     folderPath: 'Material',      
+  //     configuration: {
+  //       min: 0,
+  //       max: 1,
+  //       step: 0.0001,
+  //     }
+  //   }
+  // ])
   private physicalMaterial: THREE.MeshPhysicalMaterial;
 
   private geometries: THREE.BufferGeometry[];
@@ -109,7 +109,7 @@ export class MaterialsTest extends OrbitControlledExercise {
     this.scene.add(...this.meshes);
   }
 
-  @DebugFPS
+  //@DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
     const elapsed = timer.getElapsed();

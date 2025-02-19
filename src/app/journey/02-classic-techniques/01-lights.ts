@@ -5,9 +5,9 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import RenderView from '@/app/layout/render-view';
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
-import { CustomizableEntries, DebugFPS, Debuggable } from '../decorators/debug';
-import { printable } from '@/app/utils/text-utils';
-import { CustomizableController } from '../decorators/customizable';
+// import { CustomizableEntries, DebugFPS, Debuggable } from '../decorators/debug';
+// import { printable } from '@/app/utils/text-utils';
+// import { CustomizableController } from '../decorators/customizable';
 import { Quality } from '@/app/layout/quality-selector';
 
 type QualityConfig = {
@@ -56,37 +56,37 @@ type Helpers = {
 
 type HelperStatusDict = Record<keyof Helpers, boolean>;
 
-const POSITION_CONFIG = {
-  min: -5,
-  max: 5,
-  step: 0.001
-}
+// const POSITION_CONFIG = {
+// min: -5,
+// max: 5,
+// step: 0.001
+// }
 
-const SIZE_CONFIG = {
-  min: 0.1,
-  max: 5,
-  step: 0.01
-}
+// const SIZE_CONFIG = {
+//   min: 0.1,
+//   max: 5,
+//   step: 0.01
+// }
 
-function positinalConfig(propertyName: string, onChange?: string, initialValue?: number) {
-  return ['x', 'y', 'z'].map(axis => {
-    const controller: CustomizableController = {
-      propertyPath: `${propertyName}.${axis}`,
-      folderPath: printable(propertyName),
-      configuration: { ...POSITION_CONFIG }
-    }
+// function positinalConfig(propertyName: string, onChange?: string, initialValue?: number) {
+//   return ['x', 'y', 'z'].map(axis => {
+//     const controller: CustomizableController = {
+//       propertyPath: `${propertyName}.${axis}`,
+//       folderPath: printable(propertyName),
+//       configuration: { ...POSITION_CONFIG }
+//     }
 
-    if(onChange) {
-      controller.configuration!.onChange = onChange;
-    }
-    if(initialValue !== undefined) {
-      controller.initialValue = initialValue;
-    }
-    return controller;
-  });
-}
+//     if(onChange) {
+//       controller.configuration!.onChange = onChange;
+//     }
+//     if(initialValue !== undefined) {
+//       controller.initialValue = initialValue;
+//     }
+//     return controller;
+//   });
+// }
 
-@Debuggable
+//@Debuggable
 export class LightsExercise extends OrbitControlledExercise {
 
   public static id = 'lights';
@@ -96,90 +96,90 @@ export class LightsExercise extends OrbitControlledExercise {
   private animatedObjects: THREE.Mesh[];
   private plane: THREE.Mesh;
 
-  @CustomizableEntries({
-    '.*': [{
-      propertyPath: "onOff",
-      initialValue: true,
-      isMaster: true,
-      configuration: {
-        name: "On/Off",
-        onChange: "toggleLight"
-      },
-    }, {
-      propertyPath: "color",
-      isColor: true,
-      configuration: {
-        onChange: "updateColor"
-      }
-    }, {
-      propertyPath: "intensity",
-      configuration: {
-        min: 0,
-        max: 6,
-        step: 0.01
-      }
-    }],
-    'directional|point|rectArea|spot': positinalConfig('position'),
-    'hemisphere': [{
-      propertyPath: "groundColor",
-      isColor: true,
-      configuration: {
-        onChange: "updateGroundColor"
-      }
-    }],
-    'point|spot': [{
-      propertyPath: "distance",
-      configuration: {
-        min: 0,
-        max: 10,
-        step: 0.01
-      }
-    }, {
-      propertyPath: "decay",
-      configuration: {
-        min: 0,
-        max: 2,
-        step: 0.01
-      }
-    }],
-    'rectArea': [{
-      propertyPath: "width",
-      configuration: SIZE_CONFIG
-    }, {
-      propertyPath: "height",
-      configuration: SIZE_CONFIG
-    },
-    ...positinalConfig('lookAt', 'updateLookAt', 0),
-    ],
-    'spot': [{
-      propertyPath: "angle",
-      configuration: {
-        min: 0,
-        max: Math.PI * 0.5,
-        step: 0.01
-      }
-    }, {
-      propertyPath: "penumbra",
-      configuration: {
-        min: 0,
-        max: 1,
-        step: 0.01
-      }
-    }, 
-    ...positinalConfig('target.position')
-    ]
-  })
+  // @CustomizableEntries({
+  //   '.*': [{
+  //     propertyPath: "onOff",
+  //     initialValue: true,
+  //     isMaster: true,
+  //     configuration: {
+  //       name: "On/Off",
+  //       onChange: "toggleLight"
+  //     },
+  //   }, {
+  //     propertyPath: "color",
+  //     isColor: true,
+  //     configuration: {
+  //       onChange: "updateColor"
+  //     }
+  //   }, {
+  //     propertyPath: "intensity",
+  //     configuration: {
+  //       min: 0,
+  //       max: 6,
+  //       step: 0.01
+  //     }
+  //   }],
+  //   'directional|point|rectArea|spot': positinalConfig('position'),
+  //   'hemisphere': [{
+  //     propertyPath: "groundColor",
+  //     isColor: true,
+  //     configuration: {
+  //       onChange: "updateGroundColor"
+  //     }
+  //   }],
+  //   'point|spot': [{
+  //     propertyPath: "distance",
+  //     configuration: {
+  //       min: 0,
+  //       max: 10,
+  //       step: 0.01
+  //     }
+  //   }, {
+  //     propertyPath: "decay",
+  //     configuration: {
+  //       min: 0,
+  //       max: 2,
+  //       step: 0.01
+  //     }
+  //   }],
+  //   'rectArea': [{
+  //     propertyPath: "width",
+  //     configuration: SIZE_CONFIG
+  //   }, {
+  //     propertyPath: "height",
+  //     configuration: SIZE_CONFIG
+  //   },
+  //   ...positinalConfig('lookAt', 'updateLookAt', 0),
+  //   ],
+  //   'spot': [{
+  //     propertyPath: "angle",
+  //     configuration: {
+  //       min: 0,
+  //       max: Math.PI * 0.5,
+  //       step: 0.01
+  //     }
+  //   }, {
+  //     propertyPath: "penumbra",
+  //     configuration: {
+  //       min: 0,
+  //       max: 1,
+  //       step: 0.01
+  //     }
+  //   }, 
+  //   ...positinalConfig('target.position')
+  //   ]
+  // })
   private ligths: Lights;
 
-  @CustomizableEntries({
-    '.*': [{
-      propertyPath: "visible",
-      initialValue: true,
-      configuration: {
-        name: "Show helper",
-      }
-    }]
-  })
+  // @CustomizableEntries({
+  //   '.*': [{
+  //     propertyPath: "visible",
+  //     initialValue: true,
+  //     configuration: {
+  //       name: "Show helper",
+  //     }
+  //   }]
+  // })
   private helpers: Helpers;
 
   private helpersVisibleStatus: HelperStatusDict;
@@ -208,7 +208,7 @@ export class LightsExercise extends OrbitControlledExercise {
     );
   }
 
-  @DebugFPS
+  //@DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
 
@@ -266,7 +266,7 @@ export class LightsExercise extends OrbitControlledExercise {
   createAnimatedObjects() {
     const geometries = [
       new THREE.SphereGeometry(0.5, this.quality.sphereSegments, this.quality.sphereSegments),
-      new THREE.BoxGeometry(1, 1, 1, 1, 1, 1),
+      new THREE.BoxGeometry(0.75, 0.75, 0.75, 1, 1, 1),
       new THREE.TorusGeometry(0.3, 0.2, this.quality.torus.radialSegments, this.quality.torus.tubularSegments),
     ]
     const objects = geometries.map(geometry => new THREE.Mesh(geometry, this.material));
