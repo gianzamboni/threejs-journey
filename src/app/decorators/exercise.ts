@@ -13,6 +13,17 @@ export function Exercise(id: string) {
   }
 }
 
+export function Description(descriptions: string[]) {
+  return function<T extends ExerciseClass>(target: T, context: ClassDecoratorContext) {
+    if(context.metadata.descriptions === undefined) {
+      context.metadata.descriptions = [] as string[];
+    }
+    const targetDescriptions = context.metadata.descriptions as string[];
+    targetDescriptions.unshift(...descriptions);
+    return target;
+  }
+}
+
 export function getMetadata(target: ExerciseClass): ExerciseMetadata {
   return target[Symbol.metadata] as ExerciseMetadata;
 }
