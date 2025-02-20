@@ -3,9 +3,7 @@ import { createRedCube } from '@/app/utils/default-shapes';
 import { Exercise } from '@/app/decorators/exercise';
 import BaseExercise from '@/app/types/exercises/base-exercise';
 
-@Exercise({
-  id: 'first-three-js-project'
-})
+@Exercise('first-three-js-project')
 export class CenteredCube extends BaseExercise {
   private cube: THREE.Mesh;
   

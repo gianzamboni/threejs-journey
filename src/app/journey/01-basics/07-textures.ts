@@ -4,9 +4,7 @@ import { AssetLoader } from '@/app/utils/assets-loader';
 import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
-@Exercise({
-  id: 'textures'
-})
+@Exercise('textures')
 export class TextureTest extends OrbitControlledExercise {
   private minecraftTexture: THREE.Texture;
   private geometry: THREE.BoxGeometry;

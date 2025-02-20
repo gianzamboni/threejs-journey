@@ -5,9 +5,7 @@ import RenderView from '@/app/layout/render-view';
 import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
-@Exercise({
-  id: 'text-3d'
-})
+@Exercise('text-3d')
 export class Text3D extends OrbitControlledExercise {
   private loader: AssetLoader;
 

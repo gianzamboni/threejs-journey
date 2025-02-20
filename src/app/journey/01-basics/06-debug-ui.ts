@@ -5,9 +5,7 @@ import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
 
 //@Debuggable
-@Exercise({
-  id: 'debug-ui'
-})
+@Exercise('debug-ui')
 export class DebugUITest extends OrbitControlledExercise {
   // @Customizable([{
   //     propertyPath: 'position.y',

@@ -88,9 +88,7 @@ type HelperStatusDict = Record<keyof Helpers, boolean>;
 // }
 
 //@Debuggable
-@Exercise({
-  id: 'lights'
-})
+@Exercise('lights')
 export class LightsExercise extends OrbitControlledExercise {
   private quality: QualityConfig;
   private material: THREE.MeshStandardMaterial;

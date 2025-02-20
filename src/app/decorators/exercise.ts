@@ -1,16 +1,14 @@
 import { ExerciseClass } from "../types/exercise";
 
-type ExerciseInitialMetadata = {
+export type ExerciseMetadata = {
   id: string;
   descriptions?: string[];
 }
 
-export type ExerciseMetadata = Required<ExerciseInitialMetadata>;
 
-export function Exercise(data: ExerciseInitialMetadata) {
+export function Exercise(id: string) {
   return function<T extends ExerciseClass>(target: T, context: ClassDecoratorContext) {
-    context.metadata.id = data.id;
-    context.metadata.descriptions = data.descriptions ?? [];
+    context.metadata.id = id;
     return target;
   }
 }

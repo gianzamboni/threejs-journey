@@ -34,9 +34,7 @@ const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
   }
 }
 
-@Exercise({
-  id: 'materials'
-})
+@Exercise('materials')
 //@Debuggable
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;

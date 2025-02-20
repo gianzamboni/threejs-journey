@@ -30,16 +30,17 @@ export class InfoBox {
   updateContent(exercise: ExerciseMetadata) {
     this.collapsable.updateTitle(pascalCaseToText(exercise.id));
     const parser = new DOMParser();
-    if(exercise.descriptions.length === 0) {
+    const descriptions = exercise.descriptions ?? [];
+    if(descriptions.length === 0) {
       this.collapsable.replaceContent([]);
       return;
     }
     
-    const htmlSpans = exercise.descriptions.map((description) => {
+    const htmlSpans = descriptions.map((description: string) => {
       return parser.parseFromString(description, 'text/html').body as HTMLElement; 
     });
     const container = document.createElement('div');
-    htmlSpans.forEach((span) => container.appendChild(span));
+    htmlSpans.forEach((span: HTMLElement) => container.appendChild(span));
     container.className ='px-5 py-3';
     this.collapsable.replaceContent([container]);
   }

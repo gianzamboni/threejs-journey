@@ -4,9 +4,7 @@ import RenderView from "@/app/layout/render-view";
 import { Exercise } from "@/app/decorators/exercise";
 import OrbitControlledExercise from "@/app/types/exercises/orbit-controlled-exercise";
 
-@Exercise({
-  id: 'cameras'
-})
+@Exercise('cameras')
 export class OrbitControlsTest extends OrbitControlledExercise {
   private cube: THREE.Mesh;
 

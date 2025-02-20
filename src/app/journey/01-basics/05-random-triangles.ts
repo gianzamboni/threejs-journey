@@ -3,9 +3,7 @@ import RenderView from "@/app/layout/render-view";
 import { Exercise } from "@/app/decorators/exercise";
 import OrbitControlledExercise from "@/app/types/exercises/orbit-controlled-exercise";
 
-@Exercise({
-  id: 'geometries'
-})
+@Exercise('geometries')
 export class RandomTraingles extends OrbitControlledExercise {
 
   public static id = 'geometries';

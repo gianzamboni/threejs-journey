@@ -4,9 +4,7 @@ import { createRedCube } from '@/app/utils/default-shapes';
 import { Exercise } from '@/app/decorators/exercise';
 import AnimatedExercise from '@/app/types/exercises/animated-exercise';
 
-@Exercise({
-  id: 'animations'
-})
+@Exercise('animations')
 export class RotatingCube extends AnimatedExercise {
     
   private cube: THREE.Mesh;
