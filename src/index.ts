@@ -34,9 +34,7 @@ function toggleDebug(event?: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
   }
-  if(ExerciseMetadata.isDebuggable(activeExercise)) {
-    debugUI.toggle(activeExercise);
-  } 
+  debugUI.toggle(activeExercise);
 }
 
 function doubleTapHandler() {
@@ -80,7 +78,7 @@ async function selectExercise(newExercise: ExerciseClass) {
 
   activeExercise = new newExercise(renderView, activeQuality);
   updateURL(activeExercise);
- // debugUI.createControllers(activeExercise);
+  debugUI.createControllers(activeExercise);
   infoBox.updateContent(activeExercise);
   renderView.run(activeExercise);
   if(ExerciseMetadata.isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {

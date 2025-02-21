@@ -16,16 +16,16 @@ export default class DebugUI {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = `text-white justify-items-end`;
+    this.container.className = `text-white justify-items-end hidden`;
     this.container.innerHTML = ``;
     parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
   }
 
-  toggle(exercise: Exercise) {
+  toggle(_: Exercise) {
     this.lastGuiUpdate = performance.now();
     this.container.classList.toggle('hidden');
-    console.log(ExerciseMetadata.get(exercise));
+
   }
 
   update(info: Record<string, number>) {
