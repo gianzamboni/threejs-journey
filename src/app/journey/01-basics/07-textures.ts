@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import RenderView from '@/app/layout/render-view';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Exercise } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
+import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 
 @Exercise('textures')
 export class TextureTest extends OrbitControlledExercise {

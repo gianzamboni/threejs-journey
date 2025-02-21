@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 export default class BaseExercise extends EventTarget {
   
-  public descriptions: string[] = [];
   public scene: THREE.Scene;
   public camera: THREE.PerspectiveCamera;
 

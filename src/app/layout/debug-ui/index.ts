@@ -1,5 +1,7 @@
 import GUI from "lil-gui";
 import { GraphPanel } from "./graph-panel";
+import { Exercise } from "@/app/types/exercise";
+import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
 
 type DataRow = GraphPanel;
 
@@ -18,12 +20,12 @@ export default class DebugUI {
     this.container.innerHTML = ``;
     parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
-    this.toggle();
   }
 
-  toggle() {
+  toggle(exercise: Exercise) {
     this.lastGuiUpdate = performance.now();
     this.container.classList.toggle('hidden');
+    console.log(ExerciseMetadata.get(exercise));
   }
 
   update(info: Record<string, number>) {
@@ -73,5 +75,13 @@ export default class DebugUI {
     });
     this.lilGui?.destroy();
     this.lilGui = null;
+  }
+
+  public createControllers(exercise: Exercise) {
+    const gui = this.gui;
+    console.log('createControllers', gui);
+    console.log('createControllers', exercise);
+    //const gui = this.gui;
+    //controllers.init(gui);
   }
 }

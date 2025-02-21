@@ -5,7 +5,7 @@ import { pascalCaseToText } from "@/app/utils/text-utils";
 import { Collapsable } from "@/app/components/collapsable";
 import { CSS_CLASSES } from "@/theme";
 import { ExerciseClass } from "../types/exercise";
-import { getMetadata } from "../decorators/exercise";
+import { ExerciseMetadata } from "../utils/exercise-metadata";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;
@@ -39,9 +39,9 @@ export default class Menu extends EventTarget {
 
   private createExerciseItem(exercise: ExerciseClass) {
     const exerciseItem = document.createElement('li');
-    const metadata = getMetadata(exercise);
-    exerciseItem.id = metadata.id;
-    exerciseItem.textContent = pascalCaseToText(metadata.id);
+    const id = ExerciseMetadata.getId(exercise);
+    exerciseItem.id = id;
+    exerciseItem.textContent = pascalCaseToText(id);
     exerciseItem.className = 'cursor-pointer ml-2';
     exerciseItem.addEventListener('click', () => {
       const selectedClasses = [

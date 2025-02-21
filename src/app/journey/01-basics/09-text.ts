@@ -3,7 +3,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { AssetLoader } from "@/app/utils/assets-loader";
 import RenderView from '@/app/layout/render-view';
 import { Exercise } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
+import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 
 @Exercise('text-3d')
 export class Text3D extends OrbitControlledExercise {

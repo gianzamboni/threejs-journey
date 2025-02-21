@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Exercise } from '@/app/decorators/exercise';
-import BaseExercise from '@/app/types/exercises/base-exercise';
+import BaseExercise from '@/app/journey/exercises/base-exercise';
 
 @Exercise('object-transformation')
 export class CubeGroup extends BaseExercise {  

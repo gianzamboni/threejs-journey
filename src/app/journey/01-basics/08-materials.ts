@@ -5,7 +5,7 @@ import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { Quality } from '@/app/layout/quality-selector';
 import { Exercise } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
+import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 
 type QualityConfig = {
   sphereSegments: number;

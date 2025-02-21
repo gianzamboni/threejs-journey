@@ -8,13 +8,13 @@ import { AssetLoader, LoadingData } from "./app/utils/assets-loader";
 import { LoadingScreen } from "./app/layout/loading-screen";
 import { ErrorData, WarningBox } from "./app/layout/warning-box";
 import { Quality, qualityFromString, QualitySelector } from "./app/layout/quality-selector";
-import { getMetadata } from "./app/decorators/exercise";
-import { ExerciseClass } from './app/types/exercise';
+import { Exercise, ExerciseClass } from './app/types/exercise';
+import { ExerciseMetadata } from './app/utils/exercise-metadata';
 
 let tappedTwice = false;
 
 const loader: AssetLoader = AssetLoader.getInstance();
-let activeExercise: InstanceType<ExerciseClass> | undefined;
+let activeExercise: Exercise;
 let activeQuality: Quality;
 
 let menu: Menu;
@@ -34,9 +34,8 @@ function toggleDebug(event?: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
   }
-  if(activeExercise?.isDebuggable === true) {
-    activeExercise.toggleDebug();
-    debugUI.toggle();
+  if(ExerciseMetadata.isDebuggable(activeExercise)) {
+    debugUI.toggle(activeExercise);
   } 
 }
 
@@ -66,6 +65,11 @@ function showErrorMessage(evt: CustomEvent<ErrorData>) {
   warningBox.setMessage(evt.detail);
 }
 
+function updateURL(exercise: Exercise) { 
+  const id = ExerciseMetadata.getId(exercise);
+  window.history.pushState({exerciseId: id}, '', `?exercise=${id}&quality=${activeQuality}`);
+}
+
 async function selectExercise(newExercise: ExerciseClass) {
   if(activeExercise !== undefined) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
@@ -74,16 +78,14 @@ async function selectExercise(newExercise: ExerciseClass) {
     await activeExercise.dispose();
   }
 
-  const metadata = getMetadata(newExercise);
-  window.history.pushState({exerciseId: metadata.id}, '', `?exercise=${metadata.id}&quality=${activeQuality}`);
-  activeExercise = new newExercise(renderView, activeQuality, debugUI);
-
-  activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
-
-  infoBox.updateContent(metadata);
+  activeExercise = new newExercise(renderView, activeQuality);
+  updateURL(activeExercise);
+ // debugUI.createControllers(activeExercise);
+  infoBox.updateContent(activeExercise);
   renderView.run(activeExercise);
-  if(activeExercise.isDebuggable && import.meta.env.MODE === 'development') {
+  if(ExerciseMetadata.isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {
     toggleDebug();
+    activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
   }
 }
 
@@ -109,7 +111,7 @@ function setupListeners() {
 
   window.addEventListener('touch', () => {
     doubleTapHandler();
-    if(tappedTwice) {
+    if(tappedTwice && ExerciseMetadata.isDebuggable(activeExercise)) {
       toggleDebug();
     }
   });

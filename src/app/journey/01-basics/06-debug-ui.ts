@@ -2,24 +2,25 @@ import * as THREE from 'three';
 import RenderView from '@/app/layout/render-view';
 import gsap from 'gsap';
 import { Exercise } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
+import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
+import { Customizable } from '@/app/decorators/customizable';
 
-//@Debuggable
 @Exercise('debug-ui')
 export class DebugUITest extends OrbitControlledExercise {
-  // @Customizable([{
-  //     propertyPath: 'position.y',
-  //     folderPath: 'Awesome Cube',
-  //     configuration: {
-  //       min: -3,
-  //       max: 3,
-  //       step: 0.01,
-  //       name: 'Elevation',
-  //     }
-  // }, {
-  //   propertyPath: 'visible',
-  //   folderPath: 'Awesome Cube',
-  // }])
+  @Customizable({
+    'position': {
+      'y': {
+        folderPath: 'Awesome Cube',
+        constraints: {
+          min: -3,
+          max: 3,
+          step: 0.01,
+          label: 'Elevation',
+        }
+      }
+    },
+    'visible': { folderPath: 'Awesome Cube' }
+  })
   private cube: THREE.Mesh;
 
   // @Customizable([{

@@ -9,7 +9,7 @@ import RenderView from '@/app/layout/render-view';
 // import { CustomizableController } from '../decorators/customizable';
 import { Quality } from '@/app/layout/quality-selector';
 import { Exercise } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/types/exercises/orbit-controlled-exercise';
+import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 
 type QualityConfig = {
   sphereSegments: number;
