@@ -1,7 +1,7 @@
 import GUI from "lil-gui";
 import { GraphPanel } from "./graph-panel";
 import { Exercise } from "@/app/types/exercise";
-import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
+import { ControllerFactory } from "@/app/utils/controls-factory";
 
 type DataRow = GraphPanel;
 
@@ -66,9 +66,9 @@ export default class DebugUI {
 
   reset() {
     this.container.classList.add('hidden');
-    Object.entries(this.dataRows).forEach(([_, dataRow]) => {
-      dataRow.dispose();
-    });
+    for(const key in this.dataRows) {
+      this.dataRows[key].dispose();
+    }
     this.dataRows = {};
     this.lilGui?.controllersRecursive().forEach(controller => {
       controller.destroy();
@@ -79,9 +79,7 @@ export default class DebugUI {
 
   public createControllers(exercise: Exercise) {
     const gui = this.gui;
-    console.log('createControllers', gui);
-    console.log('createControllers', exercise);
-    //const gui = this.gui;
-    //controllers.init(gui);
+    const controllerFactory = new ControllerFactory(gui, exercise);
+    controllerFactory.create();
   }
 }

@@ -1,12 +1,13 @@
-import { CustomizableProperties } from "../decorators/customizable";
+import { ExerciseControllers } from "../decorators/customizable";
 import { ExerciseClass, Exercise } from "../types/exercise";
 
 export namespace ExerciseMetadata {
   export type ExerciseMetadata = {
     id?: string;
     descriptions?: string[];
-    controllersConfig?: CustomizableProperties;
+    controllersConfig?: ExerciseControllers;
     isAnimated?: boolean;
+    isDebuggable?: boolean;
   }
   
   export function get(target: ExerciseClass | Exercise): ExerciseMetadata {
@@ -33,11 +34,16 @@ export namespace ExerciseMetadata {
   
   export function isDebuggable(target: ExerciseClass | Exercise): boolean {
     const metadata = get(target);
-    return metadata.controllersConfig != undefined;
+    return metadata.isDebuggable ?? false;
   }
   
   export function isAnimated(target: ExerciseClass | Exercise): boolean {
     const metadata = get(target);
     return metadata.isAnimated ?? false;
+  }
+
+  export function getControllers(target: ExerciseClass | Exercise): ExerciseControllers {
+    const metadata = get(target);
+    return metadata.controllersConfig ?? {};
   }
 }

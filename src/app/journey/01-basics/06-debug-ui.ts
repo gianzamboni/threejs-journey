@@ -7,20 +7,20 @@ import { Customizable } from '@/app/decorators/customizable';
 
 @Exercise('debug-ui')
 export class DebugUITest extends OrbitControlledExercise {
-  @Customizable({
-    'position': {
-      'y': {
-        folderPath: 'Awesome Cube',
-        constraints: {
-          min: -3,
-          max: 3,
-          step: 0.01,
-          label: 'Elevation',
-        }
-      }
-    },
-    'visible': { folderPath: 'Awesome Cube' }
-  })
+  @Customizable([{
+    propertyPath: 'position.y',
+    folderPath: 'Awesome Cube',
+    settings: {
+      min: -3,
+      max: 3,
+      step: 0.01,
+      name: 'Elevation',
+    }
+  },{
+    propertyPath: 'visible', 
+    folderPath: 'Awesome Cube'
+  }
+  ])
   private cube: THREE.Mesh;
 
   // @Customizable([{
@@ -28,10 +28,10 @@ export class DebugUITest extends OrbitControlledExercise {
   //   folderPath: 'Awesome Cube',
   // }, {
   //   propertyPath: 'color',
-  //   isColor: true,
+  //   type: 'color',
   //   folderPath: 'Awesome Cube',
-  //   configuration: {
-  //     onChange: 'updateMaterialColor'
+  //   settings: {
+  //     onChange: (newColor: string) => { (this! as DebugUITest).updateMaterialColor(newColor) }
   //   }
   // }])
   private material: THREE.MeshBasicMaterial;
@@ -40,11 +40,11 @@ export class DebugUITest extends OrbitControlledExercise {
   //   propertyPath: 'subdivisions',
   //   initialValue: 1,
   //   folderPath: 'Awesome Cube',
-  //   configuration: {
+  //   settings: {
   //     min: 1,
   //     max: 20,
   //     step: 1,
-  //     onFinishChange: 'updateSubdivisions',
+  //     onFinishChange: (value: number) => { (this! as DebugUITest).updateSubdivisions(value)},
   //   }
   // }])
   private geometry: THREE.BoxGeometry;
