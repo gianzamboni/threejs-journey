@@ -3,7 +3,7 @@ import RenderView from '@/app/layout/render-view';
 import gsap from 'gsap';
 import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
-import { Customizable } from '@/app/decorators/customizable';
+import { Callable, Customizable } from '@/app/decorators/customizable';
 
 @Exercise('debug-ui')
 export class DebugUITest extends OrbitControlledExercise {
@@ -23,30 +23,31 @@ export class DebugUITest extends OrbitControlledExercise {
   ])
   private cube: THREE.Mesh;
 
-  // @Customizable([{
-  //   propertyPath: 'wireframe',
-  //   folderPath: 'Awesome Cube',
-  // }, {
-  //   propertyPath: 'color',
-  //   type: 'color',
-  //   folderPath: 'Awesome Cube',
-  //   settings: {
-  //     onChange: (newColor: string) => { (this! as DebugUITest).updateMaterialColor(newColor) }
-  //   }
-  // }])
+  @Customizable([{
+    propertyPath: 'wireframe',
+    folderPath: 'Awesome Cube',
+  }, {
+    propertyPath: 'color',
+    type: 'color',
+    folderPath: 'Awesome Cube',
+    settings: {
+      onChange: 'updateMaterialColor'
+    }
+  }])
   private material: THREE.MeshBasicMaterial;
 
-  // @Customizable([{
-  //   propertyPath: 'subdivisions',
-  //   initialValue: 1,
-  //   folderPath: 'Awesome Cube',
-  //   settings: {
-  //     min: 1,
-  //     max: 20,
-  //     step: 1,
-  //     onFinishChange: (value: number) => { (this! as DebugUITest).updateSubdivisions(value)},
-  //   }
-  // }])
+  @Customizable([{
+    propertyPath: 'subdivisions',
+    initialValue: 1,
+    folderPath: 'Awesome Cube',
+    settings: {
+      min: 1,
+      max: 20,
+      step: 1,
+      onFinishChange: 'updateSubdivisions',
+      name: 'Subdivisions'
+    }
+  }])
   private geometry: THREE.BoxGeometry;
 
   constructor(view: RenderView) {
@@ -59,7 +60,7 @@ export class DebugUITest extends OrbitControlledExercise {
     this.scene.add(this.cube);
   }
 
-  //@Callable('Awesome Cube', 'Spin')
+  @Callable('Awesome Cube', 'Spin')
   spin() {
       gsap.to(this.cube.rotation, { duration: 1, y: this.cube.rotation.y + Math.PI * 2 });
     }

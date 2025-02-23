@@ -3,6 +3,8 @@ export function pascalCaseToText(text: string) {
 }
 
 export function printable(propertyName: string): string {
-  const printableName = propertyName.replace(/([A-Z])/g, ' $1').trim();
+  
+  let printableName = propertyName.replace(/([A-Z])/g, ' $1').trim();
+  printableName = printableName.replace(/\./g, ' ');
   return printableName.charAt(0).toUpperCase() + printableName.slice(1);
 }

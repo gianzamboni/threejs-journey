@@ -18,7 +18,6 @@ export class ControllerFactory {
     this.exercise = exercise;
     this.exercise._ControllerFactory_debugObject = {};
     this.debugObject = this.exercise._ControllerFactory_debugObject;
-    console.log('debugObject', this.debugObject);
   }
 
   public create() {
@@ -37,11 +36,17 @@ export class ControllerFactory {
   private createController(key: string, config: ControllerConfig) {
     const folder = this.getFolder(config.folderPath);
     const customizableObject = this.findCustomizableObject(key, config);
-    const controller = folder.add(customizableObject.object, customizableObject.propertyName);
-    console.log(key, config.settings?.name, customizableObject);
-    for(let setting in config.settings) {
-        controller[setting as keyof Controller](config.settings[setting as keyof Controller] as Parameters<Controller[keyof Controller]>[0]);
-    }
+    const isColor = config.type === 'color';
+    const controller = folder[isColor? 'addColor':'add'](customizableObject.object, customizableObject.propertyName);
+
+    Object.entries(config.settings ?? {}).forEach(([setting, value]) => {
+      if (setting === 'onChange' || setting === 'onFinishChange') {
+        controller[setting as keyof Controller](this.exercise[value].bind(this.exercise));
+      } else {
+
+        controller[setting as keyof Controller](value);
+      }
+    });
 
     if(config.settings?.name === undefined) {
       controller.name(printable(customizableObject.propertyName));
@@ -70,12 +75,25 @@ export class ControllerFactory {
     }
 
     const path = config.propertyPath.split('.');
+    path.unshift(key);
     const propertyName = path.pop() as string;
 
     const object = path.reduce((object, property) => {
       return object[property];      
-    }, this.exercise[key]);
+    }, this.exercise);
 
+    if(this.needsDebugObject(config)) {
+      const propertyValue = object[propertyName] ?? config.initialValue;
+      if(propertyValue === undefined) {
+        throw new Error(`Customizable property ${config.propertyPath} should have an initial value`);
+      }
+      this.debugObject[`${key}.${config.propertyPath}`] = propertyValue;
+      return { object: this.debugObject, propertyName: `${key}.${config.propertyPath}` };
+    }
     return { object, propertyName };
+  }
+
+  private needsDebugObject(config: ControllerConfig) {
+    return config.settings !== undefined && (config.settings.onChange || config.settings.onFinishChange);
   }
 }

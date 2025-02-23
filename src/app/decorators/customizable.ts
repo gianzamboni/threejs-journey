@@ -1,8 +1,11 @@
 import { Controller } from "lil-gui";
 import { ExerciseMetadata } from "../utils/exercise-metadata";
 
-type Settings = {
-  [key in keyof Controller]?: Controller[key] extends Function ? Parameters<Controller[key]>[0] : never
+export type ControllerSettings = Omit<{
+  [key in keyof Controller]?: Controller[key] extends Function ? any : never;
+}, 'onChange' | 'onFinishChange'> & {
+  onChange?: string;
+  onFinishChange?: string;
 }
 
 export type ControllerConfig = {
@@ -10,7 +13,7 @@ export type ControllerConfig = {
   propertyPath?: string;  
   folderPath?: string;
   initialValue?: any;
-  settings?: Settings;
+  settings?: ControllerSettings;
 }
  
 export type ExerciseControllers = Record<string | symbol, ControllerConfig[]>;
@@ -31,7 +34,9 @@ function addControllersToMetadata(
     metadata.controllersConfig = {};
   } 
   const controllers = metadata.controllersConfig as ExerciseControllers;
-  controllers[name] = controllers[name] ?? [];
+  if(controllers[name] === undefined) {
+    controllers[name] = [];
+  }
   controllers[name].push(...newControllers);
 }
 
