@@ -17,3 +17,16 @@ export function Description(descriptions: string[]) {
     return target;
   }
 }
+
+export function OrbitControllerDescription(descriptions?: string[]) {
+  if(descriptions === undefined) {
+    descriptions = [];
+  }
+  return Description([
+    ...descriptions,
+    '<strong>Rotate:</strong> Click/Tap & drag',
+    '<strong>Zoom:</strong> Scroll or pinch',
+    '<strong>Pan:</strong> Two-finger Tap/Right click & drag',
+  ])
+
+}

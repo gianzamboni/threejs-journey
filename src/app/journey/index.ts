@@ -9,6 +9,7 @@ import { DebugUITest } from "./01-basics/06-debug-ui";
 import { TextureTest } from "./01-basics/07-textures";
 import { MaterialsTest } from "./01-basics/08-materials";
 import { Text3D } from "./01-basics/09-text";
+import { LightsExercise } from "./02-classic-techniques/01-lights";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -45,7 +46,7 @@ export const JOURNEY: Section[] = [{
 }, {
   id: 'classic-techniques',
   exercises: [
-    //LightsExercise,
+    LightsExercise,
     // Shadows,
     // BakedShadows,
     // HauntedHouse,

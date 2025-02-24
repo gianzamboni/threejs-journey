@@ -37,9 +37,15 @@ export class InfoBox {
     const htmlSpans = descriptions.map((description: string) => {
       return parser.parseFromString(description, 'text/html').body as HTMLElement; 
     });
-    const container = document.createElement('div');
-    htmlSpans.forEach((span: HTMLElement) => container.appendChild(span));
-    container.className ='px-5 py-3';
-    this.collapsable.replaceContent([container]);
+
+    if(htmlSpans.length === 0) {
+      this.collapsable.replaceContent([]);
+    } else {
+      const container = document.createElement('div');
+      htmlSpans.forEach((span: HTMLElement) => container.appendChild(span));
+      container.className ='px-5 py-3';
+
+      this.collapsable.replaceContent([container]);
+    }
   }
 }

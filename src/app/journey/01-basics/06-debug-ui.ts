@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import RenderView from '@/app/layout/render-view';
 import gsap from 'gsap';
-import { Exercise } from '@/app/decorators/exercise';
+import { Exercise, OrbitControllerDescription } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 import { Callable, Customizable } from '@/app/decorators/customizable';
 
 @Exercise('debug-ui')
+@OrbitControllerDescription()
 export class DebugUITest extends OrbitControlledExercise {
   @Customizable([{
     propertyPath: 'position.y',

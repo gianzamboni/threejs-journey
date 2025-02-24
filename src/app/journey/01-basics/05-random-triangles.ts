@@ -1,9 +1,10 @@
 import * as THREE from "three";
 import RenderView from "@/app/layout/render-view";
-import { Exercise } from "@/app/decorators/exercise";
+import { Exercise, OrbitControllerDescription } from "@/app/decorators/exercise";
 import OrbitControlledExercise from "@/app/journey/exercises/orbit-controlled-exercise";
 
 @Exercise('geometries')
+@OrbitControllerDescription()
 export class RandomTriangles extends OrbitControlledExercise {
 
   public static id = 'geometries';

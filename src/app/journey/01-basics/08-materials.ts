@@ -4,7 +4,7 @@ import RenderView from '@/app/layout/render-view';
 import { AssetLoader } from '@/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { Quality } from '@/app/layout/quality-selector';
-import { Exercise } from '@/app/decorators/exercise';
+import { Exercise, OrbitControllerDescription } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 import { Customizable } from '@/app/decorators/customizable';
 import { DebugFPS } from '@/app/decorators/debug';
@@ -22,6 +22,7 @@ const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
 }
 
 @Exercise('materials')
+@OrbitControllerDescription()
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
