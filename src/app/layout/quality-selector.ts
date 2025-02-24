@@ -6,11 +6,11 @@ export enum Quality {
 
 export function qualityFromString(quality: string | null) {
   switch (quality) {
-    case 'low':
-      return Quality.Low;
     case 'high':
-    default:
       return Quality.High;
+    case 'low':
+    default:
+      return Quality.Low;
   }
 } 
 export class QualitySelector extends EventTarget {

@@ -8,6 +8,7 @@ export namespace ExerciseMetadata {
     controllersConfig?: ExerciseControllers;
     isAnimated?: boolean;
     isDebuggable?: boolean;
+    shouldSendData?: boolean;
   }
   
   export function get(target: ExerciseClass | Exercise): ExerciseMetadata {

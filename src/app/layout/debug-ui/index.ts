@@ -2,6 +2,7 @@ import GUI from "lil-gui";
 import { GraphPanel } from "./graph-panel";
 import { Exercise } from "@/app/types/exercise";
 import { ControllerFactory } from "@/app/utils/controls-factory";
+import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
 
 type DataRow = GraphPanel;
 
@@ -22,10 +23,11 @@ export default class DebugUI {
     this.lastGuiUpdate = performance.now();
   }
 
-  toggle(_: Exercise) {
+  toggle(activeExercise: Exercise) {
     this.lastGuiUpdate = performance.now();
     this.container.classList.toggle('hidden');
-
+    const metadata = ExerciseMetadata.get(activeExercise);
+    metadata.shouldSendData = !this.container.classList.contains('hidden');
   }
 
   update(info: Record<string, number>) {

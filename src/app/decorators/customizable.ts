@@ -1,5 +1,5 @@
 import { Controller } from "lil-gui";
-import { ExerciseMetadata } from "../utils/exercise-metadata";
+import { initDebugMetadata } from "./debug";
 
 export type ControllerSettings = Omit<{
   [key in keyof Controller]?: Controller[key] extends Function ? any : never;
@@ -23,12 +23,7 @@ function addControllersToMetadata(
   newControllers: ControllerConfig[], 
   name: string | symbol
 ) {
-  const metadata = context.metadata as ExerciseMetadata.ExerciseMetadata;
-  if(metadata.isDebuggable === undefined) {
-    metadata.isDebuggable = true;
-    metadata.descriptions = metadata.descriptions ?? [];
-    metadata.descriptions.push('<strong>Toggle Debug</strong>: Double click/tap')
-  }
+  const metadata = initDebugMetadata(context);
 
   if(metadata.controllersConfig === undefined) {
     metadata.controllersConfig = {};
