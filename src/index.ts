@@ -26,7 +26,6 @@ let warningBox: WarningBox;
 let qualitySelector: QualitySelector;
 
 function updateDebugUI(evt: CustomEvent): void {
-  console.log('updateDebugUI', evt.detail);
   debugUI.update(evt.detail);
 }
 
@@ -82,9 +81,7 @@ async function selectExercise(newExercise: ExerciseClass) {
   debugUI.createControllers(activeExercise);
   infoBox.updateContent(activeExercise);
   renderView.run(activeExercise);
-  console.log("new exercise created0")
   if(ExerciseMetadata.isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {
-    console.log("Setting up debug listeners")
     activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
     toggleDebug();
   }
@@ -118,7 +115,7 @@ function setupListeners() {
   });
 
   qualitySelector.addEventListener('quality-changed', changeQuality as EventListener);
-  
+
 }
 
 function initAllGUIParts() {

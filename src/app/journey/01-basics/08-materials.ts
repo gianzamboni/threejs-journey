@@ -10,28 +10,13 @@ import { Customizable } from '@/app/decorators/customizable';
 import { DebugFPS } from '@/app/decorators/debug';
 
 type QualityConfig = {
-  sphereSegments: number;
-  torus: {
-    radialSegments: number;
-    tubularSegments: number;
-  };
-  materialSide: THREE.Side;
+ materialSide: THREE.Side;
 }
 const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
   [Quality.Low]: {
-    sphereSegments: 8,
-    torus: {
-      radialSegments: 8,
-      tubularSegments: 16,
-    },
     materialSide: THREE.FrontSide,
   },
   [Quality.High]: {
-    sphereSegments: 64,
-    torus: {
-      radialSegments: 64,
-      tubularSegments: 128,
-    },
     materialSide: THREE.DoubleSide,
   }
 }
@@ -101,9 +86,9 @@ export class MaterialsTest extends OrbitControlledExercise {
     this.physicalMaterial = this.createMaterial();
 
     this.geometries = [
-      new THREE.SphereGeometry(0.5, this.qualityconfig.sphereSegments, this.qualityconfig.sphereSegments),
+      new THREE.SphereGeometry(0.5, 64, 64),
       new THREE.PlaneGeometry(1, 1, 1, 1),
-      new THREE.TorusGeometry(0.3, 0.2, this.qualityconfig.torus.radialSegments, this.qualityconfig.torus.tubularSegments),
+      new THREE.TorusGeometry(0.3, 0.2, 64, 128),
     ];
 
     this.meshes = this.createMeshes();
