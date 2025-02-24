@@ -8,6 +8,7 @@ import { RandomTriangles } from "./01-basics/05-random-triangles";
 import { DebugUITest } from "./01-basics/06-debug-ui";
 import { TextureTest } from "./01-basics/07-textures";
 import { MaterialsTest } from "./01-basics/08-materials";
+import { Text3D } from "./01-basics/09-text";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -39,7 +40,7 @@ export const JOURNEY: Section[] = [{
     DebugUITest,
     TextureTest,
     MaterialsTest,
-    // Text3D
+    Text3D
   ]
 }, {
   id: 'classic-techniques',

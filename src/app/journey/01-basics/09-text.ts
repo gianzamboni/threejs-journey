@@ -4,6 +4,7 @@ import { AssetLoader } from "@/app/utils/assets-loader";
 import RenderView from '@/app/layout/render-view';
 import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
+import { Timer } from 'three/addons/misc/Timer.js';
 
 @Exercise('text-3d')
 export class Text3D extends OrbitControlledExercise {
@@ -38,7 +39,8 @@ export class Text3D extends OrbitControlledExercise {
     this.generateText();
   }
 
-  frame(): void {
+  frame(timer: Timer): void {
+    super.frame(timer);
     this.donuts.forEach(donut => {
       donut.rotation.x += 0.01;
       donut.rotation.y += 0.01;
