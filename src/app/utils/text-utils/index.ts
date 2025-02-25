@@ -8,3 +8,7 @@ export function printable(propertyName: string): string {
   printableName = printableName.replace(/\./g, ' ');
   return printableName.charAt(0).toUpperCase() + printableName.slice(1);
 }
+
+export function getPathArray(path: string): string[] {
+  return path.split('.');
+}

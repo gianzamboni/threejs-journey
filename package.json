@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.6",
     "@types/three": "^0.173.0",
+    "@vitest/ui": "^3.0.7",
     "eslint": "^9.20.1",
     "globals": "^15.15.0",
     "postcss": "^8.4.49",
@@ -30,6 +32,7 @@
     "vite": "^6.1.0",
     "vite-plugin-checker": "^0.8.0",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-restart": "^0.4.1"
+    "vite-plugin-restart": "^0.4.1",
+    "vitest": "^3.0.7"
   }
 }

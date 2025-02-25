@@ -1,7 +1,7 @@
+import { ControllerConfig } from "@/app/decorators/customizable";
+import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
+import { getPathArray, printable } from "@/app/utils/text-utils";
 import GUI, { Controller } from "lil-gui";
-import { ExerciseMetadata } from "./exercise-metadata";
-import { ControllerConfig } from "../decorators/customizable";
-import { printable } from "./text-utils";
 
 type CustomizableData = {
   object: any;
@@ -74,8 +74,9 @@ export class ControllerFactory {
       return { object: this.exercise, propertyName: key };
     }
 
-    const path = config.propertyPath.split('.');
+    const path = getPathArray(config.propertyPath);
     path.unshift(key);
+    console.log(path);
     const propertyName = path.pop() as string;
 
     const object = path.reduce((object, property) => {
@@ -97,3 +98,4 @@ export class ControllerFactory {
     return config.settings !== undefined && (config.settings.onChange || config.settings.onFinishChange);
   }
 }
+

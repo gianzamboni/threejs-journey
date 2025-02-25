@@ -10,6 +10,8 @@ import RenderView from '@/app/layout/render-view';
 import { Quality } from '@/app/layout/quality-selector';
 import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
+import { DebugFPS } from '@/app/decorators/debug';
+import { Customizable } from '@/app/decorators/customizable';
 
 type QualityConfig = {
   sphereSegments: number;
@@ -87,7 +89,6 @@ type HelperStatusDict = Record<keyof Helpers, boolean>;
 //   });
 // }
 
-//@Debuggable
 @Exercise('lights')
 export class LightsExercise extends OrbitControlledExercise {
   private quality: QualityConfig;
@@ -95,7 +96,16 @@ export class LightsExercise extends OrbitControlledExercise {
   private animatedObjects: THREE.Mesh[];
   private plane: THREE.Mesh;
 
-  // @CustomizableEntries({
+  @Customizable([
+    {
+      propertyPath: "/.*/.onOff",
+      initialValue: true,
+      type: 'master',
+      settings: {
+        name: "On/Off",
+        onChange: "toggleLight"
+      }
+    }])
   //   '.*': [{
   //     propertyPath: "onOff",
   //     initialValue: true,
@@ -207,7 +217,7 @@ export class LightsExercise extends OrbitControlledExercise {
     );
   }
 
-  //@DebugFPS
+  @DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
 

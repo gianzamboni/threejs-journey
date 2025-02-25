@@ -1,8 +1,8 @@
 import GUI from "lil-gui";
 import { GraphPanel } from "./graph-panel";
 import { Exercise } from "@/app/types/exercise";
-import { ControllerFactory } from "@/app/utils/controls-factory";
 import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
+import { ControllerFactory } from "./controls-factory";
 
 type DataRow = GraphPanel;
 
