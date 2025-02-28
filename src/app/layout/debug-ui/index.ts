@@ -33,10 +33,10 @@ export default class DebugUI {
   update(info: Record<string, number>) {
     const now = performance.now();
     if(now - this.lastGuiUpdate > 1000) {
-      Object.keys(info).forEach(key => {
+      for(const key of Object.keys(info)) {
         const dataRow = this.getDataRow(key);
         dataRow.update(info[key]);
-      });
+      }
       this.lastGuiUpdate = now;
     }
   }
@@ -72,9 +72,10 @@ export default class DebugUI {
       this.dataRows[key].dispose();
     }
     this.dataRows = {};
-    this.lilGui?.controllersRecursive().forEach(controller => {
+    const controllers = this.lilGui?.controllersRecursive() ?? [];
+    for(const controller of controllers) {
       controller.destroy();
-    });
+    }
     this.lilGui?.destroy();
     this.lilGui = null;
   }

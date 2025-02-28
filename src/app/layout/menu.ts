@@ -33,7 +33,7 @@ export default class Menu extends EventTarget {
     sidebar.addContent(menu);
     JOURNEY.forEach((section: Section) => {
       this.createSection(section, menu);
-    });
+    }
     return menu;
   }
 
@@ -82,11 +82,10 @@ export default class Menu extends EventTarget {
 
     const collapsable = new Collapsable(title);
     const exerciseList = document.createElement('ul');
-
-    section.exercises.forEach((exercise: ExerciseClass) => {
+    for(const exercise of section.exercises) {  
       const exerciseItem = this.createExerciseItem(exercise);
       exerciseList.appendChild(exerciseItem);
-    });
+    }
     collapsable.addContent(exerciseList);
     collapsable.addTo(menu);
     collapsable.toggle();

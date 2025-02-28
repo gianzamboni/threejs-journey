@@ -223,25 +223,25 @@ export class LightsExercise extends OrbitControlledExercise {
 
     const elapsed = timer.getElapsed();
     this.helpers.spot.update();
-    this.animatedObjects.forEach(object => {
+    for(const object of this.animatedObjects) {
       object.rotation.y = 0.1 * elapsed;
       object.rotation.x = 0.15 * elapsed;
-    });
+    }
   }
 
   async dispose() {
     await super.dispose();
-    Object.values(this.helpers).forEach(helper => {
+    for(const helper of Object.values(this.helpers)) {
       helper.dispose();
-    });
+    }
     this.ligths.spot.target.clear();
-    Object.values(this.ligths).forEach(light => {
+    for(const light of Object.values(this.ligths)) {
       light.dispose();
-    });
+    }
     this.plane.geometry.dispose();
-    this.animatedObjects.forEach(object => {
+    for(const object of this.animatedObjects) {
       object.geometry.dispose();
-    });
+    }
     this.material.dispose();
   }
 

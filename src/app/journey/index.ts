@@ -13,16 +13,16 @@ import { LightsExercise } from "./02-classic-techniques/01-lights";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
-  sections.forEach(section => {
-    section.exercises.forEach(exercise => {
+  for(const section of sections) {
+    for(const exercise of section.exercises) {
       const metadata = ExerciseMetadata.get(exercise);
       if(metadata.id === undefined) throw new Error('Exercise id is undefined');
       
       const id = metadata.id;
       if (ids.has(id)) throw new Error(`Duplicate exercise id: ${id}`);
       ids.add(id);
-    });
-  });
+    }
+  }
 }
 
 export type Section = {

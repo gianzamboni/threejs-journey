@@ -42,10 +42,10 @@ export class Text3D extends OrbitControlledExercise {
 
   frame(timer: Timer): void {
     super.frame(timer);
-    this.donuts.forEach(donut => {
-      donut.rotation.x += 0.01;
-      donut.rotation.y += 0.01;
-    });
+    for(const donut of this.donuts) {
+      donut.rotation.x += 0.005;
+      donut.rotation.y += 0.005;
+    }
   }
 
   generateDonuts() {

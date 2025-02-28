@@ -42,7 +42,9 @@ export class InfoBox {
       this.collapsable.replaceContent([]);
     } else {
       const container = document.createElement('div');
-      htmlSpans.forEach((span: HTMLElement) => container.appendChild(span));
+      for(const span of htmlSpans) {
+        container.appendChild(span);
+      }
       container.className ='px-5 py-3';
 
       this.collapsable.replaceContent([container]);

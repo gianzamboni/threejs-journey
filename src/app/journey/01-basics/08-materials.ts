@@ -101,10 +101,10 @@ export class MaterialsTest extends OrbitControlledExercise {
     super.frame(timer);
     const elapsed = timer.getElapsed();
 
-    this.meshes.forEach((mesh) => {
+    for(const mesh of this.meshes) {
       mesh.rotation.y = 0.01 * elapsed;
       mesh.rotation.x = -0.15 * elapsed;
-    });
+    }
   }
 
   private createMeshes() {

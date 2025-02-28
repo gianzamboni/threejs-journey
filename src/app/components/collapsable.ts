@@ -91,9 +91,9 @@ export class Collapsable {
     this.button.element.disabled = !this.isActive;
     if(this.isActive) {
       this.button.icon.classList.remove('hidden');
-      content!.forEach((element) => {
+      for(const element of content) {
         this.collapsable.appendChild(element);
-      });
+      }
     } else {
       this.button.icon.classList.add('hidden');
     }
@@ -117,9 +117,9 @@ export class Collapsable {
           }, { once: true });
         }, 0);
       }
-      this.button.toggle.forEach((className) => {
+      for(const className of this.button.toggle) {
         this.button.element.classList.toggle(className);
-      });
+      }
       this.button.icon.classList.toggle('rotate-[270deg]');
     }
   }

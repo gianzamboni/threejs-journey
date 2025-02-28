@@ -34,7 +34,7 @@ export class QualitySelector extends EventTarget {
     this.qualitySelector.appendChild(select);
 
     const options =[ Quality.High, Quality.Low ];
-    options.forEach((option) => {
+    for(const option of options) {
       const optionElement = document.createElement('option');
       optionElement.value = option.toString();
       optionElement.textContent = option.toString();
@@ -42,7 +42,7 @@ export class QualitySelector extends EventTarget {
         optionElement.selected = true;
       }
       select.appendChild(optionElement);
-    });
+    }
 
     parent.appendChild(this.qualitySelector);
   }
