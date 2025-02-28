@@ -21,7 +21,7 @@
     "noUncheckedSideEffectImports": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
   },
-  "include": ["src", "polyfills"]
+  "include": ["src", "polyfills", "test/app/utils/index.test.ts"]
 }
