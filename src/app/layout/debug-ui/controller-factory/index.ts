@@ -28,9 +28,9 @@ export class ControllerFactory {
   }
 
   public createControllers(key: string, controllersConfig: ControllerConfig[]) {
-    controllersConfig.forEach(config => {
+    for(const config of controllersConfig) {
       this.createController(key, config);
-    })
+    }
   }
 
   private createController(key: string, config: ControllerConfig) {
@@ -39,14 +39,14 @@ export class ControllerFactory {
     const isColor = config.type === 'color';
     const controller = folder[isColor? 'addColor':'add'](customizableObject.object, customizableObject.propertyName);
 
-    Object.entries(config.settings ?? {}).forEach(([setting, value]) => {
+    for(const [setting, value] of Object.entries(config.settings ?? {})) {
       if (setting === 'onChange' || setting === 'onFinishChange') {
         controller[setting as keyof Controller](this.exercise[value].bind(this.exercise));
       } else {
 
         controller[setting as keyof Controller](value);
       }
-    });
+    }
 
     if(config.settings?.name === undefined) {
       controller.name(printable(customizableObject.propertyName));

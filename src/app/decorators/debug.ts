@@ -1,9 +1,22 @@
 import { Timer } from "three/examples/jsm/Addons.js";
 import { ExerciseMetadata } from "../utils/exercise-metadata";
+import { Controller } from "lil-gui";
 
-export function initDebugMetadata(context: ClassFieldDecoratorContext | ClassMethodDecoratorContext): ExerciseMetadata.ExerciseMetadata {
+type LilGuiControllerConfig = Omit<{
+  [key in keyof Controller]?: Controller[key] extends Function ? any : never;
+}, 'onChange' | 'onFinishChange'> & {
+  onChange?: string;
+  onFinishChange?: string;
+}
+
+export type ControllerConfig = {
+  propertyPath: string;
+  type?: 'callable' | 'color';
+  settings?: LilGuiControllerConfig;
+}
+
+export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDecoratorContext | ClassFieldDecoratorContext): ExerciseMetadata.ExerciseMetadata {
   const metadata = context.metadata as ExerciseMetadata.ExerciseMetadata;
-  console.log(metadata);
   if(metadata.isDebuggable === undefined) {
     metadata.isDebuggable = true;
     metadata.shouldSendData = false;

@@ -2,8 +2,7 @@ import GUI from "lil-gui";
 import { GraphPanel } from "./graph-panel";
 import { Exercise } from "@/app/types/exercise";
 import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
-import { ControllerFactory } from "./controls-factory";
-
+import { ControllerFactory } from "./controller-factory";
 type DataRow = GraphPanel;
 
 export default class DebugUI {
