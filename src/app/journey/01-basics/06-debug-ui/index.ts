@@ -4,51 +4,18 @@ import gsap from 'gsap';
 import { Exercise, OrbitControllerDescription } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 import { Callable, Customizable } from '@/app/decorators/customizable';
+import { DEBUG_UI_MATERIAL_CONFIG, DEBUG_UI_GEOMETRY_CONFIG, DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 
 @Exercise('debug-ui')
 @OrbitControllerDescription()
 export class DebugUITest extends OrbitControlledExercise {
-  @Customizable([{
-    propertyPath: 'position.y',
-    folderPath: 'Awesome Cube',
-    settings: {
-      min: -3,
-      max: 3,
-      step: 0.01,
-      name: 'Elevation',
-    }
-  },{
-    propertyPath: 'visible', 
-    folderPath: 'Awesome Cube'
-  }
-  ])
+  @Customizable(DEBUG_UI_CUBE_CONFIG)
   private cube: THREE.Mesh;
 
-  @Customizable([{
-    propertyPath: 'wireframe',
-    folderPath: 'Awesome Cube',
-  }, {
-    propertyPath: 'color',
-    type: 'color',
-    folderPath: 'Awesome Cube',
-    settings: {
-      onChange: 'updateMaterialColor'
-    }
-  }])
+  @Customizable(DEBUG_UI_MATERIAL_CONFIG)
   private material: THREE.MeshBasicMaterial;
 
-  @Customizable([{
-    propertyPath: 'subdivisions',
-    initialValue: 1,
-    folderPath: 'Awesome Cube',
-    settings: {
-      min: 1,
-      max: 20,
-      step: 1,
-      onFinishChange: 'updateSubdivisions',
-      name: 'Subdivisions'
-    }
-  }])
+  @Customizable(DEBUG_UI_GEOMETRY_CONFIG)
   private geometry: THREE.BoxGeometry;
 
   constructor(view: RenderView) {

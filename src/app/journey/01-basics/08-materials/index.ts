@@ -8,6 +8,7 @@ import { Exercise, OrbitControllerDescription } from '@/app/decorators/exercise'
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 import { Customizable } from '@/app/decorators/customizable';
 import { DebugFPS } from '@/app/decorators/debug';
+import { PHYSICAL_MATERIAL_CONFIGS } from './debug-ui-configs';
 
 type QualityConfig = {
  materialSide: THREE.Side;
@@ -27,50 +28,7 @@ export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
 
-  @Customizable([
-    {
-      propertyPath: 'metalness',
-      folderPath: 'Material',
-      settings: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }, {
-      propertyPath: 'roughness',
-      folderPath: 'Material',
-      settings: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }, {
-      propertyPath: 'transmission',
-      folderPath: 'Material',
-      settings: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }, {
-      propertyPath: 'ior',
-      folderPath: 'Material',
-      settings: {
-        min: 1,
-        max: 2.5,
-        step: 0.0001,
-        name: 'IOR'
-      }
-    }, {
-      propertyPath: 'thickness',
-      folderPath: 'Material',      
-      settings: {
-        min: 0,
-        max: 1,
-        step: 0.0001,
-      }
-    }
-  ])
+  @Customizable(PHYSICAL_MATERIAL_CONFIGS)
   private physicalMaterial: THREE.MeshPhysicalMaterial;
 
   private geometries: THREE.BufferGeometry[];
