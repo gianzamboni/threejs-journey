@@ -31,7 +31,7 @@ export default class Menu extends EventTarget {
     const menu = document.createElement('nav');
     menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${CSS_CLASSES.scrollBar}`;
     sidebar.addContent(menu);
-    JOURNEY.forEach((section: Section) => {
+    for(const section of JOURNEY) {
       this.createSection(section, menu);
     }
     return menu;
