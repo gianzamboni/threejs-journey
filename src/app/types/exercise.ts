@@ -4,7 +4,6 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 
-
-export type ExerciseClass = new (renderView: RenderView, quality: Quality) => any;
 export type Exercise = BaseExercise | AnimatedExercise | OrbitControlledExercise;
+export type ExerciseClass = new (renderView: RenderView, quality: Quality) => Exercise;
 
