@@ -11,7 +11,7 @@ export const DEBUG_UI_CUBE_CONFIG: ControllerConfig[] = [{
   }
 },{
   propertyPath: 'visible', 
-  folderPath: 'Awesome Cube'
+  folderPath: 'Awesome Cube',
 }];
 
 export const DEBUG_UI_MATERIAL_CONFIG: ControllerConfig[] = [{

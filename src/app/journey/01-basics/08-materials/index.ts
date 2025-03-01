@@ -9,18 +9,8 @@ import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-ex
 import { Customizable } from '@/app/decorators/customizable';
 import { DebugFPS } from '@/app/decorators/debug';
 import { PHYSICAL_MATERIAL_CONFIGS } from './debug-ui-configs';
-
-type QualityConfig = {
- materialSide: THREE.Side;
-}
-const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
-  [Quality.Low]: {
-    materialSide: THREE.FrontSide,
-  },
-  [Quality.High]: {
-    materialSide: THREE.DoubleSide,
-  }
-}
+import { QUALITY_CONFIG } from './quality-config';
+import { QualityConfig } from './quality-config';
 
 @Exercise('materials')
 @OrbitControllerDescription()

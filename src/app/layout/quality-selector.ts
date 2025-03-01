@@ -1,3 +1,4 @@
+import { CSS_CLASSES } from '@/theme';
 
 export enum Quality {
   Low = 'low',
@@ -22,14 +23,15 @@ export class QualitySelector extends EventTarget {
     super();
     this.selectedQuality = defaultQuality;
     this.qualitySelector = document.createElement('div');
-    this.qualitySelector.className = 'flex justify-center items-center bg-white px-3 py-2 rounded-md gap-2';
+    this.qualitySelector.className = `flex justify-center items-center ${CSS_CLASSES.background} px-3 py-2 rounded-md gap-2`;
 
     const label = document.createElement('label');
     label.textContent = 'Quality:';
+    label.className = CSS_CLASSES.text;
     this.qualitySelector.appendChild(label);
 
     const select = document.createElement('select');
-    select.className = 'border border-gray-300 rounded-md bg-gray-300 px-2 py-1';
+    select.className = `border ${CSS_CLASSES.border} rounded-md ${CSS_CLASSES.background} ${CSS_CLASSES.text} px-2 py-1 ${CSS_CLASSES.hover}`;
     select.addEventListener('change', this.onQualityChange.bind(this));
     this.qualitySelector.appendChild(select);
 
@@ -38,6 +40,7 @@ export class QualitySelector extends EventTarget {
       const optionElement = document.createElement('option');
       optionElement.value = option.toString();
       optionElement.textContent = option.toString();
+      optionElement.className = CSS_CLASSES.text;
       if (option === this.selectedQuality) {
         optionElement.selected = true;
       }
