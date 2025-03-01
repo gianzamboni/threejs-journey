@@ -133,7 +133,7 @@ function initAllGUIParts() {
   
   const bottomRow = document.createElement('div');
   bottomRow.id = "bottom-row";
-  bottomRow.className = "fixed bottom-0 left-0 w-full flex flex-col md:flex-row items-end justify-between align-center";
+  bottomRow.className = "fixed bottom-0 left-0 flex flex-col md:flex-row items-end justify-between align-center";
 
   infoBox = new InfoBox(bottomRow);
   warningBox = new WarningBox(bottomRow);
