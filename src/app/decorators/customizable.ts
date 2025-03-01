@@ -13,6 +13,7 @@ export type ControllerConfig = {
   propertyPath?: string;  
   folderPath?: string;
   initialValue?: any;
+  context?: any;
   settings?: ControllerSettings;
 }
  

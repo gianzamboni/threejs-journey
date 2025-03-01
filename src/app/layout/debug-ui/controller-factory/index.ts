@@ -69,7 +69,7 @@ export class ControllerFactory {
     );
 
     // Apply controller settings
-    this.applyControllerSettings(controller, config);
+    this.applyControllerSettings(controller, config, customizableObject.propertyName);
   }
 
   /**
@@ -77,12 +77,14 @@ export class ControllerFactory {
    * @param controller The controller to apply settings to
    * @param config The controller configuration
    */
-  private applyControllerSettings(controller: Controller, config: ControllerConfig): void {
+  private applyControllerSettings(controller: Controller, config: ControllerConfig, propertyName: string): void {
     // Apply all settings from the config
     for (const [setting, value] of Object.entries(config.settings ?? {})) {
       if (setting === 'onChange' || setting === 'onFinishChange') {
         // Bind callback methods
-        controller[setting as keyof Controller](this.exercise[value].bind(this.exercise));
+        controller[setting as keyof Controller]((newValue: any) => {
+          this.exercise[value].bind(this.exercise)(newValue, config.context);
+        });
       } else {
         // Apply other settings directly
         controller[setting as keyof Controller](value);
@@ -91,7 +93,7 @@ export class ControllerFactory {
 
     // Set a default name if none was provided
     if (config.settings?.name === undefined) {
-      controller.name(printable(controller.property));
+      controller.name(printable(propertyName));
     }
   }
 

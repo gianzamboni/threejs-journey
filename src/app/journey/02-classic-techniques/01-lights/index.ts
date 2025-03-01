@@ -4,90 +4,14 @@ import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUnifo
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import RenderView from '@/app/layout/render-view';
-// import { CustomizableEntries, DebugFPS, Debuggable } from '../decorators/debug';
-// import { printable } from '@/app/utils/text-utils';
-// import { CustomizableController } from '../decorators/customizable';
 import { Quality } from '@/app/layout/quality-selector';
 import { Exercise } from '@/app/decorators/exercise';
 import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
 import { DebugFPS } from '@/app/decorators/debug';
+import { QualityConfig, QUALITY_CONFIG } from './quality-config';
 import { Customizable } from '@/app/decorators/customizable';
-
-type QualityConfig = {
-  sphereSegments: number;
-  torus: {
-    radialSegments: number;
-    tubularSegments: number;
-  };
-  pointLightEnabled: boolean;
-}
-
-const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
-  [Quality.Low]: {
-    sphereSegments: 8,
-    torus: {
-      radialSegments: 8,
-      tubularSegments: 16,
-    },
-    pointLightEnabled: false,
-  },
-  [Quality.High]: {
-    sphereSegments: 64,
-    torus: {
-      radialSegments: 64,
-      tubularSegments: 128,
-    },
-    pointLightEnabled: true,
-  }
-}
-
-type Lights = {
-  ambient: THREE.AmbientLight,
-  directional: THREE.DirectionalLight,
-  hemisphere: THREE.HemisphereLight,
-  point: THREE.PointLight,
-  rectArea: THREE.RectAreaLight,
-  spot: THREE.SpotLight
-}
-
-type Helpers = {
-  directional: THREE.DirectionalLightHelper,
-  point: THREE.PointLightHelper,
-  rectArea: RectAreaLightHelper,
-  spot: THREE.SpotLightHelper
-}
-
-type HelperStatusDict = Record<keyof Helpers, boolean>;
-
-// const POSITION_CONFIG = {
-// min: -5,
-// max: 5,
-// step: 0.001
-// }
-
-// const SIZE_CONFIG = {
-//   min: 0.1,
-//   max: 5,
-//   step: 0.01
-// }
-
-// function positinalConfig(propertyName: string, onChange?: string, initialValue?: number) {
-//   return ['x', 'y', 'z'].map(axis => {
-//     const controller: CustomizableController = {
-//       propertyPath: `${propertyName}.${axis}`,
-//       folderPath: printable(propertyName),
-//       configuration: { ...POSITION_CONFIG }
-//     }
-
-//     if(onChange) {
-//       controller.configuration!.onChange = onChange;
-//     }
-//     if(initialValue !== undefined) {
-//       controller.initialValue = initialValue;
-//     }
-//     return controller;
-//   });
-// }
+import { LIGHTS_CONFIG, HELPERS_CONFIG } from './debug-ui-configs';
+import { Helpers, HelperStatusDict, Lights } from './types';
 
 @Exercise('lights')
 export class LightsExercise extends OrbitControlledExercise {
@@ -96,16 +20,16 @@ export class LightsExercise extends OrbitControlledExercise {
   private animatedObjects: THREE.Mesh[];
   private plane: THREE.Mesh;
 
-  @Customizable([
-    {
-      propertyPath: "/.*/.onOff",
-      initialValue: true,
-      type: 'master',
-      settings: {
-        name: "On/Off",
-        onChange: "toggleLight"
-      }
-    }])
+//  @Customizable([
+    // {
+    //   propertyPath: "/.*/.onOff",
+    //   initialValue: true,
+    //   type: 'master',
+    //   settings: {
+    //     name: "On/Off",
+    //     onChange: "toggleLight"
+    //   }
+    // }])
   //   '.*': [{
   //     propertyPath: "onOff",
   //     initialValue: true,
@@ -178,6 +102,7 @@ export class LightsExercise extends OrbitControlledExercise {
   //   ...positinalConfig('target.position')
   //   ]
   // })
+  @Customizable(LIGHTS_CONFIG)
   private ligths: Lights;
 
   // @CustomizableEntries({
@@ -189,6 +114,7 @@ export class LightsExercise extends OrbitControlledExercise {
   //     }
   //   }]
   // })
+  @Customizable(HELPERS_CONFIG)
   private helpers: Helpers;
 
   private helpersVisibleStatus: HelperStatusDict;
