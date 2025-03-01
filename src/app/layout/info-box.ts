@@ -30,7 +30,7 @@ export class InfoBox {
 
   updateContent(exercise: Exercise) {
     const id = ExerciseMetadata.getId(exercise);
-    const descriptions = ExerciseMetadata.getDescpritions(exercise);
+    const descriptions = ExerciseMetadata.getDescriptions(exercise);
     
     this.collapsable.updateTitle(pascalCaseToText(id));
     const parser = new DOMParser();

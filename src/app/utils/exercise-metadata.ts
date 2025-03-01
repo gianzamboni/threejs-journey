@@ -10,21 +10,28 @@ export type ExerciseMetadata = {
   shouldSendData?: boolean;
 }
 
-
-type WithMetadata<T> = T & {
-  [Symbol.metadata]?: ExerciseMetadata;
+export type WithMetadata<T> = T & {
+  [Symbol.metadata]?: ExerciseMetadata | null;
 }
 
-export function get(target: WithMetadata<ExerciseClass | Exercise>): ExerciseMetadata {
+export type MetadataTarget = WithMetadata<ExerciseClass | Exercise>;
+
+/**
+ * Get all metadata from a target
+ */
+export function get(target: MetadataTarget): ExerciseMetadata {
   let meta = target[Symbol.metadata];
-  if(meta === undefined) {
+  if(meta === undefined || meta === null) {
     meta = target.constructor[Symbol.metadata] as ExerciseMetadata;
   }
 
   return meta as ExerciseMetadata;
 }
 
-export function getId(target: WithMetadata<ExerciseClass | Exercise>): string {
+/**
+ * Get the ID from a target's metadata
+ */
+export function getId(target: MetadataTarget): string {
   const metadata = get(target);
   if(metadata.id === undefined) {
     throw new Error('Exercise id is undefined');
@@ -32,22 +39,34 @@ export function getId(target: WithMetadata<ExerciseClass | Exercise>): string {
   return metadata.id;
 }
 
-export function getDescpritions(target: WithMetadata<ExerciseClass | Exercise>): string[] {
+/**
+ * Get descriptions from a target's metadata
+ */
+export function getDescriptions(target: MetadataTarget): string[] {
   const metadata = get(target);
   return metadata.descriptions ?? [];
 }
 
-export function isDebuggable(target: WithMetadata<ExerciseClass | Exercise>): boolean {
+/**
+ * Check if a target is debuggable based on its metadata
+ */
+export function isDebuggable(target: MetadataTarget): boolean {
   const metadata = get(target);
   return metadata.isDebuggable ?? false;
 }
 
-export function isAnimated(target: WithMetadata<ExerciseClass | Exercise>): boolean {
+/**
+ * Check if a target is animated based on its metadata
+ */
+export function isAnimated(target: MetadataTarget): boolean {
   const metadata = get(target);
   return metadata.isAnimated ?? false;
 }
 
-export function getControllers(target: WithMetadata<ExerciseClass | Exercise>): ExerciseControllers {
+/**
+ * Get controllers configuration from a target's metadata
+ */
+export function getControllers(target: MetadataTarget): ExerciseControllers {
   const metadata = get(target);
   return metadata.controllersConfig ?? {};
 }
