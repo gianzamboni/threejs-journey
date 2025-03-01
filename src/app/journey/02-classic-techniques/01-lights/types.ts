@@ -18,3 +18,6 @@ export type Helpers = {
 }
 
 export type HelperStatusDict = Record<keyof Helpers, boolean>;
+
+export type LightType = keyof Lights;
+export type LightTypeHelper = keyof Helpers;

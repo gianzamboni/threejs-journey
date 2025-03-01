@@ -3,6 +3,7 @@ import { ControllerFactory } from "..";
 import { GUI } from "lil-gui";
 import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
 import { TestExercise } from "./test-exercise";
+import { ControllerConfig } from "@/app/decorators/customizable";
 
 describe('ControllerFactory', () => {
   let gui: GUI;
@@ -99,8 +100,8 @@ describe('ControllerFactory', () => {
     const controllers = gui.controllers;
 
     expect(controllers.length).toBe(1);
-    expect(controllers[0]._name).toBe('Cube visible');
-    expect(controllers[0].object).toBe((exercise as any)._ControllerFactory_debugObject);
+    expect(controllers[0]._name).toBe('Visible');
+    expect(controllers[0].object).toBe((exercise as any)._ControllerFactory_debugObject.cube);
   });
 
   it('should create nested folders correctly', () => {
@@ -170,5 +171,51 @@ describe('ControllerFactory', () => {
     expect(gui.folders[1].controllers.length).toBe(1);
     expect(gui.folders[0].controllers[0]._name).toBe('Y Position 1');
     expect(gui.folders[1].controllers[0]._name).toBe('Visible');
+  });
+
+  it('should handle master controllers that enable/disable other controllers in the same folder', () => {
+    // Create a master controller and regular controllers in the same folder
+    const configs: ControllerConfig[] = [
+      {
+        propertyPath: 'visible',
+        folderPath: 'Test Folder',
+        type: 'master',
+        initialValue: true,
+        settings: {
+          name: 'On/Off'
+        }
+      },
+      {
+        propertyPath: 'position.y',
+        folderPath: 'Test Folder',
+        settings: {
+          name: 'Y Position'
+        }
+      }
+    ];
+        
+    vi.spyOn(ExerciseMetadata, 'getControllers').mockReturnValue({ 'cube': configs });
+
+    controllerFactory.create();
+
+    expect(gui.folders.length).toBe(1);
+    expect(gui.folders[0]._title).toBe('Test Folder');
+    expect(gui.folders[0].controllers.length).toBe(2);
+
+    const onOffController = gui.folders[0].controllers[0];
+    const yPositionController = gui.folders[0].controllers[1];
+
+    expect(onOffController._name).toBe('On/Off');
+    expect(yPositionController._name).toBe('Y Position');
+
+    onOffController._onChange(false);
+
+    expect(yPositionController._disabled).toBe(true);
+    expect(onOffController._disabled).toBe(false);
+
+    onOffController._onChange(true);
+
+    expect(yPositionController._disabled).toBe(false);
+    expect(onOffController._disabled).toBe(false);
   });
 });

@@ -37,53 +37,66 @@ export class ControllerFactory {
   public create(): void {
     const controllersConfig = ExerciseMetadata.getControllers(this.exercise);
     for (const key in controllersConfig) {
-      this.createControllers(key, controllersConfig[key]);
-    }
-  }
-
-  /**
-   * Creates controllers for a specific property
-   * @param key The property key
-   * @param controllersConfig The controller configurations
-   */
-  public createControllers(key: string, controllersConfig: ControllerConfig[]): void {
-    for (const config of controllersConfig) {
-      this.createController(key, config);
-    }
-  }
-
-  /**
-   * Creates a single controller for a property
-   * @param key The property key
-   * @param config The controller configuration
-   */
-  private createController(key: string, config: ControllerConfig): void {
-    const folder = this.getFolder(config.folderPath);
-    const customizableObject = this.findCustomizableObject(key, config);
-    const isColor = config.type === 'color';
+      for(const config of controllersConfig[key]) {
+        const folder = this.getFolder(config.folderPath);
+        const customizableObject = this.findCustomizableObject(key, config);
+        const isColor = config.type === 'color';
+        const isMaster = config.type === 'master';
+        
+        // Create the controller
+        const controller = folder[isColor ? 'addColor' : 'add'](
+          customizableObject.object, 
+          customizableObject.propertyName
+        );
     
-    // Create the controller
-    const controller = folder[isColor ? 'addColor' : 'add'](
-      customizableObject.object, 
-      customizableObject.propertyName
-    );
-
-    // Apply controller settings
-    this.applyControllerSettings(controller, config, customizableObject.propertyName);
+        // Apply controller settings
+        this.applyControllerSettings(controller, config);
+        
+        // Add masters controller functionality if needed. That is, enable/disable other controllers of the same folder
+        this.masterControllerSetup(folder, controller, isMaster);
+        
+        // Close all folders after all controllers are created
+        this.gui.folders.forEach(f => f.close());
+      }
+    }
   }
 
+  /**
+   * Tracks a controller for master functionality
+   * @param folder The folder containing the controller
+   * @param controller The controller to track
+   * @param isMaster Whether the controller is a master controller
+   */
+  private masterControllerSetup(folder: GUI, controller: Controller, isMaster: boolean): void {
+    if(!isMaster) return;
+
+    const onChange = controller._onChange;
+    controller.onChange((value: any) => {
+      // Call the onChange callback if it exists
+      if(onChange) onChange(value);
+
+      // Enable/disable other controllers in the same folder
+      folder.controllersRecursive().forEach(slaveController => {
+        if(slaveController === controller) return;
+        slaveController.enable(value);
+      });
+    })
+  }
   /**
    * Applies settings to a controller
    * @param controller The controller to apply settings to
    * @param config The controller configuration
    */
-  private applyControllerSettings(controller: Controller, config: ControllerConfig, propertyName: string): void {
+  private applyControllerSettings(controller: Controller, config: ControllerConfig): void {
     // Apply all settings from the config
     for (const [setting, value] of Object.entries(config.settings ?? {})) {
       if (setting === 'onChange' || setting === 'onFinishChange') {
         // Bind callback methods
         controller[setting as keyof Controller]((newValue: any) => {
-          this.exercise[value].bind(this.exercise)(newValue, config.context);
+          this.exercise[value].bind(this.exercise)(newValue, {
+            ...config.context,
+            target: controller.object
+          });
         });
       } else {
         // Apply other settings directly
@@ -93,7 +106,7 @@ export class ControllerFactory {
 
     // Set a default name if none was provided
     if (config.settings?.name === undefined) {
-      controller.name(printable(propertyName));
+      controller.name(printable(controller.property));
     }
   }
 
@@ -140,7 +153,8 @@ export class ControllerFactory {
 
     // Use debug object for properties with callbacks
     if (this.needsDebugObject(config)) {
-      return this.createDebugObject(key, config, object, propertyName);
+      // We pass the path without the property name
+      return this.createDebugObject(path, config, object, propertyName);
     }
     
     return { object, propertyName };
@@ -148,14 +162,14 @@ export class ControllerFactory {
 
   /**
    * Creates a debug object for a property with callbacks
-   * @param key The property key
+   * @param path The path array to the property
    * @param config The controller configuration
    * @param object The object containing the property
    * @param propertyName The property name
    * @returns The customizable data
    */
   private createDebugObject(
-    key: string, 
+    path: string[], 
     config: ControllerConfig, 
     object: any, 
     propertyName: string
@@ -165,12 +179,22 @@ export class ControllerFactory {
       throw new Error(`Customizable property ${config.propertyPath} should have an initial value`);
     }
     
-    const debugKey = `${key}.${config.propertyPath}`;
-    this.debugObject[debugKey] = propertyValue;
+    // Navigate through the path and create objects as needed
+    let current = this.debugObject;
+    // We iterate through all path segments to create the nested structure
+    for (const segment of path) {
+      if (!current[segment]) {
+        current[segment] = {};
+      }
+      current = current[segment];
+    }
+    
+    // Set the value at the property name
+    current[propertyName] = propertyValue;
     
     return { 
-      object: this.debugObject, 
-      propertyName: debugKey 
+      object: current, 
+      propertyName: propertyName 
     };
   }
 

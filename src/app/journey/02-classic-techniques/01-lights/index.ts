@@ -11,7 +11,7 @@ import { DebugFPS } from '@/app/decorators/debug';
 import { QualityConfig, QUALITY_CONFIG } from './quality-config';
 import { Customizable } from '@/app/decorators/customizable';
 import { LIGHTS_CONFIG, HELPERS_CONFIG } from './debug-ui-configs';
-import { Helpers, HelperStatusDict, Lights } from './types';
+import { Helpers, HelperStatusDict, Lights, LightType, LightTypeHelper } from './types';
 
 @Exercise('lights')
 export class LightsExercise extends OrbitControlledExercise {
@@ -20,100 +20,9 @@ export class LightsExercise extends OrbitControlledExercise {
   private animatedObjects: THREE.Mesh[];
   private plane: THREE.Mesh;
 
-//  @Customizable([
-    // {
-    //   propertyPath: "/.*/.onOff",
-    //   initialValue: true,
-    //   type: 'master',
-    //   settings: {
-    //     name: "On/Off",
-    //     onChange: "toggleLight"
-    //   }
-    // }])
-  //   '.*': [{
-  //     propertyPath: "onOff",
-  //     initialValue: true,
-  //     isMaster: true,
-  //     configuration: {
-  //       name: "On/Off",
-  //       onChange: "toggleLight"
-  //     },
-  //   }, {
-  //     propertyPath: "color",
-  //     isColor: true,
-  //     configuration: {
-  //       onChange: "updateColor"
-  //     }
-  //   }, {
-  //     propertyPath: "intensity",
-  //     configuration: {
-  //       min: 0,
-  //       max: 6,
-  //       step: 0.01
-  //     }
-  //   }],
-  //   'directional|point|rectArea|spot': positinalConfig('position'),
-  //   'hemisphere': [{
-  //     propertyPath: "groundColor",
-  //     isColor: true,
-  //     configuration: {
-  //       onChange: "updateGroundColor"
-  //     }
-  //   }],
-  //   'point|spot': [{
-  //     propertyPath: "distance",
-  //     configuration: {
-  //       min: 0,
-  //       max: 10,
-  //       step: 0.01
-  //     }
-  //   }, {
-  //     propertyPath: "decay",
-  //     configuration: {
-  //       min: 0,
-  //       max: 2,
-  //       step: 0.01
-  //     }
-  //   }],
-  //   'rectArea': [{
-  //     propertyPath: "width",
-  //     configuration: SIZE_CONFIG
-  //   }, {
-  //     propertyPath: "height",
-  //     configuration: SIZE_CONFIG
-  //   },
-  //   ...positinalConfig('lookAt', 'updateLookAt', 0),
-  //   ],
-  //   'spot': [{
-  //     propertyPath: "angle",
-  //     configuration: {
-  //       min: 0,
-  //       max: Math.PI * 0.5,
-  //       step: 0.01
-  //     }
-  //   }, {
-  //     propertyPath: "penumbra",
-  //     configuration: {
-  //       min: 0,
-  //       max: 1,
-  //       step: 0.01
-  //     }
-  //   }, 
-  //   ...positinalConfig('target.position')
-  //   ]
-  // })
   @Customizable(LIGHTS_CONFIG)
   private ligths: Lights;
 
-  // @CustomizableEntries({
-  //   '.*': [{
-  //     propertyPath: "visible",
-  //     initialValue: true,
-  //     configuration: {
-  //       name: "Show helper",
-  //     }
-  //   }]
-  // })
   @Customizable(HELPERS_CONFIG)
   private helpers: Helpers;
 
@@ -171,21 +80,31 @@ export class LightsExercise extends OrbitControlledExercise {
     this.material.dispose();
   }
 
-  toggleLight(newValue: boolean, lightName: keyof typeof LightsExercise.prototype.ligths) {
-    const light = this.ligths[lightName];
+  /**
+   * Toggles the visibility of a light and its helper
+   * @param newValue - The new visibility value
+   * @param {Object} context - The context object containing lightType
+   */
+  toggleLight(newValue: boolean, { lightType }: {lightType: LightType}) {
+    const light = this.ligths[lightType];
     light.visible = newValue;
-    if(lightName in this.helpers) {
-      lightName = lightName as keyof typeof this.helpers;
-      const helper = this.helpers[lightName];
+    if(lightType in this.helpers) {
+      lightType = lightType as LightTypeHelper;
+      const helper = this.helpers[lightType];
       if(newValue === false) {
-        this.helpersVisibleStatus[lightName] = helper.visible;
+        this.helpersVisibleStatus[lightType] = helper.visible;
       }
-      helper.visible = newValue && this.helpersVisibleStatus[lightName];
+      helper.visible = newValue && this.helpersVisibleStatus[lightType];
     }
   }
 
-  updateColor(color: string, lightName: keyof typeof LightsExercise.prototype.ligths) {
-    const light = this.ligths[lightName];
+  /**
+   * Updates the color of a light
+   * @param color - The new color value
+   * @param {Object} context - The context object containing lightType
+   */
+  updateColor(color: string, { lightType }: {lightType: LightType}) {
+    const light = this.ligths[lightType];
     light.color.set(new THREE.Color(color));
   }
 
@@ -193,8 +112,8 @@ export class LightsExercise extends OrbitControlledExercise {
     this.ligths.hemisphere.groundColor.set(new THREE.Color(color));
   }
 
-  updateLookAt(_: number, _1:string, lookAtCoords: {x: number, y: number, z: number}) {
-    const newTarget = new THREE.Vector3(lookAtCoords.x, lookAtCoords.y, lookAtCoords.z);
+  updateLookAt(_: number, { target }: { target: { x: number, y:number, z:number }}) {
+    const newTarget = new THREE.Vector3(target.x, target.y, target.z);
     this.ligths.rectArea.lookAt(newTarget);
   }
   
@@ -250,7 +169,7 @@ export class LightsExercise extends OrbitControlledExercise {
     }
 
     const status = Object.keys(helpers).reduce((acc, key) => {
-      acc[key as keyof Helpers] = true;
+      acc[key as LightTypeHelper] = true;
       return acc;
     }, {} as HelperStatusDict);
 
