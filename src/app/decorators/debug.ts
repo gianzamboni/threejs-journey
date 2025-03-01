@@ -1,24 +1,8 @@
-import { Controller } from "lil-gui";
-
 import { Timer } from "three/examples/jsm/Addons.js";
 
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 
-type VoidFunction = (...args: unknown[]) => void;
 type FrameFunction = (timer: Timer, ...args: unknown[]) => void;
-
-type LilGuiControllerConfig = Omit<{
-  [key in keyof Controller]?: Controller[key] extends VoidFunction ? unknown : never;
-}, 'onChange' | 'onFinishChange'> & {
-  onChange?: string;
-  onFinishChange?: string;
-}
-
-export type ControllerConfig = {
-  propertyPath: string;
-  type?: 'callable' | 'color';
-  settings?: LilGuiControllerConfig;
-}
 
 export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDecoratorContext | ClassFieldDecoratorContext): ExerciseMetadata.ExerciseMetadata {
   const metadata = context.metadata as ExerciseMetadata.ExerciseMetadata;

@@ -2,8 +2,10 @@ import { Controller } from "lil-gui";
 
 import { initDebugMetadata } from "#/app/decorators/debug";
 
-export type ControllerSettings = Omit<{
-  [key in keyof Controller]?: Controller[key] extends Function ? any : never;
+type ControllerFunction = (...args: unknown[]) => Controller;
+
+type LilGuiControllerConfig = Omit<{
+  [key in keyof Controller]?: Controller[key] extends ControllerFunction ? unknown : Parameters<Controller[key]>[0];
 }, 'onChange' | 'onFinishChange'> & {
   onChange?: string;
   onFinishChange?: string;
@@ -13,9 +15,9 @@ export type ControllerConfig = {
   type?: 'color' | 'callable' | 'master';
   propertyPath?: string;  
   folderPath?: string;
-  initialValue?: any;
-  context?: any;
-  settings?: ControllerSettings;
+  initialValue?: unknown;
+  context?:  Record<string, unknown>;
+  settings?: LilGuiControllerConfig;
 }
  
 export type ExerciseControllers = Record<string | symbol, ControllerConfig[]>;
