@@ -5,7 +5,7 @@ import { ControllerConfig } from "#/app/decorators/customizable";
 import { TestExercise } from "#/app/layout/debug-ui/controller-factory/tests/test-exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 
-import { ControllerFactory } from "..";
+import { ControllerFactory, WithDebugObject } from "..";
 
 describe('ControllerFactory', () => {
   let gui: GUI;
@@ -103,7 +103,7 @@ describe('ControllerFactory', () => {
 
     expect(controllers.length).toBe(1);
     expect(controllers[0]._name).toBe('Visible');
-    expect(controllers[0].object).toBe((exercise as any)._ControllerFactory_debugObject.cube);
+    expect(controllers[0].object).toBe((exercise as WithDebugObject<TestExercise>)._ControllerFactory_debugObject.cube);
   });
 
   it('should create nested folders correctly', () => {
