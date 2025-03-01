@@ -1,6 +1,6 @@
 import { Collapsable } from "#/app/components/collapsable";
 import { Exercise } from "#/app/types/exercise";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
 
 export class InfoBox {

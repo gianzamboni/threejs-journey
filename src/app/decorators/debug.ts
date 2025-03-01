@@ -2,7 +2,7 @@ import { Controller } from "lil-gui";
 
 import { Timer } from "three/examples/jsm/Addons.js";
 
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 
 type LilGuiControllerConfig = Omit<{
   [key in keyof Controller]?: Controller[key] extends Function ? any : never;

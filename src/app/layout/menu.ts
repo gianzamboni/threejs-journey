@@ -3,7 +3,7 @@ import SideBar from "#/app/components/sidebar";
 import { GITHUB_ICON, HAMBURGER_ICON } from "#/app/constants/icons";
 import { JOURNEY, Section } from "#/app/journey";
 import { ExerciseClass } from "#/app/types/exercise";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
 import { CSS_CLASSES } from "#/theme";
 export default class Menu extends EventTarget {

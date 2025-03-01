@@ -1,7 +1,7 @@
 import GUI, { Controller } from "lil-gui";
 
 import { ControllerConfig } from "#/app/decorators/customizable";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { getPathArray, printable } from "#/app/utils/text-utils";
 
 /**

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ControllerConfig } from "#/app/decorators/customizable";
 import { TestExercise } from "#/app/layout/debug-ui/controller-factory/tests/test-exercise";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 
 import { ControllerFactory } from "..";
 

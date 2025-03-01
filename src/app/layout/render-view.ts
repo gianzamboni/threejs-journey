@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { Exercise } from '#/app/types/exercise';
-import { ExerciseMetadata } from '#/app/utils/exercise-metadata';
+import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 
 export default class RenderView {
 

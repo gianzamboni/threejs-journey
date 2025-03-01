@@ -9,7 +9,7 @@ import { MaterialsTest } from "#/app/journey/01-basics/08-materials";
 import { Text3D } from "#/app/journey/01-basics/09-text";
 import { LightsExercise } from "#/app/journey/02-classic-techniques/01-lights";
 import { ExerciseClass } from "#/app/types/exercise";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();

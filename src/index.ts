@@ -9,7 +9,7 @@ import RenderView from "#/app/layout/render-view";
 import { ErrorData, WarningBox } from "#/app/layout/warning-box";
 import { Exercise, ExerciseClass } from '#/app/types/exercise';
 import { AssetLoader, LoadingData } from "#/app/utils/assets-loader";
-import { ExerciseMetadata } from '#/app/utils/exercise-metadata';
+import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 
 let tappedTwice = false;
 
