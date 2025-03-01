@@ -31,7 +31,7 @@ export class QualitySelector extends EventTarget {
     this.qualitySelector.appendChild(label);
 
     const select = document.createElement('select');
-    select.className = `border ${CSS_CLASSES.border} rounded-md ${CSS_CLASSES.background} ${CSS_CLASSES.text} px-2 py-1 ${CSS_CLASSES.hover}`;
+    select.className = `${CSS_CLASSES.border} rounded-md ${CSS_CLASSES.selector_background} ${CSS_CLASSES.text} px-2 py-1 ${CSS_CLASSES.hover}`;
     select.addEventListener('change', this.onQualityChange.bind(this));
     this.qualitySelector.appendChild(select);
 
