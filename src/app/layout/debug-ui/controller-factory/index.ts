@@ -1,15 +1,22 @@
 import GUI, { Controller } from "lil-gui";
 
 import { ControllerConfig } from "#/app/decorators/customizable";
+import { Exercise } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { getPathArray, printable } from "#/app/utils/text-utils";
 
 /**
  * Represents an object and property name pair for controller binding
  */
+type CustomizableObject = Record<string, unknown>;
+
 type CustomizableData = {
-  object: any;
+  object: CustomizableObject;
   propertyName: string;
+}
+
+export type WithDebugObject<T> = T & {
+  _ControllerFactory_debugObject: Record<string, unknown>;
 }
 
 /**
@@ -17,17 +24,17 @@ type CustomizableData = {
  */
 export class ControllerFactory {
   private gui: GUI;
-  private exercise: any;
-  private debugObject: any;
+  private exercise: WithDebugObject<Exercise>;
+  private debugObject: Record<string, unknown>;
 
   /**
    * Creates a new ControllerFactory instance
    * @param gui The GUI instance to add controllers to
    * @param exercise The exercise instance to create controllers for
    */
-  public constructor(gui: GUI, exercise: any) {
+  public constructor(gui: GUI, exercise: Exercise) {
     this.gui = gui;
-    this.exercise = exercise;
+    this.exercise = exercise as WithDebugObject<Exercise>;
     this.exercise._ControllerFactory_debugObject = {};
     this.debugObject = this.exercise._ControllerFactory_debugObject;
   }
@@ -44,11 +51,18 @@ export class ControllerFactory {
         const isColor = config.type === 'color';
         const isMaster = config.type === 'master';
         
-        // Create the controller
-        const controller = folder[isColor ? 'addColor' : 'add'](
-          customizableObject.object, 
-          customizableObject.propertyName
-        );
+        let controller: Controller;
+        if(isColor) {
+          controller = folder.addColor(
+            customizableObject.object, 
+            customizableObject.propertyName
+          );
+        } else {
+          controller = folder.add(
+            customizableObject.object, 
+            customizableObject.propertyName
+          );
+        }
     
         // Apply controller settings
         this.applyControllerSettings(controller, config);
@@ -72,7 +86,7 @@ export class ControllerFactory {
     if(!isMaster) return;
 
     const onChange = controller._onChange;
-    controller.onChange((value: any) => {
+    controller.onChange((value: boolean) => {
       // Call the onChange callback if it exists
       if(onChange) onChange(value);
 
@@ -93,11 +107,15 @@ export class ControllerFactory {
     for (const [setting, value] of Object.entries(config.settings ?? {})) {
       if (setting === 'onChange' || setting === 'onFinishChange') {
         // Bind callback methods
-        controller[setting as keyof Controller]((newValue: any) => {
-          this.exercise[value].bind(this.exercise)(newValue, {
-            ...config.context,
-            target: controller.object
-          });
+        controller[setting as keyof Controller]((newValue: unknown) => {
+          // Use type assertion to access the method. Here value should be a method name of the exercise
+          const method = this.exercise[value as keyof Exercise];
+          if (typeof method === 'function') {
+            method.bind(this.exercise)(newValue, {
+              ...config.context,
+              target: controller.object
+            });
+          }
         });
       } else {
         // Apply other settings directly
@@ -141,16 +159,17 @@ export class ControllerFactory {
    */
   private findCustomizableObject(key: string, config: ControllerConfig): CustomizableData {
     if (config.propertyPath === undefined || config.propertyPath.length === 0) {
-      return { object: this.exercise, propertyName: key };
+      return { object: this.exercise as unknown as CustomizableObject, propertyName: key };
     }
 
     const path = getPathArray(config.propertyPath);
     path.unshift(key);
     const propertyName = path.pop() as string;
 
-    const object = path.reduce((obj, property) => {
-      return obj[property];
-    }, this.exercise);
+    // Use type assertion to handle property access
+    const object = path.reduce<CustomizableObject>((obj, property) => {
+      return obj[property] as CustomizableObject;
+    }, this.exercise as unknown as CustomizableObject);
 
     // Use debug object for properties with callbacks
     if (this.needsDebugObject(config)) {
@@ -172,7 +191,7 @@ export class ControllerFactory {
   private createDebugObject(
     path: string[], 
     config: ControllerConfig, 
-    object: any, 
+    object: CustomizableObject, 
     propertyName: string
   ): CustomizableData {
     const propertyValue = object[propertyName] ?? config.initialValue;
@@ -185,9 +204,9 @@ export class ControllerFactory {
     // We iterate through all path segments to create the nested structure
     for (const segment of path) {
       if (!current[segment]) {
-        current[segment] = {};
+        current[segment] = {} as CustomizableObject;
       }
-      current = current[segment];
+      current = current[segment] as CustomizableObject;
     }
     
     // Set the value at the property name
