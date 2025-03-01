@@ -10,16 +10,21 @@ export type ExerciseMetadata = {
   shouldSendData?: boolean;
 }
 
-export function get(target: ExerciseClass | Exercise): ExerciseMetadata {
-  let meta = (target as { [Symbol.metadata]?: ExerciseMetadata })[Symbol.metadata];
+
+type WithMetadata<T> = T & {
+  [Symbol.metadata]?: ExerciseMetadata;
+}
+
+export function get(target: WithMetadata<ExerciseClass | Exercise>): ExerciseMetadata {
+  let meta = target[Symbol.metadata];
   if(meta === undefined) {
-    meta = (target.constructor as { [Symbol.metadata]?: ExerciseMetadata })[Symbol.metadata];
+    meta = target.constructor[Symbol.metadata] as ExerciseMetadata;
   }
 
   return meta as ExerciseMetadata;
 }
 
-export function getId(target: ExerciseClass | Exercise): string {
+export function getId(target: WithMetadata<ExerciseClass | Exercise>): string {
   const metadata = get(target);
   if(metadata.id === undefined) {
     throw new Error('Exercise id is undefined');
@@ -27,22 +32,22 @@ export function getId(target: ExerciseClass | Exercise): string {
   return metadata.id;
 }
 
-export function getDescpritions(target: ExerciseClass | Exercise): string[] {
+export function getDescpritions(target: WithMetadata<ExerciseClass | Exercise>): string[] {
   const metadata = get(target);
   return metadata.descriptions ?? [];
 }
 
-export function isDebuggable(target: ExerciseClass | Exercise): boolean {
+export function isDebuggable(target: WithMetadata<ExerciseClass | Exercise>): boolean {
   const metadata = get(target);
   return metadata.isDebuggable ?? false;
 }
 
-export function isAnimated(target: ExerciseClass | Exercise): boolean {
+export function isAnimated(target: WithMetadata<ExerciseClass | Exercise>): boolean {
   const metadata = get(target);
   return metadata.isAnimated ?? false;
 }
 
-export function getControllers(target: ExerciseClass | Exercise): ExerciseControllers {
+export function getControllers(target: WithMetadata<ExerciseClass | Exercise>): ExerciseControllers {
   const metadata = get(target);
   return metadata.controllersConfig ?? {};
 }
