@@ -4,8 +4,11 @@ import { Timer } from "three/examples/jsm/Addons.js";
 
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 
+type VoidFunction = (...args: unknown[]) => void;
+type FrameFunction = (timer: Timer, ...args: unknown[]) => void;
+
 type LilGuiControllerConfig = Omit<{
-  [key in keyof Controller]?: Controller[key] extends Function ? any : never;
+  [key in keyof Controller]?: Controller[key] extends VoidFunction ? unknown : never;
 }, 'onChange' | 'onFinishChange'> & {
   onChange?: string;
   onFinishChange?: string;
@@ -28,13 +31,13 @@ export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDe
   return metadata;
 }
 
-export function DebugFPS(target: Function, context: ClassMethodDecoratorContext) {
+export function DebugFPS(target: FrameFunction, context: ClassMethodDecoratorContext) {
   const metadata = initDebugMetadata(context);
   return function(this: EventTarget, timer: Timer) {
     target.bind(this)(timer);
     if(metadata.shouldSendData) {
       const fps =  1 / timer.getDelta();
-      (this as any).dispatchEvent(new CustomEvent('debug-info', { detail: { fps } }));
+      (this as EventTarget).dispatchEvent(new CustomEvent('debug-info', { detail: { fps } }));
     }
   }
 }
