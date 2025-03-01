@@ -1,10 +1,11 @@
-import { Exercise } from "#/app/types/exercise";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import GUI from "lil-gui";
 
 import { ControllerFactory } from "#/app/layout/debug-ui/controller-factory";
 import { GraphPanel } from "#/app/layout/debug-ui/graph-panel";
+import { Exercise } from "#/app/types/exercise";
+import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
 
-import GUI from "lil-gui";
+
 
 type DataRow = GraphPanel;
 

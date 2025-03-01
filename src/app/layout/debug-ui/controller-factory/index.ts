@@ -1,7 +1,8 @@
+import GUI, { Controller } from "lil-gui";
+
 import { ControllerConfig } from "#/app/decorators/customizable";
 import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
 import { getPathArray, printable } from "#/app/utils/text-utils";
-import GUI, { Controller } from "lil-gui";
 
 /**
  * Represents an object and property name pair for controller binding

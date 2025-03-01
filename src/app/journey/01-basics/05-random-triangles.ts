@@ -1,7 +1,8 @@
 import * as THREE from "three";
-import RenderView from "#/app/layout/render-view";
+
 import { Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
+import RenderView from "#/app/layout/render-view";
 
 @Exercise('geometries')
 @OrbitControllerDescription()

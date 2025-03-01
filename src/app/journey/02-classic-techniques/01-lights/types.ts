@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 export type Lights = {

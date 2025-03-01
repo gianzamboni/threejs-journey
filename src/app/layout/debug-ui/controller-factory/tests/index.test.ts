@@ -1,9 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ControllerFactory } from "..";
 import { GUI } from "lil-gui";
-import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
-import { TestExercise } from "#/app/layout/debug-ui/controller-factory/tests/test-exercise";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { ControllerConfig } from "#/app/decorators/customizable";
+import { TestExercise } from "#/app/layout/debug-ui/controller-factory/tests/test-exercise";
+import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+
+import { ControllerFactory } from "..";
 
 describe('ControllerFactory', () => {
   let gui: GUI;

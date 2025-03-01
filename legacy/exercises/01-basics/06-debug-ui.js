@@ -1,6 +1,7 @@
-import * as THREE from 'three'
 import gsap from 'gsap'
 import GUI from 'lil-gui'
+import * as THREE from 'three'
+
 import { dispose } from '../../utils/dispose';
 
 export class DebugUIExercise {

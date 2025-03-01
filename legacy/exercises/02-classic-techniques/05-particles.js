@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
 
 export class Particles {

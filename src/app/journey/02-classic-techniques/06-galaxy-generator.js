@@ -1,7 +1,8 @@
-import * as THREE from 'three'
 import GUI from 'lil-gui';
-import { randomSign } from '../../utils/utils';
+import * as THREE from 'three'
+
 import { TEXTURE_LOADER } from '../../utils/loading-manager';
+import { randomSign } from '../../utils/utils';
 export class GalaxyGenerator {
   constructor(view, debugUI) {
     this.view = view;

@@ -1,4 +1,5 @@
 import { Controller } from "lil-gui";
+
 import { initDebugMetadata } from "#/app/decorators/debug";
 
 export type ControllerSettings = Omit<{

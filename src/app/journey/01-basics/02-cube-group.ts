@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
 

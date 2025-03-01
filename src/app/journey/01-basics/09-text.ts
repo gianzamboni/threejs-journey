@@ -1,10 +1,12 @@
 import * as THREE from 'three';
+
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { AssetLoader } from "#/app/utils/assets-loader";
-import RenderView from '#/app/layout/render-view';
+import { Timer } from 'three/addons/misc/Timer.js';
+
 import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
-import { Timer } from 'three/addons/misc/Timer.js';
+import RenderView from '#/app/layout/render-view';
+import { AssetLoader } from "#/app/utils/assets-loader";
 
 @Exercise('text-3d')
 @OrbitControllerDescription()

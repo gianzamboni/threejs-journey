@@ -1,11 +1,11 @@
+import { Collapsable } from "#/app/components/collapsable";
 import SideBar from "#/app/components/sidebar";
 import { GITHUB_ICON, HAMBURGER_ICON } from "#/app/constants/icons";
 import { JOURNEY, Section } from "#/app/journey";
-import { pascalCaseToText } from "#/app/utils/text-utils";
-import { Collapsable } from "#/app/components/collapsable";
-import { CSS_CLASSES } from "#/theme";
 import { ExerciseClass } from "#/app/types/exercise";
 import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import { pascalCaseToText } from "#/app/utils/text-utils";
+import { CSS_CLASSES } from "#/theme";
 export default class Menu extends EventTarget {
 
   private selected: HTMLElement | null = null;

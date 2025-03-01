@@ -1,5 +1,6 @@
 import GUI from 'lil-gui';
 import * as THREE from 'three';
+
 import { CustomizableLight } from '../../utils/customizable-light';
 
 export class LightsExercise {

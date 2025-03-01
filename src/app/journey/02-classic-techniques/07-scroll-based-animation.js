@@ -1,7 +1,9 @@
-import * as THREE from 'three'
-import GUI from 'lil-gui';
-import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import gsap from 'gsap';
+import GUI from 'lil-gui';
+import * as THREE from 'three'
+
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
+
 
 export class ScrollBasedAnimation {
   constructor(view, debugUI) {

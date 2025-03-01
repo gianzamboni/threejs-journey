@@ -1,5 +1,6 @@
-import * as THREE from 'three'
 import GUI from 'lil-gui'
+import * as THREE from 'three'
+
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 export class MaterialExercise {

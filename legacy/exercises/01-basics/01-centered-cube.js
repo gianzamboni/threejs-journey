@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { RedCube } from '../../utils/red-cube';
 
 export class CenteredCube {

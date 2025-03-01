@@ -1,6 +1,7 @@
 import * as THREE from 'three'
-import { TEXTURE_LOADER } from '../../utils/loading-manager';
+
 import { dispose } from '../../utils/dispose';
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
 export class TextureExercise {
   constructor(view) {
     this.view = view;

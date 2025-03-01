@@ -1,6 +1,7 @@
-import * as THREE from "three";
-import { TEXTURE_LOADER } from "../../utils/loading-manager";
 import GUI from "lil-gui";
+import * as THREE from "three";
+
+import { TEXTURE_LOADER } from "../../utils/loading-manager";
 
 export class BakedShadow {
   constructor(view) {

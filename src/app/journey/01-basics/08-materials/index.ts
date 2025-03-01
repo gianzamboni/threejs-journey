@@ -1,13 +1,15 @@
 import * as THREE from 'three';
-import RenderView from '#/app/layout/render-view';
+
 //import {  Customizable, DebugFPS, Debuggable } from '#/app/journey/decorators/debug';
-import { AssetLoader } from '#/app/utils/assets-loader';
 import { Timer } from 'three/addons/misc/Timer.js';
-import { Quality } from '#/app/layout/quality-selector';
-import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
-import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
+
 import { Customizable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
+import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
+import { Quality } from '#/app/layout/quality-selector';
+import RenderView from '#/app/layout/render-view';
+import { AssetLoader } from '#/app/utils/assets-loader';
 import { PHYSICAL_MATERIAL_CONFIGS } from './debug-ui-configs';
 import { QUALITY_CONFIG } from './quality-config';
 import { QualityConfig } from './quality-config';

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { createRedCube } from '#/app/utils/default-shapes';
+
 import { Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
+import { createRedCube } from '#/app/utils/default-shapes';
 
 @Exercise('first-three-js-project')
 export class CenteredCube extends BaseExercise {

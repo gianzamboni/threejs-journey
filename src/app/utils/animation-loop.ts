@@ -1,5 +1,6 @@
-import RenderView from '#/app/layout/render-view';
 import { Timer } from 'three/addons/misc/Timer.js'
+
+import RenderView from '#/app/layout/render-view';
 import { waitForCondition } from '#/app/utils/sleep';
 
 enum AnimationStatus {

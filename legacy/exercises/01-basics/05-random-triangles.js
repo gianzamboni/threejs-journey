@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+
 import { dispose } from '../../utils/dispose';
 
 export class RandomTriangles {

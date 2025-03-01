@@ -1,5 +1,7 @@
 import * as THREE from 'three';
+
 import { CenteredCube } from './01-centered-cube';
+
 import { label } from '../../utils/utils';
 
 export class RotatingCube extends CenteredCube {

@@ -1,10 +1,12 @@
-import * as THREE from 'three';
-import { Timer } from 'three/addons/misc/Timer.js'
-import { TEXTURE_LOADER } from '../../utils/loading-manager';
-import { Sky } from 'three/addons/objects/Sky.js'
-import { randomBetween, randomSign } from '../../utils/utils.js';
-import { PathTracer } from '../../utils/path-tracer';
 import GUI from 'lil-gui';
+import * as THREE from 'three';
+
+import { Timer } from 'three/addons/misc/Timer.js'
+import { Sky } from 'three/addons/objects/Sky.js'
+
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
+import { PathTracer } from '../../utils/path-tracer';
+import { randomBetween, randomSign } from '../../utils/utils.js';
 
 const textureMaps = {
   color: 'diff',

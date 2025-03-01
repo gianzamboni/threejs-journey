@@ -1,8 +1,10 @@
-import * as THREE from 'three';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { TEXTURE_LOADER } from '../../utils/loading-manager';
 import GUI from 'lil-gui';
+import * as THREE from 'three';
+
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+
+import { TEXTURE_LOADER } from '../../utils/loading-manager';
 
 export class Text3D {
   constructor(view) {
