@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js';
-import { createRedCube } from '@/app/utils/default-shapes';
-import { Exercise } from '@/app/decorators/exercise';
-import AnimatedExercise from '@/app/journey/exercises/animated-exercise';
+import { createRedCube } from '#/app/utils/default-shapes';
+import { Exercise } from '#/app/decorators/exercise';
+import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 
 @Exercise('animations')
 export class RotatingCube extends AnimatedExercise {

@@ -1,4 +1,4 @@
-import BaseExercise from "@/app/journey/exercises/base-exercise";
+import BaseExercise from "#/app/journey/exercises/base-exercise";
 
 export class TestExercise extends BaseExercise {
 

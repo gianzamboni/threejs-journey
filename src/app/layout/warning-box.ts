@@ -1,4 +1,4 @@
-import { WARNING } from "../constants/icons";
+import { WARNING } from "#/app/constants/icons";
 
 export type ErrorData = {
   message: HTMLElement;

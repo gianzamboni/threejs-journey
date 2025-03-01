@@ -1,5 +1,5 @@
 import { Timer } from "three/examples/jsm/Addons.js";
-import { ExerciseMetadata } from "../utils/exercise-metadata";
+import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
 import { Controller } from "lil-gui";
 
 type LilGuiControllerConfig = Omit<{

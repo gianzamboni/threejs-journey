@@ -1,5 +1,5 @@
 import { Controller } from "lil-gui";
-import { initDebugMetadata } from "./debug";
+import { initDebugMetadata } from "#/app/decorators/debug";
 
 export type ControllerSettings = Omit<{
   [key in keyof Controller]?: Controller[key] extends Function ? any : never;

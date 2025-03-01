@@ -1,17 +1,19 @@
-import restart from 'vite-plugin-restart'
-import checker from 'vite-plugin-checker'
-import eslint from 'vite-plugin-eslint'
+import path from 'path';
+
 import tailwindcss from "@tailwindcss/vite";
+import checker from 'vite-plugin-checker';
+import eslint from 'vite-plugin-eslint';
+import restart from 'vite-plugin-restart'
+
 import {configDefaults, defineConfig, mergeConfig } from 'vitest/config'
 
-import path from 'path';
 
 const config = {
   root: 'src/', // Sources files (typically where index.html is)
   publicDir: 'static/', // Path from "root" to static assets (files that are served as they are)
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src') // Alias @ to src/
+      '#': path.resolve(__dirname, 'src') // Alias # to src/
     }
   },
   server:
@@ -37,6 +39,7 @@ const config = {
   },
   plugins:
     [
+      //eslint(),
       restart({ restart: ['static/**',] }), // Restart server on static file change
       checker({
         // e.g. use TypeScript check

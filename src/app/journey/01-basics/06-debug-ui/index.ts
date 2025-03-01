@@ -1,9 +1,9 @@
+import RenderView from '#/app/layout/render-view';
 import * as THREE from 'three';
-import RenderView from '@/app/layout/render-view';
 import gsap from 'gsap';
-import { Exercise, OrbitControllerDescription } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
-import { Callable, Customizable } from '@/app/decorators/customizable';
+import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
+import { Callable, Customizable } from '#/app/decorators/customizable';
 import { DEBUG_UI_MATERIAL_CONFIG, DEBUG_UI_GEOMETRY_CONFIG, DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 
 @Exercise('debug-ui')

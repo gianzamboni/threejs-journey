@@ -1,6 +1,6 @@
-import { ControllerConfig } from '@/app/decorators/customizable';
+import { ControllerConfig } from '#/app/decorators/customizable';
+import { printable } from '#/app/utils/text-utils';
 import { Lights, LightType, LightTypeHelper } from './types';
-import { printable } from '@/app/utils/text-utils';
 
 
 function commonControllers(lightType: keyof Lights): ControllerConfig[] {

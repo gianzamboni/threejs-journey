@@ -1,15 +1,15 @@
-import { ExerciseClass } from "../types/exercise";
-import { ExerciseMetadata } from "../utils/exercise-metadata";
-import { CenteredCube } from "./01-basics/01-centered-cube";
-import { CubeGroup } from "./01-basics/02-cube-group";
-import { RotatingCube } from "./01-basics/03-rotating-cube";
-import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
-import { RandomTriangles } from "./01-basics/05-random-triangles";
-import { DebugUITest } from "./01-basics/06-debug-ui";
-import { TextureTest } from "./01-basics/07-textures";
-import { MaterialsTest } from "./01-basics/08-materials";
-import { Text3D } from "./01-basics/09-text";
-import { LightsExercise } from "./02-classic-techniques/01-lights";
+import { ExerciseClass } from "#/app/types/exercise";
+import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import { CenteredCube } from "#/app/journey/01-basics/01-centered-cube";
+import { CubeGroup } from "#/app/journey/01-basics/02-cube-group";
+import { RotatingCube } from "#/app/journey/01-basics/03-rotating-cube";
+import { OrbitControlsTest } from "#/app/journey/01-basics/04-orbit-controls";
+import { RandomTriangles } from "#/app/journey/01-basics/05-random-triangles";
+import { DebugUITest } from "#/app/journey/01-basics/06-debug-ui";
+import { TextureTest } from "#/app/journey/01-basics/07-textures";
+import { MaterialsTest } from "#/app/journey/01-basics/08-materials";
+import { Text3D } from "#/app/journey/01-basics/09-text";
+import { LightsExercise } from "#/app/journey/02-classic-techniques/01-lights";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();

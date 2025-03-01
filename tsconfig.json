@@ -20,7 +20,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "#/*": ["./src/*"]
     },
   },
   "include": ["src", "polyfills", "test/app/utils/index.test.ts"]

@@ -1,8 +1,11 @@
+import { Exercise } from "#/app/types/exercise";
+import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+
+import { ControllerFactory } from "#/app/layout/debug-ui/controller-factory";
+import { GraphPanel } from "#/app/layout/debug-ui/graph-panel";
+
 import GUI from "lil-gui";
-import { GraphPanel } from "./graph-panel";
-import { Exercise } from "@/app/types/exercise";
-import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
-import { ControllerFactory } from "./controller-factory";
+
 type DataRow = GraphPanel;
 
 export default class DebugUI {

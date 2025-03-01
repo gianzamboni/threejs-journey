@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { Exercise } from '../types/exercise';
-import AnimatedExercise from '../journey/exercises/animated-exercise';
-import { ExerciseMetadata } from '../utils/exercise-metadata';
+import { Exercise } from '#/app/types/exercise';
+import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
+import { ExerciseMetadata } from '#/app/utils/exercise-metadata';
 
 export default class RenderView {
 

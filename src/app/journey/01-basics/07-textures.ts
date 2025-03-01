@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import RenderView from '@/app/layout/render-view';
-import { AssetLoader } from '@/app/utils/assets-loader';
-import { Exercise, OrbitControllerDescription } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
+import RenderView from '#/app/layout/render-view';
+import { AssetLoader } from '#/app/utils/assets-loader';
+import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 
 @Exercise('textures')
 @OrbitControllerDescription()

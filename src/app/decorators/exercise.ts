@@ -1,4 +1,4 @@
-import { ExerciseClass } from "../types/exercise";
+import { ExerciseClass } from "#/app/types/exercise";
 
 export function Exercise(id: string) {
   return function<T extends ExerciseClass>(target: T, context: ClassDecoratorContext) {

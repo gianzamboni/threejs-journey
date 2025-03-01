@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Quality } from "@/app/layout/quality-selector";
+import { Quality } from "#/app/layout/quality-selector";
 
 
 export type QualityConfig = {

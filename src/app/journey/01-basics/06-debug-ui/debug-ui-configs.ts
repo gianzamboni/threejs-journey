@@ -1,4 +1,4 @@
-import { ControllerConfig } from "@/app/decorators/customizable";
+import { ControllerConfig } from "#/app/decorators/customizable";
 
 export const DEBUG_UI_CUBE_CONFIG: ControllerConfig[] = [{
   propertyPath: 'position.y',

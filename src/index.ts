@@ -1,15 +1,15 @@
 /// <reference types="vite/client" />
 import '../pollyfills/symbol-pollyfill';
-import Menu from "@/app/layout/menu";
-import { InfoBox } from "./app/layout/info-box";
-import RenderView from "./app/layout/render-view";
-import DebugUI from "./app/layout/debug-ui";
-import { AssetLoader, LoadingData } from "./app/utils/assets-loader";
-import { LoadingScreen } from "./app/layout/loading-screen";
-import { ErrorData, WarningBox } from "./app/layout/warning-box";
-import { Quality, qualityFromString, QualitySelector } from "./app/layout/quality-selector";
-import { Exercise, ExerciseClass } from './app/types/exercise';
-import { ExerciseMetadata } from './app/utils/exercise-metadata';
+import DebugUI from "#/app/layout/debug-ui";
+import { InfoBox } from "#/app/layout/info-box";
+import { LoadingScreen } from "#/app/layout/loading-screen";
+import Menu from "#/app/layout/menu";
+import { Quality, qualityFromString, QualitySelector } from "#/app/layout/quality-selector";
+import RenderView from "#/app/layout/render-view";
+import { ErrorData, WarningBox } from "#/app/layout/warning-box";
+import { Exercise, ExerciseClass } from '#/app/types/exercise';
+import { AssetLoader, LoadingData } from "#/app/utils/assets-loader";
+import { ExerciseMetadata } from '#/app/utils/exercise-metadata';
 
 let tappedTwice = false;
 

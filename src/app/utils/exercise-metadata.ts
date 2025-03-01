@@ -1,5 +1,5 @@
-import { ExerciseControllers } from "../decorators/customizable";
-import { ExerciseClass, Exercise } from "../types/exercise";
+import { ExerciseControllers } from "#/app/decorators/customizable";
+import { ExerciseClass, Exercise } from "#/app/types/exercise";
 
 export namespace ExerciseMetadata {
   export type ExerciseMetadata = {

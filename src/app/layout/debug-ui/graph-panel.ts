@@ -1,4 +1,4 @@
-import { COLORS } from "@/theme";
+import { COLORS } from "#/theme";
 
 type SizesConfig = {
   canvas: {

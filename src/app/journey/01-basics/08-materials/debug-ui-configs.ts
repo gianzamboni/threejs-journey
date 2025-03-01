@@ -1,4 +1,4 @@
-import { ControllerConfig } from '@/app/decorators/customizable';
+import { ControllerConfig } from '#/app/decorators/customizable';
 
 const MATERIAL_FOLDER = 'Material';
 const DEFAULT_SETTINGS = {

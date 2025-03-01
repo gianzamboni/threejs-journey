@@ -1,6 +1,6 @@
-import { ControllerConfig } from "@/app/decorators/customizable";
-import { ExerciseMetadata } from "@/app/utils/exercise-metadata";
-import { getPathArray, printable } from "@/app/utils/text-utils";
+import { ControllerConfig } from "#/app/decorators/customizable";
+import { ExerciseMetadata } from "#/app/utils/exercise-metadata";
+import { getPathArray, printable } from "#/app/utils/text-utils";
 import GUI, { Controller } from "lil-gui";
 
 /**

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { RELOAD } from '../constants/icons';
+import { RELOAD } from '#/app/constants/icons';
 import { FontLoader, Font } from 'three/addons/loaders/FontLoader.js';
 
 export type LoadingData = {

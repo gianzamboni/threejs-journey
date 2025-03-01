@@ -1,5 +1,5 @@
-import { DOWN_ARROW } from "@/app/constants/icons";
-import { CSS_CLASSES } from "@/theme";
+import { DOWN_ARROW } from "#/app/constants/icons";
+import { CSS_CLASSES } from "#/theme";
 
 type CollapsableButtonSettings = {
   className?: string;

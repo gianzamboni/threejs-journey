@@ -1,6 +1,6 @@
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import AnimatedExercise from "./animated-exercise";
-import RenderView from "@/app/layout/render-view";
+import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
+import RenderView from "#/app/layout/render-view";
 import { Timer } from 'three/addons/misc/Timer.js';
 
 export default class OrbitControlledExercise extends AnimatedExercise {

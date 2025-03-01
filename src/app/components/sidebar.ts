@@ -1,5 +1,5 @@
-import { CSS_CLASSES } from "@/theme";
-import { Overlay } from "./overlay";
+import { CSS_CLASSES } from "#/theme";
+import { Overlay } from "#/app/components/overlay";
 
 type SideBarOptions = {
   buttonTitle: string;

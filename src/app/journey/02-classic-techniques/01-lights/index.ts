@@ -3,13 +3,13 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import RenderView from '@/app/layout/render-view';
-import { Quality } from '@/app/layout/quality-selector';
-import { Exercise } from '@/app/decorators/exercise';
-import OrbitControlledExercise from '@/app/journey/exercises/orbit-controlled-exercise';
-import { DebugFPS } from '@/app/decorators/debug';
+import RenderView from '#/app/layout/render-view';
+import { Quality } from '#/app/layout/quality-selector';
+import { Exercise } from '#/app/decorators/exercise';
+import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
+import { DebugFPS } from '#/app/decorators/debug';
 import { QualityConfig, QUALITY_CONFIG } from './quality-config';
-import { Customizable } from '@/app/decorators/customizable';
+import { Customizable } from '#/app/decorators/customizable';
 import { LIGHTS_CONFIG, HELPERS_CONFIG } from './debug-ui-configs';
 import { Helpers, HelperStatusDict, Lights, LightType, LightTypeHelper } from './types';
 

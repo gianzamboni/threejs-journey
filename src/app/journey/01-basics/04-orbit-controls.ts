@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { createRedCube } from "@/app/utils/default-shapes";
-import RenderView from "@/app/layout/render-view";
-import { Exercise, OrbitControllerDescription } from "@/app/decorators/exercise";
-import OrbitControlledExercise from "@/app/journey/exercises/orbit-controlled-exercise";
+import { createRedCube } from "#/app/utils/default-shapes";
+import RenderView from "#/app/layout/render-view";
+import { Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
+import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 
 @Exercise('cameras')
 @OrbitControllerDescription()

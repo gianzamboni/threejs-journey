@@ -1,4 +1,4 @@
-import { CSS_CLASSES } from '@/theme';
+import { CSS_CLASSES } from '#/theme';
 
 export enum Quality {
   Low = 'low',
