@@ -46,7 +46,7 @@ export function Customizable(newControllers: ControllerConfig[]) {
 }
 
 export function Callable(folderPath: string, name: string,) {
-  return function( _ : Function, context: ClassMethodDecoratorContext) {
+  return function( _ : VoidFunction, context: ClassMethodDecoratorContext) {
     addControllersToMetadata(context, [{ type: 'callable', folderPath, settings: {name} }], context.name);
   }
 }
