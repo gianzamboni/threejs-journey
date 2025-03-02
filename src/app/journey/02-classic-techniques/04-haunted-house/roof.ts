@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
+import { randomBetween } from '#/app/utils/number-utils';
 import { QualityConfig } from './quality-config';
 import { MeshObject } from './scene-object';
 import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
-import { randomBetween } from './utils';
 
 /**
  * Roof object for the haunted house scene
