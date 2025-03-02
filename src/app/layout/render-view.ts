@@ -56,9 +56,9 @@ export default class RenderView {
     }
   }
 
-  enableShadows() {
+  enableShadows(shadowMapType: THREE.ShadowMapType) {
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = shadowMapType;
   }
 
   reset() {

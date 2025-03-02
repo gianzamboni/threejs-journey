@@ -5,12 +5,13 @@ import { Timer } from "three/examples/jsm/Addons.js";
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
+import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Lights } from "#/app/utils/light-controllers-utils";
 import { LIGHTS_CONFIG, MATERIAL_CONFIG } from "./debug-ui-configs";
+import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-
 type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>;
 
 //type Helpers = {
@@ -22,6 +23,8 @@ type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>
 @Exercise('Shadows')
 @OrbitControllerDescription()
 export class Shadows extends OrbitControlledExercise {
+
+  private qualityConfig: QualityConfig;
 
   @Customizable(LIGHTS_CONFIG)
   private lights: ExerciseLights;
@@ -35,10 +38,12 @@ export class Shadows extends OrbitControlledExercise {
   private plane: THREE.Mesh;
   private sphere: THREE.Mesh;
 
-  constructor(view: RenderView) {
+  constructor(view: RenderView, quality: Quality) {
     super(view);
+    
+    this.qualityConfig = QUALITY_CONFIG[quality];
 
-    view.enableShadows();
+    view.enableShadows(this.qualityConfig.shadowMapType);
 
     this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 0.25;
@@ -109,8 +114,8 @@ export class Shadows extends OrbitControlledExercise {
 
     [lights.directional, lights.spot, lights.point].forEach((light) => {
       light.castShadow = true;
-      light.shadow.mapSize.width = 2048;
-      light.shadow.mapSize.height = 2048;
+      light.shadow.mapSize.width = this.qualityConfig.shadowMapSize;
+      light.shadow.mapSize.height = this.qualityConfig.shadowMapSize;
       light.shadow.camera.near = 1;
       light.shadow.camera.far = 6;
     });
