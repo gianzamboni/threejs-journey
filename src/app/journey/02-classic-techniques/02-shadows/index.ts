@@ -114,8 +114,8 @@ export class Shadows extends OrbitControlledExercise {
 
     [lights.directional, lights.spot, lights.point].forEach((light) => {
       light.castShadow = true;
-      light.shadow.mapSize.width = this.qualityConfig.shadowMapSize;
-      light.shadow.mapSize.height = this.qualityConfig.shadowMapSize;
+      light.shadow.mapSize.width = 2048;
+      light.shadow.mapSize.height = 2048;
       light.shadow.camera.near = 1;
       light.shadow.camera.far = 6;
     });
