@@ -25,6 +25,10 @@ export default class DebugUI {
   }
 
   toggle(activeExercise: Exercise) {
+    const isDebuggable = ExerciseMetadata.isDebuggable(activeExercise);
+    if(!isDebuggable) {
+      return;
+    }
     this.lastGuiUpdate = performance.now();
     this.container.classList.toggle('hidden');
     const metadata = ExerciseMetadata.get(activeExercise);

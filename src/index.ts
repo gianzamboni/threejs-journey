@@ -74,7 +74,6 @@ async function selectExercise(newExercise: ExerciseClass) {
   if(activeExercise !== undefined) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
     debugUI.reset();
-    renderView.reset();
     loader.reset();
     await activeExercise.dispose();
   }
@@ -86,8 +85,8 @@ async function selectExercise(newExercise: ExerciseClass) {
   renderView.run(activeExercise);
   if(ExerciseMetadata.isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {
     activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
-    toggleDebug();
   }
+  toggleDebug();
 }
 
 function changeQuality(evt: CustomEvent<string>) {
@@ -112,7 +111,7 @@ function setupListeners() {
 
   window.addEventListener('touch', () => {
     doubleTapHandler();
-    if(tappedTwice && ExerciseMetadata.isDebuggable(activeExercise)) {
+    if(tappedTwice) {
       toggleDebug();
     }
   });
