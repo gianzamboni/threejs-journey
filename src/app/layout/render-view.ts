@@ -13,7 +13,7 @@ export default class RenderView {
 
   constructor(parent: HTMLElement) {
     this.canvas = document.createElement('canvas');
-    this.canvas.className = 'fixed top-0 left-0 z-[-1]';
+    this.canvas.className = 'fixed top-0 left-0 z-[0]';
     parent.appendChild(this.canvas);
 
     this.renderer = new THREE.WebGLRenderer({ 

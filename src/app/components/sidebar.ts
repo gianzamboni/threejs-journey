@@ -35,7 +35,7 @@ export default class SideBar {
 
   private createBody() {
     const body = document.createElement('div');
-    body.className = 'relative flex flex-col h-full max-h-full px-3 pt-3';
+    body.className = 'relative flex flex-col h-full max-h-full px-3 pt-3 z-[2]';
     return body;
   }
 
@@ -47,7 +47,7 @@ export default class SideBar {
 
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
-    button.className = `flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} z-50`;
+    button.className = `absolute flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} z-[1]`;
     button.innerHTML = buttonTitle;
     button.onclick = this.toggleSidePanel.bind(this);
     return button;

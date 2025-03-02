@@ -70,3 +70,8 @@ export function getControllers(target: MetadataTarget): ExerciseControllers {
   const metadata = get(target);
   return metadata.controllersConfig ?? {};
 }
+
+export function hasControllers(target: MetadataTarget): boolean {
+  const controllers = getControllers(target);
+  return Object.keys(controllers).length > 0;
+}

@@ -10,7 +10,6 @@ export class InfoBox {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-
     this.collapsable = new Collapsable('Información', {
       className: 'm-5 w-[90vw] sm:w-[16vw] min-w-[390px] ',
       button: {

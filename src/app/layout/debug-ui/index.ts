@@ -77,7 +77,7 @@ export default class DebugUI {
       this.dataRows[key].dispose();
     }
     this.dataRows = {};
-    const controllers = this.lilGui?.controllersRecursive() ?? [];
+    const controllers = this.gui.controllersRecursive() ?? [];
     for(const controller of controllers) {
       controller.destroy();
     }
@@ -86,8 +86,10 @@ export default class DebugUI {
   }
 
   public createControllers(exercise: Exercise) {
-    const gui = this.gui;
-    const controllerFactory = new ControllerFactory(gui, exercise);
-    controllerFactory.create();
+    if(ExerciseMetadata.hasControllers(exercise)) {
+      const gui = this.gui;
+      const controllerFactory = new ControllerFactory(gui, exercise);
+      controllerFactory.create();
+    }
   }
 }

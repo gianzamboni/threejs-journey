@@ -9,7 +9,7 @@ export class LoadingScreen {
 
   constructor(parent: HTMLElement) {
     this.container = document.createElement('div');
-    this.container.className = 'fixed top-0 left-0 right-0 bottom-0 flex justify-center flex-col items-center text-white text-2xl bg-black/50  transition-[opacity] duration-300 w-full hidden';
+    this.container.className = 'fixed top-0 left-0 right-0 bottom-0 flex justify-center flex-col items-center text-white text-2xl bg-black/50  transition-[opacity] duration-300 w-full hidden z-[3]';
     parent.appendChild(this.container);
 
     const textRow = document.createElement('div');
@@ -42,7 +42,7 @@ export class LoadingScreen {
   }
 
   async update(data: LoadingData) {
-    const progress = data.itemsLoaded * 100/ data.itemsTotal;
+    const progress = Math.round(data.itemsLoaded * 100/ data.itemsTotal);
     this.label.innerHTML = `${progress}%`;
     this.progress.style.width = `${progress}%`;
   }
