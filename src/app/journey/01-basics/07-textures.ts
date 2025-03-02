@@ -29,7 +29,7 @@ export class TextureTest extends OrbitControlledExercise {
   }
 
   loadMinecrafTexture() {
-    const colorTexture = this.loader.loadTexture('/textures/minecraft.png');
+    const colorTexture = this.loader.loadTexture('/textures/minecraft/minecraft.png');
     colorTexture.colorSpace = THREE.SRGBColorSpace;
     colorTexture.wrapS = THREE.RepeatWrapping;
     colorTexture.wrapT = THREE.RepeatWrapping;

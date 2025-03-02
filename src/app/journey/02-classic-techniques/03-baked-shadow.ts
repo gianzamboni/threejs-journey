@@ -44,7 +44,7 @@ export class BakedShadow extends OrbitControlledExercise {
 
     this.plane = this.createPlane();
 
-    this.bakedShadowTexture = this.loader.loadTexture('/textures/simpleShadow.jpg');
+    this.bakedShadowTexture = this.loader.loadTexture('/textures/bakedShadows/simpleShadow.jpg');
     
     this.bakedShadowMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,

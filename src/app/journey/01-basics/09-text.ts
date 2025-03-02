@@ -28,7 +28,7 @@ export class Text3D extends OrbitControlledExercise {
     this.camera.lookAt(0,0,0);
 
     this.loader = AssetLoader.getInstance();
-    this.matcapTexture = this.loader.loadTexture('textures/matcap_8.png');
+    this.matcapTexture = this.loader.loadTexture('textures/matcaps/8.png');
     this.matcapTexture.colorSpace = THREE.SRGBColorSpace;
 
     this.material = new THREE.MeshMatcapMaterial({
