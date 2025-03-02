@@ -74,6 +74,7 @@ async function selectExercise(newExercise: ExerciseClass) {
   if(activeExercise !== undefined) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
     debugUI.reset();
+    renderView.reset();
     loader.reset();
     await activeExercise.dispose();
   }
