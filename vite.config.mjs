@@ -2,11 +2,10 @@ import path from 'path';
 
 import tailwindcss from "@tailwindcss/vite";
 import checker from 'vite-plugin-checker';
-import eslint from 'vite-plugin-eslint';
+//mport eslint from 'vite-plugin-eslint';
 import restart from 'vite-plugin-restart'
 
 import {configDefaults, defineConfig, mergeConfig } from 'vitest/config'
-
 
 const config = {
   root: 'src/', // Sources files (typically where index.html is)
@@ -31,8 +30,10 @@ const config = {
     }
   },
   test: {
+    root: './',
     globals: true,
     environment: "jsdom",
+    setupFiles: ['./vitest/vitest.setup.ts'],
   },
   esbuild: {
     target: 'es6'

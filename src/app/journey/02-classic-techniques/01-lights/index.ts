@@ -10,9 +10,19 @@ import { Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
+import { Lights, LightType } from '#/app/utils/light-controllers-utils';
 import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
-import { Helpers, HelperStatusDict, Lights, LightType, LightTypeHelper } from './types';
+
+ type Helpers = {
+  directional: THREE.DirectionalLightHelper,
+  point: THREE.PointLightHelper,
+  rectArea: RectAreaLightHelper,
+  spot: THREE.SpotLightHelper
+}
+
+type HelperStatusDict = Record<keyof Helpers, boolean>;
+export type LightTypeHelper = keyof Helpers;
 
 @Exercise('lights')
 export class LightsExercise extends OrbitControlledExercise {
@@ -22,7 +32,7 @@ export class LightsExercise extends OrbitControlledExercise {
   private plane: THREE.Mesh;
 
   @Customizable(LIGHTS_CONFIG)
-  private ligths: Lights;
+  private lights: Lights;
 
   @Customizable(HELPERS_CONFIG)
   private helpers: Helpers;
@@ -40,15 +50,15 @@ export class LightsExercise extends OrbitControlledExercise {
     this.plane = this.createPlane();
 
     RectAreaLightUniformsLib.init();
-    this.ligths = this.createLights();
+    this.lights = this.createLights();
 
     [this.helpers, this.helpersVisibleStatus] = this.createLightHelpers();
 
     this.scene.add(
       ...this.animatedObjects, 
       this.plane,
-      ...Object.values(this.ligths),
-      this.ligths.spot.target,
+      ...Object.values(this.lights),
+      this.lights.spot.target,
       ...Object.values(this.helpers),
     );
   }
@@ -70,8 +80,8 @@ export class LightsExercise extends OrbitControlledExercise {
     for(const helper of Object.values(this.helpers)) {
       helper.dispose();
     }
-    this.ligths.spot.target.clear();
-    for(const light of Object.values(this.ligths)) {
+    this.lights.spot.target.clear();
+    for(const light of Object.values(this.lights)) {
       light.dispose();
     }
     this.plane.geometry.dispose();
@@ -87,7 +97,9 @@ export class LightsExercise extends OrbitControlledExercise {
    * @param {Object} context - The context object containing lightType
    */
   toggleLight(newValue: boolean, { lightType }: {lightType: LightType}) {
-    const light = this.ligths[lightType];
+    
+
+    const light = this.lights[lightType];
     light.visible = newValue;
     if(lightType in this.helpers) {
       lightType = lightType as LightTypeHelper;
@@ -105,17 +117,17 @@ export class LightsExercise extends OrbitControlledExercise {
    * @param {Object} context - The context object containing lightType
    */
   updateColor(color: string, { lightType }: {lightType: LightType}) {
-    const light = this.ligths[lightType];
+    const light = this.lights[lightType];
     light.color.set(new THREE.Color(color));
   }
 
   updateGroundColor(color: string) {
-    this.ligths.hemisphere.groundColor.set(new THREE.Color(color));
+    this.lights.hemisphere.groundColor.set(new THREE.Color(color));
   }
 
   updateLookAt(_: number, { target }: { target: { x: number, y:number, z:number }}) {
     const newTarget = new THREE.Vector3(target.x, target.y, target.z);
-    this.ligths.rectArea.lookAt(newTarget);
+    this.lights.rectArea.lookAt(newTarget);
   }
   
   createAnimatedObjects() {
@@ -163,10 +175,10 @@ export class LightsExercise extends OrbitControlledExercise {
 
   createLightHelpers() : [Helpers, HelperStatusDict] {
     const helpers = {
-      directional: new THREE.DirectionalLightHelper(this.ligths.directional, 0.2),
-      point: new THREE.PointLightHelper(this.ligths.point, 0.2),
-      rectArea: new RectAreaLightHelper(this.ligths.rectArea),
-      spot: new THREE.SpotLightHelper(this.ligths.spot)
+      directional: new THREE.DirectionalLightHelper(this.lights.directional, 0.2),
+      point: new THREE.PointLightHelper(this.lights.point, 0.2),
+      rectArea: new RectAreaLightHelper(this.lights.rectArea),
+      spot: new THREE.SpotLightHelper(this.lights.spot)
     }
 
     const status = Object.keys(helpers).reduce((acc, key) => {

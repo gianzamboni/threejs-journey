@@ -10,6 +10,7 @@ import { Text3D } from "#/app/journey/01-basics/09-text";
 import { LightsExercise } from "#/app/journey/02-classic-techniques/01-lights";
 import { ExerciseClass } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
+import { Shadows } from "./02-classic-techniques/02-shadows";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -47,7 +48,7 @@ export const JOURNEY: Section[] = [{
   id: 'classic-techniques',
   exercises: [
     LightsExercise,
-    // Shadows,
+    Shadows,
     // BakedShadows,
     // HauntedHouse,
     // Particles,

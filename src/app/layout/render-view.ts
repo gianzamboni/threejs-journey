@@ -55,4 +55,9 @@ export default class RenderView {
       this.renderer.render(this.exercise.scene, this.exercise.camera);
     }
   }
+
+  enableShadows() {
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  }
 }

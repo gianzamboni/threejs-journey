@@ -13,21 +13,6 @@ describe('ControllerFactory', () => {
   let controllerFactory: ControllerFactory;
   
   beforeEach(() => {
-    vi.resetAllMocks();
-
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation(query => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
 
     // Setup for each test
     gui = new GUI();
@@ -184,7 +169,8 @@ describe('ControllerFactory', () => {
         type: 'master',
         initialValue: true,
         settings: {
-          name: 'On/Off'
+          name: 'On/Off',
+          onChange: 'getCube'
         }
       },
       {
@@ -220,4 +206,63 @@ describe('ControllerFactory', () => {
     expect(yPositionController._disabled).toBe(false);
     expect(onOffController._disabled).toBe(false);
   });
+
+  it('should throw an error when a controller has an invalid onChange callback', () => {
+    const invalidConfig = {
+      propertyPath: 'visible',
+      settings: {
+        onChange: 'nonExistentMethod' // This method doesn't exist on TestExercise
+      }
+    };
+    
+    vi.spyOn(ExerciseMetadata, 'getControllers').mockReturnValue({ 'cube': [invalidConfig] });
+    
+    expect(() => controllerFactory.create()).toThrow(
+      `Controller visible has onChange callback nonExistentMethod but it is not a function`
+    );
+  });
+
+  it('should throw an error when a controller has an invalid onFinishChange callback', () => {
+    const invalidConfig = {
+      propertyPath: 'visible',
+      settings: {
+        onFinishChange: 'nonExistentMethod' // This method doesn't exist on TestExercise
+      }
+    };
+    
+    vi.spyOn(ExerciseMetadata, 'getControllers').mockReturnValue({ 'cube': [invalidConfig] });
+    
+    expect(() => controllerFactory.create()).toThrow(
+      `Controller visible has onFinishChange callback nonExistentMethod but it is not a function`
+    );
+  });
+
+  it('should throw an error when a color controller has no onChange or onFinishChange callback', () => {
+    const invalidConfig: ControllerConfig = {
+      propertyPath: 'visible',
+      type: 'color'
+      // Missing onChange or onFinishChange callback
+    };
+    
+    vi.spyOn(ExerciseMetadata, 'getControllers').mockReturnValue({ 'cube': [invalidConfig] });
+    
+    expect(() => controllerFactory.create()).toThrow(
+      `Controller visible has type color but no onChange or onFinishChange callback`
+    );
+  });
+
+  it('should throw an error when a master controller has no onChange or onFinishChange callback', () => {
+    const invalidConfig: ControllerConfig = {
+      propertyPath: 'visible',
+      type: 'master'
+      // Missing onChange or onFinishChange callback
+    };
+    
+    vi.spyOn(ExerciseMetadata, 'getControllers').mockReturnValue({ 'cube': [invalidConfig] });
+    
+    expect(() => controllerFactory.create()).toThrow(
+      `Controller visible has type master but no onChange or onFinishChange callback`
+    );
+  });
+  
 });

@@ -10,6 +10,7 @@ import { ErrorData, WarningBox } from "#/app/layout/warning-box";
 import { Exercise, ExerciseClass } from '#/app/types/exercise';
 import { AssetLoader, LoadingData } from "#/app/utils/assets-loader";
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { pascalCaseToText } from './app/utils/text-utils';
 
 let tappedTwice = false;
 
@@ -66,6 +67,7 @@ function showErrorMessage(evt: CustomEvent<ErrorData>) {
 function updateURL(exercise: Exercise) { 
   const id = ExerciseMetadata.getId(exercise);
   window.history.pushState({exerciseId: id}, '', `?exercise=${id}&quality=${activeQuality}`);
+  document.title = `${pascalCaseToText(id)} | Three.js Journey`;
 }
 
 async function selectExercise(newExercise: ExerciseClass) {
@@ -121,7 +123,6 @@ function setupListeners() {
 function initAllGUIParts() {
   menu = new Menu(document.body);
   renderView = new RenderView(document.body);
-
   const rightColumn = document.createElement('div');
   rightColumn.id = "right-column";
   rightColumn.className = "fixed top-0 right-0 m-5 flex flex-col items-end gap-2";

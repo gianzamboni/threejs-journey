@@ -46,11 +46,14 @@ export class ControllerFactory {
     const controllersConfig = ExerciseMetadata.getControllers(this.exercise);
     for (const key in controllersConfig) {
       for(const config of controllersConfig[key]) {
+        this.assertControllerConfigIsValid(config);
+
         const folder = this.getFolder(config.folderPath);
         const customizableObject = this.findCustomizableObject(key, config);
         const isColor = config.type === 'color';
         const isMaster = config.type === 'master';
         
+
         let controller: Controller;
         if(isColor) {
           controller = folder.addColor(
@@ -227,5 +230,26 @@ export class ControllerFactory {
     return config.settings !== undefined && 
            (config.settings.onChange !== undefined || 
             config.settings.onFinishChange !== undefined);
+  }
+
+  private assertControllerConfigIsValid(config: ControllerConfig) {
+    const onChange = config.settings?.onChange as keyof Exercise;
+    const onFinishChange = config.settings?.onFinishChange as keyof Exercise;
+
+    if(onChange && typeof this.exercise[onChange] !== 'function') {
+      throw new Error(`Controller ${config.propertyPath} has onChange callback ${onChange} but it is not a function`);
+    }
+
+    if(onFinishChange && typeof this.exercise[onFinishChange] !== 'function') {
+      throw new Error(`Controller ${config.propertyPath} has onFinishChange callback ${onFinishChange} but it is not a function`);
+    }
+
+    if(config.type === 'color' && onChange === undefined && onFinishChange === undefined) {
+      throw new Error(`Controller ${config.propertyPath} has type color but no onChange or onFinishChange callback`);
+    }
+
+    if(config.type === 'master' && onChange === undefined && onFinishChange === undefined) {
+      throw new Error(`Controller ${config.propertyPath} has type master but no onChange or onFinishChange callback`);
+    }
   }
 }
