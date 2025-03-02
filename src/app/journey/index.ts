@@ -11,7 +11,7 @@ import { LightsExercise } from "#/app/journey/02-classic-techniques/01-lights";
 import { ExerciseClass } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { Shadows } from "./02-classic-techniques/02-shadows";
-
+import { BakedShadow } from "./02-classic-techniques/03-baked-shadow";
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
   for(const section of sections) {
@@ -49,7 +49,7 @@ export const JOURNEY: Section[] = [{
   exercises: [
     LightsExercise,
     Shadows,
-    // BakedShadows,
+    BakedShadow,
     // HauntedHouse,
     // Particles,
     // GalaxyGenerator,
