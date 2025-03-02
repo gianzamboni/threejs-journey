@@ -13,6 +13,7 @@ import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { Shadows } from "./02-classic-techniques/02-shadows";
 import { BakedShadow } from "./02-classic-techniques/03-baked-shadow";
 import { HauntedHouse } from "./02-classic-techniques/04-haunted-house";
+import { Particles } from "./02-classic-techniques/05-particles";
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
   for(const section of sections) {
@@ -52,7 +53,7 @@ export const JOURNEY: Section[] = [{
     Shadows,
     BakedShadow,
     HauntedHouse,
-    // Particles,
+    Particles,
     // GalaxyGenerator,
     // ScrollBasedAnimation
   ]
