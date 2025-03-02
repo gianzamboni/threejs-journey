@@ -46,7 +46,7 @@ export class Shadows extends OrbitControlledExercise {
     view.enableShadows(this.qualityConfig.shadowMapType);
 
     this.controls.autoRotate = true;
-    this.controls.autoRotateSpeed = 0.25;
+    this.controls.autoRotateSpeed = 0.5;
 
     this.lights = this.createLigths();
     //this.helpers = this.createHelpers();
