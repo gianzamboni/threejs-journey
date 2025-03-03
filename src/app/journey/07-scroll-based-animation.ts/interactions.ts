@@ -87,6 +87,13 @@ export class Interactions extends EventTarget {
 
   dispose() {
     this.element.removeEventListener('scroll', this.scrollHandler.bind(this));
-    this.element.removeEventListener('mousemove', this.mouseMoveHandler.bind(this));
+
+    if(hasOrientationSupport()) {
+      window.removeEventListener('deviceorientation', this.orientationHandler.bind(this));
+    } else if(hasMotionSupport()) {
+      window.removeEventListener('devicemotion', this.motionHandler.bind(this));
+    } else {
+      this.element.removeEventListener('mousemove', this.mouseMoveHandler.bind(this));
+    }
   }
 }
