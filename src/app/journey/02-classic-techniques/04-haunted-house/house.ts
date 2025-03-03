@@ -3,8 +3,9 @@ import * as THREE from 'three';
 import { Door } from './door';
 import { QualityConfig } from './quality-config';
 import { Roof } from './roof';
-import { SceneObject } from './scene-object';
 import { Walls } from './walls';
+
+import { SceneObject } from '../../../types/scene-object';
 
 
 /**

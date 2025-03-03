@@ -14,7 +14,8 @@ import { Ghosts } from './ghosts';
 import { Graves } from './graves';
 import { House } from './house';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
-import { SceneObject } from './scene-object';
+
+import { SceneObject } from '../../../types/scene-object';
 
 /**
  * Haunted House exercise

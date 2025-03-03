@@ -8,14 +8,14 @@ export class CubeGroup extends BaseExercise {
   private group: THREE.Group;
   private axesHelper: THREE.AxesHelper;
   
-  private cubeGeometry: THREE.BoxGeometry;
-  private cubeMaterial: THREE.MeshBasicMaterial;
+  private geometry: THREE.BoxGeometry;
+  private material: THREE.MeshBasicMaterial;
 
 
   constructor() {
     super();
-    this.cubeGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
-    this.cubeMaterial = new THREE.MeshBasicMaterial({ 
+    this.geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+    this.material = new THREE.MeshBasicMaterial({ 
       color: 0xff0000, 
       wireframe: true 
     });
@@ -29,7 +29,7 @@ export class CubeGroup extends BaseExercise {
   private createCubeGroup() {
     const group = new THREE.Group();
     for (let i = 0; i < 3; i++) {
-      const cube = new THREE.Mesh(this.cubeGeometry, this.cubeMaterial);
+      const cube = new THREE.Mesh(this.geometry, this.material);
       cube.position.x = 1.5*i - 1.5;
       group.add(cube);
     }
@@ -44,7 +44,7 @@ export class CubeGroup extends BaseExercise {
     super.dispose();
     this.axesHelper.dispose();
     this.group.clear();
-    this.cubeMaterial.dispose();
-    this.cubeGeometry.dispose();
+    this.material.dispose();
+    this.geometry.dispose();
   }
 }

@@ -16,11 +16,15 @@ export class Text3D extends OrbitControlledExercise {
   private matcapTexture: THREE.Texture;
   private material: THREE.MeshMatcapMaterial;
 
-  private donutsGeometry: THREE.TorusGeometry;
-  private donuts: THREE.Mesh[];
+  private donuts: {
+    geometry: THREE.TorusGeometry;
+    meshes: THREE.Mesh[];
+  }
 
-  private textGeometry: TextGeometry | undefined;
-  private text: THREE.Mesh | undefined;
+  private text: {
+    geometry?: TextGeometry;
+    mesh?: THREE.Mesh;
+  };
   
   constructor(view: RenderView) {
     super(view);
@@ -35,25 +39,25 @@ export class Text3D extends OrbitControlledExercise {
       matcap: this.matcapTexture,
     });
 
-    this.donutsGeometry = new THREE.TorusGeometry(0.3, 0.15, 32, 64);
     this.donuts = this.generateDonuts();
-    this.scene.add(...this.donuts);
-
+    this.scene.add(...this.donuts.meshes);
+    this.text = {};
     this.generateText();
   }
 
   frame(timer: Timer): void {
     super.frame(timer);
-    for(const donut of this.donuts) {
+    for(const donut of this.donuts.meshes) {
       donut.rotation.x += 0.005;
       donut.rotation.y += 0.005;
     }
   }
 
   generateDonuts() {
+    const geometry = new THREE.TorusGeometry(0.3, 0.15, 32, 64);
     const donuts = []
     for(let i = 0; i < 100; i++) {
-      const donut = new THREE.Mesh(this.donutsGeometry, this.material);
+      const donut = new THREE.Mesh(geometry, this.material);
       donut.position.x = (Math.random() - 0.5) * 10;
       donut.position.y = (Math.random() - 0.5) * 10;
       donut.position.z = (Math.random() - 0.5) * 10;
@@ -63,12 +67,15 @@ export class Text3D extends OrbitControlledExercise {
       donut.scale.set(scale, scale, scale);
       donuts.push(donut);
     }
-    return donuts;
+    return {
+      geometry,
+      meshes: donuts
+    };
   }
 
   generateText() {
     this.loader.loadFont('fonts/helvetiker_regular.typeface.json', (font) => {
-      this.textGeometry = new TextGeometry('Hello Three.js', {
+      this.text.geometry = new TextGeometry('Hello Three.js', {
         font: font,
         size: 0.5,
         depth: 0.2,
@@ -79,9 +86,9 @@ export class Text3D extends OrbitControlledExercise {
         bevelOffset: 0,
         bevelSegments: 10
       });
-      this.textGeometry.center();
-      this.text = new THREE.Mesh(this.textGeometry, this.material);
-      this.scene.add(this.text);
+      this.text.geometry.center();
+      this.text.mesh = new THREE.Mesh(this.text.geometry, this.material);
+      this.scene.add(this.text.mesh);
     });
   }
   async dispose() {
@@ -89,7 +96,7 @@ export class Text3D extends OrbitControlledExercise {
     this.material.dispose();
     this.matcapTexture.dispose();
     
-    this.donutsGeometry.dispose();
-    this.textGeometry?.dispose();
+    this.donuts.geometry.dispose();
+    this.text.geometry?.dispose();
   }
 }

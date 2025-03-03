@@ -3,7 +3,8 @@ import * as THREE from 'three';
 import { randomBetween, randomSign } from '#/app/utils/number-utils';
 import { PathTracer } from './path-tracer';
 import { QualityConfig } from './quality-config';
-import { SceneObject } from './scene-object';
+
+import { SceneObject } from '../../../types/scene-object';
 
 interface Ghost {
   light: THREE.PointLight;
