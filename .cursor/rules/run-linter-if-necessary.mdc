@@ -1,0 +1,6 @@
+---
+description: Run linter when there are linting errors
+globs: 
+alwaysApply: true
+---
+When generating code, it the generated code has linter errors, you should run the linter app with the fix option. After the linter fixes all posible errors, if there are error still, then fix them yourself.
