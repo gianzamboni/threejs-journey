@@ -26,7 +26,6 @@ export class Interactions extends EventTarget {
     this._section = 0;
 
     this.element.addEventListener('scroll', this.scrollHandler.bind(this));
-    console.log(hasOrientationSupport(), hasMotionSupport());
     if(hasOrientationSupport()) {
       window.addEventListener('deviceorientation', this.orientationHandler.bind(this));
     } else if(hasMotionSupport()) {
@@ -62,14 +61,12 @@ export class Interactions extends EventTarget {
     const x = evt.clientX;
     const y = evt.clientY;
     this.mousePosition = { x: x / this.element.clientWidth - 0.5, y: y / this.element.clientHeight - 0.5 };
-    console.log(this.mousePosition);
   }
 
   rotationToPosition(gamma: number, beta: number) {
     const x = gamma || 0;
     const y = beta || 0;
     this.mousePosition = { x: x / 30, y: y / 30 };
-    console.log(this.mousePosition);
   }
 
   orientationHandler(evt: DeviceOrientationEvent) {
