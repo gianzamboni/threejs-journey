@@ -11,7 +11,8 @@ import { AssetLoader } from '#/app/utils/assets-loader';
 import { Interactions } from './interactions';
 import { ScrollBasedAnimationLayout } from './layout';
 
-import AnimatedExercise from '../exercises/animated-exercise';
+import AnimatedExercise from '../../exercises/animated-exercise';
+
 
 /**
  * Scroll-based animation exercise

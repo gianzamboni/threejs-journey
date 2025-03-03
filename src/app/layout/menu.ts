@@ -1,8 +1,8 @@
 import { Collapsable } from "#/app/components/collapsable";
 import SideBar from "#/app/components/sidebar";
 import { GITHUB_ICON, HAMBURGER_ICON } from "#/app/constants/icons";
-import { JOURNEY, Section } from "#/app/journey";
-import { ExerciseClass } from "#/app/types/exercise";
+import { JOURNEY } from "#/app/journey";
+import { ExerciseClass, Section } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
 import { CSS_CLASSES } from "#/theme";
