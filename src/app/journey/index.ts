@@ -15,6 +15,8 @@ import { BakedShadow } from "./02-classic-techniques/03-baked-shadow";
 import { HauntedHouse } from "./02-classic-techniques/04-haunted-house";
 import { Particles } from "./02-classic-techniques/05-particles";
 import { GalaxyGenerator } from "./02-classic-techniques/06-galaxy-generator";
+import { ScrollBasedAnimation } from "./07-scroll-based-animation.ts";
+
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -57,7 +59,7 @@ export const JOURNEY: Section[] = [{
     HauntedHouse,
     Particles,
     GalaxyGenerator,
-    // ScrollBasedAnimation
+    ScrollBasedAnimation
   ]
 }];
 

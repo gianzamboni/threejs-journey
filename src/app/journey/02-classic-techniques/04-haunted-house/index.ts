@@ -108,6 +108,7 @@ export class HauntedHouse extends OrbitControlledExercise {
       light.shadow.camera.left = -8;
       light.shadow.camera.near = 1;
       light.shadow.camera.far = 20;
+      light.shadow.camera.updateProjectionMatrix();
     }
     return light;
   }

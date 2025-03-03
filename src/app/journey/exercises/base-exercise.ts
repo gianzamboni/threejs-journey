@@ -7,17 +7,25 @@ export default class BaseExercise extends EventTarget {
 
   constructor() {
     super();
-    [this.scene, this.camera] = this.createBasicScene();
+    this.camera = this.createCamera(75);
+    this.scene = this.createScene();
+    this.setupSceneCamera();
   }
 
-  private createBasicScene(): [THREE.Scene, THREE.PerspectiveCamera] {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+  protected createCamera(fov: number): THREE.PerspectiveCamera {
+    const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0,0,3);
     camera.lookAt(0,0,0);
-    scene.add(camera);
+    return camera;
+  }
 
-    return [scene, camera];
+  private createScene(): THREE.Scene {
+    const scene = new THREE.Scene();
+    return scene;
+  }
+
+  protected setupSceneCamera() {
+    this.scene.add(this.camera);
   }
 
   get id() {
@@ -25,8 +33,10 @@ export default class BaseExercise extends EventTarget {
   }
 
   updateCamera(aspect: number) {
-    this.camera.aspect = aspect;
-    this.camera.updateProjectionMatrix();
+    if(this.camera instanceof THREE.PerspectiveCamera) {
+      this.camera.aspect = aspect;
+      this.camera.updateProjectionMatrix();
+    }
   }
 
   async dispose() {

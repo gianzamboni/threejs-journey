@@ -118,6 +118,7 @@ export class Shadows extends OrbitControlledExercise {
       light.shadow.mapSize.height = 2048;
       light.shadow.camera.near = 1;
       light.shadow.camera.far = 6;
+      light.shadow.camera.updateProjectionMatrix();
     });
 
     const directionalShadowCamera = lights.directional.shadow.camera;
@@ -125,7 +126,7 @@ export class Shadows extends OrbitControlledExercise {
     directionalShadowCamera.right = 2;
     directionalShadowCamera.bottom = -2;
     directionalShadowCamera.left = -2;
-    
+    directionalShadowCamera.updateProjectionMatrix();
     return lights;
   }
 

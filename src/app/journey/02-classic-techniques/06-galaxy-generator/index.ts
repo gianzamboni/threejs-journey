@@ -52,7 +52,7 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     this.particleTexture = assetLoader.loadTexture('/textures/particles/4.png');
     // Generate initial galaxy
     this.camera.position.set(3,2,3);
-    this.camera.near = 0.001;
+    (this.camera as THREE.PerspectiveCamera).near = 0.001;
     this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 0.125;
     this.generateGalaxy();
