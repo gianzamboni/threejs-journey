@@ -62,7 +62,7 @@ export class ScrollBasedAnimation extends AnimatedExercise {
     this.light = new THREE.DirectionalLight(0xffffff, 3);
     this.light.position.set(1, 0, 0);
 
-    this.camera.position.set(0,0,6);
+    this.camera.position.set(0,0,7);
     this.camera.fov = 35;
     this.camera.updateProjectionMatrix();
 

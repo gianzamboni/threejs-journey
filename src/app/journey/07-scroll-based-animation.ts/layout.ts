@@ -11,7 +11,7 @@ export class ScrollBasedAnimationLayout {
     // Create HTML sections
     ['My Portfolio', "My projects", "Contact me"].map((text, index) => {
       const section = document.createElement('section');
-      section.className = 'flex items-center h-screen font-["Cabin"] text-[#ffeded] text-uppercase font-size-[7vw] px-[10%]';
+      section.className = 'flex items-center h-screen font-["Cabin"] text-red-400 lg:text-[#ffeded] text-uppercase font-size-[7vw] px-[10%]';
 
 
       if(index % 2 !== 0) {

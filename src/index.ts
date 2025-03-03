@@ -126,7 +126,7 @@ function initAllGUIParts() {
   renderView = new RenderView(document.body);
   const rightColumn = document.createElement('div');
   rightColumn.id = "right-column";
-  rightColumn.className = `absolute top-0 right-0 m-5 flex flex-col items-end gap-2 ${CSS_CLASSES.main_layout_index}`;
+  rightColumn.className = `fixed top-0 right-0 m-5 flex flex-col items-end gap-2 ${CSS_CLASSES.main_layout_index}`;
   qualitySelector = new QualitySelector(rightColumn, activeQuality);
   debugUI = new DebugUI(rightColumn);
   document.body.appendChild(rightColumn);
@@ -135,7 +135,7 @@ function initAllGUIParts() {
   
   const bottomRow = document.createElement('div');
   bottomRow.id = "bottom-row";
-  bottomRow.className = `absolute bottom-0 left-0 flex flex-col md:flex-row items-end justify-between align-center ${CSS_CLASSES.main_layout_index}`;
+  bottomRow.className = `fixed bottom-0 left-0 flex flex-col md:flex-row items-end justify-between align-center ${CSS_CLASSES.main_layout_index}`;
 
   infoBox = new InfoBox(bottomRow);
   warningBox = new WarningBox(bottomRow);

@@ -47,7 +47,7 @@ export default class SideBar {
 
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
-    button.className = `absolute cursor-pointer flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`;
+    button.className = `fixed cursor-pointer flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`;
     button.innerHTML = buttonTitle;
     button.onclick = this.toggleSidePanel.bind(this);
     return button;
