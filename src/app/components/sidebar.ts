@@ -35,19 +35,19 @@ export default class SideBar {
 
   private createBody() {
     const body = document.createElement('div');
-    body.className = 'relative flex flex-col h-full max-h-full px-3 pt-3 z-[2]';
+    body.className = `relative flex flex-col h-full max-h-full px-3 pt-3 ${CSS_CLASSES.main_layout_index}`;
     return body;
   }
 
   private createPanel() {
     const panel = document.createElement('div');
-    panel.className = `w-64 transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 z-[60] border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
+    panel.className = `w-64 transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 ${CSS_CLASSES.sidebar_index} border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
     return panel;
   }
 
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
-    button.className = `absolute flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} z-[1]`;
+    button.className = `absolute cursor-pointer flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`;
     button.innerHTML = buttonTitle;
     button.onclick = this.toggleSidePanel.bind(this);
     return button;

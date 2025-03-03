@@ -64,4 +64,8 @@ export default class RenderView {
   reset() {
     this.renderer.shadowMap.enabled = false;
   }
+
+  get height() {
+    return this.canvas.clientHeight;
+  }
 }
