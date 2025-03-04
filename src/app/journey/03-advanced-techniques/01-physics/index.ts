@@ -9,6 +9,7 @@ import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Position3D } from '#/app/types/exercise';
 import { AssetLoader } from "#/app/utils/assets-loader";
+import { getRandom3DPosition, getRandomColor, randomBetween } from '#/app/utils/random-utils';
 import { PhysicsLayout } from "./layout";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
@@ -27,7 +28,7 @@ export class Physics extends OrbitControlledExercise {
 
   private environmentMap: THREE.Texture;
 
-  private material: THREE.MeshStandardMaterial;
+  private materials: Record<string, THREE.MeshStandardMaterial>;
 
   private sphereGeometry: THREE.SphereGeometry;
   private boxGeometry: THREE.BoxGeometry;
@@ -60,13 +61,7 @@ export class Physics extends OrbitControlledExercise {
     this.environmentMap = this.loadEnvironmentMap();
 
     this.physicsWorld = this.setupPhysics();
-    
-    this.material = new THREE.MeshStandardMaterial({
-      metalness: 0.3,
-      roughness: 0.4,
-      envMap: this.environmentMap,
-      envMapIntensity: 0.5
-    });
+    this.materials = {};
 
     const subdivisions = this.qualityConfig.sphereSubdivisions;
     this.sphereGeometry = new THREE.SphereGeometry(1, subdivisions, subdivisions);
@@ -125,8 +120,8 @@ export class Physics extends OrbitControlledExercise {
   }
 
   public addSphere() {
-    const radius = Math.random() * 0.5;
-    const position = this.getRandomPosition();
+    const radius = randomBetween(0.1, 0.5);
+    const position = getRandom3DPosition();
     const sphere = this.createSphere(radius, position);
     this.physicalObjects.push(sphere);
   }
@@ -135,19 +130,12 @@ export class Physics extends OrbitControlledExercise {
     const width = Math.random();
     const height = Math.random();
     const depth = Math.random();
-    const position = this.getRandomPosition();
+    const position = getRandom3DPosition();
 
     const box = this.createBox(width, height, depth, position);
     this.physicalObjects.push(box);
   }
 
-  private getRandomPosition() {
-    return {
-      x: (Math.random() - 0.5) * 3,
-      y: 3,
-      z: (Math.random() - 0.5) * 3,
-    }
-  }
 
   public clearScene() {
     for (const object of this.physicalObjects) {
@@ -177,7 +165,8 @@ export class Physics extends OrbitControlledExercise {
   }
 
   private createBox(width: number, height: number, depth: number, position: Position3D) {
-    const mesh = new THREE.Mesh(this.boxGeometry, this.material);
+    const material = this.getMaterial();
+    const mesh = new THREE.Mesh(this.boxGeometry, material);
     mesh.scale.set(width, height, depth);
 
     const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
@@ -186,11 +175,27 @@ export class Physics extends OrbitControlledExercise {
 
 
   private createSphere(radius: number, position: Position3D) {
-    const mesh = new THREE.Mesh(this.sphereGeometry, this.material);
+    const material = this.getMaterial();
+    const mesh = new THREE.Mesh(this.sphereGeometry, material);
     mesh.scale.set(radius, radius, radius);
 
     const shape = new CANNON.Sphere(radius);
     return this.createPhysicalObject(mesh, shape, position);
+  }
+
+  private getMaterial() {
+    const color = getRandomColor();
+    const colorString = color.getHexString();
+    if(!this.materials[colorString]) {
+      this.materials[colorString] = new THREE.MeshStandardMaterial({ 
+        color,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMap: this.environmentMap,
+        envMapIntensity: 0.5
+      });
+    }
+    return this.materials[colorString];
   }
 
   private createFloor() {
@@ -247,6 +252,10 @@ export class Physics extends OrbitControlledExercise {
     for (const sphere of this.physicalObjects) {
       sphere.mesh.geometry.dispose();
       (sphere.mesh.material as THREE.Material).dispose();
+    }
+
+    for (const material of Object.values(this.materials)) {
+      (material as THREE.Material).dispose();
     }
   }
 }

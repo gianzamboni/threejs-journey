@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { randomBetween } from '#/app/utils/number-utils';
+import { randomBetween } from '#/app/utils/random-utils';
 import { QualityConfig } from './quality-config';
 import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
 
