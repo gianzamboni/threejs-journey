@@ -3,14 +3,14 @@ import * as THREE from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Callable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
-import { Exercise } from "#/app/decorators/exercise";
+import { Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { Position3D } from '#/app/types/exercise';
 import { AssetLoader } from "#/app/utils/assets-loader";
+import { PhysicsLayout } from "./layout";
 
-import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
+import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 type PhysicalObject = {
   mesh: THREE.Mesh;
@@ -18,7 +18,10 @@ type PhysicalObject = {
 }
 
 @Exercise('physics')
+@OrbitControllerDescription()
 export class Physics extends OrbitControlledExercise {
+  
+  private layout: PhysicsLayout;
 
   private environmentMap: THREE.Texture;
 
@@ -42,6 +45,12 @@ export class Physics extends OrbitControlledExercise {
     super(view);
     view.enableShadows(THREE.PCFSoftShadowMap);
 
+    this.layout = new PhysicsLayout();
+
+    this.layout.sphereButton.addEventListener('click', this.addSphere.bind(this));
+    this.layout.boxButton.addEventListener('click', this.addBox.bind(this));
+    this.layout.removeButton.addEventListener('click', this.clearScene.bind(this));
+
     this.environmentMap = this.loadEnvironmentMap();
 
     this.physicsWorld = this.setupPhysics();
@@ -53,7 +62,7 @@ export class Physics extends OrbitControlledExercise {
       envMapIntensity: 0.5
     });
 
-    this.sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+    this.sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
     this.boxGeometry = new THREE.BoxGeometry(1, 1, 1);
     this.physicalObjects = [];
 
@@ -108,7 +117,6 @@ export class Physics extends OrbitControlledExercise {
     return world;
   }
 
-  @Callable('', 'Add Sphere')
   public addSphere() {
     const radius = Math.random() * 0.5;
     const position = this.getRandomPosition();
@@ -116,7 +124,6 @@ export class Physics extends OrbitControlledExercise {
     this.physicalObjects.push(sphere);
   }
 
-  @Callable('', 'Add Box')
   public addBox() {
     const width = Math.random();
     const height = Math.random();
@@ -135,7 +142,6 @@ export class Physics extends OrbitControlledExercise {
     }
   }
 
-  @Callable('', 'Remove all')
   public clearScene() {
     for (const object of this.physicalObjects) {
       object.physics.removeEventListener('collide', this.playHitSound.bind(this));
@@ -226,6 +232,7 @@ export class Physics extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
+    this.layout.remove();
     this.environmentMap.dispose();
     this.floor.mesh.geometry.dispose();
     (this.floor.mesh.material as THREE.Material).dispose();
