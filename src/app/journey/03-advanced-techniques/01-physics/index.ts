@@ -5,10 +5,12 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { DebugFPS } from '#/app/decorators/debug';
 import { Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
+import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Position3D } from '#/app/types/exercise';
 import { AssetLoader } from "#/app/utils/assets-loader";
 import { PhysicsLayout } from "./layout";
+import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
@@ -40,10 +42,14 @@ export class Physics extends OrbitControlledExercise {
   private physicsWorld: CANNON.World;
 
   private hitSound: HTMLAudioElement;
+  
+  private qualityConfig: QualityConfig;
 
-  constructor(view: RenderView) {
+  constructor(view: RenderView, quality: Quality) {
     super(view);
-    view.enableShadows(THREE.PCFSoftShadowMap);
+    
+    this.qualityConfig = QUALITY_CONFIG[quality];
+    view.enableShadows(this.qualityConfig.shadowMapType);
 
     this.layout = new PhysicsLayout();
 
@@ -62,7 +68,8 @@ export class Physics extends OrbitControlledExercise {
       envMapIntensity: 0.5
     });
 
-    this.sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
+    const subdivisions = this.qualityConfig.sphereSubdivisions;
+    this.sphereGeometry = new THREE.SphereGeometry(1, subdivisions, subdivisions);
     this.boxGeometry = new THREE.BoxGeometry(1, 1, 1);
     this.physicalObjects = [];
 
