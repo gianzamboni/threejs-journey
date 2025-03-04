@@ -1,8 +1,11 @@
+import { Description } from "#/app/decorators/exercise";
 import { CSS_CLASSES } from "#/theme";
 import BOX from "./icons/cube.svg?raw";
 import SPHERE from "./icons/sphere.svg?raw";
 import TRASH from "./icons/trash.svg?raw";
 
+
+@Description(["<strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects"])
 export class PhysicsLayout {
 
   private layoutContainer: HTMLElement;
@@ -19,7 +22,6 @@ export class PhysicsLayout {
     
     this.sphereButton = document.createElement('button');
     this.sphereButton.className = buttonClasses;
-    console.log(SPHERE);
     this.sphereButton.setAttribute('title', 'Add Sphere');
     this.sphereButton.innerHTML = SPHERE;
     this.layoutContainer.appendChild(this.sphereButton);

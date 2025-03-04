@@ -12,6 +12,8 @@ export type Section = {
 }
 
 export type Exercise = BaseExercise | AnimatedExercise | OrbitControlledExercise;
+
+export type Constructor<T> = new (...args: any[]) => T;
 export type ExerciseClass = new (renderView: RenderView, quality: Quality) => Exercise;
 
 export type MeshObject = {
