@@ -20,17 +20,20 @@ export class PhysicsLayout {
     this.sphereButton = document.createElement('button');
     this.sphereButton.className = buttonClasses;
     console.log(SPHERE);
+    this.sphereButton.setAttribute('title', 'Add Sphere');
     this.sphereButton.innerHTML = SPHERE;
     this.layoutContainer.appendChild(this.sphereButton);
 
     this.boxButton = document.createElement('button');
     this.boxButton.innerHTML = BOX;
     this.boxButton.className = buttonClasses;
+    this.boxButton.setAttribute('title', 'Add Box');
     this.layoutContainer.appendChild(this.boxButton);
 
     this.removeButton = document.createElement('button');
     this.removeButton.innerHTML = TRASH;
     this.removeButton.className = buttonClasses;
+    this.removeButton.setAttribute('title', 'Remove All');
     this.layoutContainer.appendChild(this.removeButton);
 
     const infoBoxContainer = document.getElementById('info-box-container');
