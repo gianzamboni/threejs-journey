@@ -85,7 +85,6 @@ export class Physics extends OrbitControlledExercise {
 
   public playHitSound(collision: { contact: CANNON.ContactEquation}) {
     const velocity = collision.contact.getImpactVelocityAlongNormal();
-    console.log(velocity);
     if (velocity > 1.5) {
       this.hitSound.volume = Math.random();
       this.hitSound.currentTime = 0;
@@ -146,15 +145,12 @@ export class Physics extends OrbitControlledExercise {
     this.physicalObjects = [];
   }
 
-  private createBox(width: number, height: number, depth: number, position: Position3D) {
-    const mesh = new THREE.Mesh(this.boxGeometry, this.material);
+  private createPhysicalObject(mesh: THREE.Mesh, shape: CANNON.Shape, position: Position3D) {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
-    mesh.scale.set(width, height, depth);
     mesh.position.copy(position);
     this.scene.add(mesh);
 
-    const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
     const body = new CANNON.Body({
       mass: 1,
       position: new CANNON.Vec3(0, 3, 0),
@@ -167,25 +163,21 @@ export class Physics extends OrbitControlledExercise {
     return { mesh, physics: body };
   }
 
+  private createBox(width: number, height: number, depth: number, position: Position3D) {
+    const mesh = new THREE.Mesh(this.boxGeometry, this.material);
+    mesh.scale.set(width, height, depth);
+
+    const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
+    return this.createPhysicalObject(mesh, shape, position);
+  }
+
 
   private createSphere(radius: number, position: Position3D) {
     const mesh = new THREE.Mesh(this.sphereGeometry, this.material);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
     mesh.scale.set(radius, radius, radius);
-    mesh.position.copy(position);
-    this.scene.add(mesh);
 
     const shape = new CANNON.Sphere(radius);
-    const body = new CANNON.Body({ 
-      mass: 1,
-      position: new CANNON.Vec3(0, 3, 0),
-      shape,
-    });
-    body.position.copy(new CANNON.Vec3(position.x, position.y, position.z));
-    body.addEventListener('collide', this.playHitSound.bind(this));
-    this.physicsWorld.addBody(body);
-    return { mesh, physics: body };
+    return this.createPhysicalObject(mesh, shape, position);
   }
 
   private createFloor() {
