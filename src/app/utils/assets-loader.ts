@@ -17,10 +17,10 @@ export class AssetLoader extends EventTarget{
 
   private loadingManager: THREE.LoadingManager;
 
-  private textureLoader: THREE.TextureLoader;
-  private rgbeLoader: RGBELoader;
-  private fontLoader: FontLoader;
-
+  private textureLoader: THREE.TextureLoader | undefined;
+  private rgbeLoader: RGBELoader | undefined;
+  private fontLoader: FontLoader | undefined;
+  private cubeTextureLoader: THREE.CubeTextureLoader | undefined;
   public static getInstance() {
     if (!AssetLoader.instance) {
       AssetLoader.instance = new AssetLoader();
@@ -35,10 +35,6 @@ export class AssetLoader extends EventTarget{
     this.loadingManager.onProgress = this.onProgress.bind(this);
     this.loadingManager.onError = this.onError.bind(this);
     this.loadingManager.onLoad = this.onLoad.bind(this);
-
-    this.textureLoader = new THREE.TextureLoader(this.loadingManager);
-    this.rgbeLoader = new RGBELoader(this.loadingManager);
-    this.fontLoader = new FontLoader(this.loadingManager);
 
   }
 
@@ -73,20 +69,37 @@ export class AssetLoader extends EventTarget{
     this.loadingManager.onError = this.onError.bind(this);
     this.loadingManager.onLoad = this.onLoad.bind(this);
 
-    this.textureLoader = new THREE.TextureLoader(this.loadingManager);
-    this.rgbeLoader = new RGBELoader(this.loadingManager);
-    this.fontLoader = new FontLoader(this.loadingManager);
+    this.textureLoader = undefined;
+    this.rgbeLoader = undefined;
+    this.fontLoader = undefined;
+    this.cubeTextureLoader = undefined;
   }
 
   loadTexture(url: string) {
+    if (!this.textureLoader) {
+      this.textureLoader = new THREE.TextureLoader(this.loadingManager);
+    }
     return this.textureLoader.load(url);
   }
 
   loadEnvironment(url: string, onLoad: (_: THREE.Texture) => void) {
+    if (!this.rgbeLoader) {
+      this.rgbeLoader = new RGBELoader(this.loadingManager);
+    }
     return this.rgbeLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 
+  loadCubeTexture(urls:string[]) {
+    if (!this.cubeTextureLoader) {
+      this.cubeTextureLoader = new THREE.CubeTextureLoader(this.loadingManager);
+    }
+    return this.cubeTextureLoader.load(urls);
+  }
+
   loadFont(url: string, onLoad: (_: Font) => void) {
-    this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
+    if (!this.fontLoader) {
+      this.fontLoader = new FontLoader(this.loadingManager);
+    }
+    return this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 }
