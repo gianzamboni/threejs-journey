@@ -1,6 +1,6 @@
 import { Collapsable } from "#/app/components/collapsable";
 import SideBar from "#/app/components/sidebar";
-import { GITHUB_ICON, HAMBURGER_ICON } from "#/app/constants/icons";
+import {HAMBURGER_ICON, LINKEDIN_ICON } from "#/app/constants/icons";
 import { JOURNEY } from "#/app/journey";
 import { ExerciseClass, Section } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
@@ -108,12 +108,13 @@ export default class Menu extends EventTarget {
     const footer = document.createElement('footer');
     footer.className = 'flex justify-center items-center p-4';
 
-    const githubLink = document.createElement('a');
-    githubLink.className = 'flex items-center gap-x-2';
-    githubLink.href = 'https://github.com/gianzamboni';
-    githubLink.innerHTML = `${GITHUB_ICON} Gianfranco Zamboni`;
+    const portfolioLinkg = document.createElement('a');
+    portfolioLinkg.className = 'flex items-center gap-x-1';
+    portfolioLinkg.target = '_blank';
+    portfolioLinkg.href = 'https://www.linkedin.com/in/gianfranco-zamboni/';
+    portfolioLinkg.innerHTML = `${LINKEDIN_ICON}<span>Gianfranco Zamboni</span>`;
 
-    footer.appendChild(githubLink);
+    footer.appendChild(portfolioLinkg);
     return footer;
   }
 }
