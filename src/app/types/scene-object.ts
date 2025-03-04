@@ -25,6 +25,7 @@ export abstract class MeshObject extends SceneObject {
 }
 
 export type SceneMeshObject = {
+  textures?: TextureDict;
   geometry: THREE.BufferGeometry;
   material: THREE.Material;
   mesh: THREE.Mesh;
