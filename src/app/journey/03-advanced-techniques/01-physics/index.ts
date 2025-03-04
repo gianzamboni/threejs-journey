@@ -53,7 +53,10 @@ export class Physics extends OrbitControlledExercise {
 
   private environmentMap: THREE.Texture;
 
-  private materials: Record<string, THREE.MeshStandardMaterial>;
+  private materials: Record<string, {
+    material: THREE.MeshStandardMaterial;
+    usageCount: number;
+  }>;
 
   private sphereGeometry: THREE.SphereGeometry;
   private boxGeometry: THREE.BoxGeometry;
@@ -221,15 +224,20 @@ export class Physics extends OrbitControlledExercise {
     const colorString = getRandomValueFrom(Physics.palette);
     const color = new THREE.Color(colorString);
     if(!this.materials[colorString]) {
-      this.materials[colorString] = new THREE.MeshStandardMaterial({ 
-        color,
-        metalness: 0.3,
-        roughness: 0.4,
-        envMap: this.environmentMap,
-        envMapIntensity: 0.5
-      });
+      this.materials[colorString] = {
+        material: new THREE.MeshStandardMaterial({ 
+          color,
+          metalness: 0.3,
+          roughness: 0.4,
+          envMap: this.environmentMap,
+          envMapIntensity: 0.5
+        }),
+        usageCount: 1,
+      };
+    } else {
+      this.materials[colorString].usageCount++;
     }
-    return this.materials[colorString];
+    return this.materials[colorString].material;
   }
 
   private createFloor() {
