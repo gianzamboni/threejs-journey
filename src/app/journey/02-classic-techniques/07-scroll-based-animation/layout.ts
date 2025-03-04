@@ -6,7 +6,7 @@ export class ScrollBasedAnimationLayout {
 
   constructor() {
     this.layoutContainer = document.createElement('div');
-    this.layoutContainer.className = `absolute h-screen w-screen overflow-scroll ${CSS_CLASSES.exercise_index}`;
+    this.layoutContainer.className = `absolute h-screen w-screen overflow-y-scroll ${CSS_CLASSES.exercise_index}`;
     
     // Create HTML sections
     ['My Portfolio', "My projects", "Contact me"].map((text, index) => {
