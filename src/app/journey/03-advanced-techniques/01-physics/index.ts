@@ -18,6 +18,7 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 type PhysicalObject = {
   mesh: THREE.Mesh;
   physics: CANNON.Body;
+  color?: string;
 }
 
 @Exercise('physics')
@@ -28,7 +29,10 @@ export class Physics extends OrbitControlledExercise {
 
   private environmentMap: THREE.Texture;
 
-  private materials: Record<string, THREE.MeshStandardMaterial>;
+  private materials: Record<string, {
+    material: THREE.MeshStandardMaterial;
+    usageCount: number;
+  }>;
 
   private sphereGeometry: THREE.SphereGeometry;
   private boxGeometry: THREE.BoxGeometry;
@@ -85,12 +89,16 @@ export class Physics extends OrbitControlledExercise {
   frame(timer: Timer) {
     super.frame(timer);
     const delta = timer.getDelta();
-
     this.physicsWorld.step(1 / 60, delta, 3);
 
-    for (const object of this.physicalObjects) {
-      object.mesh.position.copy(object.physics.position);
-      object.mesh.quaternion.copy(object.physics.quaternion);
+    for(let i = this.physicalObjects.length - 1; i >= 0; i--) {
+      const object = this.physicalObjects[i];
+      if(object.mesh.position.y < -20) {
+        this.removeObject(object, i);
+      } else {
+        object.mesh.position.copy(object.physics.position);
+        object.mesh.quaternion.copy(object.physics.quaternion);
+      }
     }
   }
 
@@ -137,13 +145,24 @@ export class Physics extends OrbitControlledExercise {
   }
 
 
-  public clearScene() {
-    for (const object of this.physicalObjects) {
-      object.physics.removeEventListener('collide', this.playHitSound.bind(this));
-      this.physicsWorld.removeBody(object.physics);
-      this.scene.remove(object.mesh);
+  public removeObject(object: PhysicalObject, index: number) {
+    object.physics.removeEventListener('collide', this.playHitSound.bind(this));
+    this.physicsWorld.removeBody(object.physics);
+    this.scene.remove(object.mesh);
+    if(object.color) {
+      this.materials[object.color].usageCount--;
+      if(this.materials[object.color].usageCount === 0) {
+        this.materials[object.color].material.dispose();
+        delete this.materials[object.color];
+      }
     }
-    this.physicalObjects = [];
+    this.physicalObjects.splice(index, 1);
+  }
+
+  public clearScene() {
+    for(let i = this.physicalObjects.length - 1; i >= 0; i--) {
+      this.removeObject(this.physicalObjects[i], i);
+    }
   }
 
   private createPhysicalObject(mesh: THREE.Mesh, shape: CANNON.Shape, position: Position3D) {
@@ -161,7 +180,9 @@ export class Physics extends OrbitControlledExercise {
     body.addEventListener('collide', this.playHitSound.bind(this));
     body.position.copy(new CANNON.Vec3(position.x, position.y, position.z));
     this.physicsWorld.addBody(body);
-    return { mesh, physics: body };
+
+    const color = (mesh.material as THREE.MeshStandardMaterial).color.getHexString();
+    return { mesh, physics: body, color };
   }
 
   private createBox(width: number, height: number, depth: number, position: Position3D) {
@@ -172,7 +193,6 @@ export class Physics extends OrbitControlledExercise {
     const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
     return this.createPhysicalObject(mesh, shape, position);
   }
-
 
   private createSphere(radius: number, position: Position3D) {
     const material = this.getMaterial();
@@ -187,15 +207,20 @@ export class Physics extends OrbitControlledExercise {
     const color = getRandomColor();
     const colorString = color.getHexString();
     if(!this.materials[colorString]) {
-      this.materials[colorString] = new THREE.MeshStandardMaterial({ 
-        color,
-        metalness: 0.3,
-        roughness: 0.4,
-        envMap: this.environmentMap,
-        envMapIntensity: 0.5
-      });
+      this.materials[colorString] = {
+        material: new THREE.MeshStandardMaterial({ 
+          color,
+          metalness: 0.3,
+          roughness: 0.4,
+          envMap: this.environmentMap,
+          envMapIntensity: 0.5
+        }),
+        usageCount: 1,
+      };
+    } else {
+      this.materials[colorString].usageCount++;
     }
-    return this.materials[colorString];
+    return this.materials[colorString].material;
   }
 
   private createFloor() {
@@ -212,12 +237,12 @@ export class Physics extends OrbitControlledExercise {
     mesh.receiveShadow = true;
     mesh.rotation.x = -Math.PI * 0.5;
 
-    const shape = new CANNON.Plane();
+    const shape = new CANNON.Box(new CANNON.Vec3(5, 5, 0.1));
     const body = new CANNON.Body();
     body.mass  = 0;
+    body.position.set(0, -0.1, 0);
     body.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
-    body.addShape(shape);
-
+    body.addShape(shape);    
     return { mesh, physics: body };
   }
 
@@ -254,8 +279,8 @@ export class Physics extends OrbitControlledExercise {
       (sphere.mesh.material as THREE.Material).dispose();
     }
 
-    for (const material of Object.values(this.materials)) {
-      (material as THREE.Material).dispose();
+    for (const materialData of Object.values(this.materials)) {
+      materialData.material.dispose();
     }
   }
 }
