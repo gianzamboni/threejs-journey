@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 /**
  * Returns a random number between min and max
  */
@@ -23,10 +21,6 @@ export function getRandom3DPosition() {
   }
 }
 
-export function getRandomColor() {
-  return new THREE.Color(
-    randomBetween(0, 1),
-    randomBetween(0, 1),
-    randomBetween(0, 1)
-  );
-}
+export function getRandomValueFrom<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+};

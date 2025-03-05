@@ -9,7 +9,7 @@ import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Position3D } from '#/app/types/exercise';
 import { AssetLoader } from "#/app/utils/assets-loader";
-import { getRandom3DPosition, getRandomColor, randomBetween } from '#/app/utils/random-utils';
+import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
 import { PhysicsLayout } from "./layout";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
@@ -25,14 +25,35 @@ type PhysicalObject = {
 @OrbitControllerDescription()
 export class Physics extends OrbitControlledExercise {
   
+  private static readonly palette = [
+    "#ff6a10",
+    "#00a1f4",
+    "#50ea00",
+    "#a249da",
+    "#60ff67",
+    "#e887ff",
+    "#3bffa2",
+    "#ff5c74",
+    "#00ad8c",
+    "#d43a4b",
+    "#02b1b5",
+    "#cb4266",
+    "#f6ffad",
+    "#996197",
+    "#ffcd64",
+    "#c0e3ff",
+    "#a96148",
+    "#ff89b6",
+    "#6c7957",
+    "#996952"
+  ];
+
+
   private layout: PhysicsLayout;
 
   private environmentMap: THREE.Texture;
 
-  private materials: Record<string, {
-    material: THREE.MeshStandardMaterial;
-    usageCount: number;
-  }>;
+  private materials: Record<string, THREE.MeshStandardMaterial>;
 
   private sphereGeometry: THREE.SphereGeometry;
   private boxGeometry: THREE.BoxGeometry;
@@ -149,13 +170,6 @@ export class Physics extends OrbitControlledExercise {
     object.physics.removeEventListener('collide', this.playHitSound.bind(this));
     this.physicsWorld.removeBody(object.physics);
     this.scene.remove(object.mesh);
-    if(object.color) {
-      this.materials[object.color].usageCount--;
-      if(this.materials[object.color].usageCount === 0) {
-        this.materials[object.color].material.dispose();
-        delete this.materials[object.color];
-      }
-    }
     this.physicalObjects.splice(index, 1);
   }
 
@@ -204,23 +218,18 @@ export class Physics extends OrbitControlledExercise {
   }
 
   private getMaterial() {
-    const color = getRandomColor();
-    const colorString = color.getHexString();
+    const colorString = getRandomValueFrom(Physics.palette);
+    const color = new THREE.Color(colorString);
     if(!this.materials[colorString]) {
-      this.materials[colorString] = {
-        material: new THREE.MeshStandardMaterial({ 
-          color,
-          metalness: 0.3,
-          roughness: 0.4,
-          envMap: this.environmentMap,
-          envMapIntensity: 0.5
-        }),
-        usageCount: 1,
-      };
-    } else {
-      this.materials[colorString].usageCount++;
+      this.materials[colorString] = new THREE.MeshStandardMaterial({ 
+        color,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMap: this.environmentMap,
+        envMapIntensity: 0.5
+      });
     }
-    return this.materials[colorString].material;
+    return this.materials[colorString];
   }
 
   private createFloor() {
@@ -279,8 +288,8 @@ export class Physics extends OrbitControlledExercise {
       (sphere.mesh.material as THREE.Material).dispose();
     }
 
-    for (const materialData of Object.values(this.materials)) {
-      materialData.material.dispose();
+    for (const material of Object.values(this.materials)) {
+      material.dispose();
     }
   }
 }
