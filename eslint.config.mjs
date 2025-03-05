@@ -10,7 +10,11 @@ export default [
   ...tseslint.configs.recommended,
   {rules: {"@typescript-eslint/no-unused-vars": [
     "error",
-    {varsIgnorePattern: "^_", argsIgnorePattern: "^_"}
+    {varsIgnorePattern: "^_", argsIgnorePattern: "^_",}
+  ]}},
+  {rules: {"@typescript-eslint/no-explicit-any": [
+    "error",
+    {ignoreRestArgs: true}
   ]}},
   {
     plugins: {

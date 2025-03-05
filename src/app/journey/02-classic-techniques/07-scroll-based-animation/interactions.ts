@@ -1,3 +1,5 @@
+import { Position2D } from "#/app/types/exercise";
+
 function isMobile() {
   return navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|BB10|mobi|tablet|opera mini|nexus 7)/i);
 }
@@ -15,7 +17,7 @@ export class Interactions extends EventTarget {
   private element: HTMLElement;
 
   private _yScroll: number;
-  private mousePosition: { x: number, y: number };
+  private mousePosition: Position2D;
   private _section: number;
   
   constructor(element: HTMLElement) {

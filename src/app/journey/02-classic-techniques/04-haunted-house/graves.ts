@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 
-import { randomBetween } from '#/app/utils/number-utils';
+import { randomBetween } from '#/app/utils/random-utils';
 import { QualityConfig } from './quality-config';
-import { SceneObject } from './scene-object';
 import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
+
+import { SceneObject } from '../../../types/scene-object';
 /**
  * Graves object for the haunted house scene
  */

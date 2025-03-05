@@ -1,22 +1,8 @@
-import { CenteredCube } from "#/app/journey/01-basics/01-centered-cube";
-import { CubeGroup } from "#/app/journey/01-basics/02-cube-group";
-import { RotatingCube } from "#/app/journey/01-basics/03-rotating-cube";
-import { OrbitControlsTest } from "#/app/journey/01-basics/04-orbit-controls";
-import { RandomTriangles } from "#/app/journey/01-basics/05-random-triangles";
-import { DebugUITest } from "#/app/journey/01-basics/06-debug-ui";
-import { TextureTest } from "#/app/journey/01-basics/07-textures";
-import { MaterialsTest } from "#/app/journey/01-basics/08-materials";
-import { Text3D } from "#/app/journey/01-basics/09-text";
-import { LightsExercise } from "#/app/journey/02-classic-techniques/01-lights";
-import { ExerciseClass } from "#/app/types/exercise";
+import { Section } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
-import { Shadows } from "./02-classic-techniques/02-shadows";
-import { BakedShadow } from "./02-classic-techniques/03-baked-shadow";
-import { HauntedHouse } from "./02-classic-techniques/04-haunted-house";
-import { Particles } from "./02-classic-techniques/05-particles";
-import { GalaxyGenerator } from "./02-classic-techniques/06-galaxy-generator";
-import { ScrollBasedAnimation } from "./07-scroll-based-animation.ts";
-
+import { BASICS } from "./01-basics";
+import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
+import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -32,35 +18,10 @@ function verifyUniqueExerciseIds(sections: Section[]) {
   }
 }
 
-export type Section = {
-  id: string;
-  exercises: ExerciseClass[];
-}
-
-export const JOURNEY: Section[] = [{
-  id: 'basics',
-  exercises: [ 
-    CenteredCube,
-    CubeGroup,
-    RotatingCube,
-    OrbitControlsTest,
-    RandomTriangles,
-    DebugUITest,
-    TextureTest,
-    MaterialsTest,
-    Text3D
-  ]
-}, {
-  id: 'classic-techniques',
-  exercises: [
-    LightsExercise,
-    Shadows,
-    BakedShadow,
-    HauntedHouse,
-    Particles,
-    GalaxyGenerator,
-    ScrollBasedAnimation
-  ]
-}];
+export const JOURNEY: Section[] = [ 
+  BASICS, 
+  CLASSIC_TECHNIQUES,
+  ADVANCED_TECHNIQUES
+];
 
 verifyUniqueExerciseIds(JOURNEY);

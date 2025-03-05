@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { TextureDict } from './texture-maps';
+import { TextureDict } from '../journey/02-classic-techniques/04-haunted-house/texture-maps';
 
 /**
  * Base class for all scene objects
@@ -22,4 +22,11 @@ export abstract class MeshObject extends SceneObject {
       texture.dispose();
     }
   }
+}
+
+export type SceneMeshObject = {
+  textures?: TextureDict;
+  geometry: THREE.BufferGeometry;
+  material: THREE.Material;
+  mesh: THREE.Mesh;
 }

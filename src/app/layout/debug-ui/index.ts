@@ -63,10 +63,9 @@ export default class DebugUI {
     if(this.lilGui === null) {
       this.lilGui = new GUI({
         title: 'Settings',
-        closeFolders: false,
+        closeFolders: true,
         container: this.container
       });
-      this.lilGui.close();
     }
     return this.lilGui;
   }

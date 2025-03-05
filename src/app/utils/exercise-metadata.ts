@@ -25,6 +25,10 @@ export function get(target: MetadataTarget): ExerciseMetadata {
     meta = target.constructor[Symbol.metadata] as ExerciseMetadata;
   }
 
+  if(meta === undefined || meta === null) {
+    meta = {};
+  }
+
   return meta as ExerciseMetadata;
 }
 
@@ -44,7 +48,22 @@ export function getId(target: MetadataTarget): string {
  */
 export function getDescriptions(target: MetadataTarget): string[] {
   const metadata = get(target);
-  return metadata.descriptions ?? [];
+  const descriptions = metadata.descriptions ?? [];
+  const keysDescriptions = [];
+  for(const key in target) {
+    const value = target[key as unknown as keyof MetadataTarget];
+    if(value === undefined) {
+      continue;
+    }
+    const valueMetadata = get(value as MetadataTarget);
+    if(valueMetadata.descriptions) {
+      keysDescriptions.push(...valueMetadata.descriptions);
+    }
+  }
+  return [
+    ...descriptions,
+    ...keysDescriptions,
+  ];
 }
 
 /**

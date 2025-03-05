@@ -126,7 +126,7 @@ function initAllGUIParts() {
   renderView = new RenderView(document.body);
   const rightColumn = document.createElement('div');
   rightColumn.id = "right-column";
-  rightColumn.className = `fixed top-0 right-0 m-5 flex flex-col items-end gap-2 ${CSS_CLASSES.main_layout_index}`;
+  rightColumn.className = `fixed top-0 right-5 m-5 flex flex-col items-end gap-2 ${CSS_CLASSES.main_layout_index}`;
   qualitySelector = new QualitySelector(rightColumn, activeQuality);
   debugUI = new DebugUI(rightColumn);
   document.body.appendChild(rightColumn);

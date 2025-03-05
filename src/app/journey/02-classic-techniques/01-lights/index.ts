@@ -10,10 +10,10 @@ import { Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
+import { Position3D } from '#/app/types/exercise';
 import { Lights, LightType } from '#/app/utils/light-controllers-utils';
 import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
-
  type Helpers = {
   directional: THREE.DirectionalLightHelper,
   point: THREE.PointLightHelper,
@@ -125,7 +125,7 @@ export class LightsExercise extends OrbitControlledExercise {
     this.lights.hemisphere.groundColor.set(new THREE.Color(color));
   }
 
-  updateLookAt(_: number, { target }: { target: { x: number, y:number, z:number }}) {
+  updateLookAt(_: number, { target }: { target: Position3D }) {
     const newTarget = new THREE.Vector3(target.x, target.y, target.z);
     this.lights.rectArea.lookAt(newTarget);
   }
