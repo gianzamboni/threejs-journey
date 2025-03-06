@@ -1,6 +1,8 @@
 import { Section } from "#/app/types/exercise";
 import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
-import { BASICS } from "./01-basics";
+import { RandomTriangles } from "./01-basics/05-random-triangles";
+import { MaterialsTest } from "./01-basics/08-materials";
+import { Text3D } from "./01-basics/09-text";
 import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 
@@ -19,9 +21,15 @@ function verifyUniqueExerciseIds(sections: Section[]) {
 }
 
 export const JOURNEY: Section[] = [ 
-  BASICS, 
   CLASSIC_TECHNIQUES,
-  ADVANCED_TECHNIQUES
+  ADVANCED_TECHNIQUES, {
+    id: "three.js-journey",
+    exercises: [
+      Text3D,
+      MaterialsTest,
+      RandomTriangles,
+    ]
+  }
 ];
 
 verifyUniqueExerciseIds(JOURNEY);

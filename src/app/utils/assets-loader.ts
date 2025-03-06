@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { FontLoader, Font } from 'three/addons/loaders/FontLoader.js';
+import { GLTF, GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 import { RELOAD } from '#/app/constants/icons';
@@ -21,6 +23,9 @@ export class AssetLoader extends EventTarget{
   private rgbeLoader: RGBELoader | undefined;
   private fontLoader: FontLoader | undefined;
   private cubeTextureLoader: THREE.CubeTextureLoader | undefined;
+  private gltfLoader: GLTFLoader | undefined;
+  private dracoLoader: DRACOLoader | undefined;
+
   public static getInstance() {
     if (!AssetLoader.instance) {
       AssetLoader.instance = new AssetLoader();
@@ -69,10 +74,14 @@ export class AssetLoader extends EventTarget{
     this.loadingManager.onError = this.onError.bind(this);
     this.loadingManager.onLoad = this.onLoad.bind(this);
 
+    this.dracoLoader?.dispose();
+    
     this.textureLoader = undefined;
     this.rgbeLoader = undefined;
     this.fontLoader = undefined;
     this.cubeTextureLoader = undefined;
+    this.gltfLoader = undefined;
+    this.dracoLoader = undefined;
   }
 
   loadTexture(url: string) {
@@ -101,5 +110,19 @@ export class AssetLoader extends EventTarget{
       this.fontLoader = new FontLoader(this.loadingManager);
     }
     return this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
+  }
+
+  loadModel(url: string, onLoad: (_: GLTF) => void, options: { useDraco?: boolean } = {}) {
+    if (!this.gltfLoader) {
+      this.gltfLoader = new GLTFLoader(this.loadingManager);
+    }
+    if (options.useDraco) {
+      if (!this.dracoLoader) {
+        this.dracoLoader = new DRACOLoader(this.loadingManager);
+        this.dracoLoader.setDecoderPath('/draco/');
+      }
+      this.gltfLoader.setDRACOLoader(this.dracoLoader);
+    }
+    return this.gltfLoader.load(url, onLoad);
   }
 }
