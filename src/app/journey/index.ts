@@ -21,15 +21,16 @@ function verifyUniqueExerciseIds(sections: Section[]) {
 }
 
 export const JOURNEY: Section[] = [ 
-  CLASSIC_TECHNIQUES,
-  ADVANCED_TECHNIQUES, {
+  {
     id: "three.js-journey",
     exercises: [
-      Text3D,
-      MaterialsTest,
       RandomTriangles,
+      MaterialsTest,
+      Text3D,
     ]
-  }
+  },
+  CLASSIC_TECHNIQUES,
+  ADVANCED_TECHNIQUES, 
 ];
 
 verifyUniqueExerciseIds(JOURNEY);
