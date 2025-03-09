@@ -1,11 +1,11 @@
 import { Timer } from "three/examples/jsm/Addons.js";
 
-import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
+import { ExerciseMetadata } from "../utils/exercise-metadata";
 
 type FrameFunction = (timer: Timer, ...args: unknown[]) => void;
 
-export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDecoratorContext | ClassFieldDecoratorContext): ExerciseMetadata.ExerciseMetadata {
-  const metadata = context.metadata as ExerciseMetadata.ExerciseMetadata;
+export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDecoratorContext | ClassFieldDecoratorContext): ExerciseMetadata {
+  const metadata = context.metadata as ExerciseMetadata;
   if(metadata.isDebuggable === undefined) {
     metadata.isDebuggable = true;
     metadata.shouldSendData = false;

@@ -1,8 +1,9 @@
 import { ExerciseControllers } from "#/app/decorators/customizable";
-import { ExerciseClass, Exercise } from "#/app/types/exercise";
+import { ExerciseClass, Exercise, Action } from "#/app/types/exercise";
 
 export type ExerciseMetadata = {
   id?: string;
+  actions?: Action[];
   descriptions?: string[];
   controllersConfig?: ExerciseControllers;
   isAnimated?: boolean;
@@ -19,7 +20,7 @@ export type MetadataTarget = WithMetadata<ExerciseClass | Exercise>;
 /**
  * Get all metadata from a target
  */
-export function get(target: MetadataTarget): ExerciseMetadata {
+export function getMetadata(target: MetadataTarget): ExerciseMetadata {
   let meta = target[Symbol.metadata];
   if(meta === undefined || meta === null) {
     meta = target.constructor[Symbol.metadata] as ExerciseMetadata;
@@ -36,7 +37,7 @@ export function get(target: MetadataTarget): ExerciseMetadata {
  * Get the ID from a target's metadata
  */
 export function getId(target: MetadataTarget): string {
-  const metadata = get(target);
+  const metadata = getMetadata(target);
   if(metadata.id === undefined) {
     throw new Error('Exercise id is undefined');
   }
@@ -47,7 +48,7 @@ export function getId(target: MetadataTarget): string {
  * Get descriptions from a target's metadata
  */
 export function getDescriptions(target: MetadataTarget): string[] {
-  const metadata = get(target);
+  const metadata = getMetadata(target);
   const descriptions = metadata.descriptions ?? [];
   const keysDescriptions = [];
   for(const key in target) {
@@ -55,7 +56,7 @@ export function getDescriptions(target: MetadataTarget): string[] {
     if(value === undefined) {
       continue;
     }
-    const valueMetadata = get(value as MetadataTarget);
+    const valueMetadata = getMetadata(value as MetadataTarget);
     if(valueMetadata.descriptions) {
       keysDescriptions.push(...valueMetadata.descriptions);
     }
@@ -70,7 +71,7 @@ export function getDescriptions(target: MetadataTarget): string[] {
  * Check if a target is debuggable based on its metadata
  */
 export function isDebuggable(target: MetadataTarget): boolean {
-  const metadata = get(target);
+  const metadata = getMetadata(target);
   return metadata.isDebuggable ?? false;
 }
 
@@ -78,7 +79,7 @@ export function isDebuggable(target: MetadataTarget): boolean {
  * Check if a target is animated based on its metadata
  */
 export function isAnimated(target: MetadataTarget): boolean {
-  const metadata = get(target);
+  const metadata = getMetadata(target);
   return metadata.isAnimated ?? false;
 }
 
@@ -86,11 +87,16 @@ export function isAnimated(target: MetadataTarget): boolean {
  * Get controllers configuration from a target's metadata
  */
 export function getControllers(target: MetadataTarget): ExerciseControllers {
-  const metadata = get(target);
+  const metadata = getMetadata(target);
   return metadata.controllersConfig ?? {};
 }
 
 export function hasControllers(target: MetadataTarget): boolean {
   const controllers = getControllers(target);
   return Object.keys(controllers).length > 0;
+}
+
+export function getActions(target: MetadataTarget): Action[] {
+  const metadata = getMetadata(target);
+  return metadata.actions ?? [];
 }

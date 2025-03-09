@@ -6,7 +6,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
-import { Exercise } from '#/app/decorators/exercise';
+import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
@@ -25,6 +25,7 @@ type HelperStatusDict = Record<keyof Helpers, boolean>;
 export type LightTypeHelper = keyof Helpers;
 
 @Exercise('lights')
+@OrbitControllerDescription()
 export class LightsExercise extends OrbitControlledExercise {
   private quality: QualityConfig;
   private material: THREE.MeshStandardMaterial;
