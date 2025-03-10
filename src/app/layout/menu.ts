@@ -3,7 +3,7 @@ import SideBar from "#/app/components/sidebar";
 import {HAMBURGER_ICON, LINKEDIN_ICON } from "#/app/constants/icons";
 import { JOURNEY } from "#/app/journey";
 import { ExerciseClass, Section } from "#/app/types/exercise";
-import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
+import { getId } from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
 import { CSS_CLASSES } from "#/theme";
 export default class Menu extends EventTarget {
@@ -39,7 +39,7 @@ export default class Menu extends EventTarget {
 
   private createExerciseItem(exercise: ExerciseClass) {
     const exerciseItem = document.createElement('li');
-    const id = ExerciseMetadata.getId(exercise);
+    const id = getId(exercise);
     exerciseItem.id = id;
     exerciseItem.textContent = pascalCaseToText(id);
     exerciseItem.className = 'cursor-pointer ml-2';

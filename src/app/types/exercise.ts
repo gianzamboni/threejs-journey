@@ -6,6 +6,12 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 
+export type Action = {
+  label: string;
+  icon: string;
+  onClick: () => void;
+}
+
 export type Section = {
   id: string;
   exercises: ExerciseClass[];

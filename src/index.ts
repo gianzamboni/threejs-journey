@@ -9,7 +9,8 @@ import RenderView from "#/app/layout/render-view";
 import { ErrorData, WarningBox } from "#/app/layout/warning-box";
 import { Exercise, ExerciseClass } from '#/app/types/exercise';
 import { AssetLoader, LoadingData } from "#/app/utils/assets-loader";
-import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { ActionBar } from './app/layout/action-bar';
+import { getId, isDebuggable } from './app/utils/exercise-metadata';
 import { pascalCaseToText } from './app/utils/text-utils';
 import { CSS_CLASSES } from './theme';
 
@@ -26,6 +27,7 @@ let debugUI: DebugUI;
 let loadingScreen: LoadingScreen;
 let warningBox: WarningBox;
 let qualitySelector: QualitySelector;
+let actionBar: ActionBar;
 
 function updateDebugUI(evt: CustomEvent): void {
   debugUI.update(evt.detail);
@@ -66,7 +68,7 @@ function showErrorMessage(evt: CustomEvent<ErrorData>) {
 }
 
 function updateURL(exercise: Exercise) { 
-  const id = ExerciseMetadata.getId(exercise);
+  const id = getId(exercise);
   window.history.pushState({exerciseId: id}, '', `?exercise=${id}&quality=${activeQuality}`);
   document.title = `${pascalCaseToText(id)} | Three.js Journey`;
 }
@@ -76,6 +78,7 @@ async function selectExercise(newExercise: ExerciseClass) {
     activeExercise.removeEventListener('debug-info', updateDebugUI as EventListener);
     debugUI.reset();
     loader.reset();
+    actionBar.reset();
     await activeExercise.dispose();
   }
 
@@ -84,7 +87,8 @@ async function selectExercise(newExercise: ExerciseClass) {
   debugUI.createControllers(activeExercise);
   infoBox.updateContent(activeExercise);
   renderView.run(activeExercise);
-  if(ExerciseMetadata.isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {
+  actionBar.updateContent(activeExercise);
+  if(isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {
     activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
   }
   toggleDebug();
@@ -128,6 +132,7 @@ function initAllGUIParts() {
   rightColumn.id = "right-column";
   rightColumn.className = `fixed top-0 right-5 m-5 flex flex-col items-end gap-2 ${CSS_CLASSES.main_layout_index}`;
   qualitySelector = new QualitySelector(rightColumn, activeQuality);
+  
   debugUI = new DebugUI(rightColumn);
   document.body.appendChild(rightColumn);
 
@@ -140,6 +145,9 @@ function initAllGUIParts() {
   infoBox = new InfoBox(bottomRow);
   warningBox = new WarningBox(bottomRow);
   document.body.appendChild(bottomRow);
+
+  actionBar = new ActionBar();
+
 }
 
 window.addEventListener('load', () => {

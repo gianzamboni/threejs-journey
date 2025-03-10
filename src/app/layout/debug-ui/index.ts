@@ -3,7 +3,7 @@ import GUI from "lil-gui";
 import { ControllerFactory } from "#/app/layout/debug-ui/controller-factory";
 import { GraphPanel } from "#/app/layout/debug-ui/graph-panel";
 import { Exercise } from "#/app/types/exercise";
-import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
+import { hasControllers, isDebuggable, getMetadata } from "#/app/utils/exercise-metadata";
 
 type DataRow = GraphPanel;
 
@@ -25,13 +25,12 @@ export default class DebugUI {
   }
 
   toggle(activeExercise: Exercise) {
-    const isDebuggable = ExerciseMetadata.isDebuggable(activeExercise);
-    if(!isDebuggable) {
+    if(!isDebuggable(activeExercise)) {
       return;
     }
     this.lastGuiUpdate = performance.now();
     this.container.classList.toggle('hidden');
-    const metadata = ExerciseMetadata.get(activeExercise);
+    const metadata = getMetadata(activeExercise);
     metadata.shouldSendData = !this.container.classList.contains('hidden');
   }
 
@@ -85,7 +84,7 @@ export default class DebugUI {
   }
 
   public createControllers(exercise: Exercise) {
-    if(ExerciseMetadata.hasControllers(exercise)) {
+    if(hasControllers(exercise)) {
       const gui = this.gui;
       const controllerFactory = new ControllerFactory(gui, exercise);
       controllerFactory.create();

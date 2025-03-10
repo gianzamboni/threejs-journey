@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { Exercise } from '#/app/types/exercise';
-import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { isAnimated } from '#/app/utils/exercise-metadata';
 
 export default class RenderView {
 
@@ -27,8 +27,7 @@ export default class RenderView {
   
   run(exercise: Exercise) {
     this.exercise = exercise;
-    const isAnimated = ExerciseMetadata.isAnimated(exercise);
-    if(isAnimated) {
+    if(isAnimated(exercise)) {
       (this.exercise as AnimatedExercise).startAnimation(this);
     } else {
       this.renderer.render(exercise.scene, exercise.camera);

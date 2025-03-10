@@ -264,5 +264,4 @@ describe('ControllerFactory', () => {
       `Controller visible has type master but no onChange or onFinishChange callback`
     );
   });
-  
 });

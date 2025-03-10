@@ -1,16 +1,17 @@
 import { Section } from "#/app/types/exercise";
-import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { RandomTriangles } from "./01-basics/05-random-triangles";
 import { MaterialsTest } from "./01-basics/08-materials";
 import { Text3D } from "./01-basics/09-text";
 import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 
+import { getMetadata } from "../utils/exercise-metadata";
+
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
   for(const section of sections) {
     for(const exercise of section.exercises) {
-      const metadata = ExerciseMetadata.get(exercise);
+      const metadata = getMetadata(exercise);
       if(metadata.id === undefined) throw new Error('Exercise id is undefined');
       
       const id = metadata.id;

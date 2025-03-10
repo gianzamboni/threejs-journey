@@ -2,7 +2,7 @@ import GUI, { Controller } from "lil-gui";
 
 import { ControllerConfig } from "#/app/decorators/customizable";
 import { Exercise } from "#/app/types/exercise";
-import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
+import { getControllers } from "#/app/utils/exercise-metadata";
 import { getPathArray, printable } from "#/app/utils/text-utils";
 
 /**
@@ -43,7 +43,7 @@ export class ControllerFactory {
    * Creates controllers for all customizable properties in the exercise
    */
   public create(): void {
-    const controllersConfig = ExerciseMetadata.getControllers(this.exercise);
+    const controllersConfig = getControllers(this.exercise);
     for (const key in controllersConfig) {
       for(const config of controllersConfig[key]) {
         this.assertControllerConfigIsValid(config);

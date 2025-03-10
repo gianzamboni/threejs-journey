@@ -1,7 +1,9 @@
 import { Collapsable } from "#/app/components/collapsable";
 import { Exercise } from "#/app/types/exercise";
-import * as ExerciseMetadata from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
+
+import { getId } from "../utils/exercise-metadata";
+import { getDescriptions } from "../utils/exercise-metadata";
 
 export class InfoBox {
 
@@ -30,8 +32,8 @@ export class InfoBox {
   }
 
   updateContent(exercise: Exercise) {
-    const id = ExerciseMetadata.getId(exercise);
-    const descriptions = ExerciseMetadata.getDescriptions(exercise);
+    const id = getId(exercise);
+    const descriptions = getDescriptions(exercise);
     
     this.collapsable.updateTitle(pascalCaseToText(id));
     const parser = new DOMParser();
