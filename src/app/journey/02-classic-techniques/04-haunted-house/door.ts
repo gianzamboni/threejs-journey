@@ -28,7 +28,7 @@ export class Door extends MeshObject {
     
     this.object = new THREE.Mesh(this.geometry, this.material);
     this.object.position.y = 1;
-    this.object.position.z = 2 + 0.01;
+    this.object.position.z = 2 + 0.038;
     this.object.receiveShadow = this.quality.shadows;
   }
 
