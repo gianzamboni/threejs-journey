@@ -2,13 +2,14 @@ import * as THREE from 'three';
 
 import { Timer } from 'three/examples/jsm/Addons.js';
 
-import { Exercise } from '#/app/decorators/exercise';
+import { ActionButton, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
+import DUCK from './icons/duck.svg?raw';
+import FOX from './icons/fox.svg?raw';
+import MASK from './icons/mask.svg?raw';
 
 import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
-
-
 
 @Exercise('imported-models')
 export default class ImportedModels extends OrbitControlledExercise {
@@ -19,7 +20,7 @@ export default class ImportedModels extends OrbitControlledExercise {
 
   private importedModel: {
     models: THREE.Object3D[];
-    mixer: THREE.AnimationMixer;
+    mixer?: THREE.AnimationMixer;
     currentAction?: THREE.AnimationAction;
   } | undefined;
 
@@ -29,7 +30,7 @@ export default class ImportedModels extends OrbitControlledExercise {
     this.floor = this.createFloor();
     this.ambientLight = new THREE.AmbientLight(0xffffff, 2.4);
     this.directionalLight = this.createDirectionalLight();
-    this.loadModel();
+    this.loadDuck();
     this.camera.position.set(3, 3, 3);
     this.camera.lookAt(0, 0, 0);
     this.scene.add(this.floor, this.ambientLight, this.directionalLight);
@@ -38,10 +39,40 @@ export default class ImportedModels extends OrbitControlledExercise {
   frame(timer: Timer): void {
     const delta = timer.getDelta();
     if (this.importedModel) {
-      this.importedModel.mixer.update(delta);
+      this.importedModel.mixer?.update(delta);
     }
   }
-  private loadModel() {
+
+  @ActionButton('Load Duck', DUCK)
+  public loadDuck() {
+    this.resetScene();
+    const loader = AssetLoader.getInstance();
+    loader.loadModel('models/Duck/glTF/Duck.gltf', (model) => {
+      this.importedModel = {
+        models: [model.scene.children[0]]
+      }
+      this.scene.add(model.scene.children[0]);
+    });
+  }
+
+  @ActionButton('Load Mask', MASK)
+  public loadMask() {
+    this.resetScene();
+    const loader = AssetLoader.getInstance();
+    loader.loadModel('models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
+      this.importedModel = {
+        models: model.scene.children.map(child => {
+          child.scale.set(2.5, 2.5, 2.5);
+          return child;
+        })
+      }
+      this.scene.add(...this.importedModel.models);
+    });
+  }
+
+  @ActionButton('Load Fox', FOX)
+  public loadFox() {
+    this.resetScene();
     const loader = AssetLoader.getInstance();
     loader.loadModel('models/Fox/glTF/Fox.gltf', (model) => {
       const objects = model.scene.children.map(child => {
@@ -53,11 +84,26 @@ export default class ImportedModels extends OrbitControlledExercise {
         mixer: new THREE.AnimationMixer(model.scene)
       }
       console.log(this.importedModel);
-      this.importedModel.currentAction = this.importedModel.mixer.clipAction(model.animations[1]);
+      this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1]);
 
       this.scene.add(...this.importedModel.models);
-      this.importedModel.currentAction.play();
+      this.importedModel.currentAction?.play();
     }, { useDraco: true });
+  }
+  
+  private resetScene() {
+    if(this.importedModel) {
+      this.importedModel.models.forEach(model => {
+        this.scene.remove(model);
+        model.traverse((child) => {
+          if(child instanceof THREE.Mesh) {
+            child.geometry.dispose();
+            child.material.dispose();
+          }
+        });
+      });
+      this.importedModel = undefined;
+    }
   }
 
   private createFloor() {
@@ -82,6 +128,7 @@ export default class ImportedModels extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
+    this.resetScene();
     this.ambientLight.dispose();
     this.floor.geometry.dispose();
     (this.floor.material as THREE.Material).dispose();
