@@ -5,7 +5,7 @@ import { WithOrbitControllerDescription } from '#/app/decorators/exercise';
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
 import RenderView from "#/app/layout/render-view";
 
-@WithOrbitControllerDescription()
+@WithOrbitControllerDescription
 export default class OrbitControlledExercise extends AnimatedExercise {
   
   protected controls: OrbitControls;
