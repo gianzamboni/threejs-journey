@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { DebugFPS } from '#/app/decorators/debug';
-import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import { Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
@@ -12,7 +12,6 @@ import { AssetLoader } from '#/app/utils/assets-loader';
  * Particles exercise
  */
 @Exercise('particles')
-@OrbitControllerDescription()
 export class Particles extends OrbitControlledExercise {
   private particleGeometry: THREE.BufferGeometry;
   private particleTexture: THREE.Texture;

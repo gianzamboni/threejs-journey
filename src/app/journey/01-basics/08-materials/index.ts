@@ -5,7 +5,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
-import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import { Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
@@ -15,7 +15,6 @@ import { QUALITY_CONFIG } from './quality-config';
 import { QualityConfig } from './quality-config';
 
 @Exercise('materials')
-@OrbitControllerDescription()
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
