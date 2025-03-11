@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { DebugFPS } from '#/app/decorators/debug';
-import { ActionButton, Description, Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
+import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Position3D } from '#/app/types/exercise';
@@ -25,7 +25,6 @@ type PhysicalObject = {
 }
 
 @Exercise('physics')
-@OrbitControllerDescription()
 @Description(["<strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects"])
 export class Physics extends OrbitControlledExercise {
   

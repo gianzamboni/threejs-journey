@@ -6,6 +6,7 @@ export type ExerciseMetadata = {
   actions?: Action[];
   descriptions?: string[];
   controllersConfig?: ExerciseControllers;
+  orbitControllerDescription?: boolean;
   isAnimated?: boolean;
   isDebuggable?: boolean;
   shouldSendData?: boolean;
@@ -50,20 +51,16 @@ export function getId(target: MetadataTarget): string {
 export function getDescriptions(target: MetadataTarget): string[] {
   const metadata = getMetadata(target);
   const descriptions = metadata.descriptions ?? [];
-  const keysDescriptions = [];
-  for(const key in target) {
-    const value = target[key as unknown as keyof MetadataTarget];
-    if(value === undefined) {
-      continue;
-    }
-    const valueMetadata = getMetadata(value as MetadataTarget);
-    if(valueMetadata.descriptions) {
-      keysDescriptions.push(...valueMetadata.descriptions);
-    }
+
+  if(metadata.orbitControllerDescription) {
+    descriptions.push(
+      '<strong>Rotate:</strong> Click/Tap & drag',
+      '<strong>Zoom:</strong> Scroll or pinch',
+      '<strong>Pan:</strong> Two-finger Tap/Right click & drag',
+    );
   }
   return [
     ...descriptions,
-    ...keysDescriptions,
   ];
 }
 

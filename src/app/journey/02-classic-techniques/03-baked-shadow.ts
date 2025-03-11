@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Exercise, OrbitControllerDescription } from "#/app/decorators/exercise";
+import { Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
@@ -15,7 +15,6 @@ type Lights = {
 }
 
 @Exercise('baked-shadow')
-@OrbitControllerDescription()
 export class BakedShadow extends OrbitControlledExercise {
   private lights: Lights;
 

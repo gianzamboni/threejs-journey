@@ -1,18 +1,17 @@
 import { Timer } from "three/examples/jsm/Addons.js";
 
+import { IsAnimated } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AnimationLoop } from "#/app/utils/animation-loop";
-import { getMetadata } from "#/app/utils/exercise-metadata";
 import BaseExercise from "./base-exercise";
 
+@IsAnimated
 export default class AnimatedExercise extends BaseExercise {
 
   private animationLoop: AnimationLoop;
 
   constructor() {
     super();
-    const metadata = getMetadata(this);
-    metadata.isAnimated = true;
     this.animationLoop = this.createAnimationLoop();
   }
 

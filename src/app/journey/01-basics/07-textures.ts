@@ -1,12 +1,11 @@
 import * as THREE from 'three';
 
-import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import { Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
 
 @Exercise('textures')
-@OrbitControllerDescription()
 export class TextureTest extends OrbitControlledExercise {
   private minecraftTexture: THREE.Texture;
   private geometry: THREE.BoxGeometry;

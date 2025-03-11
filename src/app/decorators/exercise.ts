@@ -18,17 +18,14 @@ export function Description(descriptions: string[]) {
   }
 }
 
-export function OrbitControllerDescription(descriptions?: string[]) {
-  if(descriptions === undefined) {
-    descriptions = [];
-  }
-  return Description([
-    ...descriptions,
-    '<strong>Rotate:</strong> Click/Tap & drag',
-    '<strong>Zoom:</strong> Scroll or pinch',
-    '<strong>Pan:</strong> Two-finger Tap/Right click & drag',
-  ])
+export function WithOrbitControllerDescription<T extends ExerciseClass>(target: T, context: ClassDecoratorContext) {
+  context.metadata.orbitControllerDescription = true;
+  return target;
+}
 
+export function IsAnimated<T extends ExerciseClass>(target: T, context: ClassDecoratorContext) {
+  context.metadata.isAnimated = true;
+  return target;
 }
 
 export function ActionButton(label: string, icon: string) {

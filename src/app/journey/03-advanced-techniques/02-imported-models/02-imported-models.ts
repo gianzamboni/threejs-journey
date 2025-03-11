@@ -37,6 +37,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   }
 
   frame(timer: Timer): void {
+    super.frame(timer);
     const delta = timer.getDelta();
     if (this.importedModel) {
       this.importedModel.mixer?.update(delta);

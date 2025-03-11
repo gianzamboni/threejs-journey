@@ -4,7 +4,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
-import { Exercise, OrbitControllerDescription } from '#/app/decorators/exercise';
+import { Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
@@ -24,7 +24,6 @@ type GalaxyParams = {
 }
 
 @Exercise('galaxy-generator')
-@OrbitControllerDescription()
 export class GalaxyGenerator extends OrbitControlledExercise {
   @Customizable(GALAXY_CONFIG)
   private galaxySettings: GalaxyParams = {
