@@ -6,6 +6,9 @@ import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 
 import { getMetadata } from "../utils/exercise-metadata";
+import { CubeGroup } from "./01-basics/02-cube-group";
+import { OrbitControlsTest } from "./01-basics/04-orbit-controls";
+import { TextureTest } from "./01-basics/07-textures";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -25,7 +28,10 @@ export const JOURNEY: Section[] = [
   {
     id: "three.js-journey",
     exercises: [
+      CubeGroup,
+      OrbitControlsTest,
       RandomTriangles,
+      TextureTest,
       MaterialsTest,
       Text3D,
     ]
