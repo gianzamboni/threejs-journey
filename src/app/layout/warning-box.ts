@@ -6,11 +6,14 @@ export type ErrorData = {
   action: () => void;
 }
 export class WarningBox {
+
+  private parent: HTMLElement;
   private warningBox: HTMLElement;
   private errorContainer: HTMLElement;
   private actionButton: HTMLButtonElement;
 
   constructor(parent: HTMLElement) {
+    this.parent = parent;
     this.warningBox = document.createElement('div');
     this.warningBox.className = "mb-5 mr-5 bg-red-600 flex items-center justify-center text-white py-2 px-3 gap-2 rounded-lg max-sm:w-[90vw] hidden";
 
@@ -25,14 +28,13 @@ export class WarningBox {
     this.actionButton = document.createElement('button');
     this.actionButton.className = 'border-2 border-white rounded-lg px-2 aspect-square hover:bg-red-500';
     this.warningBox.appendChild(this.actionButton);
-    parent.classList.add('w-full');
-    parent.appendChild(this.warningBox);
+    this.parent.appendChild(this.warningBox);
 
   }
 
   setMessage(error: ErrorData) {
     this.warningBox.classList.remove('hidden');
-    
+    this.parent.classList.add('w-full');
     this.errorContainer.appendChild(error.message);
     this.actionButton.innerHTML = error.actionIcon;
     this.actionButton.addEventListener('click', () => {
