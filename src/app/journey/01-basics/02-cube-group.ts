@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 
-import { Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
 
 @Exercise('object-transformation')
+@Description(["<strong>A group of y-scaled cubes in the center of the scene.</strong>", "It is <strong>NOT</strong> interactive"])
 export class CubeGroup extends BaseExercise {  
   private group: THREE.Group;
   private axesHelper: THREE.AxesHelper;

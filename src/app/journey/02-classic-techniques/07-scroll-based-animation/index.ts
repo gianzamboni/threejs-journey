@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
 import { Interactions } from './interactions';
@@ -31,6 +31,7 @@ type Particles = {
 }
 
 @Exercise('scroll-based-animation')
+@Description(["<strong>A scene with based scroll animation to show how a scene can interact with classic web elements.</strong>"])
 export class ScrollBasedAnimation extends AnimatedExercise {
 
   private layout: ScrollBasedAnimationLayout;

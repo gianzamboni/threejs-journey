@@ -4,7 +4,7 @@ import { Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise } from '#/app/decorators/exercise';
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Lights } from "#/app/utils/light-controllers-utils";
@@ -21,6 +21,7 @@ type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>
 //}
 
 @Exercise('Shadows')
+@Description(["<strong>A scene with shadows activated.</strong>"])
 export class Shadows extends OrbitControlledExercise {
 
   private qualityConfig: QualityConfig;

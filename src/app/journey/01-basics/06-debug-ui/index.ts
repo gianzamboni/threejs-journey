@@ -2,12 +2,13 @@ import gsap from 'gsap';
 import * as THREE from 'three';
 
 import { Callable, Customizable } from '#/app/decorators/customizable';
-import { Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { DEBUG_UI_MATERIAL_CONFIG, DEBUG_UI_GEOMETRY_CONFIG, DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 
 @Exercise('debug-ui')
+@Description(["<strong>A customizable Cube, this demo is thought to show a debug ui activated with double click.</strong>"])
 export class DebugUITest extends OrbitControlledExercise {
   @Customizable(DEBUG_UI_CUBE_CONFIG)
   private cube: THREE.Mesh;

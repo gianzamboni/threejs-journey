@@ -1,10 +1,11 @@
 import * as THREE from "three";
 
-import { Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 
 @Exercise('random-triangles')
+@Description(["<strong>A bunch of random generated triangles.</strong>"])
 export class RandomTriangles extends OrbitControlledExercise {
  
   private triangles: THREE.Mesh;
