@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { Timer } from 'three/examples/jsm/Addons.js';
 
-import { ActionButton, Exercise } from '#/app/decorators/exercise';
+import { ActionButton, Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
 import DUCK from './icons/duck.svg?raw';
@@ -12,6 +12,7 @@ import MASK from './icons/mask.svg?raw';
 import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
 
 @Exercise('imported-models')
+@Description(["<strong>Imported models.</strong>", "You can load a duck, a fox or a mask I have downloaded from Three.js Journey."])
 export default class ImportedModels extends OrbitControlledExercise {
 
   private floor: THREE.Mesh;
