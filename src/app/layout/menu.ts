@@ -97,7 +97,7 @@ export default class Menu extends EventTarget {
 
     const title = document.createElement('h2');
     title.className = 'font-semibold text-xl dark:text-white';
-    title.textContent = 'Three.js Journey';
+    title.textContent = 'Three.js Demos';
 
     header.appendChild(title);
 
