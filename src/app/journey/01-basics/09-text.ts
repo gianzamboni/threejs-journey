@@ -3,12 +3,13 @@ import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from "#/app/utils/assets-loader";
 
 @Exercise('text-3d')
+@Description(["<strong>A bunch of donuts and a text in 3D.</strong>"])
 export class Text3D extends OrbitControlledExercise {
   private loader: AssetLoader;
 

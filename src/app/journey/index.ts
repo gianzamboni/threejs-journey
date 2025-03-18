@@ -6,6 +6,8 @@ import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 
 import { getMetadata } from "../utils/exercise-metadata";
+import { isInDevMode } from "../utils";
+import { BASICS } from "./01-basics";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -21,7 +23,12 @@ function verifyUniqueExerciseIds(sections: Section[]) {
   }
 }
 
-export const JOURNEY: Section[] = [ 
+export const JOURNEY: Section[] = isInDevMode() ? 
+[
+ BASICS,
+ CLASSIC_TECHNIQUES,
+ ADVANCED_TECHNIQUES, 
+] : [ 
   {
     id: "three.js-journey",
     exercises: [

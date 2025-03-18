@@ -2,11 +2,12 @@ import * as THREE from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise } from '#/app/decorators/exercise';
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { createRedCube } from '#/app/utils/default-shapes';
 
 @Exercise('animations')
+@Description(["<strong>A cube and a camera that rotate around.</strong>", "It is <strong>NOT</strong> interactive."])
 export class RotatingCube extends AnimatedExercise {
     
   private cube: THREE.Mesh;

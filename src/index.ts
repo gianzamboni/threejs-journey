@@ -13,6 +13,7 @@ import { ActionBar } from './app/layout/action-bar';
 import { getId, isDebuggable } from './app/utils/exercise-metadata';
 import { pascalCaseToText } from './app/utils/text-utils';
 import { CSS_CLASSES } from './theme';
+import { isInDevMode } from './app/utils';
 
 let tappedTwice = false;
 
@@ -88,7 +89,7 @@ async function selectExercise(newExercise: ExerciseClass) {
   infoBox.updateContent(activeExercise);
   renderView.run(activeExercise);
   actionBar.updateContent(activeExercise);
-  if(isDebuggable(activeExercise) && import.meta.env.MODE === 'development') {
+  if(isDebuggable(activeExercise) && isInDevMode()) {
     activeExercise.addEventListener('debug-info',  updateDebugUI as EventListener);
   }
   toggleDebug();

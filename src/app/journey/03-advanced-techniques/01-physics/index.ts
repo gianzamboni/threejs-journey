@@ -25,7 +25,7 @@ type PhysicalObject = {
 }
 
 @Exercise('physics')
-@Description(["<strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects"])
+@Description(["<strong>Physics Demo. It shows some objects falling.</strong>", "<strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects"])
 export class Physics extends OrbitControlledExercise {
   
   private static readonly palette = [
