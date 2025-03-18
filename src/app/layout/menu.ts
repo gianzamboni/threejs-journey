@@ -31,8 +31,8 @@ export default class Menu extends EventTarget {
     const menu = document.createElement('nav');
     menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${CSS_CLASSES.scrollBar}`;
     sidebar.addContent(menu);
-    for(const section of JOURNEY) {
-      this.createSection(section, menu);
+    for(const [index, section] of JOURNEY.entries()) {
+      this.createSection(section, menu, index === JOURNEY.length - 1);
     }
     return menu;
   }
@@ -77,7 +77,7 @@ export default class Menu extends EventTarget {
     lastExercise[lastExercise.length - 1].click();
   }
 
-  private createSection(section: Section, menu: HTMLElement) {
+  private createSection(section: Section, menu: HTMLElement, isOpen: boolean = false) {
     const title = pascalCaseToText(section.id);
 
     const collapsable = new Collapsable(title);
@@ -88,7 +88,9 @@ export default class Menu extends EventTarget {
     }
     collapsable.addContent(exerciseList);
     collapsable.addTo(menu);
-    collapsable.toggle();
+    if(isOpen) {
+      collapsable.toggle();
+    }
   }
 
   private createHeader() {
