@@ -31,7 +31,6 @@ export class ActionBar {
     this.layoutContainer.appendChild(button);
     this.buttons.push(button);
     button.addEventListener('click', action.onClick.bind(target));
-    console.log(button);    
     this.layoutContainer.appendChild(button);
   }
 
@@ -41,7 +40,6 @@ export class ActionBar {
 
   updateContent(exercise: Exercise) {
     const actions = getActions(exercise);
-    console.log(actions);
     actions.forEach(action => {
       this.addButton(action, exercise);
     })

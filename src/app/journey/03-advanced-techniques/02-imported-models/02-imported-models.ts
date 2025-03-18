@@ -85,7 +85,6 @@ export default class ImportedModels extends OrbitControlledExercise {
         models: objects,
         mixer: new THREE.AnimationMixer(model.scene)
       }
-      console.log(this.importedModel);
       this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1]);
 
       this.scene.add(...this.importedModel.models);
