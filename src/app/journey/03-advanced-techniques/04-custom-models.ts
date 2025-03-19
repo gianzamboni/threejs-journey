@@ -1,5 +1,5 @@
 import RenderView from "#/app/layout/render-view";
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import * as THREE from 'three';

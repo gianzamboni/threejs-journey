@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";

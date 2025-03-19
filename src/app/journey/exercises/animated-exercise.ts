@@ -1,4 +1,4 @@
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { IsAnimated } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";

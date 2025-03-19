@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { Timer } from 'three/examples/jsm/Addons.js';
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { ActionButton, Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';

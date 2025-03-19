@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
-import { Timer } from 'three/examples/jsm/Addons.js';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Timer } from 'three/addons/misc/Timer.js';
+import { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from '#/app/layout/render-view';
