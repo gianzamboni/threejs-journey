@@ -98,7 +98,8 @@ export class AssetLoader extends EventTarget{
     return this.rgbeLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 
-  loadCubeTexture(urls:string[]) {
+  loadCubeTexture(folder: string) {
+    const urls = ['px', 'nx', 'py', 'ny', 'pz', 'nz'].map(suffix => `${folder}/${suffix}.png`);
     if (!this.cubeTextureLoader) {
       this.cubeTextureLoader = new THREE.CubeTextureLoader(this.loadingManager);
     }
@@ -125,4 +126,15 @@ export class AssetLoader extends EventTarget{
     }
     return this.gltfLoader.load(url, onLoad);
   }
+}
+
+export function loadHelmet(scale: number = 1, callback: (meshes: THREE.Object3D[]) => void) {
+  const loader = AssetLoader.getInstance();
+  loader.loadModel('models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
+    const meshes = model.scene.children.map(child => {
+      child.scale.set(scale, scale, scale);
+      return child;
+    });
+    callback(meshes);
+  });
 }

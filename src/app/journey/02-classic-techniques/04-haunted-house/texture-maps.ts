@@ -42,7 +42,7 @@ export function loadTextureMaps(
   const textures: TextureDict = {};
   
   for (const mapType of mapTypes) { 
-    const path = `/textures/${textureFolder}/${resolution}/${mapType}.jpg`;
+    const path = `/textures/haunted-house/${textureFolder}/${resolution}/${mapType}.jpg`;
     textures[mapType] = assetLoader.loadTexture(path);
   }
   

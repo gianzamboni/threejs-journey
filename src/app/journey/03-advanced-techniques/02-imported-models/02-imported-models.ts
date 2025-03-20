@@ -4,7 +4,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { ActionButton, Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
-import { AssetLoader } from '#/app/utils/assets-loader';
+import { AssetLoader, loadHelmet } from '#/app/utils/assets-loader';
 import DUCK from './icons/duck.svg?raw';
 import FOX from './icons/fox.svg?raw';
 import MASK from './icons/mask.svg?raw';
@@ -60,13 +60,9 @@ export default class ImportedModels extends OrbitControlledExercise {
   @ActionButton('Load Mask', MASK)
   public loadMask() {
     this.resetScene();
-    const loader = AssetLoader.getInstance();
-    loader.loadModel('models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
+    loadHelmet(2.5, (meshes: THREE.Object3D[]) => {
       this.importedModel = {
-        models: model.scene.children.map(child => {
-          child.scale.set(2.5, 2.5, 2.5);
-          return child;
-        })
+        models: meshes as THREE.Mesh[]
       }
       this.scene.add(...this.importedModel.models);
     });

@@ -65,7 +65,7 @@ export class Floor extends MeshObject {
     }
 
     const assetLoader = AssetLoader.getInstance();
-    textures[TextureMaps.Alpha] = assetLoader.loadTexture('/textures/floor/alpha.jpg');
+    textures[TextureMaps.Alpha] = assetLoader.loadTexture('/textures/haunted-house/floor/alpha.jpg');
 
     return textures;
   }

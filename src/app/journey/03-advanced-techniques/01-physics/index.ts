@@ -268,10 +268,7 @@ export class Physics extends OrbitControlledExercise {
 
   private loadEnvironmentMap() {
     const assetLoader = AssetLoader.getInstance();
-    const textureFolder = 'textures/environmentMap/0';
-    const urls = ['px', 'nx', 'py', 'ny', 'pz', 'nz']
-      .map(suffix => `${textureFolder}/${suffix}.png`);
-    return assetLoader.loadCubeTexture(urls);
+    return assetLoader.loadCubeTexture('env-maps/factory');
   }
 
   async dispose() {
