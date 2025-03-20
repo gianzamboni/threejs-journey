@@ -66,10 +66,7 @@ export class MaterialsTest extends OrbitControlledExercise {
   }
 
   private setupEnvironment() {
-    this.loader.loadEnvironment('env-maps/alley/2k.hdr', (envMap) => {
-      envMap.mapping = THREE.EquirectangularReflectionMapping;
-      this.scene.environment = envMap;
-      this.scene.background = envMap;
+    this.loader.loadEnvironment('env-maps/alley/2k.hdr', this.scene, (envMap) => {
       this.envMap = envMap;   
     });
   }
