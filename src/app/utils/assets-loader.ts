@@ -97,7 +97,6 @@ export class AssetLoader extends EventTarget{
     }
     return this.rgbeLoader.load(url, (envMap) => {
       envMap.mapping = THREE.EquirectangularReflectionMapping;
-      scene.background = envMap;
       scene.environment = envMap;
       onLoad(envMap);
     }, undefined, () => this.onError(url));
