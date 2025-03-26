@@ -96,10 +96,11 @@ export class AssetLoader extends EventTarget{
       this.rgbeLoader = new RGBELoader(this.loadingManager);
     }
     return this.rgbeLoader.load(url, (envMap) => {
+      console.log(envMap);
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;
       onLoad(envMap);
-    }, undefined, () => this.onError(url));
+    }, undefined);
   }
 
   loadCubeTexture(folder: string) {

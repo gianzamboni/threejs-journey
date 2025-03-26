@@ -1,9 +1,10 @@
+import * as THREE from "three";
+
+import { Customizable } from "#/app/decorators/customizable";
+import { Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
-import { Exercise } from "#/app/decorators/exercise";
-import * as THREE from "three";
 import { AssetLoader, loadHelmet } from "#/app/utils/assets-loader";
-import { Customizable } from "#/app/decorators/customizable";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
 
 @Exercise("environment-map")
@@ -33,7 +34,7 @@ export class EnvironmentMap extends OrbitControlledExercise {
 
     this.loadHelmetModel();
 
-    this.loadEnvironmentMap(),
+    this.loadEnvironmentMap();
 
     this.scene.add(this.torusKnot);
 
@@ -58,7 +59,7 @@ export class EnvironmentMap extends OrbitControlledExercise {
 
   loadEnvironmentMap() {
     const loader = AssetLoader.getInstance();
-    loader.loadEnvironment("env-maps/blender-2k.hdr", this.scene, (envMap) => {
+    loader.loadEnvironment("env-maps/nvidiaCanvas-4k.exr", this.scene, (envMap) => {
       this.scene.environment = envMap;
     });
   }
