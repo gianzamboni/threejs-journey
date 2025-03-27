@@ -40,13 +40,9 @@ export class EnvironmentMap extends OrbitControlledExercise {
     this.controls.target.y = 3.5;
     this.camera.position.set(6, 6, 6);
 
-    this.scene.environmentIntensity = 10;
+    this.scene.environmentIntensity = 1;
     this.scene.backgroundBlurriness = 0;
     this.scene.backgroundIntensity = 1;
-    //this.scene.backgroundRotation.x = 1;
-    //this.scene.environmentRotation.x = 2;
-   // this.scene.background = this.environmentMap;
-   // this.scene.environment = this.environmentMap;
   }
 
   loadHelmetModel() {
@@ -58,8 +54,8 @@ export class EnvironmentMap extends OrbitControlledExercise {
 
   loadEnvironmentMap() {
     const loader = AssetLoader.getInstance();
-    loader.loadEnvironment("env-maps/blender-2k.hdr", this.scene, (envMap) => {
-      this.scene.environment = envMap;
+    loader.loadEnvironment("env-maps/field/2k.hdr", this.scene, (envMap) => {
+      console.log(envMap);
     });
   }
 
