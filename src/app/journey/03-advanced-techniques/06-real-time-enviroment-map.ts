@@ -45,11 +45,12 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
     this.scene.backgroundBlurriness = 0;
     this.scene.backgroundIntensity = 1;
 
-    this.cubeRenderTarget = new THREE.WebGLCubeRenderTarget(2048, {	
+    this.cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {	
       type: THREE.FloatType,
     });
 
     this.cubeCamera = new THREE.CubeCamera(0.1, 100, this.cubeRenderTarget);
+    this.cubeCamera.layers.set(1);
 
     this.scene.environment = this.cubeRenderTarget.texture;
   }
