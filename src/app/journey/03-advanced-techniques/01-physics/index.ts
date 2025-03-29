@@ -16,6 +16,7 @@ import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 
 type PhysicalObject = {
@@ -168,14 +169,12 @@ export class Physics extends OrbitControlledExercise {
     }
   }
 
-
   public removeObject(object: PhysicalObject, index: number) {
     object.physics.removeEventListener('collide', this.playHitSound.bind(this));
     this.physicsWorld.removeBody(object.physics);
     this.scene.remove(object.mesh);
     this.physicalObjects.splice(index, 1);
   }
-
 
   private createPhysicalObject(mesh: THREE.Mesh, shape: CANNON.Shape, position: Position3D) {
     mesh.castShadow = true;
@@ -273,17 +272,10 @@ export class Physics extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
-    this.environmentMap.dispose();
-    this.floor.mesh.geometry.dispose();
-    (this.floor.mesh.material as THREE.Material).dispose();
-
-    for (const sphere of this.physicalObjects) {
-      sphere.mesh.geometry.dispose();
-      (sphere.mesh.material as THREE.Material).dispose();
-    }
-
-    for (const material of Object.values(this.materials)) {
-      material.dispose();
-    }
+    this.physicalObjects.forEach((object, index) => {
+      this.removeObject(object, index);
+    });
+    disposeObjects(this.environmentMap, ...Object.values(this.materials));
+    disposeMesh(this.floor.mesh);
   }
 }

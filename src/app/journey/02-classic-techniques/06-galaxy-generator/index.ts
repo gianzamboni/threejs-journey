@@ -133,9 +133,9 @@ export class GalaxyGenerator extends OrbitControlledExercise {
 
   private disposeGalaxy() {
     if (this.points) {
-    this.scene.remove(this.points);
-    this.geometry!.dispose();
-    this.material!.dispose();
+      this.scene.remove(this.points);
+      this.geometry?.dispose();
+      this.material?.dispose();
     }
   }
 

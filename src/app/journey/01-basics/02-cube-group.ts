@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 import { Description, Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
+import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('object-transformation')
 @Description(["<strong>A group of y-scaled cubes in the center of the scene.</strong>", "It is <strong>NOT</strong> interactive"])
@@ -43,9 +44,7 @@ export class CubeGroup extends BaseExercise {
 
   async dispose() {
     super.dispose();
-    this.axesHelper.dispose();
     this.group.clear();
-    this.material.dispose();
-    this.geometry.dispose();
+    disposeObjects(this.axesHelper, this.material, this.geometry);
   }
 }

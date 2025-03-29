@@ -7,6 +7,7 @@ import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
+import { disposeObjects } from '#/app/utils/three-utils';
 
 /**
  * Particles exercise
@@ -101,10 +102,12 @@ export class Particles extends OrbitControlledExercise {
   /**
    * Clean up resources
    */
-  async dispose(): Promise<void> {
+  async dispose() {
     await super.dispose();
-    this.particleGeometry.dispose();
-    this.pointMaterial.dispose();
-    this.particleTexture.dispose();
+    disposeObjects(
+      this.particleGeometry,
+      this.pointMaterial,
+      this.particleTexture
+    );
   }
 } 

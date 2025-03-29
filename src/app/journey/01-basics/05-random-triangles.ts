@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
+import { disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise('random-triangles')
 @Description(["<strong>A bunch of random generated triangles.</strong>"])
@@ -39,7 +40,6 @@ export class RandomTriangles extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
-    this.triangles.geometry.dispose();
-    (this.triangles.material as THREE.Material).dispose();
+    disposeMesh(this.triangles);
   }
 }

@@ -1,3 +1,4 @@
+import { disposeMesh } from '#/app/utils/three-utils';
 import * as THREE from 'three';
 
 /**
@@ -48,12 +49,7 @@ export class PathTracer {
   dispose(): void {
     this.mesh.children.forEach((child) => {
       const line = child as THREE.Line;
-      line.geometry.dispose();
-      if (line.material instanceof THREE.Material) {
-        line.material.dispose();
-      } else if (Array.isArray(line.material)) {
-        line.material.forEach(material => material.dispose());
-      }
+      disposeMesh(line);
     });
   }
 } 

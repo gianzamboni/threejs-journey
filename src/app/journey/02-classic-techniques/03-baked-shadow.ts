@@ -6,6 +6,7 @@ import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
+import { disposeObjects } from "#/app/utils/three-utils";
 
 type Lights = {
   ambient: THREE.AmbientLight;
@@ -76,21 +77,17 @@ export class BakedShadow extends OrbitControlledExercise {
     this.bakedShadowMaterial.opacity = (1 - this.sphere.position.y) * 0.5;
   }
 
-  async dispose(): Promise<void> {
+  async dispose() {
     super.dispose();
-    this.sphere.geometry.dispose();
-    this.plane.geometry.dispose();
-    this.sphereShadow.geometry.dispose();
-
-    Object.values(this.lights).forEach(light => {
-      light.dispose();
-    });
-
-    this.material.dispose();
-    this.bakedShadowMaterial.dispose();
-    
-    // Dispose of textures
-    this.bakedShadowTexture.dispose();
+    disposeObjects(
+      this.sphere.geometry, 
+      this.plane.geometry, 
+      this.sphereShadow.geometry,
+      ...Object.values(this.lights),
+      this.material,
+      this.bakedShadowMaterial,
+      this.bakedShadowTexture
+    );
   }
 
   private createLights(): Lights {

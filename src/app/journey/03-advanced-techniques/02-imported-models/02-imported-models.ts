@@ -10,6 +10,7 @@ import FOX from './icons/fox.svg?raw';
 import MASK from './icons/mask.svg?raw';
 
 import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('imported-models')
 @Description(["<strong>Imported models.</strong>", "You can load a duck, a fox or a mask I have downloaded from Three.js Journey website."])
@@ -90,15 +91,14 @@ export default class ImportedModels extends OrbitControlledExercise {
   
   private resetScene() {
     if(this.importedModel) {
-      this.importedModel.models.forEach(model => {
+      for(const model of this.importedModel.models) {
         this.scene.remove(model);
         model.traverse((child) => {
           if(child instanceof THREE.Mesh) {
-            child.geometry.dispose();
-            child.material.dispose();
+            disposeMesh(child);
           }
         });
-      });
+      }
       this.importedModel = undefined;
     }
   }
@@ -126,8 +126,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   async dispose() {
     await super.dispose();
     this.resetScene();
-    this.ambientLight.dispose();
-    this.floor.geometry.dispose();
-    (this.floor.material as THREE.Material).dispose();
+    disposeObjects(this.ambientLight, this.directionalLight);
+    disposeMesh(this.floor);
   }
 }

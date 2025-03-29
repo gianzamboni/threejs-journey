@@ -8,6 +8,7 @@ import RenderView from '#/app/layout/render-view';
 
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import { AssetLoader } from '#/app/utils/assets-loader';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise("Raycaster")
 @Description([
@@ -121,14 +122,15 @@ export default class Raycaster extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
-    this.ambientLight.dispose();
-    this.directionalLight.dispose();
-    this.geometry.dispose(); 
-    for(const object of this.spheres) {
-      (object.material as THREE.MeshBasicMaterial).dispose();
-    }
+    disposeObjects(
+      this.ambientLight,
+      this.directionalLight,
+      this.geometry,
+      ...this.spheres.flatMap(sphere => sphere.material),
+    )
 
-    this.duck?.geometry.dispose();
-    (this.duck?.material as THREE.MeshStandardMaterial).dispose();
+    if(this.duck) { 
+      disposeMesh(this.duck);
+    }
   }  
 }

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { Description, Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
-import { createRedCube } from '#/app/utils/default-shapes';
+import { createRedCube, disposeMesh } from '#/app/utils/three-utils';
 
 @Exercise('first-three-js-project')
 @Description(["<strong>Just a cube in the center of the scene</strong>. It is <strong>NOT</strong> interactive."])
@@ -17,7 +17,6 @@ export class CenteredCube extends BaseExercise {
 
   async dispose() {
     super.dispose();
-    this.cube.geometry.dispose();
-    (this.cube.material as THREE.Material).dispose();
+    disposeMesh(this.cube);
   }
 }

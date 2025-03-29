@@ -16,6 +16,7 @@ import { House } from './house';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
 
 import { SceneObject } from '../../../types/scene-object';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 /**
  * Haunted House exercise
@@ -129,12 +130,12 @@ export class HauntedHouse extends OrbitControlledExercise {
    */
   async dispose(): Promise<void> {
     await super.dispose();
-    this.lights.ambient.dispose();
-    this.lights.directional.dispose();
-    this.lights.sky.material.dispose();
-    this.lights.sky.geometry.dispose();
-    for (const child of this.children) {
-      child.dispose();
-    }
+    disposeObjects(
+      this.lights.ambient,
+      this.lights.directional,
+      ...this.children,
+    )
+    
+    disposeMesh(this.lights.sky);
   }
 } 

@@ -5,6 +5,7 @@ import { QualityConfig } from './quality-config';
 import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
 
 import { SceneObject } from '../../../types/scene-object';
+import { disposeObjects } from '#/app/utils/three-utils';
 /**
  * Graves object for the haunted house scene
  */
@@ -88,10 +89,10 @@ export class Graves extends SceneObject {
 
   dispose(): void {
     this.object.clear();
-    this.geometry.dispose();
-    this.material.dispose();
-    for (const texture of Object.values(this.textures)) {
-      texture.dispose();
-    }
+    disposeObjects(
+      this.geometry,
+      this.material,
+      ...Object.values(this.textures)
+    )
   }
 } 

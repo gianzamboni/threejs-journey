@@ -31,7 +31,7 @@ export class ScrollBasedAnimationLayout {
     document.body.appendChild(this.layoutContainer);
   }
 
-  remove() {
+  dispose() {
     this.layoutContainer.remove();
   }
 

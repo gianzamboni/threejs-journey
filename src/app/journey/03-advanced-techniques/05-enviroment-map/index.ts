@@ -6,6 +6,8 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader, loadHelmet } from "#/app/utils/assets-loader";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
+import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js'
+import { disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise("environment-map")
 export class EnvironmentMap extends OrbitControlledExercise {
@@ -14,15 +16,16 @@ export class EnvironmentMap extends OrbitControlledExercise {
 
   private helmet: THREE.Mesh[] | undefined;
 
+  private skybox: GroundedSkybox | undefined;
 
   private environmentMap: THREE.Texture | undefined;
 
   @Customizable(ENV_CONTROLLERS)
-  public _scene : THREE.Scene;
-  
+  public _scene: THREE.Scene;
+
   constructor(view: RenderView) {
     super(view);
-    
+
     this._scene = this.scene;
 
     this.torusKnot = new THREE.Mesh(
@@ -56,7 +59,10 @@ export class EnvironmentMap extends OrbitControlledExercise {
   loadEnvironmentMap() {
     const loader = AssetLoader.getInstance();
     loader.loadEnvironment("env-maps/field/2k.hdr", this.scene, (envMap) => {
-      console.log(envMap);
+      this.environmentMap = envMap;
+      this.skybox = new GroundedSkybox(this.environmentMap, 15, 70);
+      (this.skybox.material as THREE.MeshBasicMaterial).wireframe = true;
+      this.scene.add(this.skybox)
     });
   }
 
@@ -68,14 +74,12 @@ export class EnvironmentMap extends OrbitControlledExercise {
       this.environmentMap.dispose();
     }
 
-    this.torusKnot.geometry.dispose();
-    (this.torusKnot.material as THREE.Material).dispose();
+    disposeMesh(this.torusKnot);
 
     if (this.helmet) {
-      this.helmet.forEach(mesh => {
-        mesh.geometry.dispose();
-        (mesh.material as THREE.Material).dispose();
-      });
+      for (const mesh of this.helmet) {
+        disposeMesh(mesh);
+      }
     }
   }
 }

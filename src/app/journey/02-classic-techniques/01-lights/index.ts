@@ -14,6 +14,7 @@ import { Position3D } from '#/app/types/exercise';
 import { Lights, LightType } from '#/app/utils/light-controllers-utils';
 import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
+import { disposeObjects } from '#/app/utils/three-utils';
  type Helpers = {
   directional: THREE.DirectionalLightHelper,
   point: THREE.PointLightHelper,
@@ -78,28 +79,18 @@ export class LightsExercise extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
-    for(const helper of Object.values(this.helpers)) {
-      helper.dispose();
-    }
     this.lights.spot.target.clear();
-    for(const light of Object.values(this.lights)) {
-      light.dispose();
-    }
-    this.plane.geometry.dispose();
-    for(const object of this.animatedObjects) {
-      object.geometry.dispose();
-    }
-    this.material.dispose();
+
+    disposeObjects(
+      ...Object.values(this.helpers),
+      ...Object.values(this.lights),
+      this.plane.geometry,
+      ...this.animatedObjects.map(obj => obj.geometry),
+      this.material
+    );
   }
 
-  /**
-   * Toggles the visibility of a light and its helper
-   * @param newValue - The new visibility value
-   * @param {Object} context - The context object containing lightType
-   */
   toggleLight(newValue: boolean, { lightType }: {lightType: LightType}) {
-    
-
     const light = this.lights[lightType];
     light.visible = newValue;
     if(lightType in this.helpers) {
