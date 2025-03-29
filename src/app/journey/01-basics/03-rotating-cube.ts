@@ -7,7 +7,10 @@ import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { createRedCube, disposeMesh } from '#/app/utils/three-utils';
 
 @Exercise('animations')
-@Description(["<strong>A cube and a camera that rotate around.</strong>", "It is <strong>NOT</strong> interactive."])
+@Description([
+  "<p><strong>A cube and a camera that rotate around.</strong></p>", 
+  "<p>It is <strong>NOT</strong> interactive.</p>"
+])
 export class RotatingCube extends AnimatedExercise {
     
   private cube: THREE.Mesh;

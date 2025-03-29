@@ -13,7 +13,10 @@ import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('imported-models')
-@Description(["<strong>Imported models.</strong>", "You can load a duck, a fox or a mask I have downloaded from Three.js Journey website."])
+@Description([
+  "<p><strong>Imported models I downloaded from Three.js Journey website.</strong></p>", 
+  "<p>You can load a duck, a fox or a mask.</p>"
+])
 export default class ImportedModels extends OrbitControlledExercise {
 
   private floor: THREE.Mesh;

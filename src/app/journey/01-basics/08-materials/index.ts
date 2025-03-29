@@ -16,7 +16,7 @@ import { QualityConfig } from './quality-config';
 import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('materials')
-@Description(["Some objects with physicals materials. You can customize the material with the hidden ui"])
+@Description(["<p><strong>Some objects with physical materials.</strong></p>", "<p>You can customize the material with the hidden ui</p>"])
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;

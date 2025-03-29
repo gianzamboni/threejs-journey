@@ -12,9 +12,9 @@ import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise("Raycaster")
 @Description([
-  "This is a simple 3D interaction demo.", 
-  "The <strong>duck</strong> will grow when the <strong>mouse is over</strong> it.",
-  "The <strong>spheres</strong> will change color when the <strong>mouse is over</strong> them.",
+  "<p><strong>This is a simple 3D interaction demo.</strong></p>", 
+  "<p>The <strong>duck</strong> will grow when the <strong>mouse is over</strong> it.</p>",
+  "<p>The <strong>spheres</strong> will change color when the <strong>mouse is over</strong> them.</p>",
 ])
 export default class Raycaster extends OrbitControlledExercise {
   

@@ -80,6 +80,7 @@ async function selectExercise(newExercise: ExerciseClass) {
     debugUI.reset();
     loader.reset();
     actionBar.reset();
+    infoBox.close();
     await activeExercise.dispose();
   }
 

@@ -124,4 +124,9 @@ export class Collapsable {
     }
   }
    
+  close() {
+    if(this.isOpen) {
+      this.toggle();
+    }
+  }
 }
