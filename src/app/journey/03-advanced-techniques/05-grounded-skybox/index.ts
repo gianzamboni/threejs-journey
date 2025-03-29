@@ -29,12 +29,7 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
     this._scene = this.scene;
 
-    this.torusKnot = new THREE.Mesh(
-      new THREE.TorusKnotGeometry(1, 0.4, 100, 16),
-      new THREE.MeshStandardMaterial({ roughness: 0.3, metalness: 1, color: 0xaaaaaa })
-    );
-    this.torusKnot.position.y = 4;
-    this.torusKnot.position.x = -4;
+    this.torusKnot = this.createTorusKnot();
 
     this.loadHelmetModel();
 
@@ -48,6 +43,15 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
     this.scene.environmentIntensity = 1;
     this.scene.backgroundBlurriness = 0;
     this.scene.backgroundIntensity = 1;
+  }
+
+  createTorusKnot() {
+    const geometry = new THREE.TorusKnotGeometry(1, 0.4, 100, 16);
+    const material = new THREE.MeshStandardMaterial({ roughness: 0.3, metalness: 1, color: 0xaaaaaa });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.y = 4;
+    mesh.position.x = -4;
+    return mesh;
   }
 
   loadHelmetModel() {

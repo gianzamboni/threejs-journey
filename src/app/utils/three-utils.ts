@@ -7,14 +7,16 @@ export function createRedCube() {
   return cube;
 }
 
-export function disposeMesh(mesh: { geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[] }) {
-  mesh.geometry.dispose();
-  if (Array.isArray(mesh.material)) {
-    for(const material of mesh.material) {
+export function disposeMesh(...args: { geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[] }[]) {
+  for(const mesh of args) {
+    mesh.geometry.dispose();
+    if (Array.isArray(mesh.material)) {
+      for(const material of mesh.material) {
       material.dispose();
+      }
+    } else {
+      mesh.material.dispose();
     }
-  } else {
-    mesh.material.dispose();
   }
 }
 

@@ -7,7 +7,7 @@ import { isAnimated } from '#/app/utils/exercise-metadata';
 export default class RenderView {
 
   public canvas: HTMLElement;
-  private renderer: THREE.WebGLRenderer;
+  private _renderer: THREE.WebGLRenderer;
 
   private exercise: Exercise | undefined;
 
@@ -16,7 +16,7 @@ export default class RenderView {
     this.canvas.className = 'fixed top-0 left-0 z-[0]';
     parent.appendChild(this.canvas);
 
-    this.renderer = new THREE.WebGLRenderer({ 
+    this._renderer = new THREE.WebGLRenderer({ 
       canvas: this.canvas,
       antialias: true,
     });
@@ -29,14 +29,14 @@ export default class RenderView {
     if(isAnimated(exercise)) {
       (this.exercise as AnimatedExercise).startAnimation(this);
     } else {
-      this.renderer.render(exercise.scene, exercise.camera);
+      this._renderer.render(exercise.scene, exercise.camera);
     }
   }
 
   update() {
     if(this.exercise === undefined) return;
 
-    this.renderer.render(this.exercise.scene, this.exercise.camera);
+    this._renderer.render(this.exercise.scene, this.exercise.camera);
   }
   
   updateSize() {
@@ -45,22 +45,26 @@ export default class RenderView {
       height: window.innerHeight,
     }
 
-    this.renderer.setSize(size.width, size.height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this._renderer.setSize(size.width, size.height);
+    this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     if(this.exercise) {
       this.exercise.updateCamera(size.width / size.height)
-      this.renderer.render(this.exercise.scene, this.exercise.camera);
+      this._renderer.render(this.exercise.scene, this.exercise.camera);
     }
   }
 
   enableShadows(shadowMapType: THREE.ShadowMapType) {
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = shadowMapType;
+    this._renderer.shadowMap.enabled = true;
+    this._renderer.shadowMap.type = shadowMapType;
   }
 
   reset() {
-    this.renderer.shadowMap.enabled = false;
+    this._renderer.shadowMap.enabled = false;
+  }
+
+  get renderer() {
+    return this._renderer;
   }
 
   get height() {
