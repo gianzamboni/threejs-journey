@@ -1,5 +1,5 @@
 import { Timer } from 'three/addons/misc/Timer.js';
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import { WithOrbitControllerDescription } from '#/app/decorators/exercise';
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
@@ -10,8 +10,10 @@ export default class OrbitControlledExercise extends AnimatedExercise {
   
   protected controls: OrbitControls;
 
+  protected _view: RenderView;
   constructor(view: RenderView) {
     super();
+    this._view = view;
     this.controls = new OrbitControls(this.camera, view.canvas);
     this.controls.enableDamping = true;
   }

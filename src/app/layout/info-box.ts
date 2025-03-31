@@ -37,10 +37,10 @@ export class InfoBox {
     
     this.collapsable.updateTitle(pascalCaseToText(id));
     const parser = new DOMParser();
-    const htmlSpans = descriptions.map((description: string) => {
-      return parser.parseFromString(description, 'text/html').body as HTMLElement; 
+    const htmlSpans = descriptions.flatMap((description: string) => {
+      return Array.from(parser.parseFromString(description, 'text/html').body.children); 
     });
-
+    console.log(htmlSpans);
     if(htmlSpans.length === 0) {
       this.collapsable.replaceContent([]);
     } else {
@@ -52,5 +52,9 @@ export class InfoBox {
 
       this.collapsable.replaceContent([container]);
     }
+  }
+
+  close() {
+    this.collapsable.close();
   }
 }

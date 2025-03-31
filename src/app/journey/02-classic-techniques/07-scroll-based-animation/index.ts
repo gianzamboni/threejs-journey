@@ -12,6 +12,7 @@ import { Interactions } from './interactions';
 import { ScrollBasedAnimationLayout } from './layout';
 
 import AnimatedExercise from '../../exercises/animated-exercise';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 
 /**
@@ -174,14 +175,14 @@ export class ScrollBasedAnimation extends AnimatedExercise {
 
   async dispose() {
     super.dispose();
-    for(const mesh of this.meshObjects.meshes) {
-      mesh.geometry.dispose();
-    }
-    this.meshObjects.material.dispose();
-    this.meshObjects.texture.dispose();
-    this.particles.geometry.dispose();
-    this.particles.material.dispose();
-    this.interactions.dispose();
-    this.layout.remove();
-    }
+    disposeObjects(
+      this.interactions,
+      this.layout,
+      ...this.meshObjects.meshes.map(mesh => mesh.geometry),
+      this.meshObjects.material,
+      this.meshObjects.texture,
+    )
+
+    disposeMesh(this.particles);
+  }
 } 

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
@@ -12,6 +12,7 @@ import { LIGHTS_CONFIG, MATERIAL_CONFIG } from "./debug-ui-configs";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import { disposeObjects } from "#/app/utils/three-utils";
 type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>;
 
 //type Helpers = {
@@ -164,16 +165,11 @@ export class Shadows extends OrbitControlledExercise {
   }
   async dispose() {
     await super.dispose();
-    this.material.dispose();
-    this.plane.geometry.dispose();
-    this.sphere.geometry.dispose();
-
-    //for(const helper of Object.values(this.helpers)) {
-    //  helper.dispose();
-    //}
-
-    for(const light of Object.values(this.lights)) {
-      light.dispose();
-    }
+    disposeObjects(
+      this.material,
+      this.plane.geometry,
+      this.sphere.geometry,
+      ...Object.values(this.lights)
+    );
   }
 }

@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
-import { createRedCube } from "#/app/utils/default-shapes";
+import { createRedCube, disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise('cameras')
 @Description(["<strong>Just a cube. This demo shows how you can control a camera with a mouse.</strong>"])
@@ -21,7 +21,6 @@ export class OrbitControlsTest extends OrbitControlledExercise {
   
   async dispose() {
     await super.dispose();
-    this.cube.geometry.dispose();
-    (this.cube.material as THREE.Material).dispose();
+    disposeMesh(this.cube);
   }
 }

@@ -16,6 +16,7 @@ import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 
 type PhysicalObject = {
@@ -25,7 +26,10 @@ type PhysicalObject = {
 }
 
 @Exercise('physics')
-@Description(["<strong>Physics Demo. It shows some objects falling.</strong>", "<strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects"])
+@Description([
+  "<p style='margin-bottom: 10px;'><strong>Physics Demo. It shows some objects falling.</strong></p>", 
+  "<p><strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects</p>"
+])
 export class Physics extends OrbitControlledExercise {
   
   private static readonly palette = [
@@ -168,14 +172,12 @@ export class Physics extends OrbitControlledExercise {
     }
   }
 
-
   public removeObject(object: PhysicalObject, index: number) {
     object.physics.removeEventListener('collide', this.playHitSound.bind(this));
     this.physicsWorld.removeBody(object.physics);
     this.scene.remove(object.mesh);
     this.physicalObjects.splice(index, 1);
   }
-
 
   private createPhysicalObject(mesh: THREE.Mesh, shape: CANNON.Shape, position: Position3D) {
     mesh.castShadow = true;
@@ -268,25 +270,15 @@ export class Physics extends OrbitControlledExercise {
 
   private loadEnvironmentMap() {
     const assetLoader = AssetLoader.getInstance();
-    const textureFolder = 'textures/environmentMap/0';
-    const urls = ['px', 'nx', 'py', 'ny', 'pz', 'nz']
-      .map(suffix => `${textureFolder}/${suffix}.png`);
-    return assetLoader.loadCubeTexture(urls);
+    return assetLoader.loadCubeTexture('env-maps/factory');
   }
 
   async dispose() {
     await super.dispose();
-    this.environmentMap.dispose();
-    this.floor.mesh.geometry.dispose();
-    (this.floor.mesh.material as THREE.Material).dispose();
-
-    for (const sphere of this.physicalObjects) {
-      sphere.mesh.geometry.dispose();
-      (sphere.mesh.material as THREE.Material).dispose();
-    }
-
-    for (const material of Object.values(this.materials)) {
-      material.dispose();
-    }
+    this.physicalObjects.forEach((object, index) => {
+      this.removeObject(object, index);
+    });
+    disposeObjects(this.environmentMap, ...Object.values(this.materials));
+    disposeMesh(this.floor.mesh);
   }
 }

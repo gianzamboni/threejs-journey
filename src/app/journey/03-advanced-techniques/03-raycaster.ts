@@ -1,19 +1,20 @@
 import * as THREE from 'three';
 
-import { Timer } from 'three/examples/jsm/Addons.js';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Timer } from 'three/addons/misc/Timer.js';
+import { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from '#/app/layout/render-view';
 
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import { AssetLoader } from '#/app/utils/assets-loader';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise("Raycaster")
 @Description([
-  "This is a simple 3D interaction demo.", 
-  "The <strong>duck</strong> will grow when the <strong>mouse is over</strong> it.",
-  "The <strong>spheres</strong> will change color when the <strong>mouse is over</strong> them.",
+  "<p><strong>This is a simple 3D interaction demo.</strong></p>", 
+  "<p>The <strong>duck</strong> will grow when the <strong>mouse is over</strong> it.</p>",
+  "<p>The <strong>spheres</strong> will change color when the <strong>mouse is over</strong> them.</p>",
 ])
 export default class Raycaster extends OrbitControlledExercise {
   
@@ -121,14 +122,15 @@ export default class Raycaster extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
-    this.ambientLight.dispose();
-    this.directionalLight.dispose();
-    this.geometry.dispose(); 
-    for(const object of this.spheres) {
-      (object.material as THREE.MeshBasicMaterial).dispose();
-    }
+    disposeObjects(
+      this.ambientLight,
+      this.directionalLight,
+      this.geometry,
+      ...this.spheres.flatMap(sphere => sphere.material),
+    )
 
-    this.duck?.geometry.dispose();
-    (this.duck?.material as THREE.MeshStandardMaterial).dispose();
+    if(this.duck) { 
+      disposeMesh(this.duck);
+    }
   }  
 }

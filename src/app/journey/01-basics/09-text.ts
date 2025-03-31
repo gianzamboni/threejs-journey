@@ -7,6 +7,7 @@ import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from "#/app/utils/assets-loader";
+import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('text-3d')
 @Description(["<strong>A bunch of donuts and a text in 3D.</strong>"])
@@ -93,10 +94,7 @@ export class Text3D extends OrbitControlledExercise {
   }
   async dispose() {
     await super.dispose();
-    this.material.dispose();
-    this.matcapTexture.dispose();
-    
-    this.donuts.geometry.dispose();
+    disposeObjects(this.material, this.matcapTexture, this.donuts.geometry);
     this.text.geometry?.dispose();
   }
 }

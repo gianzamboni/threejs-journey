@@ -13,9 +13,10 @@ import { AssetLoader } from '#/app/utils/assets-loader';
 import { PHYSICAL_MATERIAL_CONFIGS } from './debug-ui-configs';
 import { QUALITY_CONFIG } from './quality-config';
 import { QualityConfig } from './quality-config';
+import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('materials')
-@Description(["Some objects with physicals materials. You can customize the material with the hidden ui"])
+@Description(["<p><strong>Some objects with physical materials.</strong></p>", "<p>You can customize the material with the hidden ui</p>"])
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
@@ -66,9 +67,7 @@ export class MaterialsTest extends OrbitControlledExercise {
   }
 
   private setupEnvironment() {
-    this.loader.loadEnvironment('textures/environmentMap/2k.hdr', (envMap) => {
-      envMap.mapping = THREE.EquirectangularReflectionMapping;
-      this.scene.environment = envMap;
+    this.loader.loadEnvironment('env-maps/alley/2k.hdr', this.scene, (envMap) => {
       this.scene.background = envMap;
       this.envMap = envMap;   
     });
@@ -87,12 +86,9 @@ export class MaterialsTest extends OrbitControlledExercise {
   
   async dispose() {
     super.dispose();
-    this.geometries.forEach(g => g.dispose());
-    this.physicalMaterial.dispose();
+    disposeObjects(this.physicalMaterial, ...this.geometries, this.scene.background as THREE.Texture);
+    
     this.scene.environment?.dispose();
-    (this.scene.background as THREE.Texture).dispose();
-    if(this.envMap) {
-      this.envMap.dispose();
-    }
+    this.envMap?.dispose();
   }
 }

@@ -6,6 +6,7 @@ import { Roof } from './roof';
 import { Walls } from './walls';
 
 import { SceneObject } from '../../../types/scene-object';
+import { disposeObjects } from '#/app/utils/three-utils';
 
 
 /**
@@ -43,9 +44,9 @@ export class House extends SceneObject {
    */
   dispose(): void {
     this.object.clear();
-    for(const child of this.children) {
-      child.dispose();
-    }
-    this.doorLight.dispose();
+    disposeObjects(
+      ...this.children,
+      this.doorLight
+    )
   }
 } 

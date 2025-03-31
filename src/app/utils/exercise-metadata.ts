@@ -18,6 +18,16 @@ export type WithMetadata<T> = T & {
 
 export type MetadataTarget = WithMetadata<ExerciseClass | Exercise>;
 
+const ORBIT_CONTROLLER_DESCRIPTION = `
+  <p><strong>Rotate:</strong> Click/Tap & drag</p>
+  <p><strong>Zoom:</strong> Scroll or pinch</p>
+  <p><strong>Pan:</strong> Two-finger Tap/Right click & drag</p>
+`;
+
+const DEBUG_CONTROLLER_DESCRIPTION = `
+  <p><strong>Toggle Debug</strong>: Double click/tap</p>
+`;
+
 /**
  * Get all metadata from a target
  */
@@ -50,13 +60,18 @@ export function getId(target: MetadataTarget): string {
  */
 export function getDescriptions(target: MetadataTarget): string[] {
   const metadata = getMetadata(target);
-  const descriptions = metadata.descriptions ?? [];
+  const descriptions = [...(metadata.descriptions ?? [])];
 
-  if(metadata.orbitControllerDescription) {
+  if(metadata.orbitControllerDescription || metadata.isDebuggable) {
     descriptions.push(
-      '<strong>Rotate:</strong> Click/Tap & drag',
-      '<strong>Zoom:</strong> Scroll or pinch',
-      '<strong>Pan:</strong> Two-finger Tap/Right click & drag',
+      `<div style="margin-top: 10px;">
+        ${
+          metadata.orbitControllerDescription ? ORBIT_CONTROLLER_DESCRIPTION : ''
+        }
+        ${
+          metadata.isDebuggable ? DEBUG_CONTROLLER_DESCRIPTION : ''
+        }
+      </div>`
     );
   }
   return [

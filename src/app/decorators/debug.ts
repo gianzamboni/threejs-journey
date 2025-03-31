@@ -1,4 +1,4 @@
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { ExerciseMetadata } from "../utils/exercise-metadata";
 
@@ -9,8 +9,6 @@ export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDe
   if(metadata.isDebuggable === undefined) {
     metadata.isDebuggable = true;
     metadata.shouldSendData = false;
-    metadata.descriptions = metadata.descriptions ?? [];
-    metadata.descriptions.push('<strong>Toggle Debug</strong>: Double click/tap')
   }
   return metadata;
 }

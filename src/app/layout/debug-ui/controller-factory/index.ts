@@ -19,6 +19,11 @@ export type WithDebugObject<T> = T & {
   _ControllerFactory_debugObject: Record<string, unknown>;
 }
 
+export type CustomizableMetadata = {
+  property: string;
+  target: object;
+}
+
 /**
  * Factory class for creating debug UI controllers for exercise properties
  */
@@ -116,7 +121,8 @@ export class ControllerFactory {
           if (typeof method === 'function') {
             method.bind(this.exercise)(newValue, {
               ...config.context,
-              target: controller.object
+              target: controller.object,
+              property: controller.property,
             });
           }
         });
