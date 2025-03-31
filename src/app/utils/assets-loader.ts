@@ -99,7 +99,7 @@ export class AssetLoader extends EventTarget{
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;
       onLoad(envMap);
-    }, undefined);
+    }, undefined, () => this.onError(url));
   }
 
   loadCubeTexture(folder: string) {

@@ -69,6 +69,7 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
     const material = new THREE.MeshBasicMaterial({ color: new THREE.Color(10, 4, 2) });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = 3.5;
+    mesh.layers.set(1);
     return mesh;
   }
 
