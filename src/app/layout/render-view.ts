@@ -18,7 +18,7 @@ export default class RenderView {
 
     this._renderer = new THREE.WebGLRenderer({ 
       canvas: this.canvas,
-      antialias: true,
+      antialias: window.devicePixelRatio < 2,
     });
 
     this.updateSize();
