@@ -2,8 +2,7 @@ import * as THREE from 'three';
 
 import { randomBetween } from '#/app/utils/random-utils';
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps } from './texture-maps';
-import { TextureDict, TextureMaps } from '#/app/utils/textures';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 import { MeshObject } from '../../../types/scene-object';
 
@@ -126,7 +125,7 @@ export class Roof extends MeshObject {
    * Load textures for the roof
    */
   private loadTextures(): TextureDict {
-    const textures = loadTextureMaps('roof', this.quality.textureQuality, 
+    const textures = loadTextureMaps('haunted-house/roof', this.quality.textureQuality, 
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Arm]
     );
 

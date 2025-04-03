@@ -2,10 +2,9 @@ import * as THREE from 'three';
 
 import { AssetLoader } from '#/app/utils/assets-loader';
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps } from './texture-maps';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 import { MeshObject } from '../../../types/scene-object';
-import { TextureDict, TextureMaps } from '#/app/utils/textures';
 
 /**
  * Floor object for the haunted house scene
@@ -55,7 +54,7 @@ export class Floor extends MeshObject {
    * Load textures for the floor
    */
   private loadTextures(): TextureDict {
-    const textures = loadTextureMaps('floor', this.quality.textureQuality, 
+    const textures = loadTextureMaps('haunted-house/floor', this.quality.textureQuality, 
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Displacement, TextureMaps.Arm]
     );
     

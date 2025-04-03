@@ -2,11 +2,10 @@ import * as THREE from 'three';
 
 import { randomBetween } from '#/app/utils/random-utils';
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps } from './texture-maps';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 import { SceneObject } from '../../../types/scene-object';
 import { disposeObjects } from '#/app/utils/three-utils';
-import { TextureDict, TextureMaps } from '#/app/utils/textures';
 /**
  * Graves object for the haunted house scene
  */
@@ -26,7 +25,7 @@ export class Graves extends SceneObject {
     super();
     this.quality = quality;
     this.geometry = new THREE.BoxGeometry(0.6, 0.8, 0.2, this.quality.subdivisions, this.quality.subdivisions, this.quality.subdivisions);
-    this.textures = loadTextureMaps('graves', this.quality.textureQuality,
+    this.textures = loadTextureMaps('haunted-house/graves', this.quality.textureQuality,
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Arm, TextureMaps.Displacement]
     );
     this.material = this.generateMaterial();

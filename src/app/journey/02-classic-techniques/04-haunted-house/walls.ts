@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps } from './texture-maps';
-import { TextureDict, TextureMaps } from '#/app/utils/textures';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 import { MeshObject } from '../../../types/scene-object';
 /**
@@ -23,10 +22,9 @@ export class Walls extends MeshObject {
     super();
     this.quality = quality;
     this.geometry = new THREE.BoxGeometry(4, 2.5, 4, this.quality.subdivisions, this.quality.subdivisions, this.quality.subdivisions);
-    this.textures = loadTextureMaps('textures/walls', 
+    this.textures = loadTextureMaps('walls', 
       this.quality.textureQuality, 
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Arm],
-      true
     );
     this.material = this.generateMaterial();
     
