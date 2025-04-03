@@ -113,7 +113,7 @@ export default class Menu extends EventTarget {
     const portfolioLinkg = document.createElement('a');
     portfolioLinkg.className = 'flex items-center gap-x-1';
     portfolioLinkg.target = '_blank';
-    portfolioLinkg.href = 'https://www.linkedin.com/in/gianfranco-zamboni/';
+    portfolioLinkg.href = 'https://gianfrancozamboni.com.ar/portfolio';
     portfolioLinkg.innerHTML = `${PORTFOLIO_ICON}<span>Gianfranco Zamboni</span>`;
 
     footer.appendChild(portfolioLinkg);
