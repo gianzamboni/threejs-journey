@@ -35,14 +35,15 @@ export type TextureQuality = "1k" | "2k" | "4k";
 export function loadTextureMaps(
   textureFolder: string,
   resolution: TextureQuality,
-  mapTypes:  TextureMaps[]
+  mapTypes:  TextureMaps[],
+  isRootPath: boolean = false
 ): TextureDict {
 
   const assetLoader = AssetLoader.getInstance();
   const textures: TextureDict = {};
   
   for (const mapType of mapTypes) { 
-    const path = `/textures/haunted-house/${textureFolder}/${resolution}/${mapType}.jpg`;
+    const path = `${isRootPath ? textureFolder : `/textures/haunted-house/${textureFolder}`}/${resolution}/${mapType}.jpg`;
     textures[mapType] = assetLoader.loadTexture(path);
   }
   
