@@ -7,11 +7,16 @@ import * as THREE from 'three';
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
 import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { loadTextureMaps, TextureDict, TextureMaps } from "#/app/utils/textures";
+import { Timer } from "three/examples/jsm/Addons.js";
+import { DebugFPS } from "#/app/decorators/debug";
+import { Quality } from "#/app/layout/quality-selector";
+import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 type RenderedObject = {
   mesh: THREE.Mesh;
   textures: TextureDict;
 }
+
 @Exercise('realistic-render')
 @Description([
   '<strong>Renderer tweaks to get a more realistic render</strong>',
@@ -27,15 +32,17 @@ export class RealisticRender extends OrbitControlledExercise {
   private envMap: THREE.Texture | undefined;
 
   private helmet: THREE.Object3D[] = [];
-  private floor: RenderedObject
+  private floor: RenderedObject;
   private wall: RenderedObject;
 
   @Customizable(LIGHT_CONTROLLERS)
   private directionalLight: THREE.DirectionalLight;
 
+  private qualityConfig: QualityConfig;
 
-  constructor(view: RenderView) {
+  constructor(view: RenderView, quality: Quality) {
     super(view);
+    this.qualityConfig = QUALITY_CONFIG[quality];
     this._scene = this.scene;
     this._scene.environmentIntensity = 1;
     this._renderer = view.renderer;
@@ -49,7 +56,6 @@ export class RealisticRender extends OrbitControlledExercise {
 
     this._scene.add(this.directionalLight, this.floor.mesh, this.wall.mesh);
     
-
     this.camera.position.set(4, 5, 4);
     this.controls.target.y = 3.5;
 
@@ -60,29 +66,43 @@ export class RealisticRender extends OrbitControlledExercise {
     this._renderer.toneMapping = THREE.ReinhardToneMapping;
     this._renderer.toneMappingExposure = 3;
 
-    this._view.enableShadows(THREE.PCFSoftShadowMap);
+    this._view.enableShadows(this.qualityConfig.shadowMapType);
   }
 
   createFloor() {
-    const floor = this.createPlane('wood_cabinet_worn_long');
-    floor.mesh.rotation.x = -Math.PI * 0.5;
-    return floor;
+    const textures = loadTextureMaps(
+      'wood_cabinet_worn_long', 
+      '1k', 
+      [TextureMaps.Color, {
+        type: TextureMaps.Normal,
+        format: 'png'
+      }, TextureMaps.Arm]
+    );
+    const mesh = this.createPlane(textures);
+    mesh.rotation.x = -Math.PI * 0.5;
+    return {
+      mesh,
+      textures
+    };
   }
 
   createWall() {
-    const wall = this.createPlane('walls');
-    wall.mesh.position.set(0, 4, -4);
-    return wall;
-  }
-
-  createPlane(texturesPath:string) {
     const textures = loadTextureMaps(
-      texturesPath, 
+      'walls', 
       '1k', 
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Arm]
     );
+    const mesh = this.createPlane(textures);
+    mesh.position.set(0, 4, -4);
+    return {
+      mesh,
+      textures
+    };
+  }
+
+  createPlane(textures: TextureDict) {
     const mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(8, 8),
+      new THREE.PlaneGeometry(8, 8, 100, 100),
       new THREE.MeshStandardMaterial({ 
         map: textures[TextureMaps.Color], 
         normalMap: textures[TextureMaps.Normal],
@@ -91,10 +111,7 @@ export class RealisticRender extends OrbitControlledExercise {
         metalnessMap: textures[TextureMaps.Arm],
       })
     );
-    return {
-      mesh,
-      textures
-    };
+    return mesh;
   }
 
   createDirectionalLight() {
@@ -132,6 +149,11 @@ export class RealisticRender extends OrbitControlledExercise {
         child.receiveShadow = true;
       }
     });
+  }
+
+  @DebugFPS
+  public frame(timer: Timer): void {
+    super.frame(timer);
   }
 
   async dispose() {
