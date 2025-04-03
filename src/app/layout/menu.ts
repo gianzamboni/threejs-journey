@@ -1,6 +1,6 @@
 import { Collapsable } from "#/app/components/collapsable";
 import SideBar from "#/app/components/sidebar";
-import {HAMBURGER_ICON, LINKEDIN_ICON } from "#/app/constants/icons";
+import {HAMBURGER_ICON, PORTFOLIO_ICON } from "#/app/constants/icons";
 import { JOURNEY } from "#/app/journey";
 import { ExerciseClass, Section } from "#/app/types/exercise";
 import { getId } from "#/app/utils/exercise-metadata";
@@ -114,7 +114,7 @@ export default class Menu extends EventTarget {
     portfolioLinkg.className = 'flex items-center gap-x-1';
     portfolioLinkg.target = '_blank';
     portfolioLinkg.href = 'https://www.linkedin.com/in/gianfranco-zamboni/';
-    portfolioLinkg.innerHTML = `${LINKEDIN_ICON}<span>Gianfranco Zamboni</span>`;
+    portfolioLinkg.innerHTML = `${PORTFOLIO_ICON}<span>Gianfranco Zamboni</span>`;
 
     footer.appendChild(portfolioLinkg);
     return footer;
