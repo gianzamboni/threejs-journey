@@ -5,7 +5,13 @@ import { AssetLoader, loadHelmet } from "#/app/utils/assets-loader";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 import * as THREE from 'three';
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
-import { disposeMesh } from "#/app/utils/three-utils";
+import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
+import { loadTextureMaps, TextureDict, TextureMaps } from "#/app/utils/textures";
+
+type RenderedObject = {
+  mesh: THREE.Mesh;
+  textures: TextureDict;
+}
 @Exercise('realistic-render')
 @Description([
   '<strong>Renderer tweaks to get a more realistic render</strong>',
@@ -21,11 +27,12 @@ export class RealisticRender extends OrbitControlledExercise {
   private envMap: THREE.Texture | undefined;
 
   private helmet: THREE.Object3D[] = [];
+  private floor: RenderedObject
+  private wall: RenderedObject;
 
   @Customizable(LIGHT_CONTROLLERS)
   private directionalLight: THREE.DirectionalLight;
 
-  //private directionalLightCameraHelper: THREE.CameraHelper;
 
   constructor(view: RenderView) {
     super(view);
@@ -33,32 +40,73 @@ export class RealisticRender extends OrbitControlledExercise {
     this._scene.environmentIntensity = 1;
     this._renderer = view.renderer;
 
+    this.directionalLight = this.createDirectionalLight();
+    this.floor = this.createFloor();
+    this.wall = this.createWall();
+
     this.loadEnvironment();
     this.loadHelmet();
 
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 6);
-    this.directionalLight.position.set(-4, 6.5, 2.5);
-    this.directionalLight.castShadow = true;
-    this.directionalLight.target.position.set(0, 4, 0);
-    this.directionalLight.target.updateMatrixWorld();
-
-    
-    this.directionalLight.shadow.camera.far = 15;
-    this.directionalLight.shadow.mapSize.set(512, 512);
-    //this.directionalLightCameraHelper = new THREE.CameraHelper(this.directionalLight.shadow.camera);
-
-
-    this._scene.add(this.directionalLight/*, this.directionalLightCameraHelper*/);
+    this._scene.add(this.directionalLight, this.floor.mesh, this.wall.mesh);
     
 
     this.camera.position.set(4, 5, 4);
     this.controls.target.y = 3.5;
-    
 
+    this.setupRenderer();
+  }
+
+  setupRenderer() {
     this._renderer.toneMapping = THREE.ReinhardToneMapping;
     this._renderer.toneMappingExposure = 3;
 
     this._view.enableShadows(THREE.PCFSoftShadowMap);
+  }
+
+  createFloor() {
+    const floor = this.createPlane('wood_cabinet_worn_long');
+    floor.mesh.rotation.x = -Math.PI * 0.5;
+    return floor;
+  }
+
+  createWall() {
+    const wall = this.createPlane('walls');
+    wall.mesh.position.set(0, 4, -4);
+    return wall;
+  }
+
+  createPlane(texturesPath:string) {
+    const textures = loadTextureMaps(
+      texturesPath, 
+      '1k', 
+      [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Arm]
+    );
+    const mesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(8, 8),
+      new THREE.MeshStandardMaterial({ 
+        map: textures[TextureMaps.Color], 
+        normalMap: textures[TextureMaps.Normal],
+        aoMap: textures[TextureMaps.Arm],
+        roughnessMap: textures[TextureMaps.Arm],
+        metalnessMap: textures[TextureMaps.Arm],
+      })
+    );
+    return {
+      mesh,
+      textures
+    };
+  }
+
+  createDirectionalLight() {
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
+    directionalLight.position.set(-4, 6.5, 2.5);
+    directionalLight.castShadow = true;
+    directionalLight.target.position.set(0, 4, 0);
+    directionalLight.target.updateMatrixWorld();
+
+    directionalLight.shadow.camera.far = 15;
+    directionalLight.shadow.mapSize.set(512, 512);
+    return directionalLight;
   }
 
   loadEnvironment() {
@@ -89,8 +137,8 @@ export class RealisticRender extends OrbitControlledExercise {
   async dispose() {
     super.dispose();  
     this.envMap?.dispose();
-    disposeMesh(...(this.helmet as THREE.Mesh[]));
-    //this.directionalLightCameraHelper.dispose();
+    disposeMesh(...(this.helmet as THREE.Mesh[]), this.floor.mesh, this.wall.mesh);
+    disposeObjects(...Object.values(this.floor.textures), ...Object.values(this.wall.textures));
     this.directionalLight.dispose();
   }
 
