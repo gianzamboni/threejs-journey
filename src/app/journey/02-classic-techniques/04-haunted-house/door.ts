@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
+import { loadTextureMaps } from './texture-maps';
 
 import { MeshObject } from '../../../types/scene-object';
+import { TextureDict, TextureMaps } from '#/app/utils/textures';
 
 /**
  * Door object for the haunted house scene

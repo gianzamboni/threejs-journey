@@ -2,7 +2,8 @@ import * as THREE from 'three';
 
 import { randomBetween } from '#/app/utils/random-utils';
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
+import { loadTextureMaps } from './texture-maps';
+import { TextureDict, TextureMaps } from '#/app/utils/textures';
 
 import { MeshObject } from '../../../types/scene-object';
 

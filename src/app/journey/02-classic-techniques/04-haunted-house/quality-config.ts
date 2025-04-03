@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { Quality } from "#/app/layout/quality-selector";
-import { TextureQuality } from "./texture-maps";
+import { TextureQuality } from "#/app/utils/textures";
 export type QualityConfig = {
   shadowMapType: THREE.ShadowMapType;
   shadows: boolean;

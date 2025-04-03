@@ -2,9 +2,10 @@ import * as THREE from 'three';
 
 import { AssetLoader } from '#/app/utils/assets-loader';
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
+import { loadTextureMaps } from './texture-maps';
 
 import { MeshObject } from '../../../types/scene-object';
+import { TextureDict, TextureMaps } from '#/app/utils/textures';
 
 /**
  * Floor object for the haunted house scene
