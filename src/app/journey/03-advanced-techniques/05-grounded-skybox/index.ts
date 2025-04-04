@@ -4,7 +4,7 @@ import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader, loadHelmet } from "#/app/utils/assets-loader";
+import { AssetLoader } from "#/app/utils/assets-loader";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
 import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js'
 import { disposeMesh } from "#/app/utils/three-utils";
@@ -15,7 +15,7 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
   private torusKnot: THREE.Mesh;
 
-  private helmet: THREE.Mesh[] | undefined;
+  private helmet: THREE.Group | undefined;
 
   private skybox: GroundedSkybox | undefined;
 
@@ -55,10 +55,13 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
   }
 
   loadHelmetModel() {
-    loadHelmet(10, (meshes) => {
-      this.helmet = meshes as THREE.Mesh[];
-      this.scene.add(...this.helmet);
-    });
+    AssetLoader.getInstance()
+      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
+        (model) => {
+        this.helmet = model;
+        this.helmet.scale.set(10, 10, 10);
+        this.scene.add(this.helmet);
+      });
   }
 
   loadEnvironmentMap() {
@@ -82,9 +85,9 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
     disposeMesh(this.torusKnot);
 
     if (this.helmet) {
-      for (const mesh of this.helmet) {
-        disposeMesh(mesh);
-      }
+      this.helmet.children.forEach((child) => {
+        disposeMesh(child as THREE.Mesh);
+      });
     }
 
     if(this.skybox) {

@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-
-import { TextureDict } from '../journey/02-classic-techniques/04-haunted-house/texture-maps';
+import { TextureDict } from '../utils/textures';
 
 /**
  * Base class for all scene objects

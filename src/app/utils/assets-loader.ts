@@ -13,7 +13,7 @@ export type LoadingData = {
   itemsTotal: number;
 }
 
-export class AssetLoader extends EventTarget{
+export class AssetLoader extends EventTarget {
 
   private static instance: AssetLoader | undefined;
 
@@ -54,13 +54,15 @@ export class AssetLoader extends EventTarget{
   onError(url: string) {
     const p = document.createElement('p');
     p.textContent = `Error loading "${url}"`;
-    this.dispatchEvent(new CustomEvent('loading-error', { detail: { 
-      message: p,
-      actionIcon: RELOAD,
-      action: () => {
-        window.location.reload()
+    this.dispatchEvent(new CustomEvent('loading-error', {
+      detail: {
+        message: p,
+        actionIcon: RELOAD,
+        action: () => {
+          window.location.reload()
+        }
       }
-    } }));
+    }));
   }
 
   onLoad() {
@@ -75,7 +77,7 @@ export class AssetLoader extends EventTarget{
     this.loadingManager.onLoad = this.onLoad.bind(this);
 
     this.dracoLoader?.dispose();
-    
+
     this.textureLoader = undefined;
     this.rgbeLoader = undefined;
     this.fontLoader = undefined;
@@ -99,7 +101,7 @@ export class AssetLoader extends EventTarget{
       envMap.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = envMap;
       onLoad(envMap);
-    }, undefined);
+    }, undefined, () => this.onError(url));
   }
 
   loadCubeTexture(folder: string) {
@@ -117,11 +119,13 @@ export class AssetLoader extends EventTarget{
     return this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 
-  loadModel(url: string, onLoad: (_: GLTF) => void, options: { useDraco?: boolean } = {}) {
+  loadGLTF(url: string, onLoad: (_: GLTF) => void, options: { useDraco?: boolean } = {}) {
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader(this.loadingManager);
     }
-    if (options.useDraco) {
+    console.log(options.useDraco)
+    if (options.useDraco === true) {
+      console.log(this.dracoLoader)
       if (!this.dracoLoader) {
         this.dracoLoader = new DRACOLoader(this.loadingManager);
         this.dracoLoader.setDecoderPath('/draco/');
@@ -130,15 +134,15 @@ export class AssetLoader extends EventTarget{
     }
     return this.gltfLoader.load(url, onLoad);
   }
-}
 
-export function loadHelmet(scale: number = 1, callback: (meshes: THREE.Object3D[]) => void) {
-  const loader = AssetLoader.getInstance();
-  loader.loadModel('models/FlightHelmet/glTF/FlightHelmet.gltf', (model) => {
-    const meshes = model.scene.children.map(child => {
-      child.scale.set(scale, scale, scale);
-      return child;
-    });
-    callback(meshes);
-  });
+  loadModel(url: string, callback: (mesh: THREE.Group) => void, options: { useDraco?: boolean } = {}) {
+    const useDraco = options.useDraco ?? false;
+    this.loadGLTF(
+      url, 
+      (scene) => {
+        callback(scene.scene);
+      }, 
+      { useDraco }
+    );
+  }
 }

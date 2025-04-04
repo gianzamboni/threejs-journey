@@ -40,7 +40,6 @@ export class InfoBox {
     const htmlSpans = descriptions.flatMap((description: string) => {
       return Array.from(parser.parseFromString(description, 'text/html').body.children); 
     });
-    console.log(htmlSpans);
     if(htmlSpans.length === 0) {
       this.collapsable.replaceContent([]);
     } else {

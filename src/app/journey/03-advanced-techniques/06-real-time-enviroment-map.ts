@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader, loadHelmet } from "#/app/utils/assets-loader";
+import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { Timer } from "three/examples/jsm/Addons.js";
 import { DebugFPS } from "#/app/decorators/debug";
@@ -16,7 +16,7 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
 
   private torusKnot: THREE.Mesh;
 
-  private helmet: THREE.Mesh[] | undefined;
+  private helmet: THREE.Group | undefined;
   private holyDonut: THREE.Mesh;
 
   private envMap: THREE.Texture;
@@ -69,14 +69,19 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
     const material = new THREE.MeshBasicMaterial({ color: new THREE.Color(10, 4, 2) });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.y = 3.5;
+    mesh.layers.set(1);
     return mesh;
   }
 
   loadHelmetModel() {
-    loadHelmet(10, (meshes) => {
-      this.helmet = meshes as THREE.Mesh[];
-      this.scene.add(...this.helmet);
-    });
+    AssetLoader.getInstance()
+      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
+        (group) => {
+          this.helmet = group;
+          this.helmet.scale.set(10, 10, 10);
+          this.scene.add(this.helmet);
+        }
+      );
   }
 
   loadBackgroundTexture() {
@@ -101,9 +106,9 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
     this.envMap.dispose();
     disposeMesh(this.torusKnot, this.holyDonut);
     if (this.helmet) {
-      for (const mesh of this.helmet) {
-        disposeMesh(mesh);
-      }
+      this.helmet.children.forEach((child) => {
+        disposeMesh(child as THREE.Mesh);
+      });
     }
   }
 }

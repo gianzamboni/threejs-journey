@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
 
 import { MeshObject } from '../../../types/scene-object';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 /**
  * Bushes object for the haunted house scene
@@ -23,7 +23,7 @@ export class Bushes extends MeshObject {
     super();
     this.quality = quality;
     this.geometry = new THREE.SphereGeometry(1, this.quality.subdivisions, this.quality.subdivisions);
-    this.textures = loadTextureMaps('bushes', this.quality.textureQuality,
+    this.textures = loadTextureMaps('haunted-house/bushes', this.quality.textureQuality,
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Ao, TextureMaps.Displacement, TextureMaps.Roughness]
     );
     this.material = this.generateMaterial();

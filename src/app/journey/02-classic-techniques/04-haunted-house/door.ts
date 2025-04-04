@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { QualityConfig } from './quality-config';
-import { loadTextureMaps, TextureDict, TextureMaps } from './texture-maps';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 import { MeshObject } from '../../../types/scene-object';
 
@@ -36,7 +36,7 @@ export class Door extends MeshObject {
    * Load textures for the door
    */
   private loadTextures(): TextureDict {
-    const textureMaps = loadTextureMaps('door', '1k', 
+    const textureMaps = loadTextureMaps('haunted-house/door', '1k', 
       [TextureMaps.Alpha, TextureMaps.AmbientOcclusion, TextureMaps.Color, TextureMaps.Height, TextureMaps.Metalness, TextureMaps.Normal, TextureMaps.Roughness]
     );
     

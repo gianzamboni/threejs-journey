@@ -65,6 +65,18 @@ export function commonControllers(lightType: keyof Lights, config: LightConfig<{
   ]
 }
 
+export function positionConfig(config: ControllerConfig): ControllerConfig[] {
+  return ['x', 'y', 'z'].map(axis => {
+    return {
+      ...config,
+      propertyPath: `${config.propertyPath}.${axis}`,
+      settings: {
+        ...config.settings,
+        name: `${config.settings?.name} ${printable(axis)}`
+      }
+    }
+  })
+}
 export function createPositionConfig(lightType: keyof Lights, config: LightConfig<{
   propertyName?: string,
   onChange?: string,
@@ -72,25 +84,18 @@ export function createPositionConfig(lightType: keyof Lights, config: LightConfi
 }>): ControllerConfig[] {
   const property = config.propertyName ?? 'position';
   const folderPath = config.folder ? `${config.folder}/${printable(lightType)}` : printable(lightType);
-  return ['x', 'y', 'z'].map(axis => {
-    const controller: ControllerConfig = {
-      propertyPath: `${lightType}.${property}.${axis}`,
-      folderPath: `${folderPath}/${printable(property)}`,
-      settings: {
-        min: -5,
-        max: 5,
-        step: 0.001,
-        name: `${printable(axis)}`
-      }
-    };
-    if (config.onChange) {
-      controller.settings!.onChange = config.onChange;
+  return positionConfig({
+    propertyPath: `${lightType}.${property}`,
+    folderPath: `${folderPath}/${printable(property)}`,
+    initialValue: config.initialValue,
+    settings: {
+      min: -5,
+      max: 5,
+      step: 0.001,
+      onChange: config.onChange,
+      name: printable(property)
     }
-    if (config.initialValue !== undefined) {
-      controller.initialValue = config.initialValue;
-    }
-    return controller;
-  });
+  })
 }
 
 

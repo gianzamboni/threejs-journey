@@ -6,3 +6,9 @@
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+.lil-gui {
+  option {
+    color: #000;
+  }
+}

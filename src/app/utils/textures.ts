@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-
-import { AssetLoader } from '#/app/utils/assets-loader';
+import { AssetLoader } from './assets-loader';
 
 export type EnumDictionary<KeyType extends string | symbol | number, Value> = { 
   [Key in KeyType]?: Value
@@ -25,25 +24,23 @@ export enum TextureMaps {
 export type TextureDict = EnumDictionary<TextureMaps, THREE.Texture>;
 
 export type TextureQuality = "1k" | "2k" | "4k";
-/**
- * Loads texture maps for a given file prefix and map types
- * @param assetLoader The asset loader instance
- * @param filePrefix The prefix for the texture files
- * @param mapTypes The types of maps to load
- * @returns An object containing the loaded textures
- */
+
 export function loadTextureMaps(
   textureFolder: string,
   resolution: TextureQuality,
-  mapTypes:  TextureMaps[]
+  mapTypes:  (TextureMaps | {
+    type: TextureMaps,
+    format?: string
+  })[],
 ): TextureDict {
 
   const assetLoader = AssetLoader.getInstance();
   const textures: TextureDict = {};
   
   for (const mapType of mapTypes) { 
-    const path = `/textures/haunted-house/${textureFolder}/${resolution}/${mapType}.jpg`;
-    textures[mapType] = assetLoader.loadTexture(path);
+    const isObject = typeof mapType === 'object';
+    const path = isObject ? `/textures/${textureFolder}/${resolution}/${mapType.type}.${mapType.format || 'jpg'}` : `/textures/${textureFolder}/${resolution}/${mapType}.jpg`;
+    textures[isObject ? mapType.type : mapType] = assetLoader.loadTexture(path);
   }
   
   if (textures[TextureMaps.Color]) {
