@@ -14,7 +14,7 @@ export class CustomModelTest extends OrbitControlledExercise {
   private ambientLight: THREE.AmbientLight;
   private directionalLight: THREE.DirectionalLight;
 
-  private hamburger: THREE.Mesh[] | undefined;
+  private hamburger: THREE.Group | undefined;
 
   constructor(view: RenderView) {
     super(view);
@@ -63,15 +63,15 @@ export class CustomModelTest extends OrbitControlledExercise {
   }
 
   private loadHamburger() {
-    const loader = AssetLoader.getInstance();
-    loader.loadModel('/models/Hamburger/hamburger.glb', (gltf) => {
-      this.hamburger = gltf.scene.children as THREE.Mesh[];
-      this.hamburger.forEach((mesh) => {
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-      });
-      this.scene.add(...this.hamburger);
-    }, { useDraco: true });
+    AssetLoader.getInstance()
+      .loadModel('/models/Hamburger/hamburger.glb', { useDraco: true }, (group) => {
+        this.hamburger = group;
+        this.hamburger.traverse((mesh) => {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+        });
+      this.scene.add(this.hamburger);
+    });
   }
 
   frame(timer: Timer): void {
@@ -83,9 +83,9 @@ export class CustomModelTest extends OrbitControlledExercise {
     disposeMesh(this.floor);
 
     if (this.hamburger) {
-      for (const mesh of this.hamburger) {
-        disposeMesh(mesh);
-      }
+      this.hamburger.children.forEach((child) => {
+        disposeMesh(child as THREE.Mesh);
+      });
     }
   }
 }

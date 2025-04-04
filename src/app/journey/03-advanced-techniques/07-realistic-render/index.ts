@@ -1,7 +1,7 @@
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader, loadHelmet } from "#/app/utils/assets-loader";
+import { AssetLoader } from "#/app/utils/assets-loader";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 import * as THREE from 'three';
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
@@ -31,7 +31,7 @@ export class RealisticRender extends OrbitControlledExercise {
 
   private envMap: THREE.Texture | undefined;
 
-  private helmet: THREE.Object3D[] = [];
+  private helmet: THREE.Group | undefined;
   private floor: RenderedObject;
   private wall: RenderedObject;
 
@@ -135,11 +135,15 @@ export class RealisticRender extends OrbitControlledExercise {
   }
 
   loadHelmet() {
-    loadHelmet(10, (meshes) => {
-      this.helmet = meshes as THREE.Mesh[];
-      this._scene.add(...this.helmet);
-      this.updateAllMaterials();
-    });
+    AssetLoader.getInstance()
+      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
+        { scale: 10 }, 
+        (model) => {
+          this.helmet = model;
+          this._scene.add(this.helmet);
+          this.updateAllMaterials();
+        }
+      );
   }
 
   private updateAllMaterials() {
@@ -159,7 +163,13 @@ export class RealisticRender extends OrbitControlledExercise {
   async dispose() {
     super.dispose();  
     this.envMap?.dispose();
-    disposeMesh(...(this.helmet as THREE.Mesh[]), this.floor.mesh, this.wall.mesh);
+    if(this.helmet) {
+      this.helmet.children.forEach((child) => {
+        disposeMesh(child as THREE.Mesh);
+      });
+    }
+    disposeMesh(this.floor.mesh);
+    disposeMesh(this.wall.mesh);
     disposeObjects(...Object.values(this.floor.textures), ...Object.values(this.wall.textures));
     this.directionalLight.dispose();
   }

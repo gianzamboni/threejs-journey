@@ -4,7 +4,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { ActionButton, Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
-import { AssetLoader, loadHelmet } from '#/app/utils/assets-loader';
+import { AssetLoader } from '#/app/utils/assets-loader';
 import DUCK from './icons/duck.svg?raw';
 import FOX from './icons/fox.svg?raw';
 import MASK from './icons/mask.svg?raw';
@@ -24,7 +24,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   private directionalLight: THREE.DirectionalLight;
 
   private importedModel: {
-    models: THREE.Object3D[];
+    models: THREE.Group;
     mixer?: THREE.AnimationMixer;
     currentAction?: THREE.AnimationAction;
   } | undefined;
@@ -52,57 +52,56 @@ export default class ImportedModels extends OrbitControlledExercise {
   @ActionButton('Load Duck', DUCK)
   public loadDuck() {
     this.resetScene();
-    const loader = AssetLoader.getInstance();
-    loader.loadModel('models/Duck/glTF/Duck.gltf', (model) => {
-      this.importedModel = {
-        models: [model.scene.children[0]]
-      }
-      this.scene.add(model.scene.children[0]);
-    });
+    AssetLoader.getInstance()
+      .loadModel('models/Duck/glTF/Duck.gltf', {}, (model) => {
+        this.importedModel = {
+          models: model
+        }
+        this.scene.add(model);
+      });
   }
 
   @ActionButton('Load Mask', MASK)
   public loadMask() {
     this.resetScene();
-    loadHelmet(2.5, (meshes: THREE.Object3D[]) => {
-      this.importedModel = {
-        models: meshes as THREE.Mesh[]
-      }
-      this.scene.add(...this.importedModel.models);
-    });
+    AssetLoader.getInstance()
+      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', { scale: 2.5 }, (model) => {
+        this.importedModel = {
+          models: model
+        }
+        this.scene.add(model);
+      });
   }
 
   @ActionButton('Load Fox', FOX)
   public loadFox() {
     this.resetScene();
     const loader = AssetLoader.getInstance();
-    loader.loadModel('models/Fox/glTF/Fox.gltf', (model) => {
+    loader.loadGLTF('models/Fox/glTF/Fox.gltf', (model) => {
       const objects = model.scene.children.map(child => {
         child.scale.set(0.025, 0.025, 0.025);
-        return child;
+return child;
       });
+      const group = new THREE.Group();
+      group.add(...objects);
       this.importedModel = {
-        models: objects,
+        models: group,
         mixer: new THREE.AnimationMixer(model.scene)
       }
-      this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1]);
-
-      this.scene.add(...this.importedModel.models);
+      this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1], this.importedModel.models);
+      this.scene.add(this.importedModel.models);
       this.importedModel.currentAction?.play();
     }, { useDraco: true });
   }
   
   private resetScene() {
     if(this.importedModel) {
-      for(const model of this.importedModel.models) {
-        this.scene.remove(model);
-        model.traverse((child) => {
-          if(child instanceof THREE.Mesh) {
-            disposeMesh(child);
-          }
-        });
-      }
-      this.importedModel = undefined;
+      this.importedModel.models.traverse((child) => {
+        if(child instanceof THREE.Mesh) {
+          disposeMesh(child);
+        }
+      });
+      this.scene.remove(this.importedModel.models);
     }
   }
 

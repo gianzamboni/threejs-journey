@@ -72,7 +72,7 @@ export default class Raycaster extends OrbitControlledExercise {
 
   private loadDuck() {
     const loader = AssetLoader.getInstance();
-    loader.loadModel('models/Duck/glTF/Duck.gltf', (model: GLTF) => {
+    loader.loadGLTF('models/Duck/glTF/Duck.gltf', (model: GLTF) => {
       this.duck = model.scene.children[0].children[0] as THREE.Mesh;
       this.duck.scale.set(0.00625, 0.00625, 0.00625);
       this.duck.position.y = -1.2;
