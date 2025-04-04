@@ -1,5 +1,3 @@
-/* eslint-disable */
-// This is a minified third-party library file for Draco decoder
 var DracoEncoderModule = function(DracoEncoderModule) {
   DracoEncoderModule = DracoEncoderModule || {};
 
