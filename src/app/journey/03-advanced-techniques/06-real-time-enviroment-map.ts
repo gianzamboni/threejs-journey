@@ -76,9 +76,9 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
   loadHelmetModel() {
     AssetLoader.getInstance()
       .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
-        { scale: 10 }, 
         (group) => {
           this.helmet = group;
+          this.helmet.scale.set(10, 10, 10);
           this.scene.add(this.helmet);
         }
       );

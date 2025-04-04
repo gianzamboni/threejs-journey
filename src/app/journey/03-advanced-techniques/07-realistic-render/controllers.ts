@@ -1,6 +1,9 @@
 import { positionConfig } from '#/app/utils/light-controllers-utils';
 import * as THREE from 'three';
 
+const TONE_MAPPING_FOLDER = 'Tone Mapping';
+const SHADOW_FOLDER = 'Directional Light';
+
 export const SCENE_CONTROLLERS = [
   {
     propertyPath: 'environmentIntensity',
@@ -17,7 +20,7 @@ export const SCENE_CONTROLLERS = [
 export const RENDERER_CONTROLLERS = [
   {
     propertyPath: 'toneMapping',
-    folderPath: 'Tone Mapping',
+    folderPath: TONE_MAPPING_FOLDER,
     settings: {
       name: 'Algorithm',
       options: {
@@ -30,7 +33,7 @@ export const RENDERER_CONTROLLERS = [
     }
   }, {
     propertyPath: 'toneMappingExposure',
-    folderPath: 'Tone Mapping',
+    folderPath: TONE_MAPPING_FOLDER,
     settings: {
       name: 'Exposure',
       min: 0,
@@ -44,7 +47,7 @@ export const RENDERER_CONTROLLERS = [
 export const LIGHT_CONTROLLERS = [
   ...positionConfig({
     propertyPath: 'position',
-    folderPath: 'Directional Light',
+    folderPath: SHADOW_FOLDER,
     settings: {
       name: 'Position',
       min: -10,
@@ -53,8 +56,25 @@ export const LIGHT_CONTROLLERS = [
     },
   }), {
     propertyPath: 'castShadow',
-    folderPath: 'Directional Light',
+    folderPath: SHADOW_FOLDER,
     settings: {
       name: 'Cast Shadow',
+    }
+  }, {
+    propertyPath: 'shadow.normalBias',
+    folderPath: SHADOW_FOLDER,
+    settings: {
+      name: 'Normal Bias',
+      min: -0.05,
+      max: 0.05,
+      step: 0.001,
+    }
+  },{
+    propertyPath: 'shadow.bias',
+    folderPath: SHADOW_FOLDER,
+    settings: {
+      name: 'Bias',
+      min: -0.05,
+      max: 0.05,
     }
   }]

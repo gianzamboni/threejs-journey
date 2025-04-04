@@ -64,14 +64,14 @@ export class CustomModelTest extends OrbitControlledExercise {
 
   private loadHamburger() {
     AssetLoader.getInstance()
-      .loadModel('/models/Hamburger/hamburger.glb', { useDraco: true }, (group) => {
+      .loadModel('/models/Hamburger/hamburger.glb', (group) => {
         this.hamburger = group;
         this.hamburger.traverse((mesh) => {
           mesh.castShadow = true;
           mesh.receiveShadow = true;
         });
-      this.scene.add(this.hamburger);
-    });
+        this.scene.add(this.hamburger);
+      }, { useDraco: true });
   }
 
   frame(timer: Timer): void {

@@ -120,7 +120,6 @@ export class AssetLoader extends EventTarget {
   }
 
   loadGLTF(url: string, onLoad: (_: GLTF) => void, options: { useDraco?: boolean } = {}) {
-    console.log(options)
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader(this.loadingManager);
     }
@@ -136,17 +135,12 @@ export class AssetLoader extends EventTarget {
     return this.gltfLoader.load(url, onLoad);
   }
 
-  loadModel(url: string, options: { scale?: number, useDraco?: boolean }, callback: (mesh: THREE.Group) => void) {
-    const scale = options.scale ?? 1;
+  loadModel(url: string, callback: (mesh: THREE.Group) => void, options: { useDraco?: boolean } = {}) {
     const useDraco = options.useDraco ?? false;
-    const group = new THREE.Group();
-    
     this.loadGLTF(
       url, 
       (scene) => {
-        group.add(...scene.scene.children)
-        group.scale.set(scale, scale, scale);
-        callback(group);
+        callback(scene.scene);
       }, 
       { useDraco }
     );

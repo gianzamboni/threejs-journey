@@ -53,7 +53,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   public loadDuck() {
     this.resetScene();
     AssetLoader.getInstance()
-      .loadModel('models/Duck/glTF/Duck.gltf', {}, (model) => {
+      .loadModel('models/Duck/glTF/Duck.gltf', (model) => {
         this.importedModel = {
           models: model
         }
@@ -65,12 +65,16 @@ export default class ImportedModels extends OrbitControlledExercise {
   public loadMask() {
     this.resetScene();
     AssetLoader.getInstance()
-      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', { scale: 2.5 }, (model) => {
-        this.importedModel = {
-          models: model
-        }
-        this.scene.add(model);
-      });
+      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf',
+        (model) => {
+          this.importedModel = {
+            models: model
+          }
+          model.scale.set(3, 3, 3);
+          this.scene.add(model);
+        },
+        { useDraco: true }
+      );
   }
 
   @ActionButton('Load Fox', FOX)
@@ -78,16 +82,11 @@ export default class ImportedModels extends OrbitControlledExercise {
     this.resetScene();
     const loader = AssetLoader.getInstance();
     loader.loadGLTF('models/Fox/glTF/Fox.gltf', (model) => {
-      const objects = model.scene.children.map(child => {
-        child.scale.set(0.025, 0.025, 0.025);
-return child;
-      });
-      const group = new THREE.Group();
-      group.add(...objects);
       this.importedModel = {
-        models: group,
+        models: model.scene,
         mixer: new THREE.AnimationMixer(model.scene)
       }
+      this.importedModel.models.scale.set(0.025, 0.025, 0.025);
       this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1], this.importedModel.models);
       this.scene.add(this.importedModel.models);
       this.importedModel.currentAction?.play();

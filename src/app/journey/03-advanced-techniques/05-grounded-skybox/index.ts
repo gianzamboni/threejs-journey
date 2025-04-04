@@ -57,9 +57,9 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
   loadHelmetModel() {
     AssetLoader.getInstance()
       .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
-        { scale: 10 }, 
         (model) => {
         this.helmet = model;
+        this.helmet.scale.set(10, 10, 10);
         this.scene.add(this.helmet);
       });
   }

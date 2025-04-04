@@ -31,7 +31,7 @@ export class RealisticRender extends OrbitControlledExercise {
 
   private envMap: THREE.Texture | undefined;
 
-  private helmet: THREE.Group | undefined;
+  private hamburger: THREE.Group | undefined;
   private floor: RenderedObject;
   private wall: RenderedObject;
 
@@ -52,12 +52,12 @@ export class RealisticRender extends OrbitControlledExercise {
     this.wall = this.createWall();
 
     this.loadEnvironment();
-    this.loadHelmet();
+    this.loadHamburger();
 
     this._scene.add(this.directionalLight, this.floor.mesh, this.wall.mesh);
     
-    this.camera.position.set(4, 5, 4);
-    this.controls.target.y = 3.5;
+    this.camera.position.set(4, 2.5, 4);
+    this.controls.target.y = 0;
 
     this.setupRenderer();
   }
@@ -118,11 +118,13 @@ export class RealisticRender extends OrbitControlledExercise {
     const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
     directionalLight.position.set(-4, 6.5, 2.5);
     directionalLight.castShadow = true;
-    directionalLight.target.position.set(0, 4, 0);
+    directionalLight.target.position.set(0, 0, 0);
     directionalLight.target.updateMatrixWorld();
 
     directionalLight.shadow.camera.far = 15;
     directionalLight.shadow.mapSize.set(512, 512);
+    directionalLight.shadow.normalBias = 0.025;
+    directionalLight.shadow.bias = -0.004;
     return directionalLight;
   }
 
@@ -134,15 +136,16 @@ export class RealisticRender extends OrbitControlledExercise {
     });
   }
 
-  loadHelmet() {
+  loadHamburger() {
     AssetLoader.getInstance()
-      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
-        { scale: 10 }, 
+      .loadModel('/models/Hamburger/hamburger.glb', 
         (model) => {
-          this.helmet = model;
-          this._scene.add(this.helmet);
+          this.hamburger = model;
+          this.hamburger.scale.set(2.5, 2.5, 2.5);
+          this._scene.add(this.hamburger);
           this.updateAllMaterials();
-        }
+        },
+        { useDraco: true }
       );
   }
 
@@ -163,8 +166,8 @@ export class RealisticRender extends OrbitControlledExercise {
   async dispose() {
     super.dispose();  
     this.envMap?.dispose();
-    if(this.helmet) {
-      this.helmet.children.forEach((child) => {
+    if(this.hamburger) {
+      this.hamburger.children.forEach((child) => {
         disposeMesh(child as THREE.Mesh);
       });
     }
