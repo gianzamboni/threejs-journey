@@ -1,6 +1,8 @@
 import { 
   WebGLRenderer,
-  ShadowMapType
+  ShadowMapType,
+  NoToneMapping,
+  PCFShadowMap
 } from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
@@ -64,6 +66,8 @@ export default class RenderView {
 
   reset() {
     this._renderer.shadowMap.enabled = false;
+    this._renderer.shadowMap.type = PCFShadowMap;
+    this._renderer.toneMapping = NoToneMapping;
   }
 
   get renderer() {
