@@ -1,5 +1,15 @@
 import * as CANNON from 'cannon-es';
-import * as THREE from 'three';
+import { 
+  Mesh,
+  Texture,
+  MeshStandardMaterial,
+  SphereGeometry,
+  BoxGeometry,
+  AmbientLight,
+  DirectionalLight,
+  Color,
+  PlaneGeometry
+} from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -10,17 +20,17 @@ import RenderView from "#/app/layout/render-view";
 import { Position3D } from '#/app/types/exercise';
 import { AssetLoader } from "#/app/utils/assets-loader";
 import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import BOX from './icons/cube.svg?raw';
 import SPHERE from './icons/sphere.svg?raw';
 import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 
 type PhysicalObject = {
-  mesh: THREE.Mesh;
+  mesh: Mesh;
   physics: CANNON.Body;
   color?: string;
 }
@@ -55,19 +65,19 @@ export class Physics extends OrbitControlledExercise {
     "#996952"
   ];
 
-  private environmentMap: THREE.Texture;
+  private environmentMap: Texture;
 
-  private materials: Record<string, THREE.MeshStandardMaterial>;
+  private materials: Record<string, MeshStandardMaterial>;
 
-  private sphereGeometry: THREE.SphereGeometry;
-  private boxGeometry: THREE.BoxGeometry;
+  private sphereGeometry: SphereGeometry;
+  private boxGeometry: BoxGeometry;
 
   private physicalObjects: PhysicalObject[];
 
   private floor: PhysicalObject;
 
-  private ambientLight: THREE.AmbientLight;
-  private directionalLight: THREE.DirectionalLight;
+  private ambientLight: AmbientLight;
+  private directionalLight: DirectionalLight;
 
   private physicsWorld: CANNON.World;
 
@@ -87,13 +97,13 @@ export class Physics extends OrbitControlledExercise {
     this.materials = {};
 
     const subdivisions = this.qualityConfig.sphereSubdivisions;
-    this.sphereGeometry = new THREE.SphereGeometry(1, subdivisions, subdivisions);
-    this.boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+    this.sphereGeometry = new SphereGeometry(1, subdivisions, subdivisions);
+    this.boxGeometry = new BoxGeometry(1, 1, 1);
     this.physicalObjects = [];
 
     this.floor = this.createFloor();
 
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 2.1);
+    this.ambientLight = new AmbientLight(0xffffff, 2.1);
     this.directionalLight = this.createDirectionalLight();
 
     this.camera.position.set(-3, 3, 3);
@@ -179,7 +189,7 @@ export class Physics extends OrbitControlledExercise {
     this.physicalObjects.splice(index, 1);
   }
 
-  private createPhysicalObject(mesh: THREE.Mesh, shape: CANNON.Shape, position: Position3D) {
+  private createPhysicalObject(mesh: Mesh, shape: CANNON.Shape, position: Position3D) {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     mesh.position.copy(position);
@@ -195,13 +205,13 @@ export class Physics extends OrbitControlledExercise {
     body.position.copy(new CANNON.Vec3(position.x, position.y, position.z));
     this.physicsWorld.addBody(body);
 
-    const color = (mesh.material as THREE.MeshStandardMaterial).color.getHexString();
+    const color = (mesh.material as MeshStandardMaterial).color.getHexString();
     return { mesh, physics: body, color };
   }
 
   private createBox(width: number, height: number, depth: number, position: Position3D) {
     const material = this.getMaterial();
-    const mesh = new THREE.Mesh(this.boxGeometry, material);
+    const mesh = new Mesh(this.boxGeometry, material);
     mesh.scale.set(width, height, depth);
 
     const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
@@ -210,7 +220,7 @@ export class Physics extends OrbitControlledExercise {
 
   private createSphere(radius: number, position: Position3D) {
     const material = this.getMaterial();
-    const mesh = new THREE.Mesh(this.sphereGeometry, material);
+    const mesh = new Mesh(this.sphereGeometry, material);
     mesh.scale.set(radius, radius, radius);
 
     const shape = new CANNON.Sphere(radius);
@@ -219,9 +229,9 @@ export class Physics extends OrbitControlledExercise {
 
   private getMaterial() {
     const colorString = getRandomValueFrom(Physics.palette);
-    const color = new THREE.Color(colorString);
+    const color = new Color(colorString);
     if(!this.materials[colorString]) {
-      this.materials[colorString] = new THREE.MeshStandardMaterial({ 
+      this.materials[colorString] = new MeshStandardMaterial({ 
         color,
         metalness: 0.3,
         roughness: 0.4,
@@ -233,8 +243,8 @@ export class Physics extends OrbitControlledExercise {
   }
 
   private createFloor() {
-    const geometry = new THREE.PlaneGeometry(10, 10);
-    const material = new THREE.MeshStandardMaterial({ 
+    const geometry = new PlaneGeometry(10, 10);
+    const material = new MeshStandardMaterial({ 
       color: '#777777',
       metalness: 0.3,
       roughness: 0.4,
@@ -242,7 +252,7 @@ export class Physics extends OrbitControlledExercise {
       envMapIntensity: 0.5
     });
 
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new Mesh(geometry, material);
     mesh.receiveShadow = true;
     mesh.rotation.x = -Math.PI * 0.5;
 
@@ -256,7 +266,7 @@ export class Physics extends OrbitControlledExercise {
   }
 
   private createDirectionalLight() {
-    const light = new THREE.DirectionalLight(0xffffff, 0.6);
+    const light = new DirectionalLight(0xffffff, 0.6);
     light.castShadow = true;
     light.shadow.mapSize.set(1024, 1024);
     light.shadow.camera.far = 15;

@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import { Mesh } from "three";
 
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
@@ -8,7 +8,7 @@ import { createRedCube, disposeMesh } from "#/app/utils/three-utils";
 @Exercise('cameras')
 @Description(["<strong>Just a cube. This demo shows how you can control a camera with a mouse.</strong>"])
 export class OrbitControlsTest extends OrbitControlledExercise {
-  private cube: THREE.Mesh;
+  private cube: Mesh;
 
   constructor(view: RenderView) {
     super(view);

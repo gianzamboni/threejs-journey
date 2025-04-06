@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import { Texture, SRGBColorSpace } from 'three';
+
 import { AssetLoader } from './assets-loader';
 
 export type EnumDictionary<KeyType extends string | symbol | number, Value> = { 
@@ -21,7 +22,7 @@ export enum TextureMaps {
   Roughness = 'roughness',
 };
 
-export type TextureDict = EnumDictionary<TextureMaps, THREE.Texture>;
+export type TextureDict = EnumDictionary<TextureMaps, Texture>;
 
 export type TextureQuality = "1k" | "2k" | "4k";
 
@@ -44,7 +45,7 @@ export function loadTextureMaps(
   }
   
   if (textures[TextureMaps.Color]) {
-    textures[TextureMaps.Color].colorSpace = THREE.SRGBColorSpace;
+    textures[TextureMaps.Color].colorSpace = SRGBColorSpace;
   }
   
   return textures;

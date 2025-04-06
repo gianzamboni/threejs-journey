@@ -1,14 +1,22 @@
-import * as THREE from 'three';
+import { 
+  SphereGeometry,
+  Mesh,
+  Raycaster,
+  Vector2,
+  AmbientLight,
+  DirectionalLight,
+  MeshBasicMaterial,
+} from 'three';
 
-import { Timer } from 'three/addons/misc/Timer.js';
 import { GLTF } from 'three/addons/loaders/GLTFLoader.js';
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from '#/app/layout/render-view';
-
-import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 import { AssetLoader } from '#/app/utils/assets-loader';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
+
+import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 
 @Exercise("Raycaster")
 @Description([
@@ -16,33 +24,33 @@ import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
   "<p>The <strong>duck</strong> will grow when the <strong>mouse is over</strong> it.</p>",
   "<p>The <strong>spheres</strong> will change color when the <strong>mouse is over</strong> them.</p>",
 ])
-export default class Raycaster extends OrbitControlledExercise {
+export default class RaycasterDemo extends OrbitControlledExercise {
   
-  private geometry: THREE.SphereGeometry;
-  private spheres: THREE.Mesh[];
+  private geometry: SphereGeometry;
+  private spheres: Mesh[];
 
-  private raycaster: THREE.Raycaster; 
+  private raycaster: Raycaster; 
 
-  private mouse: THREE.Vector2;
+  private mouse: Vector2;
 
-  private duck: THREE.Mesh | undefined;
+  private duck: Mesh | undefined;
 
-  private ambientLight: THREE.AmbientLight;
-  private directionalLight: THREE.DirectionalLight;
+  private ambientLight: AmbientLight;
+  private directionalLight: DirectionalLight;
 
 
   constructor(view: RenderView) {
     super(view);
-    this.geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    this.geometry = new SphereGeometry(0.5, 32, 32);
     this.spheres = this.createObjects();
 
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 2.1);
+    this.ambientLight = new AmbientLight(0xffffff, 0.9);
+    this.directionalLight = new DirectionalLight(0xffffff, 2.1);
     this.directionalLight.position.set(1, 2, 3);
     this.scene.add(...this.spheres, this.ambientLight, this.directionalLight);
 
-    this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
+    this.raycaster = new Raycaster();
+    this.mouse = new Vector2();
 
     this.setupListeners();
     this.loadDuck();
@@ -52,9 +60,9 @@ export default class Raycaster extends OrbitControlledExercise {
     const objects = [];
 
     for(let i = 0; i < 3; i++) {
-      const object = new THREE.Mesh(
+      const object = new Mesh(
         this.geometry, 
-        new THREE.MeshBasicMaterial({ color: '#ff0000' })
+        new MeshBasicMaterial({ color: '#ff0000' })
       );
       object.position.x = -2 + i * 2;
       objects.push(object);
@@ -73,7 +81,7 @@ export default class Raycaster extends OrbitControlledExercise {
   private loadDuck() {
     const loader = AssetLoader.getInstance();
     loader.loadGLTF('models/Duck/glTF/Duck.gltf', (model: GLTF) => {
-      this.duck = model.scene.children[0].children[0] as THREE.Mesh;
+      this.duck = model.scene.children[0].children[0] as Mesh;
       this.duck.scale.set(0.00625, 0.00625, 0.00625);
       this.duck.position.y = -1.2;
       this.scene.add(this.duck);
@@ -113,9 +121,9 @@ export default class Raycaster extends OrbitControlledExercise {
 
     for(const object of this.spheres) {
       if(intersects.some(intersect => intersect.object === object)) {
-        (object.material as THREE.MeshBasicMaterial).color.set(0x00ff00);
+        (object.material as MeshBasicMaterial).color.set(0x00ff00);
       } else {
-        (object.material as THREE.MeshBasicMaterial).color.set(0xff0000);
+        (object.material as MeshBasicMaterial).color.set(0xff0000);
       }
     }
   }

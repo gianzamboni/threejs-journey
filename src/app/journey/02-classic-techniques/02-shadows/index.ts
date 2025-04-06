@@ -1,4 +1,13 @@
-import * as THREE from "three";
+import { 
+  AmbientLight,
+  DirectionalLight,
+  SpotLight,
+  PointLight,
+  MeshStandardMaterial,
+  Mesh,
+  PlaneGeometry,
+  SphereGeometry
+} from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -8,11 +17,11 @@ import { Description, Exercise } from '#/app/decorators/exercise';
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Lights } from "#/app/utils/light-controllers-utils";
+import { disposeObjects } from "#/app/utils/three-utils";
 import { LIGHTS_CONFIG, MATERIAL_CONFIG } from "./debug-ui-configs";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-import { disposeObjects } from "#/app/utils/three-utils";
 type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>;
 
 //type Helpers = {
@@ -34,10 +43,10 @@ export class Shadows extends OrbitControlledExercise {
 
 
   @Customizable(MATERIAL_CONFIG)
-  private material: THREE.MeshStandardMaterial;
+  private material: MeshStandardMaterial;
 
-  private plane: THREE.Mesh;
-  private sphere: THREE.Mesh;
+  private plane: Mesh;
+  private sphere: Mesh;
 
   constructor(view: RenderView, quality: Quality) {
     super(view);
@@ -79,8 +88,8 @@ export class Shadows extends OrbitControlledExercise {
     light.color.set(color);
   }
 
-  private createMaterial(): THREE.MeshStandardMaterial {
-    const material = new THREE.MeshStandardMaterial();
+  private createMaterial(): MeshStandardMaterial {
+    const material = new MeshStandardMaterial();
     material.roughness = 0.476;
     material.metalness = 0.7;
     return material;
@@ -103,10 +112,10 @@ export class Shadows extends OrbitControlledExercise {
 
   private createLigths(): ExerciseLights {
     const lights = {
-      ambient: new THREE.AmbientLight(0xff0000, 1),
-      directional: new THREE.DirectionalLight(0x00ff00, 1.5),
-      spot: new THREE.SpotLight(0x0000ff, 3.6, 5, Math.PI * 0.3),
-      point: new THREE.PointLight(0xff0000, 2.7)
+      ambient: new AmbientLight(0xff0000, 1),
+      directional: new DirectionalLight(0x00ff00, 1.5),
+      spot: new SpotLight(0x0000ff, 3.6, 5, Math.PI * 0.3),
+      point: new PointLight(0xff0000, 2.7)
     }
 
     lights.directional.position.set(2, 2, -1);
@@ -131,9 +140,9 @@ export class Shadows extends OrbitControlledExercise {
     return lights;
   }
 
-  private createPlane(): THREE.Mesh {
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(5, 5),
+  private createPlane(): Mesh {
+    const plane = new Mesh(
+      new PlaneGeometry(5, 5),
       this.material
     );
 
@@ -145,9 +154,9 @@ export class Shadows extends OrbitControlledExercise {
     return plane;
   }
 
-  private createSphere(): THREE.Mesh {
-    const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(0.5, 32, 32),
+  private createSphere(): Mesh {
+    const sphere = new Mesh(
+      new SphereGeometry(0.5, 32, 32),
       this.material
     );
 

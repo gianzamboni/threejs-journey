@@ -1,4 +1,10 @@
-import * as THREE from 'three';
+import { 
+  Mesh, 
+  TorusGeometry, 
+  MeshMatcapMaterial, 
+  Texture,
+  SRGBColorSpace,
+} from 'three';
 
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Timer } from 'three/addons/misc/Timer.js';
@@ -14,17 +20,17 @@ import { disposeObjects } from '#/app/utils/three-utils';
 export class Text3D extends OrbitControlledExercise {
   private loader: AssetLoader;
 
-  private matcapTexture: THREE.Texture;
-  private material: THREE.MeshMatcapMaterial;
+  private matcapTexture: Texture;
+  private material: MeshMatcapMaterial;
 
   private donuts: {
-    geometry: THREE.TorusGeometry;
-    meshes: THREE.Mesh[];
+    geometry: TorusGeometry;
+    meshes: Mesh[];
   }
 
   private text: {
     geometry?: TextGeometry;
-    mesh?: THREE.Mesh;
+    mesh?: Mesh;
   };
   
   constructor(view: RenderView) {
@@ -34,9 +40,9 @@ export class Text3D extends OrbitControlledExercise {
 
     this.loader = AssetLoader.getInstance();
     this.matcapTexture = this.loader.loadTexture('textures/matcaps/8.png');
-    this.matcapTexture.colorSpace = THREE.SRGBColorSpace;
+    this.matcapTexture.colorSpace = SRGBColorSpace;
 
-    this.material = new THREE.MeshMatcapMaterial({
+    this.material = new MeshMatcapMaterial({
       matcap: this.matcapTexture,
     });
 
@@ -55,10 +61,10 @@ export class Text3D extends OrbitControlledExercise {
   }
 
   generateDonuts() {
-    const geometry = new THREE.TorusGeometry(0.3, 0.15, 32, 64);
+    const geometry = new TorusGeometry(0.3, 0.15, 32, 64);
     const donuts = []
     for(let i = 0; i < 100; i++) {
-      const donut = new THREE.Mesh(geometry, this.material);
+      const donut = new Mesh(geometry, this.material);
       donut.position.x = (Math.random() - 0.5) * 10;
       donut.position.y = (Math.random() - 0.5) * 10;
       donut.position.z = (Math.random() - 0.5) * 10;
@@ -88,10 +94,11 @@ export class Text3D extends OrbitControlledExercise {
         bevelSegments: 10
       });
       this.text.geometry.center();
-      this.text.mesh = new THREE.Mesh(this.text.geometry, this.material);
+      this.text.mesh = new Mesh(this.text.geometry, this.material);
       this.scene.add(this.text.mesh);
     });
   }
+  
   async dispose() {
     await super.dispose();
     disposeObjects(this.material, this.matcapTexture, this.donuts.geometry);

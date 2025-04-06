@@ -1,8 +1,14 @@
-import * as THREE from 'three';
+import { 
+  BufferGeometry,
+  MeshStandardMaterial,
+  Mesh,
+  BufferAttribute,
+  RepeatWrapping
+} from 'three';
 
 import { randomBetween } from '#/app/utils/random-utils';
-import { QualityConfig } from './quality-config';
 import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
+import { QualityConfig } from './quality-config';
 
 import { MeshObject } from '../../../types/scene-object';
 
@@ -10,10 +16,10 @@ import { MeshObject } from '../../../types/scene-object';
  * Roof object for the haunted house scene
  */
 export class Roof extends MeshObject {
-  protected geometry: THREE.BufferGeometry;
-  protected material: THREE.MeshStandardMaterial;
+  protected geometry: BufferGeometry;
+  protected material: MeshStandardMaterial;
   protected textures: TextureDict;
-  public object: THREE.Mesh;
+  public object: Mesh;
 
   private static radius: number = 3.25;
   private static height: number = 1.5;
@@ -30,7 +36,7 @@ export class Roof extends MeshObject {
     this.textures = this.loadTextures();
     this.material = this.generateMaterial();
     
-    this.object = new THREE.Mesh(this.geometry, this.material);
+    this.object = new Mesh(this.geometry, this.material);
     this.object.position.y = 2.5;
     this.object.rotation.y = Math.PI * 0.25;
   }
@@ -38,8 +44,8 @@ export class Roof extends MeshObject {
   /**
    * Generate a pyramid geometry for the roof
    */
-  private generatePyramid(): THREE.BufferGeometry {
-    const geometry = new THREE.BufferGeometry();
+  private generatePyramid(): BufferGeometry {
+    const geometry = new BufferGeometry();
     const vertices = new Float32Array(54);
     const uvCoords = new Float32Array(36);
 
@@ -47,8 +53,8 @@ export class Roof extends MeshObject {
     this.generateSideFaces(vertices, uvCoords, topPoint, basePoints);
     this.generateBaseFaces(vertices, uvCoords, basePoints);
 
-    const vbufferAttribute = new THREE.BufferAttribute(vertices, 3);
-    const uvBufferAttribute = new THREE.BufferAttribute(uvCoords, 2);
+    const vbufferAttribute = new BufferAttribute(vertices, 3);
+    const uvBufferAttribute = new BufferAttribute(uvCoords, 2);
     geometry.setAttribute('position', vbufferAttribute);
     geometry.setAttribute('uv', uvBufferAttribute);
     geometry.computeVertexNormals();
@@ -131,8 +137,8 @@ export class Roof extends MeshObject {
 
     for(const texture of Object.values(textures)) {
       texture.repeat.set(3, 1);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
+      texture.wrapS = RepeatWrapping;
+      texture.wrapT = RepeatWrapping;
     }
     
     return textures;
@@ -141,8 +147,8 @@ export class Roof extends MeshObject {
   /**
    * Generate the material for the roof
    */
-  private generateMaterial(): THREE.MeshStandardMaterial {
-    return new THREE.MeshStandardMaterial({
+  private generateMaterial(): MeshStandardMaterial {
+    return new MeshStandardMaterial({
       map: this.textures[TextureMaps.Color],
       aoMap: this.textures[TextureMaps.Arm],
       roughnessMap: this.textures[TextureMaps.Arm],

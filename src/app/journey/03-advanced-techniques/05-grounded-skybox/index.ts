@@ -1,28 +1,36 @@
-import * as THREE from "three";
+import {
+  Mesh,
+  Group,
+  Texture,
+  Scene,
+  TorusKnotGeometry,
+  MeshStandardMaterial
+} from "three";
+
+import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js'
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
-import { ENV_CONTROLLERS } from "./debug-ui.config";
-import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js'
 import { disposeMesh } from "#/app/utils/three-utils";
+import { ENV_CONTROLLERS } from "./debug-ui.config";
 
 @Exercise("grounded-skybox")
 @Description(["<p><strong>Demo of a correctly positioned object with a skybox.</strong></p>"])
 export class GroundedSkyboxTest extends OrbitControlledExercise {
 
-  private torusKnot: THREE.Mesh;
+  private torusKnot: Mesh;
 
-  private helmet: THREE.Group | undefined;
+  private helmet: Group | undefined;
 
   private skybox: GroundedSkybox | undefined;
 
-  private environmentMap: THREE.Texture | undefined;
+  private environmentMap: Texture | undefined;
 
   @Customizable(ENV_CONTROLLERS)
-  public _scene: THREE.Scene;
+  public _scene: Scene;
 
   constructor(view: RenderView) {
     super(view);
@@ -46,9 +54,9 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
   }
 
   createTorusKnot() {
-    const geometry = new THREE.TorusKnotGeometry(1, 0.4, 100, 16);
-    const material = new THREE.MeshStandardMaterial({ roughness: 0.3, metalness: 1, color: 0xaaaaaa });
-    const mesh = new THREE.Mesh(geometry, material);
+    const geometry = new TorusKnotGeometry(1, 0.4, 100, 16);
+    const material = new MeshStandardMaterial({ roughness: 0.3, metalness: 1, color: 0xaaaaaa });
+    const mesh = new Mesh(geometry, material);
     mesh.position.y = 4;
     mesh.position.x = -4;
     return mesh;
@@ -86,7 +94,7 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
     if (this.helmet) {
       this.helmet.children.forEach((child) => {
-        disposeMesh(child as THREE.Mesh);
+        disposeMesh(child as Mesh);
       });
     }
 

@@ -1,16 +1,25 @@
-import * as THREE from 'three';
+import { 
+  Mesh,
+  Group,
+  AmbientLight,
+  DirectionalLight,
+  PlaneGeometry,
+  MeshStandardMaterial,
+  AnimationMixer,
+  AnimationAction
+} from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { ActionButton, Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import DUCK from './icons/duck.svg?raw';
 import FOX from './icons/fox.svg?raw';
 import MASK from './icons/mask.svg?raw';
 
 import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
-import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('imported-models')
 @Description([
@@ -19,21 +28,21 @@ import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 ])
 export default class ImportedModels extends OrbitControlledExercise {
 
-  private floor: THREE.Mesh;
-  private ambientLight: THREE.AmbientLight;
-  private directionalLight: THREE.DirectionalLight;
+  private floor: Mesh;
+  private ambientLight: AmbientLight;
+  private directionalLight: DirectionalLight;
 
   private importedModel: {
-    models: THREE.Group;
-    mixer?: THREE.AnimationMixer;
-    currentAction?: THREE.AnimationAction;
+    models: Group;
+    mixer?: AnimationMixer;
+    currentAction?: AnimationAction;
   } | undefined;
 
   constructor(view: RenderView) {
     super(view);
 
     this.floor = this.createFloor();
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 2.4);
+    this.ambientLight = new AmbientLight(0xffffff, 2.4);
     this.directionalLight = this.createDirectionalLight();
     this.loadDuck();
     this.camera.position.set(3, 3, 3);
@@ -84,7 +93,7 @@ export default class ImportedModels extends OrbitControlledExercise {
     loader.loadGLTF('models/Fox/glTF/Fox.gltf', (model) => {
       this.importedModel = {
         models: model.scene,
-        mixer: new THREE.AnimationMixer(model.scene)
+        mixer: new AnimationMixer(model.scene)
       }
       this.importedModel.models.scale.set(0.025, 0.025, 0.025);
       this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1], this.importedModel.models);
@@ -96,7 +105,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   private resetScene() {
     if(this.importedModel) {
       this.importedModel.models.traverse((child) => {
-        if(child instanceof THREE.Mesh) {
+        if(child instanceof Mesh) {
           disposeMesh(child);
         }
       });
@@ -105,9 +114,9 @@ export default class ImportedModels extends OrbitControlledExercise {
   }
 
   private createFloor() {
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(10, 10),
-      new THREE.MeshStandardMaterial({
+    const floor = new Mesh(
+      new PlaneGeometry(10, 10),
+      new MeshStandardMaterial({
         color: '#444444',
         metalness: 0,
         roughness: 0.5
@@ -120,7 +129,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   }
 
   private createDirectionalLight() {
-    const light = new THREE.DirectionalLight(0xffffff, 1.8);
+    const light = new DirectionalLight(0xffffff, 1.8);
     return light;
   }
 

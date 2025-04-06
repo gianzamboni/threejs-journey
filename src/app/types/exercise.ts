@@ -1,4 +1,8 @@
-import * as THREE from 'three';
+import { 
+  BufferGeometry,
+  Material,
+  Mesh
+} from 'three';
 
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
 import BaseExercise from "#/app/journey/exercises/base-exercise";
@@ -23,9 +27,9 @@ export type Constructor<T> = new (...args: any[]) => T;
 export type ExerciseClass = new (renderView: RenderView, quality: Quality) => Exercise;
 
 export type MeshObject = {
-  geometry: THREE.BufferGeometry;
-  material: THREE.Material;
-  mesh: THREE.Mesh;
+  geometry: BufferGeometry;
+  material: Material;
+  mesh: Mesh;
 }
 
 export type Position2D = {

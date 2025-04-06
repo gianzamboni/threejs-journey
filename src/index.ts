@@ -10,10 +10,11 @@ import { ErrorData, WarningBox } from "#/app/layout/warning-box";
 import { Exercise, ExerciseClass } from '#/app/types/exercise';
 import { AssetLoader, LoadingData } from "#/app/utils/assets-loader";
 import { ActionBar } from './app/layout/action-bar';
+import { isInDevMode } from './app/utils';
 import { getId, isDebuggable } from './app/utils/exercise-metadata';
 import { pascalCaseToText } from './app/utils/text-utils';
 import { CSS_CLASSES } from './theme';
-import { isInDevMode } from './app/utils';
+
 
 let tappedTwice = false;
 

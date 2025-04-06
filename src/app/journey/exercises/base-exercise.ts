@@ -1,9 +1,9 @@
-import * as THREE from 'three';
+import { Scene, PerspectiveCamera } from 'three';
 
 export default class BaseExercise extends EventTarget {
   
-  public scene: THREE.Scene;
-  public camera: THREE.PerspectiveCamera;
+  public scene: Scene;
+  public camera: PerspectiveCamera;
 
   constructor() {
     super();
@@ -12,15 +12,15 @@ export default class BaseExercise extends EventTarget {
     this.setupSceneCamera();
   }
 
-  protected createCamera(fov: number): THREE.PerspectiveCamera {
-    const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 100);
+  protected createCamera(fov: number): PerspectiveCamera {
+    const camera = new PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0,0,3);
     camera.lookAt(0,0,0);
     return camera;
   }
 
-  private createScene(): THREE.Scene {
-    const scene = new THREE.Scene();
+  private createScene(): Scene {
+    const scene = new Scene();
     return scene;
   }
 
@@ -33,7 +33,7 @@ export default class BaseExercise extends EventTarget {
   }
 
   updateCamera(aspect: number) {
-    if(this.camera instanceof THREE.PerspectiveCamera) {
+    if(this.camera instanceof PerspectiveCamera) {
       this.camera.aspect = aspect;
       this.camera.updateProjectionMatrix();
     }

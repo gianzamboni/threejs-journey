@@ -1,19 +1,32 @@
+import { 
+  Mesh,
+  Group,
+  Texture,
+  Scene,
+  WebGLRenderer,
+  DirectionalLight,
+  PlaneGeometry,
+  MeshStandardMaterial,
+  ReinhardToneMapping
+} from 'three';
+
+import { Timer } from "three/examples/jsm/Addons.js";
+
 import { Customizable } from "#/app/decorators/customizable";
+import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
+import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
-import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-import * as THREE from 'three';
-import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
-import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { loadTextureMaps, TextureDict, TextureMaps } from "#/app/utils/textures";
-import { Timer } from "three/examples/jsm/Addons.js";
-import { DebugFPS } from "#/app/decorators/debug";
-import { Quality } from "#/app/layout/quality-selector";
+import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
+import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
+import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+
 type RenderedObject = {
-  mesh: THREE.Mesh;
+  mesh: Mesh;
   textures: TextureDict;
 }
 
@@ -24,19 +37,19 @@ type RenderedObject = {
 export class RealisticRender extends OrbitControlledExercise {
 
   @Customizable(SCENE_CONTROLLERS)
-  private _scene: THREE.Scene;
+  private _scene: Scene;
 
   @Customizable(RENDERER_CONTROLLERS)
-  private _renderer: THREE.WebGLRenderer;
+  private _renderer: WebGLRenderer;
 
-  private envMap: THREE.Texture | undefined;
+  private envMap: Texture | undefined;
 
-  private hamburger: THREE.Group | undefined;
+  private hamburger: Group | undefined;
   private floor: RenderedObject;
   private wall: RenderedObject;
 
   @Customizable(LIGHT_CONTROLLERS)
-  private directionalLight: THREE.DirectionalLight;
+  private directionalLight: DirectionalLight;
 
   private qualityConfig: QualityConfig;
 
@@ -63,7 +76,7 @@ export class RealisticRender extends OrbitControlledExercise {
   }
 
   setupRenderer() {
-    this._renderer.toneMapping = THREE.ReinhardToneMapping;
+    this._renderer.toneMapping = ReinhardToneMapping;
     this._renderer.toneMappingExposure = 3;
 
     this._view.enableShadows(this.qualityConfig.shadowMapType);
@@ -101,9 +114,9 @@ export class RealisticRender extends OrbitControlledExercise {
   }
 
   createPlane(textures: TextureDict) {
-    const mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(8, 8, 100, 100),
-      new THREE.MeshStandardMaterial({ 
+    const mesh = new Mesh(
+      new PlaneGeometry(8, 8, 100, 100),
+      new MeshStandardMaterial({ 
         map: textures[TextureMaps.Color], 
         normalMap: textures[TextureMaps.Normal],
         aoMap: textures[TextureMaps.Arm],
@@ -115,7 +128,7 @@ export class RealisticRender extends OrbitControlledExercise {
   }
 
   createDirectionalLight() {
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 6);
+    const directionalLight = new DirectionalLight(0xffffff, 6);
     directionalLight.position.set(-4, 6.5, 2.5);
     directionalLight.castShadow = true;
     directionalLight.target.position.set(0, 0, 0);
@@ -168,7 +181,7 @@ export class RealisticRender extends OrbitControlledExercise {
     this.envMap?.dispose();
     if(this.hamburger) {
       this.hamburger.children.forEach((child) => {
-        disposeMesh(child as THREE.Mesh);
+        disposeMesh(child as Mesh);
       });
     }
     disposeMesh(this.floor.mesh);

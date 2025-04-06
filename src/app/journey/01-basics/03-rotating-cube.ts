@@ -1,11 +1,10 @@
-import * as THREE from 'three';
+import { Mesh } from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Description, Exercise } from '#/app/decorators/exercise';
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { createRedCube, disposeMesh } from '#/app/utils/three-utils';
-
 @Exercise('animations')
 @Description([
   "<p><strong>A cube and a camera that rotate around.</strong></p>", 
@@ -13,7 +12,7 @@ import { createRedCube, disposeMesh } from '#/app/utils/three-utils';
 ])
 export class RotatingCube extends AnimatedExercise {
     
-  private cube: THREE.Mesh;
+  private cube: Mesh;
 
   constructor() {
     super();

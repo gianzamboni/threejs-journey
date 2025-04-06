@@ -1,18 +1,31 @@
-
-
 import gsap from 'gsap';
-import * as THREE from 'three';
+import { 
+  Texture,
+  MeshToonMaterial,
+  Mesh,
+  BufferGeometry,
+  PointsMaterial,
+  Points,
+  DirectionalLight,
+  Group,
+  SRGBColorSpace,
+  NearestFilter,
+  TorusGeometry,
+  ConeGeometry,
+  TorusKnotGeometry,
+  BufferAttribute
+} from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { Interactions } from './interactions';
 import { ScrollBasedAnimationLayout } from './layout';
 
 import AnimatedExercise from '../../exercises/animated-exercise';
-import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 
 /**
@@ -20,15 +33,15 @@ import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
  */
 
 type MeshObjects = {
-  texture: THREE.Texture;
-  material: THREE.MeshToonMaterial;
-  meshes: THREE.Mesh[];
+  texture: Texture;
+  material: MeshToonMaterial;
+  meshes: Mesh[];
 }
 
 type Particles = {
-  geometry: THREE.BufferGeometry;
-  material: THREE.PointsMaterial;
-  mesh: THREE.Points;
+  geometry: BufferGeometry;
+  material: PointsMaterial;
+  mesh: Points;
 }
 
 @Exercise('scroll-based-animation')
@@ -43,9 +56,9 @@ export class ScrollBasedAnimation extends AnimatedExercise {
   private meshObjects: MeshObjects;
   private particles: Particles;
 
-  private light: THREE.DirectionalLight;
+  private light: DirectionalLight;
 
-  private cameraGroup: THREE.Group; 
+  private cameraGroup: Group; 
   
   private interactions: Interactions;
   
@@ -62,14 +75,14 @@ export class ScrollBasedAnimation extends AnimatedExercise {
     this.meshObjects = this.createMeshObjects();
     this.particles = this.createParticles();
 
-    this.light = new THREE.DirectionalLight(0xffffff, 3);
+    this.light = new DirectionalLight(0xffffff, 3);
     this.light.position.set(1, 0, 0);
 
     this.camera.position.set(0,0,7);
     this.camera.fov = 35;
     this.camera.updateProjectionMatrix();
 
-    this.cameraGroup = new THREE.Group();
+    this.cameraGroup = new Group();
     this.cameraGroup.add(this.camera);
 
     this.scene.add(...this.meshObjects.meshes, this.light, this.particles.mesh, this.cameraGroup);
@@ -82,26 +95,26 @@ export class ScrollBasedAnimation extends AnimatedExercise {
   private loadGradientTexture() {
     const assetLoader = AssetLoader.getInstance();
     const gradientTexture = assetLoader.loadTexture('textures/gradients/3.jpg');
-    gradientTexture.colorSpace = THREE.SRGBColorSpace;
-    gradientTexture.magFilter = THREE.NearestFilter;
+    gradientTexture.colorSpace = SRGBColorSpace;
+    gradientTexture.magFilter = NearestFilter;
     return gradientTexture;
   }
 
   private createMeshObjects(): MeshObjects {
     const texture = this.loadGradientTexture();
-    const material = new THREE.MeshToonMaterial({
+    const material = new MeshToonMaterial({
       color: ScrollBasedAnimation.materialColor,
       gradientMap: texture,
     });
 
     const geometries = [
-      new THREE.TorusGeometry(1, 0.4, 16, 60),
-      new THREE.ConeGeometry(1, 2, 32),
-      new THREE.TorusKnotGeometry(1, 0.4, 100, 16),
+      new TorusGeometry(1, 0.4, 16, 60),
+      new ConeGeometry(1, 2, 32),
+      new TorusKnotGeometry(1, 0.4, 100, 16),
     ];
 
     const meshes = geometries.map((geometry, index) => {
-      const mesh = new THREE.Mesh(geometry, material);
+      const mesh = new Mesh(geometry, material);
       mesh.position.y = -ScrollBasedAnimation.objectDistance * index;
       return mesh;
     });
@@ -123,16 +136,16 @@ export class ScrollBasedAnimation extends AnimatedExercise {
       positions[i * 3 + 2] = (Math.random() - 0.5)* 10;
     }
     
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new BufferAttribute(positions, 3));
 
-    const material = new THREE.PointsMaterial({
+    const material = new PointsMaterial({
       color: ScrollBasedAnimation.materialColor,
       sizeAttenuation: true,
       size: 0.03
     });
 
-    const particles = new THREE.Points(geometry, material);
+    const particles = new Points(geometry, material);
 
     return {
       geometry,

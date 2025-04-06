@@ -1,4 +1,15 @@
-import * as THREE from "three";
+import { 
+  AmbientLight,
+  DirectionalLight,
+  SpotLight,
+  PointLight,
+  MeshStandardMaterial,
+  Mesh,
+  Texture,
+  MeshBasicMaterial,
+  SphereGeometry,
+  PlaneGeometry
+} from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -9,10 +20,10 @@ import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeObjects } from "#/app/utils/three-utils";
 
 type Lights = {
-  ambient: THREE.AmbientLight;
-  directional: THREE.DirectionalLight;
-  spot: THREE.SpotLight;
-  point: THREE.PointLight;
+  ambient: AmbientLight;
+  directional: DirectionalLight;
+  spot: SpotLight;
+  point: PointLight;
 }
 
 @Exercise('baked-shadow')
@@ -20,13 +31,13 @@ type Lights = {
 export class BakedShadow extends OrbitControlledExercise {
   private lights: Lights;
 
-  private material: THREE.MeshStandardMaterial;
-  private sphere: THREE.Mesh;
-  private plane: THREE.Mesh;
+  private material: MeshStandardMaterial;
+  private sphere: Mesh;
+  private plane: Mesh;
 
-  private bakedShadowTexture: THREE.Texture;
-  private bakedShadowMaterial: THREE.MeshBasicMaterial;
-  private sphereShadow: THREE.Mesh;
+  private bakedShadowTexture: Texture;
+  private bakedShadowMaterial: MeshBasicMaterial;
+  private sphereShadow: Mesh;
   
   private loader: AssetLoader;
 
@@ -36,10 +47,10 @@ export class BakedShadow extends OrbitControlledExercise {
     this.loader = AssetLoader.getInstance();
     this.lights = this.createLights();
 
-    this.material = new THREE.MeshStandardMaterial({ roughness: 0.7 });
+    this.material = new MeshStandardMaterial({ roughness: 0.7 });
     
-    this.sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(0.5, 32, 32),
+    this.sphere = new Mesh(
+      new SphereGeometry(0.5, 32, 32),
       this.material
     );
 
@@ -47,7 +58,7 @@ export class BakedShadow extends OrbitControlledExercise {
 
     this.bakedShadowTexture = this.loader.loadTexture('/textures/shadows/simple-shadow.jpg');
     
-    this.bakedShadowMaterial = new THREE.MeshBasicMaterial({
+    this.bakedShadowMaterial = new MeshBasicMaterial({
       color: 0x000000,
       transparent: true,
       alphaMap: this.bakedShadowTexture,
@@ -92,10 +103,10 @@ export class BakedShadow extends OrbitControlledExercise {
 
   private createLights(): Lights {
     const lights = {
-      ambient: new THREE.AmbientLight(0xffffff, 1),
-      directional: new THREE.DirectionalLight(0xffffff, 1.5),
-      spot: new THREE.SpotLight(0xffffff, 3.6, 10, Math.PI * 0.3),
-      point: new THREE.PointLight(0xffffff, 2.7),
+      ambient: new AmbientLight(0xffffff, 1),
+      directional: new DirectionalLight(0xffffff, 1.5),
+      spot: new SpotLight(0xffffff, 3.6, 10, Math.PI * 0.3),
+      point: new PointLight(0xffffff, 2.7),
     }
 
     lights.directional.position.set(2, 2, -1);
@@ -105,9 +116,9 @@ export class BakedShadow extends OrbitControlledExercise {
     return lights;
   }
 
-  private createPlane(): THREE.Mesh {
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(5, 5),
+  private createPlane(): Mesh {
+    const plane = new Mesh(
+      new PlaneGeometry(5, 5),
       this.material
     );
     
@@ -117,9 +128,9 @@ export class BakedShadow extends OrbitControlledExercise {
     return plane;
   }
 
-  private createBakedShadow(): THREE.Mesh {
-    const bakedShadow = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.5, 1.5),
+  private createBakedShadow(): Mesh {
+    const bakedShadow = new Mesh(
+      new PlaneGeometry(1.5, 1.5),
       this.bakedShadowMaterial
     );
 

@@ -1,4 +1,12 @@
-import * as THREE from 'three';
+import { 
+  LoadingManager,
+  TextureLoader,
+  CubeTextureLoader,
+  Scene,
+  Texture,
+  EquirectangularReflectionMapping,
+  Group
+} from 'three';
 
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { FontLoader, Font } from 'three/addons/loaders/FontLoader.js';
@@ -17,12 +25,12 @@ export class AssetLoader extends EventTarget {
 
   private static instance: AssetLoader | undefined;
 
-  private loadingManager: THREE.LoadingManager;
+  private loadingManager: LoadingManager;
 
-  private textureLoader: THREE.TextureLoader | undefined;
+  private textureLoader: TextureLoader | undefined;
   private rgbeLoader: RGBELoader | undefined;
   private fontLoader: FontLoader | undefined;
-  private cubeTextureLoader: THREE.CubeTextureLoader | undefined;
+  private cubeTextureLoader: CubeTextureLoader | undefined;
   private gltfLoader: GLTFLoader | undefined;
   private dracoLoader: DRACOLoader | undefined;
 
@@ -35,7 +43,7 @@ export class AssetLoader extends EventTarget {
 
   private constructor() {
     super();
-    this.loadingManager = new THREE.LoadingManager();
+    this.loadingManager = new LoadingManager();
     this.loadingManager.onStart = this.onStart.bind(this);
     this.loadingManager.onProgress = this.onProgress.bind(this);
     this.loadingManager.onError = this.onError.bind(this);
@@ -70,7 +78,7 @@ export class AssetLoader extends EventTarget {
   }
 
   reset() {
-    this.loadingManager = new THREE.LoadingManager();
+    this.loadingManager = new LoadingManager();
     this.loadingManager.onStart = this.onStart.bind(this);
     this.loadingManager.onProgress = this.onProgress.bind(this);
     this.loadingManager.onError = this.onError.bind(this);
@@ -88,17 +96,17 @@ export class AssetLoader extends EventTarget {
 
   loadTexture(url: string) {
     if (!this.textureLoader) {
-      this.textureLoader = new THREE.TextureLoader(this.loadingManager);
+      this.textureLoader = new TextureLoader(this.loadingManager);
     }
     return this.textureLoader.load(url);
   }
 
-  loadEnvironment(url: string, scene: THREE.Scene, onLoad: (_: THREE.Texture) => void) {
+  loadEnvironment(url: string, scene: Scene, onLoad: (_: Texture) => void) {
     if (!this.rgbeLoader) {
       this.rgbeLoader = new RGBELoader(this.loadingManager);
     }
     return this.rgbeLoader.load(url, (envMap) => {
-      envMap.mapping = THREE.EquirectangularReflectionMapping;
+      envMap.mapping = EquirectangularReflectionMapping;
       scene.environment = envMap;
       onLoad(envMap);
     }, undefined, () => this.onError(url));
@@ -107,7 +115,7 @@ export class AssetLoader extends EventTarget {
   loadCubeTexture(folder: string) {
     const urls = ['px', 'nx', 'py', 'ny', 'pz', 'nz'].map(suffix => `${folder}/${suffix}.png`);
     if (!this.cubeTextureLoader) {
-      this.cubeTextureLoader = new THREE.CubeTextureLoader(this.loadingManager);
+      this.cubeTextureLoader = new CubeTextureLoader(this.loadingManager);
     }
     return this.cubeTextureLoader.load(urls);
   }
@@ -135,7 +143,7 @@ export class AssetLoader extends EventTarget {
     return this.gltfLoader.load(url, onLoad);
   }
 
-  loadModel(url: string, callback: (mesh: THREE.Group) => void, options: { useDraco?: boolean } = {}) {
+  loadModel(url: string, callback: (mesh: Group) => void, options: { useDraco?: boolean } = {}) {
     const useDraco = options.useDraco ?? false;
     this.loadGLTF(
       url, 

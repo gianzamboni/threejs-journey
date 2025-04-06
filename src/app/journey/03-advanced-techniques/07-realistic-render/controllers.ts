@@ -1,5 +1,12 @@
+import { 
+  NoToneMapping,
+  LinearToneMapping,
+  ReinhardToneMapping,
+  CineonToneMapping,
+  ACESFilmicToneMapping
+} from 'three';
+
 import { positionConfig } from '#/app/utils/light-controllers-utils';
-import * as THREE from 'three';
 
 const TONE_MAPPING_FOLDER = 'Tone Mapping';
 const SHADOW_FOLDER = 'Directional Light';
@@ -24,11 +31,11 @@ export const RENDERER_CONTROLLERS = [
     settings: {
       name: 'Algorithm',
       options: {
-        No: THREE.NoToneMapping,
-        Linear: THREE.LinearToneMapping,
-        Reinhard: THREE.ReinhardToneMapping,
-        Cineon: THREE.CineonToneMapping,
-        ACESFilmic: THREE.ACESFilmicToneMapping
+        No: NoToneMapping,
+        Linear: LinearToneMapping,
+        Reinhard: ReinhardToneMapping,
+        Cineon: CineonToneMapping,
+        ACESFilmic: ACESFilmicToneMapping
       }
     }
   }, {

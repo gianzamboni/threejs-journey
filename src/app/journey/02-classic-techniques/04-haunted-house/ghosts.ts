@@ -1,4 +1,8 @@
-import * as THREE from 'three';
+import { 
+  Group,
+  PointLight,
+  PointLightHelper
+} from 'three';
 
 import { randomBetween, randomSign } from '#/app/utils/random-utils';
 import { PathTracer } from './path-tracer';
@@ -7,7 +11,7 @@ import { QualityConfig } from './quality-config';
 import { SceneObject } from '../../../types/scene-object';
 
 interface Ghost {
-  light: THREE.PointLight;
+  light: PointLight;
   pacing: number;
   displacement: number;
   radius: number;
@@ -20,7 +24,7 @@ interface Ghost {
     amplitude: number;
     speed: number;
   };
-  helper?: THREE.PointLightHelper;
+  helper?: PointLightHelper;
   tracer?: PathTracer;
 }
 
@@ -28,7 +32,7 @@ interface Ghost {
  * Ghosts object for the haunted house scene
  */
 export class Ghosts extends SceneObject {
-  public object: THREE.Group;
+  public object: Group;
   private ghosts: Ghost[];
   private minRadius: number;
 
@@ -40,7 +44,7 @@ export class Ghosts extends SceneObject {
   constructor(quality: QualityConfig) {
     super();
     this.quality = quality;
-    this.object = new THREE.Group();
+    this.object = new Group();
     this.ghosts = [];
     this.minRadius = 4;
 
@@ -62,7 +66,7 @@ export class Ghosts extends SceneObject {
    */
   private generateGhost(color: string): Ghost {
     const ghost: Ghost = {
-      light: new THREE.PointLight(color, 6),
+      light: new PointLight(color, 6),
       pacing: randomSign() * randomBetween(0.0001, 0.3),
       displacement: randomBetween(0, Math.PI * 2),
       radius: randomBetween(this.minRadius, 6),
@@ -79,7 +83,7 @@ export class Ghosts extends SceneObject {
 
     this.generateGhostWobblingConstants(ghost);
     this.setupGhostShadows(ghost);
-    //ghost.helper = new THREE.PointLightHelper(ghost.light, 0.2);
+    //ghost.helper = new PointLightHelper(ghost.light, 0.2);
     //ghost.tracer = new PathTracer(ghost.light, color);
     return ghost;
   }
