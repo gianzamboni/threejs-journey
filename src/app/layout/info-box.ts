@@ -19,7 +19,7 @@ export class InfoBox {
       button: {
         className: 'flex items-center justify-center font-bold text-2xl gap-1 py-2 rounded-lg mb-0',
         iconSize: 32,
-        toggle: ['mb-0','mb-5'],
+        toggle: ['mb-5'],
       },
       collapsable: {
         className: `rounded-lg`,
