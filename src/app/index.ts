@@ -22,24 +22,27 @@ export class App {
   private menu: Menu;
   private infoBox: InfoBox;
   private renderView: RenderView;
-  private debugUI!: DebugUI;
-  private loadingScreen!: LoadingScreen;
-  private warningBox!: WarningBox;
-  private qualitySelector!: QualitySelector;
-  private actionBar!: ActionBar;
+  private debugUI: DebugUI;
+  private loadingScreen: LoadingScreen;
+  private warningBox: WarningBox;
+  private qualitySelector: QualitySelector;
+  private actionBar: ActionBar;
 
-  constructor() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const quality = urlParams.get('quality');
+  constructor(quality: Quality) {
     this.activeQuality = qualityFromString(quality);
 
     this.menu = new Menu();
     this.infoBox = new InfoBox();
     this.renderView = new RenderView();
+    this.debugUI = new DebugUI();
+    this.qualitySelector = new QualitySelector(this.activeQuality);
+    this.loadingScreen = new LoadingScreen();
+    this.warningBox = new WarningBox();
+    this.actionBar = new ActionBar();
   }
 
   init() {
-    this.initAllGUIParts();
+    this.addToDOM();
     this.setupListeners();
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -133,10 +136,6 @@ export class App {
     this.loader.addEventListener('loading-complete', this.hideLoadingScreen.bind(this)); 
     this.loader.addEventListener('loading-error', this.showErrorMessage.bind(this) as EventListener);
     
-    window.addEventListener('resize', () => {
-      this.renderView.updateSize();
-    });
-    
     this.renderView.canvas.addEventListener('dblclick', this.toggleDebug.bind(this));
 
     window.addEventListener('touch', () => {
@@ -149,33 +148,30 @@ export class App {
     this.qualitySelector.addEventListener('quality-changed', this.changeQuality.bind(this) as EventListener);
   }
 
-  private initAllGUIParts() {
+  private addToDOM() {
+    const rowClasses = `${CSS_CLASSES.main_layout_index} fixed flex flex-col items-end`
     const bottomRow = document.createElement('div');
     bottomRow.id = "bottom-row";
-    bottomRow.className = `fixed bottom-0 left-0 flex flex-col md:flex-row items-end justify-between align-center ${CSS_CLASSES.main_layout_index}`;
+    bottomRow.className = `${rowClasses} bottom-0 left-0 md:flex-row justify-between align-center`;
 
-    this.infoBox.addTo(bottomRow);
-
-
-    document.body.appendChild(bottomRow);
-    this.menu.addTo(document.body);
-    this.renderView.addTo(document.body);
-
-    
     const rightColumn = document.createElement('div');
     rightColumn.id = "right-column";
-    rightColumn.className = `fixed top-0 right-5 m-5 flex flex-col items-end gap-2 ${CSS_CLASSES.main_layout_index}`;
-    this.qualitySelector = new QualitySelector(rightColumn, this.activeQuality);
-    
-    this.debugUI = new DebugUI(rightColumn);
+    rightColumn.className = `${rowClasses} top-0 right-5 m-5 gap-2`;
+
+    this.actionBar.addTo(this.infoBox.container);
+
+    this.infoBox.addTo(bottomRow);
+    this.warningBox.addTo(bottomRow);
+    document.body.appendChild(bottomRow);
+
+    this.qualitySelector.addTo(rightColumn);
+    this.debugUI.addTo(rightColumn);
     document.body.appendChild(rightColumn);
 
-    this.loadingScreen = new LoadingScreen(document.body);
-    
+    this.menu.addTo(document.body);
+    this.renderView.addTo(document.body);
+    this.loadingScreen.addTo(document.body);
 
-    this.warningBox = new WarningBox(bottomRow);
-
-    this.actionBar = new ActionBar();
   }
 }
 

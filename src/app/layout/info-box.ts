@@ -7,12 +7,12 @@ import { getDescriptions } from "../utils/exercise-metadata";
 
 export class InfoBox {
 
-  private container: HTMLElement;
+  private _container: HTMLElement;
   private collapsable: Collapsable;
 
   constructor() {
-    this.container = document.createElement('div');
-    this.container.setAttribute('id', 'info-box-container');
+    this._container = document.createElement('div');
+    this._container.setAttribute('id', 'info-box-container');
 
     this.collapsable = new Collapsable('Información', {
       className: 'mx-5 w-[90vw] sm:w-[16vw] min-w-[390px] ',
@@ -26,11 +26,15 @@ export class InfoBox {
       }
     });
 
-    this.collapsable.addTo(this.container);
+    this.collapsable.addTo(this._container);
+  }
+
+  get container() {
+    return this._container;
   }
 
   addTo(parent: HTMLElement) {
-    parent.appendChild(this.container);
+    parent.appendChild(this._container);
   }
 
   updateContent(exercise: Exercise) {

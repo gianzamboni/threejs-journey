@@ -25,6 +25,10 @@ export default class RenderView {
       antialias: window.devicePixelRatio < 2,
     });
 
+    window.addEventListener('resize', () => {
+      this.updateSize();
+    });
+
     this.updateSize();
   }
   
