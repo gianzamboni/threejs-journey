@@ -19,9 +19,9 @@ export class App {
   private activeExercise!: Exercise;
   private activeQuality!: Quality;
 
-  private menu!: Menu;
-  private infoBox!: InfoBox;
-  private renderView!: RenderView;
+  private menu: Menu;
+  private infoBox: InfoBox;
+  private renderView: RenderView;
   private debugUI!: DebugUI;
   private loadingScreen!: LoadingScreen;
   private warningBox!: WarningBox;
@@ -32,7 +32,10 @@ export class App {
     const urlParams = new URLSearchParams(window.location.search);
     const quality = urlParams.get('quality');
     this.activeQuality = qualityFromString(quality);
+
     this.menu = new Menu();
+    this.infoBox = new InfoBox();
+    this.renderView = new RenderView();
   }
 
   init() {
@@ -147,7 +150,17 @@ export class App {
   }
 
   private initAllGUIParts() {
-    this.renderView = new RenderView(document.body);
+    const bottomRow = document.createElement('div');
+    bottomRow.id = "bottom-row";
+    bottomRow.className = `fixed bottom-0 left-0 flex flex-col md:flex-row items-end justify-between align-center ${CSS_CLASSES.main_layout_index}`;
+
+    this.infoBox.addTo(bottomRow);
+
+
+    document.body.appendChild(bottomRow);
+    this.menu.addTo(document.body);
+    this.renderView.addTo(document.body);
+
     
     const rightColumn = document.createElement('div');
     rightColumn.id = "right-column";
@@ -159,13 +172,8 @@ export class App {
 
     this.loadingScreen = new LoadingScreen(document.body);
     
-    const bottomRow = document.createElement('div');
-    bottomRow.id = "bottom-row";
-    bottomRow.className = `fixed bottom-0 left-0 flex flex-col md:flex-row items-end justify-between align-center ${CSS_CLASSES.main_layout_index}`;
 
-    this.infoBox = new InfoBox(bottomRow);
     this.warningBox = new WarningBox(bottomRow);
-    document.body.appendChild(bottomRow);
 
     this.actionBar = new ActionBar();
   }

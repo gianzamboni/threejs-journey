@@ -29,6 +29,10 @@ export default class Menu extends EventTarget {
     this.sideBar.addContent(footer);
   }
 
+  public addTo(parent: HTMLElement) {
+    this.sideBar.addTo(parent);
+  }
+
   private createExerciseMenu(sidebar: SideBar) {
     const menu = document.createElement('nav');
     menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${CSS_CLASSES.scrollBar}`;

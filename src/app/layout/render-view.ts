@@ -16,10 +16,9 @@ export default class RenderView {
 
   private exercise: Exercise | undefined;
 
-  constructor(parent: HTMLElement) {
+  constructor() {
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'fixed top-0 left-0 z-[0]';
-    parent.appendChild(this.canvas);
 
     this._renderer = new WebGLRenderer({ 
       canvas: this.canvas,
@@ -29,6 +28,10 @@ export default class RenderView {
     this.updateSize();
   }
   
+  addTo(parent: HTMLElement) {
+    parent.appendChild(this.canvas);
+  }
+
   run(exercise: Exercise) {
     this.exercise = exercise;
     if(isAnimated(exercise)) {

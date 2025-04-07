@@ -10,7 +10,7 @@ export class InfoBox {
   private container: HTMLElement;
   private collapsable: Collapsable;
 
-  constructor(parent: HTMLElement) {
+  constructor() {
     this.container = document.createElement('div');
     this.container.setAttribute('id', 'info-box-container');
 
@@ -27,7 +27,9 @@ export class InfoBox {
     });
 
     this.collapsable.addTo(this.container);
+  }
 
+  addTo(parent: HTMLElement) {
     parent.appendChild(this.container);
   }
 
