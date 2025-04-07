@@ -12,9 +12,9 @@ export default class Menu extends EventTarget {
   private sideBar: SideBar;
   private menuContent: HTMLElement;
 
-  constructor(parent: HTMLElement) {
+  constructor() {
     super();
-    this.sideBar = new SideBar(parent, {
+    this.sideBar = new SideBar({
       buttonTitle: `${HAMBURGER_ICON} Demos`,
     });
 

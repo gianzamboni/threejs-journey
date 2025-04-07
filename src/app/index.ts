@@ -32,6 +32,7 @@ export class App {
     const urlParams = new URLSearchParams(window.location.search);
     const quality = urlParams.get('quality');
     this.activeQuality = qualityFromString(quality);
+    this.menu = new Menu();
   }
 
   init() {
@@ -146,7 +147,6 @@ export class App {
   }
 
   private initAllGUIParts() {
-    this.menu = new Menu(document.body);
     this.renderView = new RenderView(document.body);
     
     const rightColumn = document.createElement('div');
