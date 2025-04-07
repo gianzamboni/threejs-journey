@@ -131,9 +131,7 @@ export class AssetLoader extends EventTarget {
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader(this.loadingManager);
     }
-    console.log(options.useDraco)
     if (options.useDraco === true) {
-      console.log(this.dracoLoader)
       if (!this.dracoLoader) {
         this.dracoLoader = new DRACOLoader(this.loadingManager);
         this.dracoLoader.setDecoderPath('/draco/');
