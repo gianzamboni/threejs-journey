@@ -11,9 +11,11 @@ export class Overlay {
     this.element = document.createElement('div');
     this.element.setAttribute('id', 'overlay');
     this.element.className = `fixed top-0 start-0 bottom-0 end-0 ${CSS_CLASSES.overlay_index} bg-black/50 hidden`;
-    document.body.appendChild(this.element);
-
     this.addEventListener = this.element.addEventListener.bind(this.element);
+  }
+
+  addTo(parent: HTMLElement) {
+    parent.appendChild(this.element);
   }
 
   hide() {

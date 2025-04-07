@@ -18,6 +18,8 @@ export default class Menu extends EventTarget {
       buttonTitle: `${HAMBURGER_ICON} Demos`,
     });
 
+    this.sideBar.addTo(document.body);
+
     const header = this.createHeader();
     this.sideBar.addContent(header);
 
