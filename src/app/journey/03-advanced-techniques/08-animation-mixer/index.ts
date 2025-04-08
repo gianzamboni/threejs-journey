@@ -8,13 +8,13 @@ import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
+import IDLE from './icons/idle.svg?raw';
+import RUN from './icons/run.svg?raw';
+import WALK from './icons/walk.svg?raw';
 import { ENV_MAP_CONTROLLERS, LIGHT_CONTROLLERS } from "./ui-controllers";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
-import IDLE from './icons/idle.svg?raw';
-import WALK from './icons/walk.svg?raw';
-import RUN from './icons/run.svg?raw';
 
 type Actions = {
   idle: AnimationAction;
