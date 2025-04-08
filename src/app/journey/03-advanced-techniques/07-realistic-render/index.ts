@@ -31,9 +31,7 @@ type RenderedObject = {
 }
 
 @Exercise('realistic-render')
-@Description([
-  '<strong>Renderer tweaks to get a more realistic render</strong>',
-])
+@Description('<strong>Renderer tweaks to get a more realistic render</strong>')
 export class RealisticRender extends OrbitControlledExercise {
 
   @Customizable(SCENE_CONTROLLERS)

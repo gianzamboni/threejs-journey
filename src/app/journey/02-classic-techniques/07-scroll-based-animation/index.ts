@@ -45,7 +45,7 @@ type Particles = {
 }
 
 @Exercise('scroll-based-animation')
-@Description(["<strong>A scene with based scroll animation to show how a scene can interact with classic web elements.</strong>"])
+@Description("<strong>A scene with based scroll animation to show how a scene can interact with classic web elements.</strong>")
 export class ScrollBasedAnimation extends AnimatedExercise {
 
   private layout: ScrollBasedAnimationLayout;

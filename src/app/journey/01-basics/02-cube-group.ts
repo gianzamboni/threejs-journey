@@ -5,7 +5,10 @@ import BaseExercise from '#/app/journey/exercises/base-exercise';
 import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('object-transformation')
-@Description(["<p><strong>A group of y-scaled cubes in the center of the scene.</strong></p>", "<p>It is <strong>NOT</strong> interactive</p>"])
+@Description(
+  "<p><strong>A group of y-scaled cubes in the center of the scene.</strong></p>",
+  "<p>It is <strong>NOT</strong> interactive</p>"
+)
 export class CubeGroup extends BaseExercise {  
   private group: Group;
   private axesHelper: AxesHelper;

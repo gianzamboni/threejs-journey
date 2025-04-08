@@ -33,7 +33,10 @@ type GalaxyParams = {
 }
 
 @Exercise('galaxy-generator')
-@Description(["<strong>A galaxy generator that creates a galaxy based on the settings.</strong>", "You can configure the galaxy with the hidden ui."])
+@Description(
+  "<strong>A galaxy generator that creates a galaxy based on the settings.</strong>", 
+  "You can configure the galaxy with the hidden ui."
+)
 export class GalaxyGenerator extends OrbitControlledExercise {
   @Customizable(GALAXY_CONFIG)
   private galaxySettings: GalaxyParams = {

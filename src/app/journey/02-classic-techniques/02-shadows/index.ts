@@ -31,7 +31,7 @@ type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>
 //}
 
 @Exercise('Shadows')
-@Description(["<strong>A scene with shadows activated.</strong>"])
+@Description("<strong>A scene with shadows activated.</strong>")
 export class Shadows extends OrbitControlledExercise {
 
   private qualityConfig: QualityConfig;

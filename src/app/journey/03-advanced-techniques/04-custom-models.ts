@@ -18,7 +18,7 @@ import { disposeMesh } from "#/app/utils/three-utils";
 import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
 
 @Exercise("Hamburger")
-@Description(["<strong>A small hamburger model made by me on Blender.</strong>"])
+@Description("<strong>A small hamburger model made by me on Blender.</strong>")
 export class CustomModelTest extends OrbitControlledExercise {
 
   private floor: Mesh;

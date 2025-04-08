@@ -7,7 +7,7 @@ export function Exercise(id: string) {
   }
 }
 
-export function Description(descriptions: string[]) {
+export function Description(...descriptions: string[]) {
   return function<T>(target: T, context: ClassDecoratorContext) {
     if(context.metadata.descriptions === undefined) {
       context.metadata.descriptions = [] as string[];
