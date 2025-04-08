@@ -4,28 +4,18 @@ export class Overlay {
 
   private element: HTMLElement;
 
-  private static instances: Record<string, Overlay> = {};
 
   public addEventListener: typeof HTMLElement.prototype.addEventListener;
-  static getInstance(parent: HTMLElement) {
-    if(parent.id === '')  {
-      throw new Error('Parent element must have an id');
-    }
-    
-    if(Overlay.instances[parent.id] === undefined) {
-      Overlay.instances[parent.id] = new Overlay(parent);
-    }
-    
-    return Overlay.instances[parent.id];
-  }
-
-  private constructor(parent: HTMLElement) {
+  
+  public constructor() {
     this.element = document.createElement('div');
     this.element.setAttribute('id', 'overlay');
     this.element.className = `fixed top-0 start-0 bottom-0 end-0 ${CSS_CLASSES.overlay_index} bg-black/50 hidden`;
-    parent.appendChild(this.element);
-
     this.addEventListener = this.element.addEventListener.bind(this.element);
+  }
+
+  addTo(parent: HTMLElement) {
+    parent.appendChild(this.element);
   }
 
   hide() {

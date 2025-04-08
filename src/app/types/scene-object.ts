@@ -1,17 +1,23 @@
-import * as THREE from 'three';
+import { 
+  Object3D,
+  BufferGeometry,
+  Material,
+  Mesh
+} from 'three';
+
 import { TextureDict } from '../utils/textures';
 
 /**
  * Base class for all scene objects
  */
 export abstract class SceneObject {
-  public abstract object: THREE.Object3D;
+  public abstract object: Object3D;
   public abstract dispose(): void;
 } 
 
 export abstract class MeshObject extends SceneObject {
-  protected abstract geometry: THREE.BufferGeometry;
-  protected abstract material: THREE.Material;
+  protected abstract geometry: BufferGeometry;
+  protected abstract material: Material;
   protected abstract textures: TextureDict;
 
   dispose(): void {
@@ -25,7 +31,7 @@ export abstract class MeshObject extends SceneObject {
 
 export type SceneMeshObject = {
   textures?: TextureDict;
-  geometry: THREE.BufferGeometry;
-  material: THREE.Material;
-  mesh: THREE.Mesh;
+  geometry: BufferGeometry;
+  material: Material;
+  mesh: Mesh;
 }

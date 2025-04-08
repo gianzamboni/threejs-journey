@@ -1,4 +1,9 @@
-import * as THREE from 'three';
+import { 
+  Scene,
+  AmbientLight,
+  DirectionalLight,
+  FogExp2,
+} from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 import { Sky } from 'three/addons/objects/Sky.js';
@@ -8,6 +13,7 @@ import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
+import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { Bushes } from './bushes';
 import { Floor } from './floor';
 import { Ghosts } from './ghosts';
@@ -16,7 +22,6 @@ import { House } from './house';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
 
 import { SceneObject } from '../../../types/scene-object';
-import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 /**
  * Haunted House exercise
@@ -25,13 +30,13 @@ import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 @Description(["<strong>A haunted house with ghosts and a sky.</strong>"])
 export class HauntedHouse extends OrbitControlledExercise {
   private lights: {
-    ambient: THREE.AmbientLight;
-    directional: THREE.DirectionalLight;
+    ambient: AmbientLight;
+    directional: DirectionalLight;
     sky: Sky;
   };
 
   private ghosts: Ghosts;
-  private fog: THREE.FogExp2;
+  private fog: FogExp2;
   private children: SceneObject[];
 
   private quality: QualityConfig;
@@ -42,10 +47,10 @@ export class HauntedHouse extends OrbitControlledExercise {
     super(view);
     this.quality = QUALITY_CONFIG[quality];
 
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
     this.lights = this.createLights();
     this.ghosts = new Ghosts(this.quality);
-    this.fog = new THREE.FogExp2("#04343f", 0.1);
+    this.fog = new FogExp2("#04343f", 0.1);
       
     this.children = [
       new Floor(this.quality),
@@ -70,9 +75,9 @@ export class HauntedHouse extends OrbitControlledExercise {
   /**
    * Create lights for the scene
    */
-  private createLights(): { ambient: THREE.AmbientLight; directional: THREE.DirectionalLight; sky: Sky } {
+  private createLights(): { ambient: AmbientLight; directional: DirectionalLight; sky: Sky } {
     const lights = {
-      ambient: new THREE.AmbientLight(0x86cdff, 0.275),
+      ambient: new AmbientLight(0x86cdff, 0.275),
       directional: this.createDirectionLight(),
       sky: this.createSkyLight(),
     };
@@ -97,8 +102,8 @@ export class HauntedHouse extends OrbitControlledExercise {
   /**
    * Create a directional light
    */
-  private createDirectionLight(): THREE.DirectionalLight {
-    const light = new THREE.DirectionalLight(0x86cdff, 1);
+  private createDirectionLight(): DirectionalLight {
+    const light = new DirectionalLight(0x86cdff, 1);
     light.position.set(3, 2, -8);
     light.castShadow = this.quality.shadows;
     if (this.quality.shadows) {

@@ -1,19 +1,25 @@
-import * as THREE from 'three';
+import { 
+  Group,
+  BoxGeometry,
+  MeshStandardMaterial,
+  Mesh
+} from 'three';
 
 import { randomBetween } from '#/app/utils/random-utils';
-import { QualityConfig } from './quality-config';
 import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
+import { disposeObjects } from '#/app/utils/three-utils';
+import { QualityConfig } from './quality-config';
 
 import { SceneObject } from '../../../types/scene-object';
-import { disposeObjects } from '#/app/utils/three-utils';
+
 /**
  * Graves object for the haunted house scene
  */
 export class Graves extends SceneObject {
-  public object: THREE.Group;
+  public object: Group;
 
-  protected geometry: THREE.BoxGeometry;
-  protected material: THREE.MeshStandardMaterial;
+  protected geometry: BoxGeometry;
+  protected material: MeshStandardMaterial;
   protected textures: TextureDict;
 
   private quality: QualityConfig;
@@ -24,12 +30,12 @@ export class Graves extends SceneObject {
   constructor(quality: QualityConfig) {
     super();
     this.quality = quality;
-    this.geometry = new THREE.BoxGeometry(0.6, 0.8, 0.2, this.quality.subdivisions, this.quality.subdivisions, this.quality.subdivisions);
+    this.geometry = new BoxGeometry(0.6, 0.8, 0.2, this.quality.subdivisions, this.quality.subdivisions, this.quality.subdivisions);
     this.textures = loadTextureMaps('haunted-house/graves', this.quality.textureQuality,
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Arm, TextureMaps.Displacement]
     );
     this.material = this.generateMaterial();
-    this.object = new THREE.Group();
+    this.object = new Group();
     this.generateGraves();
   }
 
@@ -38,7 +44,7 @@ export class Graves extends SceneObject {
    */
   private generateGraves(): void {
     for (let i = 0; i < 30; i++) {
-      const grave = new THREE.Mesh(this.geometry, this.material);
+      const grave = new Mesh(this.geometry, this.material);
       this.setRandomPosition(grave);
       this.setRandomRotation(grave);
 
@@ -52,7 +58,7 @@ export class Graves extends SceneObject {
   /**
    * Set random rotation for a grave
    */
-  private setRandomRotation(grave: THREE.Mesh): void {
+  private setRandomRotation(grave: Mesh): void {
     ['x', 'y', 'z'].forEach(axis => {
       const key = axis as 'x' | 'y' | 'z';
       grave.rotation[key] = randomBetween(-0.2, 0.2);
@@ -62,7 +68,7 @@ export class Graves extends SceneObject {
   /**
    * Set random position for a grave
    */
-  private setRandomPosition(grave: THREE.Mesh): void {
+  private setRandomPosition(grave: Mesh): void {
     const angle = randomBetween(0, Math.PI * 2);
     const radius = randomBetween(3.5, 6);
 
@@ -74,8 +80,8 @@ export class Graves extends SceneObject {
   /**
    * Generate the material for the graves
    */
-  private generateMaterial(): THREE.MeshStandardMaterial {
-    return new THREE.MeshStandardMaterial({
+  private generateMaterial(): MeshStandardMaterial {
+    return new MeshStandardMaterial({
       map: this.textures[TextureMaps.Color],
       aoMap: this.textures[TextureMaps.Arm],
       roughnessMap: this.textures[TextureMaps.Arm],

@@ -1,4 +1,13 @@
-import * as THREE from 'three';
+import { 
+  BufferGeometry,
+  PointsMaterial,
+  Points,
+  Texture,
+  PerspectiveCamera,
+  AdditiveBlending,
+  Color,
+  BufferAttribute
+} from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -39,11 +48,11 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     outsideColor: '#0048bd'
   };
 
-  private geometry: THREE.BufferGeometry | undefined = undefined;
-  private material: THREE.PointsMaterial | undefined = undefined;
-  private points: THREE.Points | undefined = undefined;
+  private geometry: BufferGeometry | undefined = undefined;
+  private material: PointsMaterial | undefined = undefined;
+  private points: Points | undefined = undefined;
 
-  private particleTexture: THREE.Texture;
+  private particleTexture: Texture;
 
   constructor(view: RenderView) {
     super(view);
@@ -52,7 +61,7 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     this.particleTexture = assetLoader.loadTexture('/textures/particles/4.png');
     // Generate initial galaxy
     this.camera.position.set(3,2,3);
-    (this.camera as THREE.PerspectiveCamera).near = 0.001;
+    (this.camera as PerspectiveCamera).near = 0.001;
     this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 0.125;
     this.generateGalaxy();
@@ -77,30 +86,30 @@ export class GalaxyGenerator extends OrbitControlledExercise {
 
     this.geometry = this.generateGalaxyGeometry();
     this.material = this.generateGalaxyMaterial();
-    this.points = new THREE.Points(this.geometry, this.material);
+    this.points = new Points(this.geometry, this.material);
     this.scene.add(this.points);
 
   }
 
   private generateGalaxyMaterial() {
-    return new THREE.PointsMaterial({
+    return new PointsMaterial({
       size: this.galaxySettings.size,
       sizeAttenuation: true,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
       vertexColors: true,
       alphaMap: this.particleTexture
     });
   }
 
   private generateGalaxyGeometry() {
-    const geometry = new THREE.BufferGeometry();
+    const geometry = new BufferGeometry();
     const positions = new Float32Array(this.galaxySettings.count * 3);
     const colors = new Float32Array(this.galaxySettings.count * 3);
     
    
-    const colorInside = new THREE.Color(this.galaxySettings.insideColor);
-    const colorOutside = new THREE.Color(this.galaxySettings.outsideColor);
+    const colorInside = new Color(this.galaxySettings.insideColor);
+    const colorOutside = new Color(this.galaxySettings.outsideColor);
 
     for (let i = 0; i < this.galaxySettings.count; i++) {
       const i3 = i * 3;
@@ -122,8 +131,8 @@ export class GalaxyGenerator extends OrbitControlledExercise {
      colors[i3 + 2] = mixedColor.b;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('position', new BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new BufferAttribute(colors, 3));
     return geometry;
   }
 

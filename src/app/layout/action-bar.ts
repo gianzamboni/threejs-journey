@@ -14,13 +14,6 @@ export class ActionBar {
     this.layoutContainer = document.createElement('div');
     this.layoutContainer.className = `flex mx-5 mb-5 justify-around`;
     this.buttons = [];
-
-    const infoBoxContainer = document.getElementById('info-box-container');
-    if(!infoBoxContainer) {
-      throw new Error('Info box container not found');
-    }
-    infoBoxContainer.insertBefore(this.layoutContainer, infoBoxContainer.firstChild);
-    
   }
 
   addButton(action: Action, target: Exercise) {
@@ -32,6 +25,10 @@ export class ActionBar {
     this.buttons.push(button);
     button.addEventListener('click', action.onClick.bind(target));
     this.layoutContainer.appendChild(button);
+  }
+
+  addTo(parent: HTMLElement) {
+    parent.insertBefore(this.layoutContainer, parent.firstChild);
   }
 
   reset() {

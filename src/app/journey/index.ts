@@ -1,7 +1,7 @@
 import { Section } from "#/app/types/exercise";
+import { BASICS } from "./01-basics";
 import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
-import { BASICS } from "./01-basics";
 
 import { getMetadata } from "../utils/exercise-metadata";
 

@@ -1,4 +1,5 @@
 import { beforeEach, vi } from "vitest";
+
 beforeEach(() => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,

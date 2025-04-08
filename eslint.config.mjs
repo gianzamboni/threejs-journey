@@ -4,18 +4,40 @@ import tseslint from "typescript-eslint";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  {files: ["src/**/*.{js,mjs,cjs,ts}"]},
-  {files: ["src/**/*.js"], languageOptions: {sourceType: "script"}},
-  {languageOptions: { globals: globals.browser }},
+  {
+    ignores: [
+      // Static assets
+      "src/static/**/*",
+      // Build output
+      "dist/**/*",
+      // Node modules
+      "node_modules/**/*",
+      // Other common directories to ignore
+      ".vercel/**/*",
+      ".vscode/**/*",
+      ".git/**/*"
+    ]
+  },
+  { files: ["src/**/*.{js,mjs,cjs,ts}"] },
+  { files: ["src/**/*.js"], languageOptions: { sourceType: "script" } },
+  { languageOptions: { globals: globals.browser } },
   ...tseslint.configs.recommended,
-  {rules: {"@typescript-eslint/no-unused-vars": [
-    "error",
-    {varsIgnorePattern: "^_", argsIgnorePattern: "^_",}
-  ]}},
-  {rules: {"@typescript-eslint/no-explicit-any": [
-    "error",
-    {ignoreRestArgs: true}
-  ]}},
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { varsIgnorePattern: "^_", argsIgnorePattern: "^_" }
+      ]
+    }
+  },
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": [
+        "error",
+        { ignoreRestArgs: true }
+      ]
+    }
+  },
   {
     plugins: {
       import: importPlugin

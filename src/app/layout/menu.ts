@@ -12,11 +12,13 @@ export default class Menu extends EventTarget {
   private sideBar: SideBar;
   private menuContent: HTMLElement;
 
-  constructor(parent: HTMLElement) {
+  constructor() {
     super();
-    this.sideBar = new SideBar(parent, {
+    this.sideBar = new SideBar({
       buttonTitle: `${HAMBURGER_ICON} Demos`,
     });
+
+    this.sideBar.addTo(document.body);
 
     const header = this.createHeader();
     this.sideBar.addContent(header);
@@ -25,6 +27,10 @@ export default class Menu extends EventTarget {
 
     const footer = this.createFooter();
     this.sideBar.addContent(footer);
+  }
+
+  public addTo(parent: HTMLElement) {
+    this.sideBar.addTo(parent);
   }
 
   private createExerciseMenu(sidebar: SideBar) {

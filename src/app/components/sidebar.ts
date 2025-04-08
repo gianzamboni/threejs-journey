@@ -10,23 +10,26 @@ export default class SideBar {
   private sidePanel: HTMLElement;
   private overlay: Overlay;
   private sideBarContent: HTMLElement;
+  private button: HTMLElement;
 
-  constructor(parent: HTMLElement, options: SideBarOptions) {
+  constructor(options: SideBarOptions) {
     this.sidePanel = this.createPanel();
-    parent.appendChild(this.sidePanel);
-
-    this.overlay = Overlay.getInstance(parent);
+    this.overlay = new Overlay();
     this.overlay.addEventListener('click', this.toggleSidePanel.bind(this));
 
     this.sideBarContent = this.createBody();
     this.sidePanel.appendChild(this.sideBarContent);
-
-    const button = this.createButton(options.buttonTitle);
-    parent.appendChild(button);
+    this.button = this.createButton(options.buttonTitle);
   }
 
   addContent(content: HTMLElement) {
     this.sideBarContent.appendChild(content);
+  }
+
+  addTo(parent: HTMLElement) {
+    this.overlay.addTo(parent);
+    parent.appendChild(this.sidePanel);
+    parent.appendChild(this.button);
   }
 
   get opened() {

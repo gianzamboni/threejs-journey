@@ -1,20 +1,31 @@
-import RenderView from "#/app/layout/render-view";
+import { 
+  Mesh,
+  Group,
+  AmbientLight,
+  DirectionalLight,
+  PlaneGeometry,
+  MeshStandardMaterial,
+  PCFSoftShadowMap
+} from 'three';
+
 import { Timer } from 'three/addons/misc/Timer.js';
-import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
+
 import { Description, Exercise } from "#/app/decorators/exercise";
-import * as THREE from 'three';
+import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
+
+import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
 
 @Exercise("Hamburger")
 @Description(["<strong>A small hamburger model made by me on Blender.</strong>"])
 export class CustomModelTest extends OrbitControlledExercise {
 
-  private floor: THREE.Mesh;
-  private ambientLight: THREE.AmbientLight;
-  private directionalLight: THREE.DirectionalLight;
+  private floor: Mesh;
+  private ambientLight: AmbientLight;
+  private directionalLight: DirectionalLight;
 
-  private hamburger: THREE.Group | undefined;
+  private hamburger: Group | undefined;
 
   constructor(view: RenderView) {
     super(view);
@@ -26,13 +37,13 @@ export class CustomModelTest extends OrbitControlledExercise {
 
     this.camera.position.set(-2, 1, 2);
     this.scene.add(this.directionalLight, this.ambientLight, this.floor);
-    view.enableShadows(THREE.PCFSoftShadowMap);
+    view.enableShadows(PCFSoftShadowMap);
   }
 
   private createFloor() {
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(50, 50),
-      new THREE.MeshStandardMaterial({
+    const floor = new Mesh(
+      new PlaneGeometry(50, 50),
+      new MeshStandardMaterial({
         color: '#444444',
         metalness: 0,
         roughness: 0.5
@@ -44,13 +55,13 @@ export class CustomModelTest extends OrbitControlledExercise {
   }
 
   private createAmbientLight() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.4);
+    const ambientLight = new AmbientLight(0xffffff, 2.4);
     return ambientLight;
   }
 
 
   private createDirectionalLight() {
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
+    const directionalLight = new DirectionalLight(0xffffff, 1.8);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.set(2048, 2048);
     directionalLight.shadow.camera.far = 15;
@@ -84,7 +95,7 @@ export class CustomModelTest extends OrbitControlledExercise {
 
     if (this.hamburger) {
       this.hamburger.children.forEach((child) => {
-        disposeMesh(child as THREE.Mesh);
+        disposeMesh(child as Mesh);
       });
     }
   }

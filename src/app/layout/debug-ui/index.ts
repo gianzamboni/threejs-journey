@@ -16,12 +16,15 @@ export default class DebugUI {
 
   private lilGui: GUI | null = null;
 
-  constructor(parent: HTMLElement) {
+  constructor() {
     this.container = document.createElement('div');
     this.container.className = `text-white justify-items-end hidden`;
     this.container.innerHTML = ``;
-    parent.appendChild(this.container);
     this.lastGuiUpdate = performance.now();
+  }
+
+  addTo(parent: HTMLElement) {
+    parent.appendChild(this.container);
   }
 
   toggle(activeExercise: Exercise) {

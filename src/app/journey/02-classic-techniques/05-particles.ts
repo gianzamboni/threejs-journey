@@ -1,4 +1,13 @@
-import * as THREE from 'three';
+import { 
+  Scene,
+  BufferGeometry,
+  Texture,
+  PointsMaterial,
+  Points,
+  BufferAttribute,
+  Color,
+  AdditiveBlending
+} from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -15,10 +24,10 @@ import { disposeObjects } from '#/app/utils/three-utils';
 @Exercise('particles')
 @Description(["<strong>Random generated particles that move in sine wave like movement.</strong>"])
 export class Particles extends OrbitControlledExercise {
-  private particleGeometry: THREE.BufferGeometry;
-  private particleTexture: THREE.Texture;
-  private pointMaterial: THREE.PointsMaterial;
-  private particles: THREE.Points;
+  private particleGeometry: BufferGeometry;
+  private particleTexture: Texture;
+  private pointMaterial: PointsMaterial;
+  private particles: Points;
   private count: number;
 
   /**
@@ -28,7 +37,7 @@ export class Particles extends OrbitControlledExercise {
     super(view);
     this.count = 6250;
 
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
     this.particleGeometry = this.createParticleGeometry();
     this.particleTexture = this.createParticleTexture();
     this.pointMaterial = this.createPointMaterial();
@@ -43,8 +52,8 @@ export class Particles extends OrbitControlledExercise {
   /**
    * Setup particles geometry, material and mesh
    */
-  private createParticleGeometry(): THREE.BufferGeometry {
-    const geometry = new THREE.BufferGeometry();
+  private createParticleGeometry(): BufferGeometry {
+    const geometry = new BufferGeometry();
 
     const positions = new Float32Array(this.count * 3);
     const colors = new Float32Array(this.count * 3);
@@ -53,31 +62,31 @@ export class Particles extends OrbitControlledExercise {
       colors[i] = Math.random();
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('position', new BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new BufferAttribute(colors, 3));
 
     return geometry; 
   }
 
-  private createParticleTexture(): THREE.Texture {
+  private createParticleTexture(): Texture {
     const assetLoader = AssetLoader.getInstance();
     return assetLoader.loadTexture('/textures/particles/4.png');
   }
 
-  private createParticles(): THREE.Points {
-    const particles = new THREE.Points(this.particleGeometry, this.pointMaterial);
+  private createParticles(): Points {
+    const particles = new Points(this.particleGeometry, this.pointMaterial);
     return particles;
   }
 
-  private createPointMaterial(): THREE.PointsMaterial {
-    return new THREE.PointsMaterial({
+  private createPointMaterial(): PointsMaterial {
+    return new PointsMaterial({
       size: 0.1,
       sizeAttenuation: true,
       transparent: true,
-      color: new THREE.Color("#ffa8db"),
+      color: new Color("#ffa8db"),
       alphaMap: this.particleTexture,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: AdditiveBlending,
       vertexColors: true,
     });
   }

@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import { Mesh, MeshBasicMaterial, BufferGeometry, BufferAttribute } from "three";
 
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
@@ -9,15 +9,15 @@ import { disposeMesh } from "#/app/utils/three-utils";
 @Description(["<strong>A bunch of random generated triangles.</strong>"])
 export class RandomTriangles extends OrbitControlledExercise {
  
-  private triangles: THREE.Mesh;
+  private triangles: Mesh;
 
   constructor(view: RenderView) {
     super(view);
     this.enableAutoRotation();
     
     const geometry = this.generateTriangleGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-    this.triangles = new THREE.Mesh(geometry, material);
+    const material = new MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.triangles = new Mesh(geometry, material);
 
     this.camera.position.y = 1;
     this.camera.position.z = 1;
@@ -26,14 +26,14 @@ export class RandomTriangles extends OrbitControlledExercise {
   }
   
   generateTriangleGeometry() {
-    const geometry = new THREE.BufferGeometry();
+    const geometry = new BufferGeometry();
     const count = 50;
     const positionsArray = new Float32Array(count * 3 * 3);
     for (let i = 0; i < count * 3 * 3; i++) {
       positionsArray[i] = (Math.random() - 0.5) * 4;
     }
 
-    const bufferAtrribute = new THREE.BufferAttribute(positionsArray, 3);
+    const bufferAtrribute = new BufferAttribute(positionsArray, 3);
     geometry.setAttribute('position', bufferAtrribute)
     return geometry;
   }

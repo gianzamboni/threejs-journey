@@ -1,8 +1,13 @@
-import * as THREE from 'three';
+import { 
+  PlaneGeometry,
+  MeshStandardMaterial,
+  Mesh,
+  RepeatWrapping
+} from 'three';
 
 import { AssetLoader } from '#/app/utils/assets-loader';
-import { QualityConfig } from './quality-config';
 import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
+import { QualityConfig } from './quality-config';
 
 import { MeshObject } from '../../../types/scene-object';
 
@@ -11,10 +16,10 @@ import { MeshObject } from '../../../types/scene-object';
  */
 export class Floor extends MeshObject {
 
-  protected geometry: THREE.PlaneGeometry;
-  protected material: THREE.MeshStandardMaterial;
+  protected geometry: PlaneGeometry;
+  protected material: MeshStandardMaterial;
   protected textures: TextureDict;
-  public object: THREE.Mesh;
+  public object: Mesh;
 
   private quality: QualityConfig;
 
@@ -24,11 +29,11 @@ export class Floor extends MeshObject {
   constructor(quality: QualityConfig) {
     super();
     this.quality = quality;
-    this.geometry = new THREE.PlaneGeometry(20, 20, 100, 100);
+    this.geometry = new PlaneGeometry(20, 20, 100, 100);
     this.textures = this.loadTextures();
     this.material = this.generateMaterial();
   
-    this.object = new THREE.Mesh(this.geometry, this.material);
+    this.object = new Mesh(this.geometry, this.material);
     this.object.rotation.x = -Math.PI * 0.5;
     this.object.receiveShadow = this.quality.shadows;
   }
@@ -36,8 +41,8 @@ export class Floor extends MeshObject {
   /**
    * Generate the material for the floor
    */
-  private generateMaterial(): THREE.MeshStandardMaterial {
-    return new THREE.MeshStandardMaterial({
+  private generateMaterial(): MeshStandardMaterial {
+    return new MeshStandardMaterial({
       transparent: true,
       alphaMap: this.textures[TextureMaps.Alpha],
       map: this.textures[TextureMaps.Color],
@@ -60,8 +65,8 @@ export class Floor extends MeshObject {
     
     for(const texture of Object.values(textures)) {
       texture.repeat.set(4, 4);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
+      texture.wrapS = RepeatWrapping;
+      texture.wrapT = RepeatWrapping;
     }
 
     const assetLoader = AssetLoader.getInstance();

@@ -1,5 +1,5 @@
-import { Timer } from 'three/addons/misc/Timer.js';
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { WithOrbitControllerDescription } from '#/app/decorators/exercise';
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";

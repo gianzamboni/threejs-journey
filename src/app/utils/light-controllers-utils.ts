@@ -1,16 +1,23 @@
-import * as THREE from 'three';
+import { 
+  AmbientLight,
+  DirectionalLight,
+  HemisphereLight,
+  PointLight,
+  RectAreaLight,
+  SpotLight
+} from 'three';
 
 import { printable } from "./text-utils"
 
 import { ControllerConfig } from '../decorators/customizable';
 
 export type Lights = {
-  ambient: THREE.AmbientLight,
-  directional: THREE.DirectionalLight,
-  hemisphere: THREE.HemisphereLight,
-  point: THREE.PointLight,
-  rectArea: THREE.RectAreaLight,
-  spot: THREE.SpotLight
+  ambient: AmbientLight,
+  directional: DirectionalLight,
+  hemisphere: HemisphereLight,
+  point: PointLight,
+  rectArea: RectAreaLight,
+  spot: SpotLight
 }
 
 export type LightType = keyof Lights;

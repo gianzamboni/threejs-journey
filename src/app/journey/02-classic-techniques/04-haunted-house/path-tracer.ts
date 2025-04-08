@@ -1,26 +1,36 @@
+import { 
+  Object3D,
+  LineBasicMaterial,
+  Vector3,
+  Group,
+  ColorRepresentation,
+  Scene,
+  BufferGeometry,
+  Line
+} from 'three';
+
 import { disposeMesh } from '#/app/utils/three-utils';
-import * as THREE from 'three';
 
 /**
  * Utility class to trace the path of an object in 3D space
  */
 export class PathTracer {
-  private obj: THREE.Object3D;
-  private material: THREE.LineBasicMaterial;
-  private path: THREE.Vector3[];
-  public mesh: THREE.Group;
+  private obj: Object3D;
+  private material: LineBasicMaterial;
+  private path: Vector3[];
+  public mesh: Group;
 
-  constructor(obj: THREE.Object3D, color: THREE.ColorRepresentation) {
+  constructor(obj: Object3D, color: ColorRepresentation) {
     this.obj = obj;
-    this.material = new THREE.LineBasicMaterial({ color });
+    this.material = new LineBasicMaterial({ color });
     this.path = [obj.position.clone()];
-    this.mesh = new THREE.Group();
+    this.mesh = new Group();
   }
 
   /**
    * Add the path tracer to a scene
    */
-  addTo(scene: THREE.Scene): void {
+  addTo(scene: Scene): void {
     scene.add(this.mesh);
   }
 
@@ -30,11 +40,11 @@ export class PathTracer {
   update(): void {
     const lastPositionIndex = this.path.length - 1;
     this.path.push(this.obj.position.clone());
-    const geometry = new THREE.BufferGeometry().setFromPoints([
+    const geometry = new BufferGeometry().setFromPoints([
       this.path[lastPositionIndex], 
       this.path[lastPositionIndex + 1]
     ]);
-    const line = new THREE.Line(geometry, this.material);
+    const line = new Line(geometry, this.material);
     this.mesh.add(line);
     
     // Limit the number of line segments to prevent performance issues
@@ -48,7 +58,7 @@ export class PathTracer {
    */
   dispose(): void {
     this.mesh.children.forEach((child) => {
-      const line = child as THREE.Line;
+      const line = child as Line;
       disposeMesh(line);
     });
   }

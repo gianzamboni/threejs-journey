@@ -1,19 +1,23 @@
-import * as THREE from "three";
+import { 
+  ShadowMapType,
+  BasicShadowMap,
+  PCFSoftShadowMap
+} from "three";
 
 import { Quality } from "#/app/layout/quality-selector";
 
 export type QualityConfig = {
-  shadowMapType: THREE.ShadowMapType;
+  shadowMapType: ShadowMapType;
   sphereSubdivisions: number;
 }
 
 export const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
   [Quality.Low]: {
-    shadowMapType: THREE.BasicShadowMap,
+    shadowMapType: BasicShadowMap,
     sphereSubdivisions: 16
   },
   [Quality.High]: {
-    shadowMapType: THREE.PCFSoftShadowMap,
+    shadowMapType: PCFSoftShadowMap,
     sphereSubdivisions: 32
   }
 } 

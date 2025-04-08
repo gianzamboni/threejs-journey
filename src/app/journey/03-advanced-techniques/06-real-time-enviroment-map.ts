@@ -1,12 +1,28 @@
-import * as THREE from "three";
+import { 
+  Mesh,
+  Group,
+  Texture,
+  Scene,
+  WebGLCubeRenderTarget,
+  CubeCamera,
+  TorusKnotGeometry,
+  MeshStandardMaterial,
+  TorusGeometry,
+  MeshBasicMaterial,
+  Color,
+  FloatType,
+  SRGBColorSpace,
+  EquirectangularReflectionMapping
+} from "three";
 
+import { Timer } from "three/examples/jsm/Addons.js";
+
+import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
-import { Timer } from "three/examples/jsm/Addons.js";
-import { DebugFPS } from "#/app/decorators/debug";
 
 @Exercise("real-time-enviroment-map")
 @Description([
@@ -14,17 +30,17 @@ import { DebugFPS } from "#/app/decorators/debug";
 ])
 export class RealTimeEnviromentMap extends OrbitControlledExercise {
 
-  private torusKnot: THREE.Mesh;
+  private torusKnot: Mesh;
 
-  private helmet: THREE.Group | undefined;
-  private holyDonut: THREE.Mesh;
+  private helmet: Group | undefined;
+  private holyDonut: Mesh;
 
-  private envMap: THREE.Texture;
+  private envMap: Texture;
 
-  public _scene: THREE.Scene;
+  public _scene: Scene;
 
-  private cubeRenderTarget: THREE.WebGLCubeRenderTarget;
-  private cubeCamera: THREE.CubeCamera;
+  private cubeRenderTarget: WebGLCubeRenderTarget;
+  private cubeCamera: CubeCamera;
 
   constructor(view: RenderView) {
     super(view);
@@ -45,29 +61,29 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
     this.scene.backgroundBlurriness = 0;
     this.scene.backgroundIntensity = 1;
 
-    this.cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {	
-      type: THREE.FloatType,
+    this.cubeRenderTarget = new WebGLCubeRenderTarget(256, {	
+      type: FloatType,
     });
 
-    this.cubeCamera = new THREE.CubeCamera(0.1, 100, this.cubeRenderTarget);
+    this.cubeCamera = new CubeCamera(0.1, 100, this.cubeRenderTarget);
     this.cubeCamera.layers.set(1);
 
     this.scene.environment = this.cubeRenderTarget.texture;
   }
 
   createTorusKnot() {
-    const geometry = new THREE.TorusKnotGeometry(1, 0.4, 100, 16);
-    const material = new THREE.MeshStandardMaterial({ roughness: 0, metalness: 1, color: 0xaaaaaa });
-    const mesh = new THREE.Mesh(geometry, material);
+    const geometry = new TorusKnotGeometry(1, 0.4, 100, 16);
+    const material = new MeshStandardMaterial({ roughness: 0, metalness: 1, color: 0xaaaaaa });
+    const mesh = new Mesh(geometry, material);
     mesh.position.y = 4;
     mesh.position.x = -4;
     return mesh;
   }
 
   createHolyDonut() {
-    const geometry = new THREE.TorusGeometry(8, 0.5);
-    const material = new THREE.MeshBasicMaterial({ color: new THREE.Color(10, 4, 2) });
-    const mesh = new THREE.Mesh(geometry, material);
+    const geometry = new TorusGeometry(8, 0.5);
+    const material = new MeshBasicMaterial({ color: new Color(10, 4, 2) });
+    const mesh = new Mesh(geometry, material);
     mesh.position.y = 3.5;
     mesh.layers.set(1);
     return mesh;
@@ -87,8 +103,8 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
   loadBackgroundTexture() {
     const loader = AssetLoader.getInstance();
     const map = loader.loadTexture('env-maps/blockade-skylab/kitchen.jpg');
-    map.colorSpace = THREE.SRGBColorSpace;
-    map.mapping = THREE.EquirectangularReflectionMapping;
+    map.colorSpace = SRGBColorSpace;
+    map.mapping = EquirectangularReflectionMapping;
     this.scene.background = map;
     return map;
   }
@@ -107,7 +123,7 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
     disposeMesh(this.torusKnot, this.holyDonut);
     if (this.helmet) {
       this.helmet.children.forEach((child) => {
-        disposeMesh(child as THREE.Mesh);
+        disposeMesh(child as Mesh);
       });
     }
   }

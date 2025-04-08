@@ -1,4 +1,9 @@
-import * as THREE from 'three';
+import { 
+  WebGLRenderer,
+  ShadowMapType,
+  NoToneMapping,
+  PCFShadowMap
+} from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { Exercise } from '#/app/types/exercise';
@@ -7,23 +12,30 @@ import { isAnimated } from '#/app/utils/exercise-metadata';
 export default class RenderView {
 
   public canvas: HTMLElement;
-  private _renderer: THREE.WebGLRenderer;
+  private _renderer: WebGLRenderer;
 
   private exercise: Exercise | undefined;
 
-  constructor(parent: HTMLElement) {
+  constructor() {
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'fixed top-0 left-0 z-[0]';
-    parent.appendChild(this.canvas);
 
-    this._renderer = new THREE.WebGLRenderer({ 
+    this._renderer = new WebGLRenderer({ 
       canvas: this.canvas,
       antialias: window.devicePixelRatio < 2,
+    });
+
+    window.addEventListener('resize', () => {
+      this.updateSize();
     });
 
     this.updateSize();
   }
   
+  addTo(parent: HTMLElement) {
+    parent.appendChild(this.canvas);
+  }
+
   run(exercise: Exercise) {
     this.exercise = exercise;
     if(isAnimated(exercise)) {
@@ -54,13 +66,15 @@ export default class RenderView {
     }
   }
 
-  enableShadows(shadowMapType: THREE.ShadowMapType) {
+  enableShadows(shadowMapType: ShadowMapType) {
     this._renderer.shadowMap.enabled = true;
     this._renderer.shadowMap.type = shadowMapType;
   }
 
   reset() {
     this._renderer.shadowMap.enabled = false;
+    this._renderer.shadowMap.type = PCFShadowMap;
+    this._renderer.toneMapping = NoToneMapping;
   }
 
   get renderer() {

@@ -1,18 +1,23 @@
-import * as THREE from 'three';
+import { 
+  Group,
+  SphereGeometry,
+  MeshStandardMaterial,
+  Mesh
+} from 'three';
 
+import { MeshObject } from '#/app/types/scene-object';
+import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 import { QualityConfig } from './quality-config';
 
-import { MeshObject } from '../../../types/scene-object';
-import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 
 /**
  * Bushes object for the haunted house scene
  */
 export class Bushes extends MeshObject {
-  public object: THREE.Group;
+  public object: Group;
 
-  protected geometry: THREE.SphereGeometry;
-  protected material: THREE.MeshStandardMaterial;
+  protected geometry: SphereGeometry;
+  protected material: MeshStandardMaterial;
   protected textures: TextureDict;
 
   private quality: QualityConfig;
@@ -22,12 +27,12 @@ export class Bushes extends MeshObject {
   constructor(quality: QualityConfig) {
     super();
     this.quality = quality;
-    this.geometry = new THREE.SphereGeometry(1, this.quality.subdivisions, this.quality.subdivisions);
+    this.geometry = new SphereGeometry(1, this.quality.subdivisions, this.quality.subdivisions);
     this.textures = loadTextureMaps('haunted-house/bushes', this.quality.textureQuality,
       [TextureMaps.Color, TextureMaps.Normal, TextureMaps.Ao, TextureMaps.Displacement, TextureMaps.Roughness]
     );
     this.material = this.generateMaterial();
-    this.object = new THREE.Group();
+    this.object = new Group();
     this.generateBushes();
   }
 
@@ -36,7 +41,7 @@ export class Bushes extends MeshObject {
    */
   private generateBushes(): void {
     for (let i = 0; i < 4; i++) {
-      const bush = new THREE.Mesh(this.geometry, this.material);
+      const bush = new Mesh(this.geometry, this.material);
       bush.rotation.x = -0.75;
       bush.castShadow = false;
       bush.receiveShadow = this.quality.shadows;
@@ -60,8 +65,8 @@ export class Bushes extends MeshObject {
   /**
    * Generate the material for the bushes
    */
-  private generateMaterial(): THREE.MeshStandardMaterial {
-    return new THREE.MeshStandardMaterial({
+  private generateMaterial(): MeshStandardMaterial {
+    return new MeshStandardMaterial({
       color: "#dfdfdf",
       map: this.textures[TextureMaps.Color],
       aoMap: this.textures[TextureMaps.Ao],

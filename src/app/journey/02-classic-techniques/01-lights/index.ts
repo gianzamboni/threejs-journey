@@ -1,4 +1,22 @@
-import * as THREE from 'three';
+import { 
+  AmbientLight,
+  DirectionalLight,
+  DirectionalLightHelper,
+  HemisphereLight,
+  PointLight,
+  PointLightHelper,
+  RectAreaLight,
+  SpotLight,
+  SpotLightHelper,
+  MeshStandardMaterial,
+  Mesh,
+  SphereGeometry,
+  BoxGeometry,
+  TorusGeometry,
+  PlaneGeometry,
+  Vector3,
+  Color
+} from 'three';
 
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
@@ -12,14 +30,15 @@ import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
 import { Position3D } from '#/app/types/exercise';
 import { Lights, LightType } from '#/app/utils/light-controllers-utils';
+import { disposeObjects } from '#/app/utils/three-utils';
 import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
-import { disposeObjects } from '#/app/utils/three-utils';
- type Helpers = {
-  directional: THREE.DirectionalLightHelper,
-  point: THREE.PointLightHelper,
+
+type Helpers = {
+  directional: DirectionalLightHelper,
+  point: PointLightHelper,
   rectArea: RectAreaLightHelper,
-  spot: THREE.SpotLightHelper
+  spot: SpotLightHelper
 }
 
 type HelperStatusDict = Record<keyof Helpers, boolean>;
@@ -29,9 +48,9 @@ export type LightTypeHelper = keyof Helpers;
 @Description(["<strong>A scene with each type of light offered by Three.js.</strong>"])
 export class LightsExercise extends OrbitControlledExercise {
   private quality: QualityConfig;
-  private material: THREE.MeshStandardMaterial;
-  private animatedObjects: THREE.Mesh[];
-  private plane: THREE.Mesh;
+  private material: MeshStandardMaterial;
+  private animatedObjects: Mesh[];
+  private plane: Mesh;
 
   @Customizable(LIGHTS_CONFIG)
   private lights: Lights;
@@ -45,7 +64,7 @@ export class LightsExercise extends OrbitControlledExercise {
     super(view);
     this.quality = QUALITY_CONFIG[quality];
     this.camera.position.set(2, 1, 3);
-    this.material = new THREE.MeshStandardMaterial();
+    this.material = new MeshStandardMaterial();
     this.material.roughness = 0.4;
 
     this.animatedObjects = this.createAnimatedObjects();
@@ -110,25 +129,25 @@ export class LightsExercise extends OrbitControlledExercise {
    */
   updateColor(color: string, { lightType }: {lightType: LightType}) {
     const light = this.lights[lightType];
-    light.color.set(new THREE.Color(color));
+    light.color.set(new Color(color));
   }
 
   updateGroundColor(color: string) {
-    this.lights.hemisphere.groundColor.set(new THREE.Color(color));
+    this.lights.hemisphere.groundColor.set(new Color(color));
   }
 
   updateLookAt(_: number, { target }: { target: Position3D }) {
-    const newTarget = new THREE.Vector3(target.x, target.y, target.z);
+    const newTarget = new Vector3(target.x, target.y, target.z);
     this.lights.rectArea.lookAt(newTarget);
   }
   
   createAnimatedObjects() {
     const geometries = [
-      new THREE.SphereGeometry(0.5, this.quality.sphereSegments, this.quality.sphereSegments),
-      new THREE.BoxGeometry(0.75, 0.75, 0.75, 1, 1, 1),
-      new THREE.TorusGeometry(0.3, 0.2, this.quality.torus.radialSegments, this.quality.torus.tubularSegments),
+      new SphereGeometry(0.5, this.quality.sphereSegments, this.quality.sphereSegments),
+      new BoxGeometry(0.75, 0.75, 0.75, 1, 1, 1),
+      new TorusGeometry(0.3, 0.2, this.quality.torus.radialSegments, this.quality.torus.tubularSegments),
     ]
-    const objects = geometries.map(geometry => new THREE.Mesh(geometry, this.material));
+    const objects = geometries.map(geometry => new Mesh(geometry, this.material));
 
     objects[0].position.x = -1.5;
     objects[2].position.x = 1.5;
@@ -137,7 +156,7 @@ export class LightsExercise extends OrbitControlledExercise {
   }
 
   createPlane() {
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5, 1, 1), this.material);
+    const plane = new Mesh(new PlaneGeometry(5, 5, 1, 1), this.material);
     plane.rotation.x = -Math.PI * 0.5;
     plane.position.y = -0.65;
     return plane;
@@ -145,12 +164,12 @@ export class LightsExercise extends OrbitControlledExercise {
 
   createLights() {
     const lights = {
-      ambient: new THREE.AmbientLight(0xffffff, 0.2),
-      directional: new THREE.DirectionalLight(0x00fffc, 0.9),
-      hemisphere: new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.9),
-      point: new THREE.PointLight(0xff9000, 1.5, 0, 2/*0, 2*/),
-      rectArea: new THREE.RectAreaLight(0x4e00ff, 6, 1, 1),
-      spot: new THREE.SpotLight(0x78ff00, 4.5, 5, Math.PI * 0.1, 0.25, 1)
+      ambient: new AmbientLight(0xffffff, 0.2),
+      directional: new DirectionalLight(0x00fffc, 0.9),
+      hemisphere: new HemisphereLight(0xff0000, 0x0000ff, 0.9),
+      point: new PointLight(0xff9000, 1.5, 0, 2/*0, 2*/),
+      rectArea: new RectAreaLight(0x4e00ff, 6, 1, 1),
+      spot: new SpotLight(0x78ff00, 4.5, 5, Math.PI * 0.1, 0.25, 1)
     };
 
     lights.directional.position.set(1, 0, 0);
@@ -167,10 +186,10 @@ export class LightsExercise extends OrbitControlledExercise {
 
   createLightHelpers() : [Helpers, HelperStatusDict] {
     const helpers = {
-      directional: new THREE.DirectionalLightHelper(this.lights.directional, 0.2),
-      point: new THREE.PointLightHelper(this.lights.point, 0.2),
+      directional: new DirectionalLightHelper(this.lights.directional, 0.2),
+      point: new PointLightHelper(this.lights.point, 0.2),
       rectArea: new RectAreaLightHelper(this.lights.rectArea),
-      spot: new THREE.SpotLightHelper(this.lights.spot)
+      spot: new SpotLightHelper(this.lights.spot)
     }
 
     const status = Object.keys(helpers).reduce((acc, key) => {

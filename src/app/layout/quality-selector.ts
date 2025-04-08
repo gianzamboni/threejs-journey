@@ -19,7 +19,7 @@ export class QualitySelector extends EventTarget {
   private qualitySelector: HTMLDivElement;
   private selectedQuality: Quality = Quality.High;
 
-  constructor(parent: HTMLElement, defaultQuality: Quality) {
+  constructor(defaultQuality: Quality) {
     super();
     this.selectedQuality = defaultQuality;
     this.qualitySelector = document.createElement('div');
@@ -46,7 +46,9 @@ export class QualitySelector extends EventTarget {
       }
       select.appendChild(optionElement);
     }
+  }
 
+  addTo(parent: HTMLElement) {
     parent.appendChild(this.qualitySelector);
   }
 
