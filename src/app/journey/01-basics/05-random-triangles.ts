@@ -6,7 +6,7 @@ import RenderView from "#/app/layout/render-view";
 import { disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise('random-triangles')
-@Description(["<strong>A bunch of random generated triangles.</strong>"])
+@Description("<strong>A bunch of random generated triangles.</strong>")
 export class RandomTriangles extends OrbitControlledExercise {
  
   private triangles: Mesh;

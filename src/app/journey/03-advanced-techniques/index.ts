@@ -6,6 +6,8 @@ import { CustomModelTest } from "./04-custom-models";
 import { GroundedSkyboxTest } from "./05-grounded-skybox";
 import { RealTimeEnviromentMap } from "./06-real-time-enviroment-map.ts";
 import { RealisticRender } from "./07-realistic-render";
+import { AnimationMixerTest } from "./08-animation-mixer/index.ts";
+
 export const ADVANCED_TECHNIQUES: Section = {
   id: 'advanced-techniques',
   exercises: [
@@ -15,6 +17,7 @@ export const ADVANCED_TECHNIQUES: Section = {
     CustomModelTest,
     GroundedSkyboxTest,
     RealTimeEnviromentMap,
-    RealisticRender
+    RealisticRender,
+    AnimationMixerTest
   ]
 }

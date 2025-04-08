@@ -6,7 +6,7 @@ import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/utils/assets-loader';
 import { disposeObjects } from '#/app/utils/three-utils';
 @Exercise('textures')
-@Description(["<strong>A cube with a Minecraft texture.</strong>"])
+@Description("<strong>A cube with a Minecraft texture.</strong>")
 export class TextureTest extends OrbitControlledExercise {
   private minecraftTexture: Texture;
   private geometry: BoxGeometry;

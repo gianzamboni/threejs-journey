@@ -22,10 +22,10 @@ import MASK from './icons/mask.svg?raw';
 import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
 
 @Exercise('imported-models')
-@Description([
+@Description(
   "<p><strong>Imported models I downloaded from Three.js Journey website.</strong></p>", 
   "<p>You can load a duck, a fox or a mask.</p>"
-])
+)
 export default class ImportedModels extends OrbitControlledExercise {
 
   private floor: Mesh;

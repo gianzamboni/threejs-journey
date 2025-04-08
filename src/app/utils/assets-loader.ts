@@ -112,8 +112,8 @@ export class AssetLoader extends EventTarget {
     }, undefined, () => this.onError(url));
   }
 
-  loadCubeTexture(folder: string) {
-    const urls = ['px', 'nx', 'py', 'ny', 'pz', 'nz'].map(suffix => `${folder}/${suffix}.png`);
+  loadCubeTexture(folder: string, extension: string = 'png') {
+    const urls = ['px', 'nx', 'py', 'ny', 'pz', 'nz'].map(suffix => `${folder}/${suffix}.${extension}`);
     if (!this.cubeTextureLoader) {
       this.cubeTextureLoader = new CubeTextureLoader(this.loadingManager);
     }

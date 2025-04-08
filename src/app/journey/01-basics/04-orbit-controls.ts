@@ -6,7 +6,7 @@ import RenderView from "#/app/layout/render-view";
 import { createRedCube, disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise('cameras')
-@Description(["<strong>Just a cube. This demo shows how you can control a camera with a mouse.</strong>"])
+@Description("<strong>Just a cube. This demo shows how you can control a camera with a mouse.</strong>")
 export class OrbitControlsTest extends OrbitControlledExercise {
   private cube: Mesh;
 

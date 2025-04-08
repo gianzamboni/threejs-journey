@@ -2,12 +2,25 @@ import {
   WebGLRenderer,
   ShadowMapType,
   NoToneMapping,
-  PCFShadowMap
+  PCFShadowMap,
+  ToneMapping
 } from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { Exercise } from '#/app/types/exercise';
 import { isAnimated } from '#/app/utils/exercise-metadata';
+
+type RenderConfig = {
+  shadowMap?: {
+    enabled: boolean,
+    type: ShadowMapType
+  },
+  tone?: {
+    mapping: ToneMapping,
+    exposure?: number,
+  },
+  clearColor?: string,
+}
 
 export default class RenderView {
 
@@ -66,6 +79,24 @@ export default class RenderView {
     }
   }
 
+  setRender(renderConfig: RenderConfig) {
+    if(renderConfig.shadowMap) {
+      this._renderer.shadowMap.enabled = renderConfig.shadowMap.enabled;
+      this._renderer.shadowMap.type = renderConfig.shadowMap.type;
+    }
+
+    if(renderConfig.tone) {
+      this._renderer.toneMapping = renderConfig.tone.mapping;
+      if(renderConfig.tone.exposure) {
+        this._renderer.toneMappingExposure = renderConfig.tone.exposure;
+      }
+    }
+
+    if(renderConfig.clearColor) {
+      this._renderer.setClearColor(renderConfig.clearColor);
+    }
+  }
+
   enableShadows(shadowMapType: ShadowMapType) {
     this._renderer.shadowMap.enabled = true;
     this._renderer.shadowMap.type = shadowMapType;
@@ -75,6 +106,8 @@ export default class RenderView {
     this._renderer.shadowMap.enabled = false;
     this._renderer.shadowMap.type = PCFShadowMap;
     this._renderer.toneMapping = NoToneMapping;
+    this._renderer.toneMappingExposure = 1;
+    this._renderer.setClearColor('#000000');
   }
 
   get renderer() {

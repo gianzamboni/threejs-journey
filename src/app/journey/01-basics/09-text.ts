@@ -16,7 +16,7 @@ import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('text-3d')
-@Description(["<strong>A bunch of donuts and a text in 3D.</strong>"])
+@Description("<strong>A bunch of donuts and a text in 3D.</strong>")
 export class Text3D extends OrbitControlledExercise {
   private loader: AssetLoader;
 

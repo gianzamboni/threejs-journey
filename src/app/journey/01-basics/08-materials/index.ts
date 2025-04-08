@@ -24,7 +24,10 @@ import { QUALITY_CONFIG } from './quality-config';
 import { QualityConfig } from './quality-config';
 
 @Exercise('materials')
-@Description(["<p><strong>Some objects with physical materials.</strong></p>", "<p>You can customize the material with the hidden ui</p>"])
+@Description(
+  "<p><strong>Some objects with physical materials.</strong></p>",
+  "<p>You can customize the material with the hidden ui</p>"
+)
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
