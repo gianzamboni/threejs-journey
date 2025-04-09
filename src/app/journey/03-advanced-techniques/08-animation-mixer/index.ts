@@ -1,20 +1,33 @@
-import { AnimationAction, AnimationMixer, CineonToneMapping, CircleGeometry, CubeTexture, DirectionalLight, Mesh, MeshStandardMaterial, PCFSoftShadowMap, RepeatWrapping, SRGBColorSpace } from "three";
+import { 
+  AnimationAction, 
+  AnimationMixer, 
+  CineonToneMapping, 
+  CircleGeometry, 
+  CubeTexture, 
+  DirectionalLight, 
+  Mesh, 
+  MeshStandardMaterial, 
+  RepeatWrapping, 
+  SRGBColorSpace 
+} from "three";
 
 import { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
+import { DebugFPS } from "#/app/decorators/debug";
 import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
+import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/utils/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import IDLE from './icons/idle.svg?raw';
 import RUN from './icons/run.svg?raw';
 import WALK from './icons/walk.svg?raw';
+import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 import { ENV_MAP_CONTROLLERS, LIGHT_CONTROLLERS } from "./ui-controllers";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-
 
 type Actions = {
   idle: AnimationAction;
@@ -25,27 +38,24 @@ type Actions = {
 @Exercise('animation-mixer')
 @Description('<strong>A fox with multiple animation. Select whichever you desire with the buttons above</strong>')
 export class AnimationMixerTest extends OrbitControlledExercise {
-
   @Customizable(ENV_MAP_CONTROLLERS)
   private envMapIntensity: number;
 
   private envMap: CubeTexture;
-
   private foxMixer: AnimationMixer | null = null;
   private fox: GLTF | null = null;
-
   private currentAction: AnimationAction | null = null;
-
   private actions: Actions | null = null;
-
   private floor: Mesh;
+  private quality: QualityConfig;
 
   @Customizable(LIGHT_CONTROLLERS)
   private directionalLight: DirectionalLight;
   
-  constructor(view: RenderView) {
+  constructor(view: RenderView, quality: Quality) {
     super(view);
 
+    this.quality = QUALITY_CONFIG[quality];
     this.envMapIntensity = 0.4;
     this.envMap = this.loadEnvTexture();
     this.scene.environment = this.envMap;
@@ -60,24 +70,27 @@ export class AnimationMixerTest extends OrbitControlledExercise {
     this.camera.position.set(6,4,8);
     this.camera.updateProjectionMatrix();
 
-    view.setRender({
+    this._view.setRender({
       shadowMap: {
         enabled: true,
-        type: PCFSoftShadowMap
+        type: this.quality.shadowMap.type
       },
       tone: {
         mapping: CineonToneMapping,
         exposure: 1.75,
       },
       clearColor: '#211d20'
-    })
+    });
   }
 
   createDirectionalLight() {
     const light = new DirectionalLight('#ffffff', 4);
     light.castShadow = true;
     light.shadow.camera.far = 15;
-    light.shadow.mapSize.set(1024, 1024);
+    light.shadow.mapSize.set(
+      this.quality.shadowMap.size,
+      this.quality.shadowMap.size
+    );
     light.shadow.normalBias = 0.05;
     light.position.set(3.5, 2, -1.25);
     return light;
@@ -179,6 +192,7 @@ export class AnimationMixerTest extends OrbitControlledExercise {
     });
   }
 
+  @DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
     if (this.foxMixer) {
