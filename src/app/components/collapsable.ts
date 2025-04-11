@@ -30,6 +30,7 @@ export class Collapsable {
   private button: {
     element: HTMLButtonElement;
     icon: HTMLElement;
+    title: HTMLElement;
     toggle: string[];
   };
 
@@ -45,7 +46,7 @@ export class Collapsable {
     this.container.className = `${Collapsable.CSS.container} ${settings?.className ?? ''}`;
 
     this.button = this.createButton(title, settings?.button);
-
+    
     this.collapsable = this.createCollapsable(settings?.collapsable);
 
     this.isOpen = false;
@@ -62,11 +63,7 @@ export class Collapsable {
   }
 
   updateTitle(title: string) {
-    const titleElement = this.button.element.querySelector(`.${this.idPrefix}-title`);
-    if (titleElement === null) {
-      throw new Error('Title element for collapsable not found');
-    }
-    titleElement.textContent = title
+    this.button.title.textContent = title;
   }
 
   replaceContent(content: HTMLElement[]) {
@@ -139,13 +136,18 @@ export class Collapsable {
     const className = settings?.className ?? `flex items-center justify-between font-medium`;
     button.className = `${CSS_CLASSES.background} ${CSS_CLASSES.text} ${className} transition-all duration-500`;
 
-    button.innerHTML = `<span class='${this.idPrefix}-title'>${title}</span>`;
+    const titleElement = document.createElement('span');
+    titleElement.className = `${this.idPrefix}-title`;
+    titleElement.textContent = title;
+
+    button.appendChild(titleElement);
     button.appendChild(icon);
     button.addEventListener('click', () => this.toggle());
     this.container.appendChild(button);
 
     return {
       element: button,
+      title: titleElement,
       icon,
       toggle: settings?.toggle ?? [],
     };
