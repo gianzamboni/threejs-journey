@@ -14,7 +14,7 @@ export class InfoBox {
     this._container = document.createElement('div');
     this._container.setAttribute('id', 'info-box-container');
 
-    this.collapsable = new Collapsable('Información', {
+    this.collapsable = new Collapsable('info-box', 'Información', {
       className: 'mx-5 w-[90vw] sm:w-[16vw] min-w-[390px] ',
       button: {
         className: 'flex items-center justify-center font-bold text-2xl gap-1 py-2 rounded-lg mb-0',

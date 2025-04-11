@@ -36,8 +36,12 @@ export class Collapsable {
   private isOpen: boolean;
   private isActive: boolean;
 
-  constructor(title: string, settings: CollapsableSettings = {}) {
+  private idPrefix: string;
+
+  constructor(id:string, title: string, settings: CollapsableSettings = {}) {
+    this.idPrefix = `collapsable-${id}`;
     this.container = document.createElement('div');
+    this.container.id = this.idPrefix;
     this.container.className = `${Collapsable.CSS.container} ${settings?.className ?? ''}`;
 
     this.button = this.createButton(title, settings?.button);
@@ -46,43 +50,6 @@ export class Collapsable {
 
     this.isOpen = false;
     this.isActive = true;
-  }
-
-  private createCollapsable(settings: CollapsableSectionSettings | undefined) {
-    const collapsable = document.createElement('div');
-    const className = `${Collapsable.CSS.collapsable} ${settings?.className ?? ''}`;
-    collapsable.className = `${className}`;
-    this.container.appendChild(collapsable);
-    return collapsable;
-  }
-
-  private createButton(title: string, settings: CollapsableButtonSettings | undefined) {
-    const icon = this.getButtonIcon(settings);
-
-    const button = document.createElement('button');
-
-    const className = settings?.className ?? `flex items-center justify-between font-medium`;
-    button.className = `${CSS_CLASSES.background} ${CSS_CLASSES.text} ${className} transition-all duration-500`;
-
-    button.innerHTML = `<span class='collapsable-title'>${title}</span>`;
-    button.appendChild(icon);
-    button.addEventListener('click', () => this.toggle());
-    this.container.appendChild(button);
-
-    return {
-      element: button,
-      icon,
-      toggle: settings?.toggle ?? [],
-    };
-  }
-
-  private getButtonIcon(settings: CollapsableButtonSettings | undefined) {
-    const parser = new DOMParser();
-    const arrow = parser.parseFromString(DOWN_ARROW, 'image/svg+xml').documentElement;
-    arrow.setAttribute('width', `${settings?.iconSize ?? 24}px`);
-    arrow.setAttribute('height', `${settings?.iconSize ?? 24}px`);
-    arrow.classList.add('hidden')
-    return arrow;
   }
 
   addTo(parent: HTMLElement) {
@@ -95,7 +62,7 @@ export class Collapsable {
   }
 
   updateTitle(title: string) {
-    const titleElement = this.button.element.querySelector('.collapsable-title');
+    const titleElement = this.button.element.querySelector(`.${this.idPrefix}-title`);
     if (titleElement === null) {
       throw new Error('Title element for collapsable not found');
     }
@@ -129,17 +96,6 @@ export class Collapsable {
     }
   }
 
-  open() {
-    this.isOpen = true;
-    this.collapsable.classList.remove('hidden');
-    this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
-
-    for (const className of this.button.toggle) {
-      this.button.element.classList.add(className);
-    }
-    this.button.icon.classList.add('rotate-[270deg]');
-  }
-
   close() {
     if (this.isOpen) {
       this.isOpen = false;
@@ -153,5 +109,54 @@ export class Collapsable {
       }
       this.button.icon.classList.remove('rotate-[270deg]');
     }
+  }
+
+  private open() {
+    this.isOpen = true;
+    this.collapsable.classList.remove('hidden');
+    this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
+
+    for (const className of this.button.toggle) {
+      this.button.element.classList.add(className);
+    }
+    this.button.icon.classList.add('rotate-[270deg]');
+  }
+  
+  private createCollapsable(settings: CollapsableSectionSettings | undefined) {
+    const collapsable = document.createElement('div');
+    collapsable.id = `${this.idPrefix}-content-container`;
+    const className = `${Collapsable.CSS.collapsable} ${settings?.className ?? ''}`;
+    collapsable.className = `${className}`;
+    this.container.appendChild(collapsable);
+    return collapsable;
+  }
+
+  private createButton(title: string, settings: CollapsableButtonSettings | undefined) {
+    const icon = this.getButtonIcon(settings);
+
+    const button = document.createElement('button');
+    button.id = `${this.idPrefix}-toggle`;
+    const className = settings?.className ?? `flex items-center justify-between font-medium`;
+    button.className = `${CSS_CLASSES.background} ${CSS_CLASSES.text} ${className} transition-all duration-500`;
+
+    button.innerHTML = `<span class='${this.idPrefix}-title'>${title}</span>`;
+    button.appendChild(icon);
+    button.addEventListener('click', () => this.toggle());
+    this.container.appendChild(button);
+
+    return {
+      element: button,
+      icon,
+      toggle: settings?.toggle ?? [],
+    };
+  }
+
+  private getButtonIcon(settings: CollapsableButtonSettings | undefined) {
+    const parser = new DOMParser();
+    const arrow = parser.parseFromString(DOWN_ARROW, 'image/svg+xml').documentElement;
+    arrow.setAttribute('width', `${settings?.iconSize ?? 24}px`);
+    arrow.setAttribute('height', `${settings?.iconSize ?? 24}px`);
+    arrow.classList.add('hidden')
+    return arrow;
   }
 }

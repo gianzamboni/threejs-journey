@@ -86,7 +86,7 @@ export default class Menu extends EventTarget {
   private createSection(section: Section, menu: HTMLElement, isOpen: boolean = false) {
     const title = pascalCaseToText(section.id);
 
-    const collapsable = new Collapsable(title);
+    const collapsable = new Collapsable(section.id, title);
     const exerciseList = document.createElement('ul');
     for(const exercise of section.exercises) {  
       const exerciseItem = this.createExerciseItem(exercise);
