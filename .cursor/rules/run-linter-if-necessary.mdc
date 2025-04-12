@@ -3,4 +3,4 @@ description: Run linter when there are linting errors
 globs: 
 alwaysApply: true
 ---
-Do NOT fix linting errors.
+Do NOT fix linting errors yoursel. Use the "npm run lint -- --fix" command to do it.

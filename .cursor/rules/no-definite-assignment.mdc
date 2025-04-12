@@ -1,6 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-When writing code or making refactor do not ever use the definite assignment operator as it could generate bugs in the future.
