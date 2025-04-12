@@ -132,12 +132,13 @@ export class Collapsable {
     const icon = this.getButtonIcon(settings);
 
     const button = document.createElement('button');
-    button.id = `${this.idPrefix}-toggle`;
+    button.id = `${this.idPrefix}-toggle-button`;
     const className = settings?.className ?? `flex items-center justify-between font-medium`;
     button.className = `${CSS_CLASSES.background} ${CSS_CLASSES.text} ${className} transition-all duration-500`;
 
     const titleElement = document.createElement('span');
-    titleElement.className = `${this.idPrefix}-title`;
+    titleElement.id = `${this.idPrefix}-title`;
+
     titleElement.textContent = title;
 
     button.appendChild(titleElement);
