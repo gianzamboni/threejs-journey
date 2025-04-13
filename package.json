@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "deploy": "vercel --prod",
-    "test": "vitest --ui",
+    "test": "vitest run",
+    "test:watch": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:coverage:watch": "vitest --coverage",
     "lint": "eslint ."
