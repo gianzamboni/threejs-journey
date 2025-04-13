@@ -9,8 +9,8 @@
     "deploy": "vercel --prod",
     "test": "vitest run",
     "test:watch": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:coverage:watch": "vitest --coverage",
+    "test:coverage": "vitest --ui --coverage",
+    "test:coverage:watch": "vitest --coverage --ui",
     "lint": "eslint ."
   },
   "keywords": [],
