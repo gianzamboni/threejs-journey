@@ -43,7 +43,7 @@ export class Collapsable {
     this.idPrefix = `collapsable-${id}`;
     this.container = document.createElement('div');
     this.container.id = this.idPrefix;
-    this.container.className = `${Collapsable.CSS.container} ${settings?.className ?? ''}`;
+    this.container.className = `collapsable ${Collapsable.CSS.container} ${settings?.className ?? ''}`;
 
     this.button = this.createButton(title, settings?.button);
     

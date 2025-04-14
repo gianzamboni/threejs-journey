@@ -12,7 +12,7 @@ export class InfoBox {
 
   constructor() {
     this._container = document.createElement('div');
-    this._container.setAttribute('id', 'info-box-container');
+    this._container.id = 'info-box-container';
 
     this.collapsable = new Collapsable('info-box', 'Información', {
       className: 'mx-5 w-[90vw] sm:w-[16vw] min-w-[390px] ',

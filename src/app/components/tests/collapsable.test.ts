@@ -39,18 +39,18 @@ describe('Collapsable', () => {
       expect(parentElement.children.length).toBe(1);
       
       const container = parentElement.firstElementChild;
-      expect(container).toBeDefined();
+      expect(container).not.toBeNull();
       expect(container!.id).toBe('collapsable-test-id');
       
       const contentElement = container!.querySelector('#collapsable-test-id-content-container');
-      expect(contentElement).toBeDefined();
+      expect(contentElement).not.toBeNull();
 
       const buttonElement = container!.querySelector('#collapsable-test-id-toggle-button');
-      expect(buttonElement).toBeDefined();
+      expect(buttonElement).not.toBeNull();
 
 
       const titleElement = container!.querySelector('#collapsable-test-id-title');
-      expect(titleElement).toBeDefined();
+      expect(titleElement).not.toBeNull();
     });
     
     it('should apply custom class names', () => {

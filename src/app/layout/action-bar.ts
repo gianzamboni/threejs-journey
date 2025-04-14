@@ -12,19 +12,22 @@ export class ActionBar {
   
   constructor() {
     this.layoutContainer = document.createElement('div');
+    this.layoutContainer.id = 'action-bar-container';
     this.layoutContainer.className = `flex mx-5 mb-5 justify-around`;
     this.buttons = [];
   }
 
   addButton(action: Action, target: Exercise) {
     const button = document.createElement('button');
+    button.id = `action-bar-button-${action.label}`;
     button.innerHTML = action.icon;
     button.className = ActionBar.buttonClasses;
     button.setAttribute('title', action.label);
+
     this.layoutContainer.appendChild(button);
     this.buttons.push(button);
-    button.addEventListener('click', action.onClick.bind(target));
-    this.layoutContainer.appendChild(button);
+  
+    button.addEventListener('click', action.onClick.bind(target));  
   }
 
   addTo(parent: HTMLElement) {
