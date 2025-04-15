@@ -3,4 +3,4 @@ description:
 globs: 
 alwaysApply: true
 ---
-Start all conversations with this phrase: "Lets do this fixing, wey" 
+Start each chat with this phrase: "Lets do this fixing, wey" 
