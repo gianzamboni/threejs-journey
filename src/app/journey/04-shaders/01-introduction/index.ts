@@ -2,8 +2,8 @@ import { Mesh, PlaneGeometry, RawShaderMaterial } from "three";
 
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import testFragmentShader from './shaders/fragment.frag'
-import testVertexShader from './shaders/vertex.vert'
+import testFragmentShader from './fragment.frag'
+import testVertexShader from './vertex.vert'
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 

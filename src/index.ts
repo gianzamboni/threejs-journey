@@ -1,4 +1,6 @@
 /// <reference types="vite/client" />
+/// <reference types="vite-plugin-glsl/ext" />
+
 import '../pollyfills/symbol-pollyfill';
 import { App } from "#/app";
 import { qualityFromString } from './app/layout/quality-selector';
