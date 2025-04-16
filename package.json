@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc --project tsconfig.json && vite build",
     "deploy": "vercel --prod",
-    "test": "vitest run",
-    "test:watch": "vitest --ui",
-    "test:coverage": "vitest --ui --coverage",
-    "test:coverage:watch": "vitest --coverage --ui",
+    "test": "tsc --project tsconfig.test.json && vitest run --mode test",
+    "test:watch": "tsc --project tsconfig.test.json && vitest --ui --mode test",
+    "test:coverage": "tsc --project tsconfig.test.json && vitest --ui --coverage --mode test",
+    "test:coverage:watch": "tsc --project tsconfig.test.json && vitest --coverage --ui --mode test",
     "lint": "eslint ."
   },
   "keywords": [],

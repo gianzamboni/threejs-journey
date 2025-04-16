@@ -23,5 +23,6 @@
       "#/*": ["./src/*"]
     },
   },
-  "include": ["src", "polyfills", "test/app/utils/index.test.ts"]
+  "include": ["src", "polyfills"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/tests/**"]
 }

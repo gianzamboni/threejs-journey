@@ -40,7 +40,7 @@ vi.mock('three', () => {
 });
 
 vi.mock('three/addons/loaders/RGBELoader.js', () => {
-  const mockLoad = vi.fn().mockImplementation((url, onLoad) => {
+  const mockLoad = vi.fn().mockImplementation((_, onLoad) => {
     onLoad({ mapping: null });
     return 'rgbeLoader';
   });
@@ -53,7 +53,7 @@ vi.mock('three/addons/loaders/RGBELoader.js', () => {
 });
 
 vi.mock('three/addons/loaders/FontLoader.js', () => {
-  const mockLoad = vi.fn().mockImplementation((url, onLoad) => {
+  const mockLoad = vi.fn().mockImplementation((_, onLoad) => {
     onLoad('font');
     return 'fontLoader';
   });

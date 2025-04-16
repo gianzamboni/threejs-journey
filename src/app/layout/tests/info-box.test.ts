@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
+import { describe, it, expect, beforeEach, vi, Mock, Mocked } from 'vitest';
 
 import { Collapsable } from '#/app/components/collapsable';
 import { Exercise } from '#/app/types/exercise';
@@ -15,14 +15,14 @@ vi.mock('#/app/utils/exercise-metadata', () => ({
 describe('InfoBox', () => {
   let infoBox: InfoBox;
   let parent: HTMLDivElement;
-  let mockCollapsable: jest.Mocked<Partial<Collapsable>>;
+  let mockCollapsable: Mocked<Partial<Collapsable>>;
 
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
 
     // Setup mocks
-    (Collapsable as unknown as jest.Mock).mockImplementation(() => {
+    (Collapsable as unknown as Mock).mockImplementation(() => {
       return mockCollapsable = {
         addTo: vi.fn(),
         updateTitle: vi.fn(),
