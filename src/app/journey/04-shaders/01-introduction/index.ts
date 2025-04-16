@@ -2,8 +2,11 @@ import { Mesh, PlaneGeometry, RawShaderMaterial } from "three";
 
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
+import testFragmentShader from './shaders/fragment.frag'
+import testVertexShader from './shaders/vertex.vert'
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+
 
 @Exercise('shaders')
 export class Shaders extends OrbitControlledExercise {
@@ -16,13 +19,10 @@ export class Shaders extends OrbitControlledExercise {
     super(view);
 
     this.geometry = new PlaneGeometry(1, 1, 32, 32);
+
     this.material = new RawShaderMaterial({
-      vertexShader: `
-        
-      `,
-      fragmentShader: `
-       
-      ` 
+      vertexShader: testVertexShader,
+      fragmentShader: testFragmentShader,
     });
 
     this.mesh = new Mesh(this.geometry, this.material);
