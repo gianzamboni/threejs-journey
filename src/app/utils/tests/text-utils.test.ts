@@ -1,6 +1,6 @@
 import { expect, describe, it } from 'vitest';
 
-import { getPathArray } from '.';
+import { getPathArray } from '../text-utils';
 
 describe('getPathArray', () => {
   it('should work with path literals', () => {

@@ -31,7 +31,8 @@ function addControllersToMetadata(
 
   if(metadata.controllersConfig === undefined) {
     metadata.controllersConfig = {};
-  } 
+  }
+  
   const controllers = metadata.controllersConfig as ExerciseControllers;
   if(controllers[name] === undefined) {
     controllers[name] = [];

@@ -38,18 +38,21 @@ export default class SideBar {
 
   private createBody() {
     const body = document.createElement('div');
+    body.id = 'sidebar-body';
     body.className = `relative flex flex-col h-full max-h-full px-3 pt-3 ${CSS_CLASSES.main_layout_index}`;
     return body;
   }
 
   private createPanel() {
     const panel = document.createElement('div');
+    panel.id = 'sidebar-panel';
     panel.className = `w-64 transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 ${CSS_CLASSES.sidebar_index} border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
     return panel;
   }
 
   private createButton(buttonTitle: string) {
     const button = document.createElement('button');
+    button.id = 'sidebar-toggle-button';
     button.className = `fixed cursor-pointer flex py-2 px-3 m-5 items-center gap-x-2 border  font-medium  rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`;
     button.innerHTML = buttonTitle;
     button.onclick = this.toggleSidePanel.bind(this);

@@ -2,6 +2,10 @@ export function pascalCaseToText(text: string) {
   return text.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
+export function textToKebabCase(text: string) {
+  return text.split(' ').map(word => word.toLowerCase()).join('-');
+}
+
 export function printable(propertyName: string): string {
   let printableName = propertyName.replace(/([A-Z])/g, ' $1').trim();
   printableName = printableName.replace(/\./g, ' ');

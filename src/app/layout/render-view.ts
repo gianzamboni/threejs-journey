@@ -31,6 +31,7 @@ export default class RenderView {
 
   constructor() {
     this.canvas = document.createElement('canvas');
+    this.canvas.id = 'render-view-canvas';
     this.canvas.className = 'fixed top-0 left-0 z-[0]';
 
     this._renderer = new WebGLRenderer({ 

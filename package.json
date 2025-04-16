@@ -1,13 +1,16 @@
 {
   "name": "three-js-journey",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc --project tsconfig.json && vite build",
     "deploy": "vercel --prod",
-    "test": "vitest --ui",
+    "test": "tsc --project tsconfig.test.json && vitest run --mode test",
+    "test:watch": "tsc --project tsconfig.test.json && vitest --ui --mode test",
+    "test:coverage": "tsc --project tsconfig.test.json && vitest --ui --coverage --mode test",
+    "test:coverage:watch": "tsc --project tsconfig.test.json && vitest --coverage --ui --mode test",
     "lint": "eslint ."
   },
   "keywords": [],
@@ -24,6 +27,7 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.6",
     "@types/three": "^0.175.0",
+    "@vitest/coverage-v8": "^3.1.1",
     "@vitest/ui": "^3.0.7",
     "eslint": "^9.20.1",
     "eslint-plugin-import": "^2.31.0",

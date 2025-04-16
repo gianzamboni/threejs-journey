@@ -35,6 +35,7 @@ export default class Menu extends EventTarget {
 
   private createExerciseMenu(sidebar: SideBar) {
     const menu = document.createElement('nav');
+    menu.id = 'exercise-menu';
     menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${CSS_CLASSES.scrollBar}`;
     sidebar.addContent(menu);
     for(const [index, section] of JOURNEY.entries()) {
@@ -48,7 +49,7 @@ export default class Menu extends EventTarget {
     const id = getId(exercise);
     exerciseItem.id = id;
     exerciseItem.textContent = pascalCaseToText(id);
-    exerciseItem.className = 'cursor-pointer ml-2';
+    exerciseItem.className = 'exercise-item cursor-pointer ml-2';
     exerciseItem.addEventListener('click', () => {
       const selectedClasses = [
         'border-b-[1px]',
@@ -86,7 +87,7 @@ export default class Menu extends EventTarget {
   private createSection(section: Section, menu: HTMLElement, isOpen: boolean = false) {
     const title = pascalCaseToText(section.id);
 
-    const collapsable = new Collapsable(title);
+    const collapsable = new Collapsable(section.id, title);
     const exerciseList = document.createElement('ul');
     for(const exercise of section.exercises) {  
       const exerciseItem = this.createExerciseItem(exercise);
@@ -101,11 +102,12 @@ export default class Menu extends EventTarget {
 
   private createHeader() {
     const header = document.createElement('header');
+    header.id = 'exercise-menu-header';
     header.className = 'flex justify-between items-center gap-x-2 mb-3';
 
     const title = document.createElement('h2');
     title.className = 'font-semibold text-xl dark:text-white';
-    title.textContent = 'Three.js Demos';
+    title.textContent = 'Three.js Journey';
 
     header.appendChild(title);
 
@@ -114,6 +116,7 @@ export default class Menu extends EventTarget {
 
   private createFooter() {
     const footer = document.createElement('footer');
+    footer.id = 'exercise-menu-footer';
     footer.className = 'flex justify-center items-center p-4';
 
     const portfolioLinkg = document.createElement('a');
