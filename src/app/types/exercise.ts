@@ -10,10 +10,22 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 
-export type Action = {
+export interface Action {
+  type: string;
   label: string;
+}
+
+
+export interface ButtonAction extends Action {
+  type: 'button';
   icon: string;
   onClick: () => void;
+}
+
+export interface SelectableAction extends Action {
+  type: 'selectable';
+  options: Record<string, string>;
+  onChange: (evt: CustomEvent) => void;
 }
 
 export type Section = {

@@ -9,7 +9,15 @@ export const CSS_CLASSES = {
     main_layout_index: `z-[2]`,
     sidebar_index: `z-[4]`,
     overlay_index: `z-[3]`,
+
 };
+
+export const SELECTABLE_CLASSES = {
+  container: `flex items-center ${CSS_CLASSES.background} px-3 py-2 rounded-md gap-2 w-full`,
+  label: CSS_CLASSES.text,
+  select: `${CSS_CLASSES.border} cursor-pointer rounded-md ${CSS_CLASSES.selector_background} ${CSS_CLASSES.text} px-2 py-1 ${CSS_CLASSES.hover} flex-grow`,
+  option: CSS_CLASSES.text,
+}
 
 export const COLORS = {
   black: {
