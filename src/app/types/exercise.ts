@@ -25,6 +25,7 @@ export interface ButtonAction extends Action {
 export interface SelectableAction extends Action {
   type: 'selectable';
   options: Record<string, string>;
+  defaultValue: string;
   onChange: (evt: CustomEvent) => void;
 }
 

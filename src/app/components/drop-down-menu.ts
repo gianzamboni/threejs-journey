@@ -51,8 +51,7 @@ export class DropDownMenu extends EventTarget {
     }
 
     setValue(value: string) {
-        const selectElement = this.menu.querySelector(`#${this.menu.id}-select`) as HTMLSelectElement;
-        selectElement.value = value;
+        this.selectElement.value = value;
     }
 
     getValue() {

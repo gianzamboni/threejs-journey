@@ -38,12 +38,12 @@ export function ActionButton(label: string, icon: string) {
   }
 }
 
-export function Selectable(label: string, options: Record<string, unknown>) {
+export function Selectable(label: string, options: Record<string, unknown>, defaultValue?: string) {
   return function(target: (...args: any[]) => void, context: ClassMethodDecoratorContext) {
     if(context.metadata.actions === undefined) {
       context.metadata.actions = [] as Action[];
     }
     const actions = context.metadata.actions as Action[];
-    actions.push({ label, options, type: 'selectable', onChange: (evt: CustomEvent) => target(evt.detail.value) } as SelectableAction);
+    actions.push({ label, options, defaultValue, type: 'selectable', onChange: target } as SelectableAction);
   }
 }

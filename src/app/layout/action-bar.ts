@@ -27,11 +27,17 @@ export class ActionBar {
       options: action.options,
       classes: 'w-full',
     });
-    dropDownMenu.addEventListener('change', action.onChange.bind(target) as EventListener);
+
+    const onChange = (event: CustomEvent) => {
+      action.onChange.bind(target)(event.detail.value);
+    }
+    dropDownMenu.setValue(action.defaultValue);
+    dropDownMenu.addEventListener('change', onChange as EventListener);
+    
     dropDownMenu.addTo(this.layoutContainer);
     this.interactiveElements.push({
       element: dropDownMenu,
-      action: action.onChange.bind(target)
+      action: onChange
     });
   }
   
