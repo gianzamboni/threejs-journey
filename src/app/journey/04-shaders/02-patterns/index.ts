@@ -2,6 +2,8 @@ import { DoubleSide, Mesh, PlaneGeometry, ShaderMaterial } from "three";
 
 import { Exercise, Description, Selectable } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
+import blackAndWhiteXGradientFragmentShader from './shaders/black-white-x-gradient.frag'
+import blackAndWhiteYGradientFragmentShader from './shaders/black-white-y-gradient.frag'
 import coolUVFragmentShader from './shaders/cool-uv.frag'
 import solidColorFragmentShader from './shaders/solid-color.frag'
 import testVertexShader from './shaders/vertex.vert'
@@ -14,6 +16,8 @@ const shaders: Record<string, string> = {
   "Solid Color": solidColorFragmentShader,
   "Cool UV Map": coolUVFragmentShader,
   "Warm UV Map": warmUVFragmentShader,
+  "Black & White X Gradient": blackAndWhiteXGradientFragmentShader,
+  "Black & White Y Gradient": blackAndWhiteYGradientFragmentShader,
 }
 
 @Exercise('patterns')
@@ -30,7 +34,7 @@ export class Patterns extends OrbitControlledExercise {
     this.geometry = new PlaneGeometry(1, 1, 32, 32);
     this.material = new ShaderMaterial({
       vertexShader: testVertexShader,
-      fragmentShader: warmUVFragmentShader,
+      fragmentShader: blackAndWhiteXGradientFragmentShader,
       side: DoubleSide
     });
 
@@ -41,7 +45,6 @@ export class Patterns extends OrbitControlledExercise {
 
   @Selectable('Change shader', shaders, warmUVFragmentShader)
   changeShader(shader: string) {
-    console.log(shader);
     this.material.fragmentShader = shader;
     this.material.needsUpdate = true;
   }
