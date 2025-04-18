@@ -1,4 +1,4 @@
-import { CSS_CLASSES } from '#/theme';
+import { DropDownMenu } from '../components/drop-down-menu';
 
 export enum Quality {
   Low = 'low',
@@ -16,46 +16,29 @@ export function qualityFromString(quality: string | null) {
 } 
 export class QualitySelector extends EventTarget {
 
-  private qualitySelector: HTMLDivElement;
-  private selectedQuality: Quality = Quality.High;
-
+  private qualityMenu: DropDownMenu;
+  
   constructor(defaultQuality: Quality) {
     super();
-    this.selectedQuality = defaultQuality;
-    this.qualitySelector = document.createElement('div');
-    this.qualitySelector.id = 'quality-selector';
-    this.qualitySelector.className = `flex justify-center items-center ${CSS_CLASSES.background} px-3 py-2 rounded-md gap-2`;
-
-    const label = document.createElement('label');
-    label.textContent = 'Quality:';
-    label.className = CSS_CLASSES.text;
-    this.qualitySelector.appendChild(label);
-
-    const select = document.createElement('select');
-    select.id = 'quality-selector-select';
-    select.className = `${CSS_CLASSES.border} cursor-pointer rounded-md ${CSS_CLASSES.selector_background} ${CSS_CLASSES.text} px-2 py-1 ${CSS_CLASSES.hover}`;
-    select.addEventListener('change', this.onQualityChange.bind(this));
-    this.qualitySelector.appendChild(select);
-
-    const options =[ Quality.High, Quality.Low ];
-    for(const option of options) {
-      const optionElement = document.createElement('option');
-      optionElement.value = option.toString();
-      optionElement.textContent = option.toString();
-      optionElement.className = CSS_CLASSES.text;
-      if (option === this.selectedQuality) {
-        optionElement.selected = true;
+    this.qualityMenu = new DropDownMenu('quality-selector', {
+      label: 'Quality:',
+      options: {
+        'High': Quality.High,
+        'Low': Quality.Low
       }
-      select.appendChild(optionElement);
-    }
+    });
+
+    this.qualityMenu.setValue(defaultQuality.toString());
+    
+    this.qualityMenu.addEventListener('change', this.onQualityChange.bind(this) as EventListener);
   }
 
   addTo(parent: HTMLElement) {
-    parent.appendChild(this.qualitySelector);
+    this.qualityMenu.addTo(parent);
   }
 
-  onQualityChange(event: Event) {
-    this.dispatchEvent(new CustomEvent('quality-changed', { detail: (event.target as HTMLSelectElement).value }));
+  onQualityChange(event: CustomEvent) {
+    const quality = qualityFromString(event.detail.value);
+    this.dispatchEvent(new CustomEvent('quality-changed', { detail: quality }));
   }
-
 }
