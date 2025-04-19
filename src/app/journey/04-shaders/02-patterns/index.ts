@@ -1,24 +1,20 @@
 import { DoubleSide, Mesh, PlaneGeometry, ShaderMaterial } from "three";
 
-import { Exercise, Description, Selectable } from "#/app/decorators/exercise";
+import { Exercise, Description } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import blackAndWhiteXGradientFragmentShader from './shaders/black-white-x-gradient.frag'
-import blackAndWhiteYGradientFragmentShader from './shaders/black-white-y-gradient.frag'
-import coolUVFragmentShader from './shaders/cool-uv.frag'
-import solidColorFragmentShader from './shaders/solid-color.frag'
+import testFragmentShader from './shaders/frag.frag'
 import testVertexShader from './shaders/vertex.vert'
-import warmUVFragmentShader from './shaders/warm-uv.frag'
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 
-const shaders: Record<string, string> = {
-  "Solid Color": solidColorFragmentShader,
-  "Cool UV Map": coolUVFragmentShader,
-  "Warm UV Map": warmUVFragmentShader,
-  "Black & White X Gradient": blackAndWhiteXGradientFragmentShader,
-  "Black & White Y Gradient": blackAndWhiteYGradientFragmentShader,
-}
+// const shaders: Record<string, string> = {
+//   "Solid Color": solidColorFragmentShader,
+//   "Cool UV Map": coolUVFragmentShader,
+//   "Warm UV Map": warmUVFragmentShader,
+//   "Black & White X Gradient": blackAndWhiteXGradientFragmentShader,
+//   "Black & White Y Gradient": blackAndWhiteYGradientFragmentShader,
+// }
 
 @Exercise('patterns')
 @Description('<strong>Some shader patterns</strong>')
@@ -34,16 +30,17 @@ export class Patterns extends OrbitControlledExercise {
     this.geometry = new PlaneGeometry(1, 1, 32, 32);
     this.material = new ShaderMaterial({
       vertexShader: testVertexShader,
-      fragmentShader: blackAndWhiteXGradientFragmentShader,
+      fragmentShader: testFragmentShader,
       side: DoubleSide
     });
 
+    console.log(this.geometry.attributes.uv)
     this.mesh = new Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
-    this.camera.position.set(0.25, -0.25, 1);
+    this.camera.position.set(0, 0, 1);
   }
 
-  @Selectable('Change shader', shaders, warmUVFragmentShader)
+  //@Selectable('Change shader', shaders, warmUVFragmentShader)
   changeShader(shader: string) {
     this.material.fragmentShader = shader;
     this.material.needsUpdate = true;
