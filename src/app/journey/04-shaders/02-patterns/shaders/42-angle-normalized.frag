@@ -4,6 +4,7 @@ precision mediump float;
 varying vec2 vUv;
 
 void main() {
-  float strength = abs(distance(vUv, vec2(0.5)) - 0.25);
+  float strength = atan(vUv.x - 0.5, vUv.y - 0.5) / (PI * 2.0) + 0.5;
+  strength = 1.0 - strength;
   gl_FragColor = vec4(vec3(strength), 1.0);
 }
