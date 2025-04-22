@@ -6,6 +6,7 @@ import testFragmentShader from './shaders/frag.frag'
 import testVertexShader from './shaders/vertex.vert'
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import { Customizable } from "#/app/decorators/customizable";
 
 
 // const shaders: Record<string, string> = {
@@ -21,7 +22,18 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 export class Patterns extends OrbitControlledExercise {
 
   private geometry: PlaneGeometry;
+
+  @Customizable([{
+    propertyPath: 'uniforms.aConstant.value',
+    settings: {
+      min: 0,
+      max: 100,
+      step: 0.1,
+      name: 'Constant'
+    }
+  }])
   private material: ShaderMaterial;
+
   private mesh: Mesh;
 
   constructor(view: RenderView) {
@@ -31,10 +43,15 @@ export class Patterns extends OrbitControlledExercise {
     this.material = new ShaderMaterial({
       vertexShader: testVertexShader,
       fragmentShader: testFragmentShader,
-      side: DoubleSide
+      side: DoubleSide,
+      uniforms: {
+        aConstant: {
+          value: 1
+        }
+      }
     });
 
-    console.log(this.geometry.attributes.uv)
+    console.log(this.geometry.attributes)
     this.mesh = new Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
     this.camera.position.set(0, 0, 1);

@@ -1,7 +1,6 @@
 precision mediump float;
 
 varying vec2 vUv;
-varying float vConstant;
 
 void main() {
   vec2 deformedUv= vec2(
