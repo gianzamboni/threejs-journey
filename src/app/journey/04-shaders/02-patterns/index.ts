@@ -1,21 +1,15 @@
 import { DoubleSide, Mesh, PlaneGeometry, ShaderMaterial } from "three";
 
-import { Exercise, Description } from "#/app/decorators/exercise";
+import { Customizable } from "#/app/decorators/customizable";
+import { Exercise, Description, Selectable } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import testFragmentShader from './shaders/frag.frag'
+import { LocalStorage } from "#/app/services/local-storage";
+import { SHADER_DICTIONARY, SHADER_LIST } from "./shaders";
 import testVertexShader from './shaders/vertex.vert'
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-import { Customizable } from "#/app/decorators/customizable";
 
-
-// const shaders: Record<string, string> = {
-//   "Solid Color": solidColorFragmentShader,
-//   "Cool UV Map": coolUVFragmentShader,
-//   "Warm UV Map": warmUVFragmentShader,
-//   "Black & White X Gradient": blackAndWhiteXGradientFragmentShader,
-//   "Black & White Y Gradient": blackAndWhiteYGradientFragmentShader,
-// }
+const defaultShader = LocalStorage.getState<string>('patterns') ?? SHADER_DICTIONARY["Solid Color"];
 
 @Exercise('patterns')
 @Description('<strong>Some shader patterns</strong>')
@@ -36,13 +30,18 @@ export class Patterns extends OrbitControlledExercise {
 
   private mesh: Mesh;
 
+  private selectedShader: keyof typeof SHADER_DICTIONARY;
+
   constructor(view: RenderView) {
     super(view);
 
-    this.geometry = new PlaneGeometry(1, 1, 32, 32);
+    this.geometry = new PlaneGeometry(1, 1, 1, 1);
+    
+    this.selectedShader = LocalStorage.getState(this) ?? "Solid Color";
+
     this.material = new ShaderMaterial({
       vertexShader: testVertexShader,
-      fragmentShader: testFragmentShader,
+      fragmentShader: SHADER_DICTIONARY[this.selectedShader],
       side: DoubleSide,
       uniforms: {
         aConstant: {
@@ -51,16 +50,17 @@ export class Patterns extends OrbitControlledExercise {
       }
     });
 
-    console.log(this.geometry.attributes)
     this.mesh = new Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
     this.camera.position.set(0, 0, 1);
   }
 
-  //@Selectable('Change shader', shaders, warmUVFragmentShader)
-  changeShader(shader: string) {
-    this.material.fragmentShader = shader;
+  @Selectable('Change shader', SHADER_LIST, defaultShader)
+  changeShader(shader: keyof typeof SHADER_DICTIONARY) {
+    this.material.fragmentShader = SHADER_DICTIONARY[shader];
     this.material.needsUpdate = true;
+    this.selectedShader = shader;
+    LocalStorage.saveState(this, this.selectedShader);
   }
 
   async dispose() {
