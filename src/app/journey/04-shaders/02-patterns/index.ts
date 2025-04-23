@@ -55,7 +55,7 @@ export class Patterns extends OrbitControlledExercise {
     this.camera.position.set(0, 0, 1);
   }
 
-  @Selectable('Change shader', SHADER_LIST, defaultShader)
+  @Selectable('Shader', SHADER_LIST, defaultShader)
   changeShader(shader: keyof typeof SHADER_DICTIONARY) {
     this.material.fragmentShader = SHADER_DICTIONARY[shader];
     this.material.needsUpdate = true;
