@@ -17,11 +17,10 @@ float glare(vec2 uv) {
 }
 
 vec2 rotate(vec2 uv, float rotation, vec2 center) {
-  mat2 rotationMatrix = mat2(
-    cos(rotation), -sin(rotation),
-    sin(rotation), cos(rotation)
+  vec2 rotatedUv = vec2(
+    cos(rotation) * (uv.x - center.x) - sin(rotation) * (uv.y - center.y) + center.x,
+    sin(rotation) * (uv.x - center.x) + cos(rotation) * (uv.y - center.y) + center.y
   );
-  vec2 rotatedUv = rotationMatrix * uv;
   return rotatedUv;
 }
 

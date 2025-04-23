@@ -2,9 +2,7 @@ precision mediump float;
 
 varying vec2 vUv;
 
-float bar(float value) {
-  return step(0.8, mod(value * 10.0, 1.0));
-}
+#include '../utils.frag';
 
 /*
   White Points
@@ -13,6 +11,7 @@ float bar(float value) {
   This is because we want to make sure that the pixel is in both the x and y direction to be a point.
 */
 void main() {
-  float strength = bar(vUv.x) * bar(vUv.y);
-  gl_FragColor = vec4(vec3(strength), 1.0);
+  float strength = thinBar(vUv.x) * thinBar(vUv.y);
+  vec3 color = applyColor(vUv, strength);
+  gl_FragColor = vec4(color, 1.0);
 }

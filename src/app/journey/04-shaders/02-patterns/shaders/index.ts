@@ -33,6 +33,7 @@ import glareRotationFragmentShader from "./fragments/32-glare-rotation.frag";
 import circleFragmentShader from "./fragments/33-circle.frag";
 import ringFragmentShader from "./fragments/34-ring.frag";
 import ringDiscreteFragmentShader from "./fragments/35-ring-discrete.frag";
+import ringDiscreteInvertedFragmentShader from "./fragments/36-ring-discrete-inverted.frag";
 import ringInvertedWaveFragmentShader from "./fragments/37-ring-inverted-wave.frag";
 import spotFragmentShader from "./fragments/38-spot.frag";
 import spotFracFragmentShader from "./fragments/39-spot-frac.frag";
@@ -84,6 +85,7 @@ export const SHADER_DICTIONARY = {
   "Circle": circleFragmentShader,
   "Ring": ringFragmentShader,
   "Ring Discrete": ringDiscreteFragmentShader,
+  "Ring Discrete Inverted": ringDiscreteInvertedFragmentShader,
   "Ring Inverted Wave": ringInvertedWaveFragmentShader,
   "Spot": spotFragmentShader,
   "Spot Frac": spotFracFragmentShader,

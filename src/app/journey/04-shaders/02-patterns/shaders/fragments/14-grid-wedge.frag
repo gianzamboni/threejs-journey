@@ -2,13 +2,7 @@ precision mediump float;
 
 varying vec2 vUv;
 
-float mod10(float value) {
-  return mod(value * 10.0, 1.0);
-}
-
-float bar(float value, float width) {
-  return step(width, mod10(value));
-}
+#include '../utils.frag';
 
 /*
   Black & White Small Bars
@@ -16,15 +10,21 @@ float bar(float value, float width) {
   This shider adds to the grid-bars.frag a small white vertical bar creating a wedged shape. 
 
 */
+
+float smallBar(float value1, float value2) {
+  return bar(value1, 0.6) * bar(value2, 0.2);
+}
+
 void main() {
   // Small Horizontal Bars Grid
-  float barX = bar(vUv.x, 0.4) * bar(vUv.y, 0.8);
+  float barX = smallBar(vUv.x, vUv.y);
   
   // Small Vertical Bars Grid
-  float barY = bar(vUv.x, 0.8) * bar(vUv.y, 0.4);
+  float barY = smallBar(vUv.y, vUv.x);
 
   // Both Grids combined on one image
   float strength = barX + barY;
-  gl_FragColor = vec4(vec3(strength), 1.0);
+  vec3 color = applyColor(vUv, strength);
+  gl_FragColor = vec4(color, 1.0);
 }
 
