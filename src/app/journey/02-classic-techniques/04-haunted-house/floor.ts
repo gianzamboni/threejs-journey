@@ -5,7 +5,7 @@ import {
   RepeatWrapping
 } from 'three';
 
-import { AssetLoader } from '#/app/utils/assets-loader';
+import { AssetLoader } from '#/app/services/assets-loader';
 import { loadTextureMaps, TextureDict, TextureMaps } from '#/app/utils/textures';
 import { QualityConfig } from './quality-config';
 

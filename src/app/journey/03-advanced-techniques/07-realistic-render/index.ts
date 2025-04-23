@@ -17,7 +17,7 @@ import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/utils/assets-loader";
+import { AssetLoader } from "#/app/services/assets-loader";
 import { loadTextureMaps, TextureDict, TextureMaps } from "#/app/utils/textures";
 import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";

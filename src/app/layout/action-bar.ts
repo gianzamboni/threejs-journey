@@ -31,6 +31,7 @@ export class ActionBar {
     const onChange = (event: CustomEvent) => {
       action.onChange.bind(target)(event.detail.value);
     }
+    
     dropDownMenu.setValue(action.defaultValue);
     dropDownMenu.addEventListener('change', onChange as EventListener);
     

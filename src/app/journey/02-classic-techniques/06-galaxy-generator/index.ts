@@ -16,7 +16,7 @@ import { DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
-import { AssetLoader } from '#/app/utils/assets-loader';
+import { AssetLoader } from '#/app/services/assets-loader';
 import { randomSign } from '#/app/utils/random-utils';
 import { GALAXY_CONFIG } from './galaxy-configs';
 
