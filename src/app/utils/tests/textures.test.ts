@@ -1,11 +1,11 @@
 import { SRGBColorSpace } from 'three';
 import { expect, describe, it, vi, beforeEach } from 'vitest';
 
-import { AssetLoader } from '../assets-loader';
+import { AssetLoader } from '../../services/assets-loader';
 import { TextureMaps, loadTextureMaps, TextureQuality } from '../textures';
 
 // Mock AssetLoader
-vi.mock('../assets-loader', () => {
+vi.mock('../../services/assets-loader', () => {
   const mockLoadTexture = vi.fn().mockImplementation(() => ({
     colorSpace: null
   }));

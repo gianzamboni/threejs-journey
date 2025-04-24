@@ -1,7 +1,7 @@
 import { expect, describe, it, vi, beforeEach } from 'vitest';
 
-import { Action, ExerciseClass } from '#/app/types/exercise';
 
+import { ExerciseClass, ButtonAction, Action } from '../../types/exercise';
 import { 
   Exercise,
   Description,
@@ -9,6 +9,7 @@ import {
   IsAnimated,
   ActionButton
 } from '../exercise';
+
 
 function createMockContext() {
   return {
@@ -28,7 +29,7 @@ describe('Exercise decorator', () => {
     const decorator = Exercise('test-id');
     decorator(MockExercise as unknown as ExerciseClass, mockContext);
     
-    expect(mockContext.metadata.id).toBe('test-id');
+    expect(mockContext.metadata!.id).toBe('test-id');
   });
 });
 
@@ -44,8 +45,8 @@ describe('Description decorator', () => {
     
     decorator(MockExercise as unknown as ExerciseClass, mockContext);
     
-    expect(Array.isArray(mockContext.metadata.descriptions)).toBe(true);
-    expect(mockContext.metadata.descriptions).toHaveLength(1);
+    expect(Array.isArray(mockContext.metadata!.descriptions)).toBe(true);
+    expect(mockContext.metadata!.descriptions).toHaveLength(1);
   });
 
   it('should handle multiple calls by prepending newer descriptions', () => {
@@ -58,7 +59,7 @@ describe('Description decorator', () => {
     decorator2(MockExercise as unknown as ExerciseClass, mockContext);
     
     // Check the actual order based on how unshift works
-    const descriptions = mockContext.metadata.descriptions as string[];
+    const descriptions = mockContext.metadata!.descriptions as string[];
     expect(descriptions.length).toBe(4);
     // Check position of each description
     expect(descriptions[0]).toBe('desc3');
@@ -77,7 +78,7 @@ describe('WithOrbitControllerDescription decorator', () => {
 
   it('should set orbitControllerDescription flag in metadata', () => {
     WithOrbitControllerDescription(MockExercise as unknown as ExerciseClass, mockContext);
-    expect(mockContext.metadata.orbitControllerDescription).toBe(true);
+    expect(mockContext.metadata!.orbitControllerDescription).toBe(true);
   });
 });
 
@@ -91,7 +92,7 @@ describe('IsAnimated decorator', () => {
   it('should set isAnimated flag in metadata', () => {
     IsAnimated(MockExercise as unknown as ExerciseClass, mockContext);
     
-    expect(mockContext.metadata.isAnimated).toBe(true);
+    expect(mockContext.metadata!.isAnimated).toBe(true);
   });
 });
 
@@ -111,7 +112,7 @@ describe('ActionButton decorator', () => {
     const decorator = ActionButton('Test Button', 'test-icon');
     decorator(mockMethod, mockContext);
     
-    const actions = mockContext.metadata.actions as Action[];
+    const actions = mockContext.metadata!.actions as Action[];
     expect(Array.isArray(actions)).toBe(true);
   });
 
@@ -119,7 +120,7 @@ describe('ActionButton decorator', () => {
     const decorator = ActionButton('Test Button', 'test-icon');
     decorator(mockMethod, mockContext);
     
-    const actions = mockContext.metadata.actions as Action[];
+    const actions = mockContext.metadata!.actions as Action[];
     expect(actions).toBeDefined();
     expect(actions).toHaveLength(1);
     expect(actions[0]).toMatchObject({
@@ -132,7 +133,7 @@ describe('ActionButton decorator', () => {
     const decorator = ActionButton('Test Button', 'test-icon');
     decorator(mockMethod, mockContext);
     
-    const actions = mockContext.metadata.actions as Action[];
+    const actions = mockContext.metadata!.actions as ButtonAction[];
     expect(actions[0].onClick).toBe(mockMethod);
   });
 
@@ -146,7 +147,7 @@ describe('ActionButton decorator', () => {
     const decorator2 = ActionButton('Button 2', 'icon-2');
     decorator2(anotherMethod, mockContext);
     
-    const actions = mockContext.metadata.actions as Action[];
+    const actions = mockContext.metadata!.actions as Action[];
     expect(actions).toHaveLength(2);
     expect(actions[0]).toMatchObject({
       label: 'Button 1',

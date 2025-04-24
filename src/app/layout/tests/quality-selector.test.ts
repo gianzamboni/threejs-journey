@@ -40,7 +40,7 @@ describe('QualitySelector', () => {
     qualitySelector.addEventListener('quality-changed', mockListener);
     
     // Create a change event
-    const changeEvent = new Event('change');
+    const changeEvent = new CustomEvent('change', { detail: Quality.Low });
     const selectElement = parent.querySelector('#quality-selector-select')! as HTMLSelectElement;
     Object.defineProperty(changeEvent, 'target', { value: selectElement });
     
