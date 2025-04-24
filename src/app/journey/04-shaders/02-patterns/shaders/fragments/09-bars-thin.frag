@@ -1,5 +1,4 @@
-precision mediump float;
-
+#include '../utils.frag';
 varying vec2 vUv;
 
 /* 
@@ -28,8 +27,6 @@ This will generate 10 horizontal white bars. We do this in two steps:
 
   The result is a binary pattern of 10 horizontal white bars on a black background.
 */
-
-#include '../utils.frag';
 
 void main() {
   float strength = bar(vUv.y, 0.2);

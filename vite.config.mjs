@@ -63,7 +63,9 @@ export default defineConfig((_) => {
         typescript: true,
       }),
       tailwindcss(),
-      glsl()
+      glsl({
+        minify: true,
+      })
     ],
     build: {
       outDir: '../dist', // Output in the dist/ folder

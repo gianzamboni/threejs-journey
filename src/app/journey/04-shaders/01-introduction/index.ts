@@ -1,6 +1,6 @@
 import { Mesh, PlaneGeometry, ShaderMaterial, Vector2 } from "three";
 
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";

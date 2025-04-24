@@ -1,6 +1,7 @@
 import { DoubleSide, Mesh, PlaneGeometry, ShaderMaterial } from "three";
 
-import { Customizable } from "#/app/decorators/customizable";
+import { Timer } from 'three/addons/misc/Timer.js';
+
 import { Exercise, Description, Selectable } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { LocalStorage } from "#/app/services/local-storage";
@@ -17,15 +18,6 @@ export class Patterns extends OrbitControlledExercise {
 
   private geometry: PlaneGeometry;
 
-  @Customizable([{
-    propertyPath: 'uniforms.aConstant.value',
-    settings: {
-      min: 0,
-      max: 100,
-      step: 0.1,
-      name: 'Constant'
-    }
-  }])
   private material: ShaderMaterial;
 
   private mesh: Mesh;
@@ -44,8 +36,8 @@ export class Patterns extends OrbitControlledExercise {
       fragmentShader: SHADER_DICTIONARY[this.selectedShader],
       side: DoubleSide,
       uniforms: {
-        aConstant: {
-          value: 1
+        uTime: {
+          value: 0
         }
       }
     });
@@ -61,6 +53,11 @@ export class Patterns extends OrbitControlledExercise {
     this.material.needsUpdate = true;
     this.selectedShader = shader;
     LocalStorage.saveState(this, this.selectedShader);
+  }
+
+  frame(timer: Timer): void {
+    super.frame(timer);
+    this.material.uniforms.uTime.value = timer.getElapsed();
   }
 
   async dispose() {
