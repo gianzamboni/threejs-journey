@@ -66,7 +66,7 @@ export const SHADER_DICTIONARY = {
   "Grid Bar": gridBarFragmentShader,
   "Grid Wedge": gridWedgeFragmentShader,
   "Grid Cross": gridCrossFragmentShader,
-  "Gradient Centered": gradientCenteredFragmentShader,
+  "Gradient Displacement": gradientCenteredFragmentShader,
   "Gradient Cross": gradientCrossFragmentShader,
   "Gradient Dot": gradientDotFragmentShader,
   "Frame": frameFragmentShader,

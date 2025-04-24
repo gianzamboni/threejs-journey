@@ -3,6 +3,7 @@ precision mediump float;
 varying vec2 vUv;
 
 #include '../utils.frag';
+
 float steppedGradient(float axis) {
   return floor(axis * 10.0) / 10.0;
 }

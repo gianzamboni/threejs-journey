@@ -2,11 +2,14 @@ precision mediump float;
 
 varying vec2 vUv;
 
-#define PI 3.1415926535897932384626433832795
+#include '../utils.frag';
+
+uniform float uTime;
 
 float compressAxis(float value) {
-  return (value - 0.5) * 5.0 + 0.5;
+  return (value - 0.5) * (5.0 + abs(sin(uTime)) * 5.0) + 0.5;
 }
+
 
 float distanceToCenter(vec2 uv) {
   return distance(uv, vec2(0.5)); 
@@ -14,14 +17,6 @@ float distanceToCenter(vec2 uv) {
 
 float glare(vec2 uv) {
   return 0.15 / distanceToCenter(uv);
-}
-
-vec2 rotate(vec2 uv, float rotation, vec2 center) {
-  vec2 rotatedUv = vec2(
-    cos(rotation) * (uv.x - center.x) - sin(rotation) * (uv.y - center.y) + center.x,
-    sin(rotation) * (uv.x - center.x) + cos(rotation) * (uv.y - center.y) + center.y
-  );
-  return rotatedUv;
 }
 
 void main() {

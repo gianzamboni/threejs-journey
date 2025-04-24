@@ -1,5 +1,8 @@
 #include '../utils.frag';
+
 varying vec2 vUv;
+
+uniform float uTime;
 
 /* 
 Black & White Thin Horizontal Bars
@@ -30,6 +33,6 @@ This will generate 10 horizontal white bars. We do this in two steps:
 
 void main() {
   float strength = bar(vUv.y, 0.2);
-  vec3 color = applyColor(vUv, strength);
+  vec3 color = horizontalSweep(vUv, uTime, strength);
   gl_FragColor = vec4(color, 1.0);  
 }

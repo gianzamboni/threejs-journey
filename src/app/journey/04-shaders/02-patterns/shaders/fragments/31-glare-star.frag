@@ -2,8 +2,12 @@ precision mediump float;
 
 varying vec2 vUv;
 
+uniform float uTime;
+
+#include '../utils.frag';
+
 float compressAxis(float value) {
-  return (value - 0.5) * 5.0 + 0.5;
+  return (value - 0.5) * (5.0 + abs(sin(uTime)) * 5.0) + 0.5;
 }
 
 float distanceToCenter(float x, float y) {
