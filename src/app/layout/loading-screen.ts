@@ -1,4 +1,4 @@
-import { LoadingData } from "#/app/utils/assets-loader";
+import { LoadingData } from "#/app/services/assets-loader";
 import { sleep } from "#/app/utils/sleep";
 
 export class LoadingScreen {

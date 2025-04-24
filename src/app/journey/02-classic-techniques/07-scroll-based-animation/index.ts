@@ -20,7 +20,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
-import { AssetLoader } from '#/app/utils/assets-loader';
+import { AssetLoader } from '#/app/services/assets-loader';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { Interactions } from './interactions';
 import { ScrollBasedAnimationLayout } from './layout';

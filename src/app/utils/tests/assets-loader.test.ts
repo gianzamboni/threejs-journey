@@ -10,7 +10,7 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
-import { AssetLoader } from '../assets-loader';
+import { AssetLoader } from '../../services/assets-loader';
 
 // Mock Three.js loaders
 vi.mock('three', () => {

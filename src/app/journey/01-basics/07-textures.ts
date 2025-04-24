@@ -3,7 +3,7 @@ import { Mesh, MeshBasicMaterial, BoxGeometry, Texture, NearestFilter, RepeatWra
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
-import { AssetLoader } from '#/app/utils/assets-loader';
+import { AssetLoader } from '#/app/services/assets-loader';
 import { disposeObjects } from '#/app/utils/three-utils';
 @Exercise('textures')
 @Description("<strong>A cube with a Minecraft texture.</strong>")

@@ -19,7 +19,7 @@ import { DebugFPS } from "#/app/decorators/debug";
 import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/utils/assets-loader";
+import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import IDLE from './icons/idle.svg?raw';
 import RUN from './icons/run.svg?raw';

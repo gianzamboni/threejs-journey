@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
-import { LoadingData } from '#/app/utils/assets-loader';
+import { LoadingData } from '../../services/assets-loader';
 
 import { LoadingScreen } from '../loading-screen';
 

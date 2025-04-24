@@ -1,23 +1,48 @@
 import { CSS_CLASSES } from "#/theme";
 
-import { Action, Exercise } from "../types/exercise";
+import { DropDownMenu } from "../components/drop-down-menu";
+import { ButtonAction, Exercise, SelectableAction } from "../types/exercise";
 import { getActions } from "../utils/exercise-metadata";
 
 export class ActionBar {
 
   private layoutContainer: HTMLElement;
-  private buttons: HTMLButtonElement[];
+  private interactiveElements: {
+    element: HTMLButtonElement | DropDownMenu;
+    action: (...args: any[]) => void;
+  }[];
 
   private static buttonClasses = `cursor-pointer py-2 px-3 items-center border h-20 w-20 font-medium rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`
-  
+
   constructor() {
     this.layoutContainer = document.createElement('div');
     this.layoutContainer.id = 'action-bar-container';
     this.layoutContainer.className = `flex mx-5 mb-5 justify-around`;
-    this.buttons = [];
+    this.interactiveElements = [];
   }
 
-  addButton(action: Action, target: Exercise) {
+  addSelectable(action: SelectableAction, target: Exercise) {
+    const dropDownMenu = new DropDownMenu('action-bar-selectable-' + action.label, {
+      label: action.label,
+      options: action.options,
+      classes: 'w-full',
+    });
+
+    const onChange = (event: CustomEvent) => {
+      action.onChange.bind(target)(event.detail.value);
+    }
+    
+    dropDownMenu.setValue(action.defaultValue);
+    dropDownMenu.addEventListener('change', onChange as EventListener);
+    
+    dropDownMenu.addTo(this.layoutContainer);
+    this.interactiveElements.push({
+      element: dropDownMenu,
+      action: onChange
+    });
+  }
+  
+  addButton(action: ButtonAction, target: Exercise) {
     const button = document.createElement('button');
     button.id = `action-bar-button-${action.label}`;
     button.innerHTML = action.icon;
@@ -25,7 +50,10 @@ export class ActionBar {
     button.setAttribute('title', action.label);
 
     this.layoutContainer.appendChild(button);
-    this.buttons.push(button);
+    this.interactiveElements.push({
+      element: button,
+      action: action.onClick.bind(target)
+    });
   
     button.addEventListener('click', action.onClick.bind(target));  
   }
@@ -35,13 +63,24 @@ export class ActionBar {
   }
 
   reset() {
-    this.buttons.forEach(button => button.remove());
+    this.interactiveElements.forEach(element => {
+      if(element.element instanceof HTMLButtonElement) {
+        element.element.removeEventListener('click', element.action);
+      } else if(element.element instanceof DropDownMenu) {
+        element.element.removeEventListener('change', element.action);
+      }
+      element.element.remove();
+    });
   }
 
   updateContent(exercise: Exercise) {
     const actions = getActions(exercise);
     actions.forEach(action => {
-      this.addButton(action, exercise);
+      if(action.type === 'button') {
+        this.addButton(action as ButtonAction, exercise);
+      } else if(action.type === 'selectable') {
+        this.addSelectable(action as SelectableAction, exercise);
+      }
     })
   }
 }
