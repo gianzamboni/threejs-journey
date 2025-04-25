@@ -1,10 +1,12 @@
-import { Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
+  import { Mesh, PlaneGeometry, ShaderMaterial } from "three";
 
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { disposeMesh } from "#/app/utils/three-utils";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import seaVertexShader from "./sea.vert";
+import seaFragmentShader from "./sea.frag";
 
 @Exercise("raging-sea")
 export class RagingSea extends OrbitControlledExercise {
@@ -15,7 +17,10 @@ export class RagingSea extends OrbitControlledExercise {
     super(renderView);
 
     const geometry = new PlaneGeometry(2, 2, 2048, 2048);
-    const material = new MeshBasicMaterial({ color: 0xffffff   });
+    const material = new ShaderMaterial({
+      vertexShader: seaVertexShader,
+      fragmentShader: seaFragmentShader,
+    });
     this.water = new Mesh(geometry, material);
     this.water.rotation.x = -Math.PI * 0.5;
     this.scene.add(this.water);
