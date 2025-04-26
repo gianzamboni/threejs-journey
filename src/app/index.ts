@@ -117,8 +117,8 @@ export class App {
     this.actionBar.updateContent(this.activeExercise);
     if(isDebuggable(this.activeExercise) && isInDevMode()) {
       this.activeExercise.addEventListener('debug-info', this.updateDebugUI.bind(this) as EventListener);
+      this.toggleDebug();
     }
-    this.toggleDebug();
   }
 
   private changeQuality(evt: CustomEvent<string>) {
