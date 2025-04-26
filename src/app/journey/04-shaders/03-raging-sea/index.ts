@@ -120,7 +120,8 @@ const RAGING_SEA_COLORS_CONTROLS: ControllerConfig[] = [{
     name: "Surface",
   }
 }]
-@Exercise("raging-sea")
+
+@Exercise("sea")
 export class RagingSea extends AnimatedExercise {
 
   @Customizable(RAGING_SEA_COLORS_CONTROLS)
@@ -144,7 +145,7 @@ export class RagingSea extends AnimatedExercise {
       fragmentShader: seaFragmentShader,
       uniforms: {
         uBigWavesElevation: { value: 0.2 },
-        uBigWavesFrequency: { value: new Vector2(0.25, 0.5) },
+        uBigWavesFrequency: { value: new Vector2(0.15, 0.25) },
         uBigWavesSpeed: { value: 0.535 },
         uTime: { value: 0 },
         uDepthColor: { value: new Color(this.colors.depth) },
