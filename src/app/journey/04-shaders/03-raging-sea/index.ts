@@ -11,7 +11,6 @@ import seaVertexShader from "./shaders/sea.vert";
 
 import AnimatedExercise from "../../exercises/animated-exercise";
 
-
 @Exercise("sea")
 export class RagingSea extends AnimatedExercise {
 
