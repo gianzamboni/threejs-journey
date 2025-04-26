@@ -10,7 +10,7 @@ import testVertexShader from './shaders/vertex.vert'
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
-const defaultShader = LocalStorage.getState<string>('patterns') ?? SHADER_DICTIONARY["Solid Color"];
+const defaultShader = LocalStorage.getState<string>('patterns') ?? "Solid Color";
 
 @Exercise('patterns')
 @Description('<strong>Some shader patterns</strong>')
