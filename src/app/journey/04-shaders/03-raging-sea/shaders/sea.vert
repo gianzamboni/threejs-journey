@@ -8,6 +8,7 @@ uniform float uSmallWavesFrequency;
 uniform float uSmallWavesSpeed;
 uniform float uSmallIterations;
 
+varying float vMaxElevation;
 varying float vElevation;
 
 #include "./perlin-noise-3d.glsl";
@@ -27,6 +28,7 @@ void main() {
     modelPosition.y += elevation;
 
     vElevation = elevation;
+    vMaxElevation = uSmallWavesElevation + uBigWavesElevation;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
