@@ -3,6 +3,8 @@ import { Shaders } from "./01-introduction";
 import { Patterns } from "./02-patterns";
 import { RagingSea } from "./03-raging-sea";
 import { AnimatedGalaxy } from "./04-animated-galaxy";
+import { ModifiedMaterials } from "./05-modified-materials";
+
 export const SHADERS: Section = {
   id: 'shaders',
   exercises: [
@@ -10,5 +12,6 @@ export const SHADERS: Section = {
     Patterns,
     RagingSea,
     AnimatedGalaxy,
+    ModifiedMaterials,
   ]
 }
