@@ -1,4 +1,4 @@
-import { DropDownMenu } from '../components/drop-down-menu';
+import { DropDownMenu } from '#/app/components/drop-down-menu';
 
 export enum Quality {
   Low = 'low',

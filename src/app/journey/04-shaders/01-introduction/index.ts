@@ -4,12 +4,12 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
+import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { MATERIAL_CONTROLLERS } from "./debug-ui";
 import testFragmentShader from './fragment.frag'
 import testVertexShader from './vertex.vert'
 
-import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 
 @Exercise('first-shader')

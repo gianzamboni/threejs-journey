@@ -14,12 +14,12 @@ import { DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
+import { disposeMesh } from '#/app/utils/three-utils';
 import fragmentShader from './fragment.frag';
 import vertexShader from './vertex.vert';
 
 import { galaxyControllers } from '../../common/galaxy/controllers';
 import { configureCamera, Galaxy, GALAXY_DEFAULT_SETTINGS, GalaxyParams, randomDisplacement } from '../../common/galaxy/galaxy';
-import { disposeMesh } from '#/app/utils/three-utils';
 
 @Exercise('animated-galaxy')
 @Description(

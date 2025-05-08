@@ -1,8 +1,7 @@
+import { DropDownMenu } from "#/app/components/drop-down-menu";
+import { ButtonAction, Exercise, SelectableAction } from "#/app/types/exercise";
+import { getActions } from "#/app/utils/exercise-metadata";
 import { CSS_CLASSES } from "#/theme";
-
-import { DropDownMenu } from "../components/drop-down-menu";
-import { ButtonAction, Exercise, SelectableAction } from "../types/exercise";
-import { getActions } from "../utils/exercise-metadata";
 
 export class ActionBar {
 

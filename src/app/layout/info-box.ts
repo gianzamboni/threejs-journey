@@ -1,9 +1,7 @@
 import { Collapsable } from "#/app/components/collapsable";
 import { Exercise } from "#/app/types/exercise";
+import { getId, getDescriptions } from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
-
-import { getId } from "../utils/exercise-metadata";
-import { getDescriptions } from "../utils/exercise-metadata";
 
 export class InfoBox {
 

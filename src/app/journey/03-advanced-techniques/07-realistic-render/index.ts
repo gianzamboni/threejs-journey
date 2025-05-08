@@ -15,6 +15,7 @@ import { Timer } from "three/examples/jsm/Addons.js";
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
+import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -23,7 +24,6 @@ import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
-import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 type RenderedObject = {
   mesh: Mesh;

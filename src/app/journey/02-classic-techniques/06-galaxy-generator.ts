@@ -16,10 +16,10 @@ import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
+import { disposeMesh } from '#/app/utils/three-utils';
 
 import { galaxyControllers } from '../common/galaxy/controllers';
 import { GALAXY_DEFAULT_SETTINGS, Galaxy, GalaxyParams, configureCamera, randomDisplacement } from '../common/galaxy/galaxy';
-import { disposeMesh } from '#/app/utils/three-utils';
 
 
 @Exercise('galaxy-generator')

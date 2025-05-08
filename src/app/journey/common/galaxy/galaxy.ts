@@ -1,6 +1,6 @@
-import { randomSign } from "#/app/utils/random-utils";
 import { BufferGeometry, Points, Material, PerspectiveCamera } from "three";
 
+import { randomSign } from "#/app/utils/random-utils";
 
 export type GalaxyParams = {
   count: number;
@@ -25,7 +25,6 @@ export const GALAXY_DEFAULT_SETTINGS: GalaxyParams = {
   insideColor: '#ff6030',
   outsideColor: '#0048bd'
 }
-
 
 export interface Galaxy<T extends Material> {
   geometry: BufferGeometry;

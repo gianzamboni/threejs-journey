@@ -3,7 +3,7 @@
 
 import '../pollyfills/symbol-pollyfill';
 import { App } from "#/app";
-import { qualityFromString } from './app/layout/quality-selector';
+import { qualityFromString } from '#/app/layout/quality-selector';
 // Initialize the app when the window loads
 window.addEventListener('load', () => {
   const urlParams = new URLSearchParams(window.location.search);

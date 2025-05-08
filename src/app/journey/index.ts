@@ -1,10 +1,9 @@
 import { Section } from "#/app/types/exercise";
+import { getMetadata } from "#/app/utils/exercise-metadata";
 import { BASICS } from "./01-basics";
 import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 import { SHADERS } from "./04-shaders";
-
-import { getMetadata } from "../utils/exercise-metadata";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();

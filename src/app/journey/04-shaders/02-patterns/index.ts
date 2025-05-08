@@ -3,12 +3,12 @@ import { DoubleSide, Mesh, PlaneGeometry, ShaderMaterial } from "three";
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Exercise, Description, Selectable } from "#/app/decorators/exercise";
+import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { LocalStorage } from "#/app/services/local-storage";
 import { SHADER_DICTIONARY, SHADER_LIST } from "./shaders";
 import testVertexShader from './shaders/vertex.vert'
 
-import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 const defaultShader = LocalStorage.getState<string>('patterns') ?? "Solid Color";
 
