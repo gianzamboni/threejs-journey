@@ -3,7 +3,6 @@ import {
   PointsMaterial,
   Points,
   Texture,
-  PerspectiveCamera,
   AdditiveBlending,
   Color,
   BufferAttribute
@@ -17,20 +16,11 @@ import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
-import { randomSign } from '#/app/utils/random-utils';
-import { GALAXY_CONFIG } from './galaxy-configs';
 
-type GalaxyParams = {
-  count: number;
-  size: number;
-  radius: number;
-  branches: number;
-  spin: number;
-  randomness: number;
-  randomnessPower: number;
-  insideColor: string;
-  outsideColor: string;
-}
+import { galaxyControllers } from '../common/galaxy/controllers';
+import { GALAXY_DEFAULT_SETTINGS, Galaxy, GalaxyParams, configureCamera, randomDisplacement } from '../common/galaxy/galaxy';
+import { disposeMesh } from '#/app/utils/three-utils';
+
 
 @Exercise('galaxy-generator')
 @Description(
@@ -38,27 +28,13 @@ type GalaxyParams = {
   "You can configure the galaxy with the hidden ui."
 )
 export class GalaxyGenerator extends OrbitControlledExercise {
-  @Customizable(GALAXY_CONFIG)
-  private galaxySettings: GalaxyParams = {
-    count: 100000,
-    size: 0.01,
-    radius: 10,
-    branches: 5,
-    spin: 1,
-    randomness: 2,
-    randomnessPower: 5,
-    insideColor: '#ff6030',
-    outsideColor: '#0048bd'
-  };
 
-  private galaxy: {
-    geometry: BufferGeometry;
-    material: PointsMaterial;
-    points: Points;
-  };
-
+  @Customizable(galaxyControllers(0.001, 1))
+  private galaxySettings: GalaxyParams = GALAXY_DEFAULT_SETTINGS;
 
   private particleTexture: Texture;
+  private galaxy: Galaxy<PointsMaterial>;
+
 
   constructor(view: RenderView) {
     super(view);
@@ -69,8 +45,7 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     this.galaxy = this.generateGalaxy();
     this.scene.add(this.galaxy.points);
 
-    this.camera.position.set(3,2,3);
-    (this.camera as PerspectiveCamera).near = 0.001;
+    configureCamera(this.camera);
     this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 0.125;
   }
@@ -87,11 +62,10 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     super.frame(timer);
   }
 
-  private generateGalaxy() {
+  private generateGalaxy(): Galaxy<PointsMaterial> {
     const geometry = this.generateGalaxyGeometry();
     const material = this.generateGalaxyMaterial();
     const points = new Points(geometry, material);
-    this.scene.add(points);
 
     return { geometry, material, points };
   }
@@ -124,9 +98,9 @@ export class GalaxyGenerator extends OrbitControlledExercise {
 
       const branchAngle = (i % this.galaxySettings.branches) / this.galaxySettings.branches * Math.PI * 2;
       
-     positions[i3] = Math.cos(branchAngle + spinAngle) * radius + this.randomDisplacement(radius);
-     positions[i3 + 1] = this.randomDisplacement(radius);
-     positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + this.randomDisplacement(radius);
+     positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomDisplacement(radius, this.galaxySettings.randomnessPower, this.galaxySettings.randomness);
+     positions[i3 + 1] = randomDisplacement(radius, this.galaxySettings.randomnessPower, this.galaxySettings.randomness);
+     positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomDisplacement(radius, this.galaxySettings.randomnessPower, this.galaxySettings.randomness);
 
      const mixedColor = colorInside.clone();
      mixedColor.lerp(colorOutside, radius / this.galaxySettings.radius);
@@ -141,14 +115,9 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     return geometry;
   }
 
-  private randomDisplacement(radius: number) {
-    return Math.pow(Math.random(), this.galaxySettings.randomnessPower) * (randomSign() * this.galaxySettings.randomness * radius);
-  }
-
   private disposeGalaxy() {
     this.scene.remove(this.galaxy.points);
-    this.galaxy.geometry.dispose();
-    this.galaxy.material.dispose();
+    disposeMesh(this.galaxy);
   }
 
   async dispose() {

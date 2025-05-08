@@ -1,7 +1,6 @@
 import { 
   BufferGeometry,
   Points,
-  PerspectiveCamera,
   AdditiveBlending,
   Color,
   BufferAttribute,
@@ -15,22 +14,12 @@ import { DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
-import { randomSign } from '#/app/utils/random-utils';
 import fragmentShader from './fragment.frag';
-import { GALAXY_CONFIG } from './galaxy-configs';
 import vertexShader from './vertex.vert';
 
-type GalaxyParams = {
-  count: number;
-  size: number;
-  radius: number;
-  branches: number;
-  spin: number;
-  randomness: number;
-  randomnessPower: number;
-  insideColor: string;
-  outsideColor: string;
-}
+import { galaxyControllers } from '../../common/galaxy/controllers';
+import { configureCamera, Galaxy, GALAXY_DEFAULT_SETTINGS, GalaxyParams, randomDisplacement } from '../../common/galaxy/galaxy';
+import { disposeMesh } from '#/app/utils/three-utils';
 
 @Exercise('animated-galaxy')
 @Description(
@@ -38,38 +27,33 @@ type GalaxyParams = {
   "You can configure the galaxy with the hidden ui."
 )
 export class AnimatedGalaxy extends OrbitControlledExercise {
-  @Customizable(GALAXY_CONFIG)
+  
+  @Customizable(galaxyControllers(1, 100))
   private galaxySettings: GalaxyParams = {
-    count: 100000,
-    size: 0.01,
-    radius: 10,
-    branches: 5,
-    spin: 1,
-    randomness: 1,
-    randomnessPower: 5,
-    insideColor: '#ff6030',
-    outsideColor: '#0048bd'
+    ...GALAXY_DEFAULT_SETTINGS,
+    size: 32,
   };
 
-  private galaxy: {
-    geometry: BufferGeometry;
-    material: ShaderMaterial;
-    points: Points;
-  };
+  private galaxy: Galaxy<ShaderMaterial>;
 
   constructor(view: RenderView) {
     super(view);
-
     this.galaxy = this.generateGalaxy();
+    this.scene.add(this.galaxy.points);
 
-    this.camera.position.set(3,2,3);
-    (this.camera as PerspectiveCamera).near = 0.001;
+    configureCamera(this.camera);
   }
 
   public updateGalaxySettings<K extends keyof GalaxyParams>(newValue: GalaxyParams[K], { property }: { property: K }) {
     this.galaxySettings[property] = newValue;
-    this.disposeGalaxy();
-    this.galaxy = this.generateGalaxy();
+
+    if (property === 'size') {
+      this.galaxy.material.uniforms.uSize.value = (newValue as number) * this.view.pixelRatio;
+    } else {
+      this.disposeGalaxy();
+      this.galaxy = this.generateGalaxy();
+      this.scene.add(this.galaxy.points);
+    }
   }
 
   @DebugFPS
@@ -78,11 +62,10 @@ export class AnimatedGalaxy extends OrbitControlledExercise {
     this.galaxy.material.uniforms.uTime.value = timer.getElapsed();
   }
 
-  private generateGalaxy() {
+  private generateGalaxy(): Galaxy<ShaderMaterial> {
     const geometry = this.generateGalaxyGeometry();
     const material = this.generateGalaxyMaterial();
     const points = new Points(geometry, material);
-    this.scene.add(points);
 
     return { geometry, material, points };
   }
@@ -95,7 +78,7 @@ export class AnimatedGalaxy extends OrbitControlledExercise {
       fragmentShader: fragmentShader,
       vertexShader: vertexShader,
       uniforms: {
-        uSize: { value: 75   * this.view.pixelRatio },
+        uSize: { value: this.galaxySettings.size   * this.view.pixelRatio },
         uTime: { value: 0 },
       },
     });
@@ -129,9 +112,9 @@ export class AnimatedGalaxy extends OrbitControlledExercise {
      colors[i3 + 1] = mixedColor.g;
      colors[i3 + 2] = mixedColor.b;
 
-     randomnes[i3] = this.randomDisplacement(radius);
-     randomnes[i3 + 1] = this.randomDisplacement(radius);
-     randomnes[i3 + 2] = this.randomDisplacement(radius);
+     randomnes[i3] = randomDisplacement(radius, this.galaxySettings.randomnessPower, this.galaxySettings.randomness);
+     randomnes[i3 + 1] = randomDisplacement(radius, this.galaxySettings.randomnessPower, this.galaxySettings.randomness);
+     randomnes[i3 + 2] = randomDisplacement(radius, this.galaxySettings.randomnessPower, this.galaxySettings.randomness);
 
      scales[i] = Math.random();
     }
@@ -143,14 +126,9 @@ export class AnimatedGalaxy extends OrbitControlledExercise {
     return geometry;
   }
 
-  private randomDisplacement(radius: number) {
-    return Math.pow(Math.random(), this.galaxySettings.randomnessPower) * (randomSign() * this.galaxySettings.randomness * radius);
-  }
-
   private disposeGalaxy() {
     this.scene.remove(this.galaxy.points);
-    this.galaxy.geometry.dispose();
-    this.galaxy.material.dispose();
+    disposeMesh(this.galaxy);
   }
 
   async dispose() {
