@@ -14,6 +14,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from '#/app/decorators/exercise';
+import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { Lights } from "#/app/utils/light-controllers-utils";
@@ -21,7 +22,6 @@ import { disposeObjects } from "#/app/utils/three-utils";
 import { LIGHTS_CONFIG, MATERIAL_CONFIG } from "./debug-ui-configs";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
-import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>;
 
 //type Helpers = {

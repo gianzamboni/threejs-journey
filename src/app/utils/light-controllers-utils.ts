@@ -7,9 +7,8 @@ import {
   SpotLight
 } from 'three';
 
+import { ControllerConfig } from '#/app/decorators/customizable';
 import { printable } from "./text-utils"
-
-import { ControllerConfig } from '../decorators/customizable';
 
 export type Lights = {
   ambient: AmbientLight,

@@ -1,5 +1,5 @@
-import { Exercise } from "../types/exercise";
-import { getId } from "../utils/exercise-metadata";
+import { Exercise } from "#/app/types/exercise";
+import { getId } from "#/app/utils/exercise-metadata";
 
 export class LocalStorage {
 

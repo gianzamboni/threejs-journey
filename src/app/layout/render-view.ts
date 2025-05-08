@@ -111,6 +111,10 @@ export default class RenderView {
     this._renderer.setClearColor('#000000');
   }
 
+  get pixelRatio() {
+    return this._renderer.getPixelRatio();
+  }
+
   get renderer() {
     return this._renderer;
   }

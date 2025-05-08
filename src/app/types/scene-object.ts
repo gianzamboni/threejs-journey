@@ -5,7 +5,7 @@ import {
   Mesh
 } from 'three';
 
-import { TextureDict } from '../utils/textures';
+import { TextureDict } from '#/app/utils/textures';
 
 /**
  * Base class for all scene objects

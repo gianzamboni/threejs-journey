@@ -1,6 +1,6 @@
 import { Texture, SRGBColorSpace } from 'three';
 
-import { AssetLoader } from '../services/assets-loader';
+import { AssetLoader } from '#/app/services/assets-loader';
 
 export type EnumDictionary<KeyType extends string | symbol | number, Value> = { 
   [Key in KeyType]?: Value

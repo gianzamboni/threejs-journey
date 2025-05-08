@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import { LoadingData } from '../../services/assets-loader';
-
 import { LoadingScreen } from '../loading-screen';
 
 function getLoadingScreenContainer(): HTMLElement {

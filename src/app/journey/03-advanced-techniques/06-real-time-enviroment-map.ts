@@ -111,7 +111,7 @@ export class RealTimeEnviromentMap extends OrbitControlledExercise {
   frame(timer: Timer): void {
     super.frame(timer);
     this.holyDonut.rotation.x = Math.sin(timer.getElapsed());
-    this.cubeCamera.update(this._view.renderer, this.scene);
+    this.cubeCamera.update(this.view.renderer, this.scene);
   }
 
   async dispose() {

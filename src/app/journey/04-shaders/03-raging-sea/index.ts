@@ -4,12 +4,12 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Exercise } from "#/app/decorators/exercise";
+import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { RAGING_SEA_COLORS_CONTROLS, RAGING_SEA_CONTROLS } from "./controls";
 import seaFragmentShader from "./shaders/sea.frag";
 import seaVertexShader from "./shaders/sea.vert";
 
-import AnimatedExercise from "../../exercises/animated-exercise";
 
 @Exercise("sea")
 export class RagingSea extends AnimatedExercise {

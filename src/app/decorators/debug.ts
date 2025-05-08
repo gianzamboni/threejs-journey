@@ -1,6 +1,6 @@
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { ExerciseMetadata } from "../utils/exercise-metadata";
+import { ExerciseMetadata } from '#/app/utils/exercise-metadata';
 
 type FrameFunction = (timer: Timer, ...args: unknown[]) => void;
 

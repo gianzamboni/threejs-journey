@@ -15,6 +15,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { DebugFPS } from '#/app/decorators/debug';
 import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
+import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -26,7 +27,6 @@ import SPHERE from './icons/sphere.svg?raw';
 import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
-import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 
 type PhysicalObject = {
