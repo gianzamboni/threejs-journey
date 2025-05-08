@@ -70,7 +70,7 @@ export class AnimationMixerTest extends OrbitControlledExercise {
     this.camera.position.set(6,4,8);
     this.camera.updateProjectionMatrix();
 
-    this._view.setRender({
+    this.view.setRender({
       shadowMap: {
         enabled: true,
         type: this.quality.shadowMap.type

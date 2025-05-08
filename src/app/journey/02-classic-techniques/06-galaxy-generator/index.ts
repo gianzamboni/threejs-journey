@@ -51,9 +51,12 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     outsideColor: '#0048bd'
   };
 
-  private geometry: BufferGeometry | undefined = undefined;
-  private material: PointsMaterial | undefined = undefined;
-  private points: Points | undefined = undefined;
+  private galaxy: {
+    geometry: BufferGeometry;
+    material: PointsMaterial;
+    points: Points;
+  };
+
 
   private particleTexture: Texture;
 
@@ -62,17 +65,21 @@ export class GalaxyGenerator extends OrbitControlledExercise {
 
     const assetLoader = AssetLoader.getInstance();
     this.particleTexture = assetLoader.loadTexture('/textures/particles/4.png');
-    // Generate initial galaxy
+
+    this.galaxy = this.generateGalaxy();
+    this.scene.add(this.galaxy.points);
+
     this.camera.position.set(3,2,3);
     (this.camera as PerspectiveCamera).near = 0.001;
     this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 0.125;
-    this.generateGalaxy();
   }
 
   public updateGalaxySettings<K extends keyof GalaxyParams>(newValue: GalaxyParams[K], { property }: { property: K }) {
     this.galaxySettings[property] = newValue;
-    this.generateGalaxy();
+    this.disposeGalaxy();
+    this.galaxy = this.generateGalaxy();
+    this.scene.add(this.galaxy.points);
   }
 
   @DebugFPS
@@ -80,18 +87,13 @@ export class GalaxyGenerator extends OrbitControlledExercise {
     super.frame(timer);
   }
 
-  /**
-   * Generates the galaxy based on current settings
-   */
   private generateGalaxy() {
-    // Dispose of old geometry if it exists
-    this.disposeGalaxy();
+    const geometry = this.generateGalaxyGeometry();
+    const material = this.generateGalaxyMaterial();
+    const points = new Points(geometry, material);
+    this.scene.add(points);
 
-    this.geometry = this.generateGalaxyGeometry();
-    this.material = this.generateGalaxyMaterial();
-    this.points = new Points(this.geometry, this.material);
-    this.scene.add(this.points);
-
+    return { geometry, material, points };
   }
 
   private generateGalaxyMaterial() {
@@ -144,17 +146,14 @@ export class GalaxyGenerator extends OrbitControlledExercise {
   }
 
   private disposeGalaxy() {
-    if (this.points) {
-      this.scene.remove(this.points);
-      this.geometry?.dispose();
-      this.material?.dispose();
-    }
+    this.scene.remove(this.galaxy.points);
+    this.galaxy.geometry.dispose();
+    this.galaxy.material.dispose();
   }
 
   async dispose() {
     super.dispose();
-    this.geometry?.dispose();
-    this.material?.dispose();
+    this.disposeGalaxy();
     this.particleTexture.dispose();
   }
 } 

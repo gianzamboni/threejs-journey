@@ -77,7 +77,7 @@ export class RealisticRender extends OrbitControlledExercise {
     this._renderer.toneMapping = ReinhardToneMapping;
     this._renderer.toneMappingExposure = 3;
 
-    this._view.enableShadows(this.qualityConfig.shadowMapType);
+    this.view.enableShadows(this.qualityConfig.shadowMapType);
   }
 
   createFloor() {

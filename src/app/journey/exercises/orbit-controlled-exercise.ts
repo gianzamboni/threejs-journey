@@ -10,10 +10,11 @@ export default class OrbitControlledExercise extends AnimatedExercise {
   
   protected controls: OrbitControls;
 
-  protected _view: RenderView;
+  protected view: RenderView;
+
   constructor(view: RenderView) {
     super();
-    this._view = view;
+    this.view = view;
     this.controls = new OrbitControls(this.camera, view.canvas);
     this.controls.enableDamping = true;
   }
