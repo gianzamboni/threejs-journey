@@ -59,7 +59,9 @@ export class AnimatedGalaxy extends OrbitControlledExercise {
   @DebugFPS
   public frame(timer: Timer) {
     super.frame(timer);
-    this.galaxy.material.uniforms.uTime.value = timer.getElapsed();
+    const elapsed = timer.getElapsed();
+    console.log(elapsed % 100);
+    this.galaxy.material.uniforms.uTime.value = elapsed;
   }
 
   private generateGalaxy(): Galaxy<ShaderMaterial> {
