@@ -133,10 +133,7 @@ describe('RenderView', () => {
   it('should set render configuration', () => {
     // Define render config
     const renderConfig = {
-      shadowMap: {
-        enabled: true,
-        type: PCFShadowMap
-      },
+      shadowMapType: PCFShadowMap,
       tone: {
         mapping: NoToneMapping,
         exposure: 2
