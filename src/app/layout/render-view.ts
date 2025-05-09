@@ -11,10 +11,7 @@ import { Exercise } from '#/app/types/exercise';
 import { isAnimated } from '#/app/utils/exercise-metadata';
 
 type RenderConfig = {
-  shadowMap?: {
-    enabled: boolean,
-    type: ShadowMapType
-  },
+  shadowMapType?: ShadowMapType,
   tone?: {
     mapping: ToneMapping,
     exposure?: number,
@@ -81,9 +78,9 @@ export default class RenderView {
   }
 
   setRender(renderConfig: RenderConfig) {
-    if(renderConfig.shadowMap) {
-      this._renderer.shadowMap.enabled = renderConfig.shadowMap.enabled;
-      this._renderer.shadowMap.type = renderConfig.shadowMap.type;
+    if(renderConfig.shadowMapType) {
+      this._renderer.shadowMap.enabled = true;
+      this._renderer.shadowMap.type = renderConfig.shadowMapType;
     }
 
     if(renderConfig.tone) {

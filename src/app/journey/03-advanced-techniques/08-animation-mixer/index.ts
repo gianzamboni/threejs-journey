@@ -71,10 +71,7 @@ export class AnimationMixerTest extends OrbitControlledExercise {
     this.camera.updateProjectionMatrix();
 
     this.view.setRender({
-      shadowMap: {
-        enabled: true,
-        type: this.quality.shadowMap.type
-      },
+      shadowMapType: this.quality.shadowMap.type,
       tone: {
         mapping: CineonToneMapping,
         exposure: 1.75,
