@@ -60,7 +60,6 @@ export class AnimatedGalaxy extends OrbitControlledExercise {
   public frame(timer: Timer) {
     super.frame(timer);
     const elapsed = timer.getElapsed();
-    console.log(elapsed % 100);
     this.galaxy.material.uniforms.uTime.value = elapsed;
   }
 
