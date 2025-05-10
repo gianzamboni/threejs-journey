@@ -13,7 +13,7 @@ float glitch(vec2 st, float y) {
   float strength = sin(glitchTime) + sin(glitchTime * 3.45) + sin(glitchTime * 8.76);
   strength /= 3.0;
   strength = smoothstep(0.3, 1.0, strength);
-  strength *= (0.09 + 0.12) / 2.0;
+  strength *= 0.1;
   return random(st + uTime) * strength - 0.5;
 }
 
