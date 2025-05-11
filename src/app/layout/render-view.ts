@@ -14,7 +14,7 @@ import { isAnimated } from '#/app/utils/exercise-metadata';
 type RenderConfig = {
   shadowMapType?: ShadowMapType,
   tone?: {
-    mapping: ToneMapping,
+    mapping?: ToneMapping,
     exposure?: number,
   },
   clearColor?: string,
@@ -90,11 +90,12 @@ export default class RenderView extends EventTarget {
       this._renderer.shadowMap.type = renderConfig.shadowMapType;
     }
 
-    if(renderConfig.tone) {
+    if(renderConfig.tone?.mapping) {
       this._renderer.toneMapping = renderConfig.tone.mapping;
-      if(renderConfig.tone.exposure) {
-        this._renderer.toneMappingExposure = renderConfig.tone.exposure;
-      }
+    }
+
+    if(renderConfig.tone?.exposure) {
+      this._renderer.toneMappingExposure = renderConfig.tone.exposure;
     }
 
     if(renderConfig.clearColor) {
