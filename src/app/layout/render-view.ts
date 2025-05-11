@@ -124,10 +124,10 @@ export default class RenderView extends EventTarget {
   }
 
   get height() {
-    return this.canvas.clientHeight;
+    return window.innerHeight;
   }
 
   get width() {
-    return this.canvas.clientWidth;
+    return window.innerWidth;
   }
 }
