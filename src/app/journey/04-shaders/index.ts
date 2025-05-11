@@ -6,6 +6,7 @@ import { AnimatedGalaxy } from "./04-animated-galaxy";
 import { ModifiedMaterials } from "./05-modified-material";
 import { CoffeeSmoke } from "./06-coffee-smoke";
 import { Hologram } from "./07-hologram";
+import Fireworks from "./08-fireworks";
 
 export const SHADERS: Section = {
   id: 'shaders',
@@ -17,5 +18,6 @@ export const SHADERS: Section = {
     ModifiedMaterials,
     CoffeeSmoke,
     Hologram,
+    Fireworks
   ]
 }

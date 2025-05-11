@@ -3,7 +3,8 @@ import {
   ShadowMapType,
   NoToneMapping,
   PCFShadowMap,
-  ToneMapping
+  ToneMapping,
+  Color
 } from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
@@ -19,7 +20,7 @@ type RenderConfig = {
   clearColor?: string,
 }
 
-export default class RenderView {
+export default class RenderView extends EventTarget {
 
   public canvas: HTMLElement;
   private _renderer: WebGLRenderer;
@@ -27,6 +28,7 @@ export default class RenderView {
   private exercise: Exercise | undefined;
 
   constructor() {
+    super();
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'render-view-canvas';
     this.canvas.className = 'fixed top-0 left-0 z-[0]';
@@ -75,6 +77,11 @@ export default class RenderView {
       this.exercise.updateCamera(size.width / size.height)
       this._renderer.render(this.exercise.scene, this.exercise.camera);
     }
+
+    this.dispatchEvent(new CustomEvent('resize', { detail: {
+      size,
+      pixelRatio: this._renderer.getPixelRatio(),
+    } }));
   }
 
   setRender(renderConfig: RenderConfig) {
@@ -105,7 +112,7 @@ export default class RenderView {
     this._renderer.shadowMap.type = PCFShadowMap;
     this._renderer.toneMapping = NoToneMapping;
     this._renderer.toneMappingExposure = 1;
-    this._renderer.setClearColor('#000000');
+    this._renderer.setClearColor(new Color('#000000'));
   }
 
   get pixelRatio() {
@@ -118,5 +125,9 @@ export default class RenderView {
 
   get height() {
     return this.canvas.clientHeight;
+  }
+
+  get width() {
+    return this.canvas.clientWidth;
   }
 }
