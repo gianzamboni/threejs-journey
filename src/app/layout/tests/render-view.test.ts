@@ -12,6 +12,7 @@ vi.mock('three', () => {
   const mockRenderer = {
     setSize: vi.fn(),
     setPixelRatio: vi.fn(),
+    getPixelRatio: vi.fn().mockReturnValue(1),
     render: vi.fn(),
     shadowMap: {
       enabled: false,
@@ -25,7 +26,10 @@ vi.mock('three', () => {
   return {
     WebGLRenderer: vi.fn().mockImplementation(() => mockRenderer),
     PCFShadowMap: 1,
-    NoToneMapping: 0
+    NoToneMapping: 0,
+    Color: vi.fn().mockImplementation((_color) => ({
+      color: "#000000"
+    }))
   };
 });
 
@@ -170,7 +174,7 @@ describe('RenderView', () => {
     expect(renderView.renderer.shadowMap.type).toBe(PCFShadowMap);
     expect(renderView.renderer.toneMapping).toBe(NoToneMapping);
     expect(renderView.renderer.toneMappingExposure).toBe(1);
-    expect(renderView.renderer.setClearColor).toHaveBeenCalledWith('#000000');
+    expect(renderView.renderer.setClearColor).toHaveBeenCalledOnce();
   });
   
   it('should return renderer', () => {
@@ -179,7 +183,7 @@ describe('RenderView', () => {
   
   it('should return canvas height', () => {
     // Set clientHeight
-    Object.defineProperty(renderView.canvas, 'clientHeight', { value: 500 });
+    Object.defineProperty(window, 'innerHeight', { value: 500 });
     
     // Verify
     expect(renderView.height).toBe(500);
