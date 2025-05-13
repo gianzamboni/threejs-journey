@@ -90,7 +90,6 @@ export default class Fireworks extends OrbitControlledExercise {
     uniforms.rayleigh.value = this.skyParameters.rayleigh;
     uniforms.mieCoefficient.value = this.skyParameters.mieCoefficient;
     uniforms.mieDirectionalG.value = this.skyParameters.mieDirectionalG;
-    console.log(uniforms);
     const phi = MathUtils.degToRad(90 - this.skyParameters.elevation);
     const theta = MathUtils.degToRad(this.skyParameters.azimuth);
     this.sun.setFromSphericalCoords(1, phi, theta);
