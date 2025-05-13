@@ -1,15 +1,14 @@
-import { Group, Mesh, Uniform, ShaderMaterial, SphereGeometry, TorusKnotGeometry, DoubleSide, AdditiveBlending, Color } from "three";
+import { Uniform, ShaderMaterial, DoubleSide, AdditiveBlending, Color } from "three";
 
 import { Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/services/assets-loader";
-import { disposeMesh } from "#/app/utils/three-utils";
 import hologramFrag from "./hologram.frag";
 import hologramVert from "./hologram.vert";
 
+import SuzanneScene from "../../common/suzanne-scene";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise("hologram")
@@ -36,74 +35,22 @@ export class Hologram extends OrbitControlledExercise {
 
   private material: ShaderMaterial;
 
-  private suzanne: Group | undefined;
-  private torus: Mesh;
-  private sphere: Mesh;
-
+  private suzanneScene: SuzanneScene;
+  
   constructor(view: RenderView) {
     super(view);
-
+    
+    this.material = this.createMaterial();
     this.view.renderer.setClearColor(this.clearColor);
 
-    this.material = this.createMaterial();
-
-    this.torus = this.createTorus();
-    this.torus.position.x = 3;
-
-    this.sphere = this.createSphere();
-    this.sphere.position.x = -3;
-
-    this.scene.add(this.torus, this.sphere);
-    this.loadSuzanne();
-
-    this.camera.fov = 25;
-    this.camera.position.set(7, 5, 6);
-    this.camera.updateProjectionMatrix();
+    this.suzanneScene = new SuzanneScene(this.material, this);
   }
 
   public frame(timer: Timer) {
     super.frame(timer);
-
-   const elapsedTime = timer.getElapsed();
+    const elapsedTime = timer.getElapsed();
     this.material.uniforms.uTime.value = elapsedTime;
-
-    if(this.suzanne) {
-      this.suzanne.rotation.x = -elapsedTime * 0.1;
-      this.suzanne.rotation.y = elapsedTime * 0.2;
-    }
-
-    this.torus.rotation.x = -elapsedTime * 0.1;
-    this.torus.rotation.y = elapsedTime * 0.2;
-    
-    this.sphere.rotation.x = -elapsedTime * 0.1;
-    this.sphere.rotation.y = elapsedTime * 0.2;
-
-  }
-
-  private createSphere() {
-    return new Mesh(
-      new SphereGeometry(),
-      this.material
-    );
-  }
-
-  private createTorus() {
-    return new Mesh(
-      new TorusKnotGeometry(0.6, 0.25, 128, 32),
-      this.material
-    );
-  }
-
-  private loadSuzanne() {
-    AssetLoader.getInstance().loadModel("./models/suzanne.glb", (model) => {
-      this.suzanne = model;
-      this.suzanne.traverse((child) => {
-        if(child instanceof Mesh) {
-          (child as Mesh).material = this.material;
-        }
-      })
-      this.scene.add(this.suzanne);
-    });
+    this.suzanneScene.frame(timer);
   }
 
   private createMaterial() {
@@ -131,7 +78,6 @@ export class Hologram extends OrbitControlledExercise {
 
   async dispose() {
     super.dispose();
-    disposeMesh(this.torus);
-    disposeMesh(this.sphere);
+    this.suzanneScene.dispose();
   }
 }
