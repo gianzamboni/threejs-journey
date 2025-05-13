@@ -8,6 +8,7 @@ import { DebugUITest } from "./06-debug-ui";
 import { TextureTest } from "./07-textures";
 import { MaterialsTest } from "./08-materials";
 import { Text3D } from "./09-text";
+
 export const BASICS: Section = {
   id: 'basics',
   exercises: [ 
