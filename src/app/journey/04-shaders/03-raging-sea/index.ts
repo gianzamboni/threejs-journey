@@ -3,17 +3,19 @@ import { Color, Mesh, PlaneGeometry, ShaderMaterial, Vector2, Vector3 } from "th
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
+import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise } from "#/app/decorators/exercise";
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
+import { Quality } from "#/app/layout/quality-selector";
+import RenderView from "#/app/layout/render-view";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { RAGING_SEA_COLORS_CONTROLS, RAGING_SEA_CONTROLS } from "./controls";
+import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 import seaFragmentShader from "./shaders/sea.frag";
 import seaVertexShader from "./shaders/sea.vert";
 
-
 @Exercise("sea")
 export class RagingSea extends AnimatedExercise {
-
   @Customizable(RAGING_SEA_COLORS_CONTROLS)
   private colors = {
     depth: "#2b9cda",
@@ -23,26 +25,26 @@ export class RagingSea extends AnimatedExercise {
   private material: ShaderMaterial;
 
   private water: Mesh;
+  private quality: QualityConfig;
 
-
-
-  constructor() {
+  constructor(_: RenderView, quality: Quality) {
     super();
+    this.quality = QUALITY_CONFIG[quality];
 
-    const geometry = new PlaneGeometry(50, 50, 2048, 2048);
+    const geometry = new PlaneGeometry(50, 50, this.quality.segments, this.quality.segments);
     this.material = new ShaderMaterial({
       vertexShader: seaVertexShader,
       fragmentShader: seaFragmentShader,
       uniforms: {
         uBigWavesElevation: { value: 0.2 },
-        uBigWavesFrequency: { value: new Vector2(0.15, 0.25) },
+        uBigWavesFrequency: { value: new Vector2(this.quality.shader.bigWaves.frequencyX, 0.25) },
         uBigWavesSpeed: { value: 0.535 },
         uTime: { value: 0 },
         uDepthColor: { value: new Color(this.colors.depth) },
         uSurfaceColor: { value: new Color(this.colors.surface) },
         uColorOffset: { value: 0.08 },
         uColorMultiplier: { value: 1.887 },
-        uSmallWavesElevation: { value: 0.15 },
+        uSmallWavesElevation: { value: this.quality.shader.smallWaves.elevation },
         uSmallWavesFrequency: { value: 0.5 },
         uSmallWavesSpeed: { value: 0.312 },
         uSmallIterations: { value: 4 },
@@ -56,7 +58,6 @@ export class RagingSea extends AnimatedExercise {
     this.camera.lookAt(new Vector3(0, 1.5, 0));
   }
 
-
   onDepthColorChange(newColor: string) {
     this.colors.depth = newColor;
     this.material.uniforms.uDepthColor.value.set(this.colors.depth);
@@ -67,6 +68,7 @@ export class RagingSea extends AnimatedExercise {
     this.material.uniforms.uSurfaceColor.value.set(this.colors.surface);
   }
 
+  @DebugFPS
   frame(timer: Timer) {
     this.material.uniforms.uTime.value = timer.getElapsed();
   }
