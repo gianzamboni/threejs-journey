@@ -30,7 +30,7 @@ function excludeTestFiles() {
   };
 }
 
-export default defineConfig((_) => {
+export default defineConfig(({ mode }) => {
   const common = {
     root: 'src/',
     publicDir: 'static/',
@@ -64,7 +64,7 @@ export default defineConfig((_) => {
       }),
       tailwindcss(),
       glsl({
-        minify: true,
+        minify: mode === 'production',
       })
     ],
     build: {
