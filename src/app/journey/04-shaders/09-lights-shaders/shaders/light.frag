@@ -3,7 +3,9 @@ uniform vec3 uColor;
 varying vec3 vNormal;
 
 varying vec3 vPosition;
-#include "./lights-fuctions.glsl"
+
+#include "../../../../utils/shaders/lights.glsl";
+
 
 void main(){
   vec3 nomrmalDirection = normalize(vNormal);
