@@ -13,16 +13,22 @@ export default class SuzanneScene {
   private torus: Mesh;
   private sphere: Mesh;
 
-  constructor(material: Material, exercise: OrbitControlledExercise) {
-    this.torus = this.createTorus(material);
-    this.sphere = this.createSphere(material);
+  private exercise: OrbitControlledExercise;
+  private material: Material;
 
-    exercise.scene.add(this.torus, this.sphere);
-    this.loadSuzanne(material, exercise)
+  constructor(material: Material, exercise: OrbitControlledExercise) {
+    this.material = material;
+    this.exercise = exercise;
+
+    this.torus = this.createTorus();
+    this.sphere = this.createSphere();
+
+    this.exercise.scene.add(this.torus, this.sphere);
+    this.loadSuzanne()
     
-    exercise.camera.fov = 25;
-    exercise.camera.position.set(7, 5, 6);
-    exercise.camera.updateProjectionMatrix();
+    this.exercise.camera.fov = 25;
+    this.exercise.camera.position.set(7, 5, 6);
+    this.exercise.camera.updateProjectionMatrix();
   }
 
   public frame(timer: Timer) {
@@ -44,29 +50,29 @@ export default class SuzanneScene {
     disposeMesh(this.torus, this.sphere);
   }
 
-  private createTorus(material: Material) {
+  private createTorus() {
     const geometry = new TorusGeometry(0.6, 0.25, 128, 32);
-    const torus = new Mesh(geometry, material);
+    const torus = new Mesh(geometry, this.material);
     torus.position.x = 3;
     return torus;
   }
 
-  private createSphere(material: Material) {
+  private createSphere() {
     const geometry = new SphereGeometry();
-    const sphere = new Mesh(geometry, material);
+    const sphere = new Mesh(geometry, this.material);
     sphere.position.x = -3;
     return sphere;
   }
 
-  private loadSuzanne(material: Material, exercise: OrbitControlledExercise) {
+  private loadSuzanne() {
     AssetLoader.getInstance().loadModel("./models/suzanne.glb", (model) => {
       this.suzanne = model;
       this.suzanne.traverse((child) => {
         if(child instanceof Mesh) {
-          (child as Mesh).material = material;
+          (child as Mesh).material = this.material;
         }
       })
-      exercise.scene.add(this.suzanne);
+      this.exercise.scene.add(this.suzanne);
     });
   }
 }

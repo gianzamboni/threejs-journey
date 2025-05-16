@@ -79,5 +79,6 @@ export class Hologram extends OrbitControlledExercise {
   async dispose() {
     super.dispose();
     this.suzanneScene.dispose();
+    this.material.dispose();
   }
 }
