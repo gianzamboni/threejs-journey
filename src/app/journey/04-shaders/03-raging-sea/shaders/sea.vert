@@ -11,7 +11,7 @@ uniform float uSmallIterations;
 varying float vMaxElevation;
 varying float vElevation;
 
-#include "./perlin-noise-3d.glsl";
+#include "../../../../utils/shaders/perlin-noise-3d.glsl";
 
 void main() {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);

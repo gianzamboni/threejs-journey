@@ -8,7 +8,7 @@ import { CoffeeSmoke } from "./06-coffee-smoke";
 import { Hologram } from "./07-hologram";
 import Fireworks from "./08-fireworks";
 import { LightsShaders } from "./09-lights-shaders";
-
+import { RagingSeaV2 } from "./10-raging-sea-2";
 export const SHADERS: Section = {
   id: 'shaders',
   exercises: [
@@ -21,5 +21,6 @@ export const SHADERS: Section = {
     Hologram,
     Fireworks,
     LightsShaders,
+    RagingSeaV2,
   ]
 }
