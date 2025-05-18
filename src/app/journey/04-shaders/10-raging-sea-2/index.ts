@@ -8,7 +8,7 @@ import { Exercise } from "#/app/decorators/exercise";
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { disposeMesh } from "#/app/utils/three-utils";
-import { RAGING_SEA_COLORS_CONTROLS, RAGING_SEA_CONTROLS } from "./controls";
+import { RAGING_SEA_CONTROLS_V2, RAGING_SEA_COLORS_CONTROLS_V2 } from "./controls";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 import seaFragmentShader from "./shaders/sea.frag";
 import seaVertexShader from "./shaders/sea.vert";
@@ -17,13 +17,10 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise("sea-v2")
 export class RagingSeaV2 extends OrbitControlledExercise {
-  @Customizable(RAGING_SEA_COLORS_CONTROLS)
-  private colors = {
-    depth: "#114e6e",
-    surface: "#114e6e",
-  }
+  @Customizable(RAGING_SEA_COLORS_CONTROLS_V2)
+  private colors = "#114e6e";
 
-  @Customizable(RAGING_SEA_CONTROLS)
+  @Customizable(RAGING_SEA_CONTROLS_V2)
   private material: ShaderMaterial;
 
   private water: Mesh;
@@ -46,10 +43,7 @@ export class RagingSeaV2 extends OrbitControlledExercise {
         uBigWavesFrequency: { value: new Vector2(this.quality.shader.bigWaves.frequencyX, 0.25) },
         uBigWavesSpeed: { value: 0.535 },
         uTime: { value: 0 },
-        uDepthColor: { value: new Color(this.colors.depth) },
-        uSurfaceColor: { value: new Color(this.colors.surface) },
-        uColorOffset: { value: 0.08 },
-        uColorMultiplier: { value: 1.887 },
+        uSurfaceColor: { value: new Color(this.colors) },
         uSmallWavesElevation: { value: this.quality.shader.smallWaves.elevation },
         uSmallWavesFrequency: { value: 0.5 },
         uSmallWavesSpeed: { value: 0.312 },
@@ -70,15 +64,11 @@ export class RagingSeaV2 extends OrbitControlledExercise {
     })
   }
 
-  onDepthColorChange(newColor: string) {
-    this.colors.depth = newColor;
-    this.material.uniforms.uDepthColor.value.set(this.colors.depth);
+  updateSeaColor(newColor: string) {
+    this.colors = newColor;
+    this.material.uniforms.uSurfaceColor.value.set(this.colors);
   }
 
-  onSurfaceColorChange(newColor: string) {
-    this.colors.surface = newColor;
-    this.material.uniforms.uSurfaceColor.value.set(this.colors.surface);
-  }
 
   @DebugFPS
   frame(timer: Timer) {
