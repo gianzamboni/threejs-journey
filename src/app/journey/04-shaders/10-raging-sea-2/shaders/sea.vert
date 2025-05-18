@@ -32,7 +32,7 @@ float getElevation(vec3 position) {
 
 void main() {
     float pixelSize =  0.5 * (1.0 / uResolution.x + 1.0 / uResolution.y);;
-    float shift = 0.25;
+    float shift = pixelSize * 200.0;
 
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
     vec3 modelPositionA = modelPosition.xyz + vec3(shift, 0.0, 0.0);

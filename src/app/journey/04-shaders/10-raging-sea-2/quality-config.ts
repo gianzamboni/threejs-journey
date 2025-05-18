@@ -1,7 +1,11 @@
+import { Blending, NormalBlending } from "three";
+import { AdditiveBlending } from "three";
+
 import { Quality } from "#/app/layout/quality-selector";
 
 export type QualityConfig = {
   segments: number;
+  blending: Blending;
   shader: {
     bigWaves: {
       frequencyX: number;
@@ -15,6 +19,7 @@ export type QualityConfig = {
 export const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
   [Quality.Low]: {
     segments: 512,
+    blending: NormalBlending,
     shader: {
       bigWaves: {
         frequencyX: 0.5
@@ -26,6 +31,7 @@ export const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
   },
   [Quality.High]: {
     segments: 2048,
+    blending: AdditiveBlending,
     shader: {
       bigWaves: {
         frequencyX: 0.15

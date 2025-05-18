@@ -20,8 +20,9 @@ export class RagingSeaV2 extends OrbitControlledExercise {
   @Customizable(RAGING_SEA_COLORS_CONTROLS)
   private colors = {
     depth: "#114e6e",
-    surface: "#0055ff",
+    surface: "#114e6e",
   }
+
   @Customizable(RAGING_SEA_CONTROLS)
   private material: ShaderMaterial;
 
@@ -39,8 +40,9 @@ export class RagingSeaV2 extends OrbitControlledExercise {
       vertexShader: seaVertexShader,
       fragmentShader: seaFragmentShader,
       transparent: true,
+      blending: this.quality.blending,
       uniforms: {
-        uBigWavesElevation: { value: 0.2 },
+        uBigWavesElevation: { value: 0.5 },
         uBigWavesFrequency: { value: new Vector2(this.quality.shader.bigWaves.frequencyX, 0.25) },
         uBigWavesSpeed: { value: 0.535 },
         uTime: { value: 0 },
@@ -59,7 +61,7 @@ export class RagingSeaV2 extends OrbitControlledExercise {
     this.water = new Mesh(geometry, this.material);
     this.water.rotation.x = -Math.PI * 0.5;
     this.scene.add(this.water);
-    this.camera.position.set(0.17, 0.39, 3.61);
+    this.camera.position.set(0.17, 0.75, 3.61);
     this.camera.quaternion.set(-0.05, 0.02, 0.0, 0.99);
     view.setRender({
       tone: {

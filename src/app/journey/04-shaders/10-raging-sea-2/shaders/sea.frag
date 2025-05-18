@@ -38,7 +38,7 @@ void main() {
 );
   
   float mixStrength = (vElevation + uColorOffset) * uColorMultiplier;
-  mixStrength = clamp(mixStrength, 0.0, 1.0);
+  mixStrength = smoothstep(0.0, 1.0, mixStrength);
 
   vec3 waterColor = mix(uDepthColor, uSurfaceColor, mixStrength);
 

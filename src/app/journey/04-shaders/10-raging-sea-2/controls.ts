@@ -1,3 +1,5 @@
+import { AdditiveBlending, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending } from "three"
+
 import { ControllerConfig } from "#/app/decorators/customizable"
 
 export const RAGING_SEA_CONTROLS: ControllerConfig[] = [{
@@ -89,6 +91,19 @@ export const RAGING_SEA_CONTROLS: ControllerConfig[] = [{
     max: 5,
     step: 1,
     name: "Iterations",
+  }
+},  {
+  propertyPath: "blending",
+  folderPath: "Sea",
+  settings: {
+    options: { 
+      "No": NoBlending, 
+      "Additive": AdditiveBlending, 
+      "Normal": NormalBlending, 
+      "Subtractive": SubtractiveBlending, 
+      "Multiply": MultiplyBlending
+    },
+    name: "Blending",
   }
 }]
 
