@@ -1,5 +1,6 @@
 uniform vec3 uColor;
 uniform vec2 uResolution;
+uniform vec2 uResolution;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
