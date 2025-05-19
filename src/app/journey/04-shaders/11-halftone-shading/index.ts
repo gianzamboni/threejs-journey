@@ -97,6 +97,7 @@ export class HalftoneShading extends OrbitControlledExercise {
       uniforms: {
         uColor: new Uniform(new Color("#ff794d")),
         uClearColor: new Uniform(new Color("#26132f")),
+        uResolution: new Uniform(this._view.sizeAsVector2),
       },
     });
   }
