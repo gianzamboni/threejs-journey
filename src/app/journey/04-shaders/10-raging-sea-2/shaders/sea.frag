@@ -7,6 +7,7 @@ varying float vElevation;
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying vec2 vUv;
+
 #include "../../../../utils/shaders/lights.glsl";
 
 void main() {
