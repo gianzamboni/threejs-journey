@@ -4,6 +4,7 @@ import { Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
+import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";
 import RenderView from "#/app/layout/render-view";
 import halftoneFrag from "./shaders/halftone.frag";
 import halftoneVert from "./shaders/halftone.vert";
@@ -13,27 +14,60 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 const INITIAL_COLOR = "#ff794d";
 const INITIAL_CLEAR_COLOR = "#26132f";
-const INITIAL_SHADING_COLOR = "#000000";
-
+const INITIAL_SHADOW_REPETITIONS = 100;
+const INITIAL_SHADOW_COLOR = "#8e19b8";
+const INITIAL_LIGHT_COLOR = "#ff794d";
+const INITIAL_LIGHT_REPETITIONS = 130;
 @Exercise("halftone-shading")
 @Description("<p>Halftone Shading implemented from scratch</p>")
 export class HalftoneShading extends OrbitControlledExercise {
 
   @Customizable([{
     type: "color",
+    folderPath: "Main Halftone",
     initialValue: INITIAL_COLOR,
-    propertyPath: "uniforms.uColor",
+    propertyPath: "uColor",
     settings: {
       name: "Color",
-      onChange: 'updateColor'
+      onChange: 'updateUniform'
+    }
+  },{
+    type: "color",
+    initialValue: INITIAL_SHADOW_COLOR,
+    folderPath: "Main Halftone",
+    propertyPath: "uShadowColor",
+    settings: {
+      name: "Shadow Color",
+      onChange: 'updateUniform'
+    }
+  }, {
+    initialValue: INITIAL_SHADOW_REPETITIONS,
+    folderPath: "Main Halftone",
+    propertyPath: "uniforms.uShadowRepetitions.value",
+    settings: {
+      name: "Shadow Repetitions",
+      min: 0,
+      max: 300,
+      step: 1,
     }
   }, {
     type: "color",
-    initialValue: INITIAL_SHADING_COLOR,
-    propertyPath: "uniforms.uShadeColor",
+    folderPath: "Secondary Halftone",
+    initialValue: INITIAL_LIGHT_COLOR,
+    propertyPath: "uLightColor",
     settings: {
-      name: "Shade Color",
-      onChange: 'updateShadeColor'
+      name: "Color",
+      onChange: 'updateUniform'
+    }
+  }, {
+    initialValue: INITIAL_LIGHT_REPETITIONS,
+    folderPath: "Secondary Halftone",
+    propertyPath: "uniforms.uLightRepetitions.value",
+    settings: {
+      name: "Repetitions",
+      min: 0,
+      max: 300,
+      step: 1,
     }
   }])
   private material: ShaderMaterial;
@@ -76,12 +110,8 @@ export class HalftoneShading extends OrbitControlledExercise {
     this.material.dispose();
   }
 
-  public updateColor(newValue: string) {
-    this.material.uniforms.uColor.value.set(new Color(newValue));
-  }
-
-  public updateShadeColor(newValue: string) {
-    this.material.uniforms.uShadeColor.value.set(new Color(newValue));
+  public updateUniform(newValue: string, context: CustomizableMetadata) {
+    this.material.uniforms[context.property].value.set(new Color(newValue));
   }
 
   public updateClearColor(newValue: string) {
@@ -95,9 +125,12 @@ export class HalftoneShading extends OrbitControlledExercise {
       vertexShader: halftoneVert,
       fragmentShader: halftoneFrag,
       uniforms: {
-        uColor: new Uniform(new Color("#ff794d")),
-        uClearColor: new Uniform(new Color("#26132f")),
+        uColor: new Uniform(new Color(INITIAL_COLOR)),
         uResolution: new Uniform(this._view.sizeAsVector2),
+        uShadowRepetitions: new Uniform(INITIAL_SHADOW_REPETITIONS),
+        uShadowColor: new Uniform(new Color(INITIAL_SHADOW_COLOR)),
+        uLightColor: new Uniform(new Color(INITIAL_LIGHT_COLOR)),
+        uLightRepetitions: new Uniform(INITIAL_LIGHT_REPETITIONS),
       },
     });
   }

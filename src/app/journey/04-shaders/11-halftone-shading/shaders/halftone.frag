@@ -1,11 +1,35 @@
 uniform vec3 uColor;
 uniform vec2 uResolution;
+uniform float uShadowRepetitions;
+uniform vec3 uShadowColor;
+uniform float uLightRepetitions;
+uniform vec3 uLightColor;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
 
 #include "../../../../utils/shaders/lights.glsl";
 
+vec3 halftone(
+  vec3 color,
+  float repetitions, 
+  vec3 direction,
+  float low,
+  float high,
+  vec3 pointColor,
+  vec3 normal
+) {
+    float intensity = dot(normal, direction);
+    intensity = smoothstep(low, high, intensity);
+
+    vec2 uv = gl_FragCoord.xy / uResolution.y;
+    uv *= repetitions;
+    uv = mod(uv, 1.0);
+
+    float point = 1.0 - step(0.5 * intensity, distance(uv, vec2(0.5)));
+
+    return mix(color, pointColor, point);
+}
 void main() {
     vec3 viewDirection = normalize(vPosition - cameraPosition);
     vec3 normal = normalize(vNormal);
@@ -22,22 +46,8 @@ void main() {
     );
 
     color *= light;
-
-    vec3 direction = vec3(0.0, -1.0, 0.0);
-    float repetitions = 50.0;
-    float low = -0.8;
-    float high = 1.5;
-    float intensity = dot(normal, direction);
-    intensity = smoothstep(low, high, intensity);
-    vec3 pointColor = vec3(1.0, 0.0, 0.0);
-
-    vec2 uv = gl_FragCoord.xy / uResolution.y;
-    uv *= repetitions;
-    uv = mod(uv, 1.0);
-
-    float point = 1.0 - step(0.5 * intensity, distance(uv, vec2(0.5)));
-
-    color = mix(color, pointColor, point);
+    color = halftone(color, uShadowRepetitions, vec3(0.0, -1.0, 0.0), -0.8, 1.5, uShadowColor, normal);
+    color = halftone(color, uLightRepetitions, vec3(0.0, 1.0, 0.0), -0.8, 1.5, uLightColor, normal);
     // Final color
     gl_FragColor = vec4(color, 1.0);
 
