@@ -4,7 +4,8 @@ import {
   NoToneMapping,
   PCFShadowMap,
   ToneMapping,
-  Color
+  Color,
+  Vector2
 } from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
@@ -130,5 +131,9 @@ export default class RenderView extends EventTarget {
 
   get width() {
     return window.innerWidth;
+  }
+
+  get sizeAsVector2() {
+    return new Vector2(this.width * this.pixelRatio, this.height * this.pixelRatio);
   }
 }

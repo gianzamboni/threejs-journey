@@ -1,15 +1,13 @@
 precision highp float;
 
-uniform vec3 uDepthColor;
 uniform vec3 uSurfaceColor;
-uniform float uColorOffset;
-uniform float uColorMultiplier;
 
 varying float vMaxElevation;
 varying float vElevation;
 varying vec3 vNormal;
 varying vec3 vPosition;
 varying vec2 vUv;
+
 #include "../../../../utils/shaders/lights.glsl";
 
 void main() {
@@ -37,10 +35,7 @@ void main() {
     0.0005                  // Decay
 );
   
-  float mixStrength = (vElevation + uColorOffset) * uColorMultiplier;
-  mixStrength = smoothstep(0.0, 1.0, mixStrength);
-
-  vec3 waterColor = mix(uDepthColor, uSurfaceColor, mixStrength);
+  vec3 waterColor = uSurfaceColor;
 
   waterColor *= light;
 
