@@ -22,6 +22,7 @@ export type WithDebugObject<T> = T & {
 export type CustomizableMetadata = {
   property: string;
   target: object;
+  type: "color" | "number" | "boolean";
 }
 
 /**
@@ -121,6 +122,7 @@ export class ControllerFactory {
           if (typeof method === 'function') {
             method.bind(this.exercise)(newValue, {
               ...config.context,
+              type: config.type,
               target: controller.object,
               property: controller.property,
             });
