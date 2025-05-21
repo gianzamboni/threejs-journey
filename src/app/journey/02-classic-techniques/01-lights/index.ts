@@ -19,7 +19,6 @@ import {
 } from 'three';
 
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
-import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from '#/app/decorators/customizable';
@@ -62,6 +61,11 @@ export class LightsExercise extends OrbitControlledExercise {
 
   constructor(view: RenderView, quality: Quality) {
     super(view);
+
+    import('three/addons/lights/RectAreaLightUniformsLib.js').then(({ RectAreaLightUniformsLib }) => {
+      RectAreaLightUniformsLib.init();
+    });
+    
     this.quality = QUALITY_CONFIG[quality];
     this.camera.position.set(2, 1, 3);
     this.material = new MeshStandardMaterial();
@@ -69,10 +73,7 @@ export class LightsExercise extends OrbitControlledExercise {
 
     this.animatedObjects = this.createAnimatedObjects();
     this.plane = this.createPlane();
-
-    RectAreaLightUniformsLib.init();
     this.lights = this.createLights();
-
     [this.helpers, this.helpersVisibleStatus] = this.createLightHelpers();
 
     this.scene.add(
