@@ -7,6 +7,9 @@
   -ms-user-select: none;
 }
 
+a {
+  color: #0000ff;
+}
 .lil-gui {
   option {
     color: #000;
