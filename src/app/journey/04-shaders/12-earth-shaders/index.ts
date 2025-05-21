@@ -77,6 +77,7 @@ export class EarthShaders extends OrbitControlledExercise {
   public frame(timer: Timer): void {
     super.frame(timer);
     this.earthMaterial.uniforms.uTime.value = timer.getElapsed();
+    this.earth.rotation.y = timer.getElapsed() * 0.01;
   }
 
   private createMaterial() {

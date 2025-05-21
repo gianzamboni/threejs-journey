@@ -19,7 +19,7 @@ void main() {
   float dayMix = smoothstep(-0.25, 0.5, sunOrientation);
   vec3 color = mix(nightColor, dayColor, dayMix);
 
-  vec2 uvXTranslation = vec2(mod(vUv.x + uTime * 0.001, 1.0), vUv.y);
+  vec2 uvXTranslation = vec2(mod(vUv.x - uTime * 0.001, 1.0), vUv.y);
   vec2 specularCloudColor = texture(uSpecularCloudsTexture, uvXTranslation).rg;
   float cloudMix = smoothstep(0.0, 1.0, specularCloudColor.g / 2.0) * dayMix ;
   color = mix(color, vec3(1.0), cloudMix);
