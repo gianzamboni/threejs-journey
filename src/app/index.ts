@@ -105,6 +105,7 @@ export class App {
       this.debugUI.reset();
       this.loader.reset();
       this.actionBar.reset();
+      this.renderView.reset();
       this.infoBox.close();
       await this.activeExercise.dispose();
     }

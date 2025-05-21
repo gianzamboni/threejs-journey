@@ -1,6 +1,7 @@
 import { Color, Mesh, DoubleSide, MeshBasicMaterial, PlaneGeometry, ShaderMaterial, Uniform, IcosahedronGeometry } from "three";
 
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
+
 
 import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";

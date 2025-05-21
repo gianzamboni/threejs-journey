@@ -15,7 +15,7 @@ import {
   EquirectangularReflectionMapping
 } from "three";
 
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";

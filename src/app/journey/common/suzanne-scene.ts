@@ -1,6 +1,6 @@
 import { Group, Mesh, TorusGeometry, SphereGeometry, Material } from "three";
 
-import { Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
