@@ -28,8 +28,8 @@ export class InteractiveParticles extends AnimatedExercise {
   private picture: Texture;
   
   constructor(view: RenderView) {
-    super();
-    this.view = view;
+    super(view);
+
     this.picture = AssetLoader.getInstance().loadTexture("imgs/picture-1.png")
 
     const geometry = new PlaneGeometry(10, 10, 128, 128);
@@ -37,7 +37,8 @@ export class InteractiveParticles extends AnimatedExercise {
     this.material = this.createMaterial(this.displacementEngine.texture);
     this.setupGeometry(geometry);
 
-    this.particles = new Points(geometry, this.material);
+    this.particles = this.createParticles();
+    this.displacementEngine = new DisplacementEngine(this.particles, this.scene);
 
     this.scene.add(this.particles);
 
