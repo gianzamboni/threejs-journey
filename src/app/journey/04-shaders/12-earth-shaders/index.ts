@@ -1,4 +1,4 @@
-import { BackSide, Color, IcosahedronGeometry, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry, Spherical, SRGBColorSpace, Texture, Uniform, Vector3 } from "three";
+import { BackSide, Color, LinearFilter, Mesh, ShaderMaterial, SphereGeometry, Spherical, SRGBColorSpace, Texture, Uniform, Vector3 } from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -15,6 +15,9 @@ import atmosphereVertexShader from "./shaders/atmosphere.vert";
 import earthFragmentShader from "./shaders/earth.frag";
 import earthVertexShader from "./shaders/earth.vert";
 
+const INITIAL_ATMOSPHERE_COLOR = "#00aaff";
+const INITIAL_ATMOSPHERE_TWILIGHT_COLOR = "#993d00";
+
 @Exercise("earth")
 @Description(
   "<p>Earth Shader.</p>",
@@ -25,7 +28,7 @@ export class EarthShaders extends OrbitControlledExercise {
   @Customizable([{
     propertyPath: "uAtmosphereColor",
     folderPath: "Atmosphere",
-    initialValue: "#00aaff",
+    initialValue: INITIAL_ATMOSPHERE_COLOR,
     type: "color",
     settings: {
       name: "Day Color",
@@ -34,7 +37,7 @@ export class EarthShaders extends OrbitControlledExercise {
   }, {
     propertyPath: "uAtmosphereTwilightColor",
     folderPath: "Atmosphere",
-    initialValue: "#ff6600",
+    initialValue: INITIAL_ATMOSPHERE_TWILIGHT_COLOR,
     type: "color",
     settings: {
       name: "Twilight Color",
@@ -45,8 +48,6 @@ export class EarthShaders extends OrbitControlledExercise {
 
   private earth: Mesh;
   private atmosphere: Mesh;
-
-  private debugSun: Mesh;
 
   @Customizable([{
     propertyPath: "phi",
@@ -90,16 +91,12 @@ export class EarthShaders extends OrbitControlledExercise {
     this.atmosphere = new Mesh(geometry, this.atmosphereMaterial);
     this.atmosphere.scale.set(1.04, 1.04, 1.04);
 
-    this.debugSun = new Mesh(
-      new IcosahedronGeometry(0.1, 2),
-      new MeshBasicMaterial()
-    );
     this.updateSun();
 
     this.camera.fov = 25;
     this.camera.position.set(12, 5, 4);
     this.camera.updateProjectionMatrix();
-    this.scene.add(this.earth, this.debugSun, this.atmosphere);
+    this.scene.add(this.earth, this.atmosphere);
   }
 
   @DebugFPS
@@ -126,8 +123,8 @@ export class EarthShaders extends OrbitControlledExercise {
         uNightTexture: new Uniform(this.textures.night),
         uSpecularCloudsTexture: new Uniform(this.textures.specularClouds),
         uSunDirection: new Uniform(new Vector3(0,0,1)),
-        uAtmosphereColor: new Uniform(new Color("#00aaff")),
-        uAtmosphereTwilightColor: new Uniform(new Color("#ff6600")),
+        uAtmosphereColor: new Uniform(new Color(INITIAL_ATMOSPHERE_COLOR)),
+        uAtmosphereTwilightColor: new Uniform(new Color(INITIAL_ATMOSPHERE_TWILIGHT_COLOR)),
         uTime: new Uniform(0.0)
       } 
     });
@@ -140,8 +137,8 @@ export class EarthShaders extends OrbitControlledExercise {
       vertexShader: atmosphereVertexShader,
       fragmentShader: atmosphereFragmentShader,
       uniforms: {
-        uAtmosphereColor: new Uniform(new Color("#00aaff")),
-        uAtmosphereTwilightColor: new Uniform(new Color("#ff6600")),
+        uAtmosphereColor: new Uniform(new Color(INITIAL_ATMOSPHERE_COLOR)),
+        uAtmosphereTwilightColor: new Uniform(new Color(INITIAL_ATMOSPHERE_TWILIGHT_COLOR)),
         uSunDirection: new Uniform(new Vector3(0,0,1)),
       }
     });
@@ -161,6 +158,8 @@ export class EarthShaders extends OrbitControlledExercise {
     textures.day.anisotropy = this.view.renderer.capabilities.getMaxAnisotropy();
     textures.night.anisotropy = this.view.renderer.capabilities.getMaxAnisotropy();
     
+    textures.specularClouds.minFilter = LinearFilter ;
+
     return textures;
   }
 
@@ -171,7 +170,6 @@ export class EarthShaders extends OrbitControlledExercise {
 
     const sunDirection = new Vector3();
     sunDirection.setFromSpherical(this.sunSpherical);
-    this.debugSun.position.copy(sunDirection).multiplyScalar(5);
     this.earthMaterial.uniforms.uSunDirection.value.copy(sunDirection);
     this.atmosphereMaterial.uniforms.uSunDirection.value.copy(sunDirection);
   }
@@ -179,7 +177,6 @@ export class EarthShaders extends OrbitControlledExercise {
   async dispose() {
     super.dispose();
     disposeMesh(this.earth);
-    disposeMesh(this.debugSun);
     disposeMesh(this.atmosphere);
   }
 }
