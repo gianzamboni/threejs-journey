@@ -6,70 +6,18 @@ import { Customizable } from "#/app/decorators/customizable";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";
 import RenderView from "#/app/layout/render-view";
+import { INITIAL_CLEAR_COLOR, HALFTONE_SHADING_CONTROLLER, INITIAL_LIGHT_REPETITIONS, INITIAL_COLOR, INITIAL_SHADOW_REPETITIONS, INITIAL_SHADOW_COLOR, INITIAL_LIGHT_COLOR } from "./controllers";
 import halftoneFrag from "./shaders/halftone.frag";
 import halftoneVert from "./shaders/halftone.vert";
 
 import SuzanneScene from "../../common/suzanne-scene";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
-const INITIAL_COLOR = "#ff794d";
-const INITIAL_CLEAR_COLOR = "#26132f";
-const INITIAL_SHADOW_REPETITIONS = 100;
-const INITIAL_SHADOW_COLOR = "#8e19b8";
-const INITIAL_LIGHT_COLOR = "#ff794d";
-const INITIAL_LIGHT_REPETITIONS = 130;
 @Exercise("halftone-shading")
 @Description("<p>Halftone Shading implemented from scratch</p>")
 export class HalftoneShading extends OrbitControlledExercise {
 
-  @Customizable([{
-    type: "color",
-    folderPath: "Main Halftone",
-    initialValue: INITIAL_COLOR,
-    propertyPath: "uColor",
-    settings: {
-      name: "Color",
-      onChange: 'updateUniform'
-    }
-  },{
-    type: "color",
-    initialValue: INITIAL_SHADOW_COLOR,
-    folderPath: "Main Halftone",
-    propertyPath: "uShadowColor",
-    settings: {
-      name: "Shadow Color",
-      onChange: 'updateUniform'
-    }
-  }, {
-    initialValue: INITIAL_SHADOW_REPETITIONS,
-    folderPath: "Main Halftone",
-    propertyPath: "uniforms.uShadowRepetitions.value",
-    settings: {
-      name: "Shadow Repetitions",
-      min: 0,
-      max: 300,
-      step: 1,
-    }
-  }, {
-    type: "color",
-    folderPath: "Secondary Halftone",
-    initialValue: INITIAL_LIGHT_COLOR,
-    propertyPath: "uLightColor",
-    settings: {
-      name: "Color",
-      onChange: 'updateUniform'
-    }
-  }, {
-    initialValue: INITIAL_LIGHT_REPETITIONS,
-    folderPath: "Secondary Halftone",
-    propertyPath: "uniforms.uLightRepetitions.value",
-    settings: {
-      name: "Repetitions",
-      min: 0,
-      max: 300,
-      step: 1,
-    }
-  }])
+  @Customizable(HALFTONE_SHADING_CONTROLLER)
   private material: ShaderMaterial;
 
   private suzanneScene: SuzanneScene;
