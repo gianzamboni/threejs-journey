@@ -52,6 +52,11 @@ export class InteractiveParticles extends AnimatedExercise {
 
   @DebugFPS
   public frame(timer: Timer): void {
+    super.frame(timer);
+  }
+
+  @DebugFPS
+  public frame(timer: Timer): void {
     this.material.uniforms.uTime.value = timer.getElapsed();
     this.displacementEngine.update(this.camera);
   }
