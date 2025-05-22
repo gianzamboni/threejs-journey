@@ -80,7 +80,7 @@ export class EarthShaders extends OrbitControlledExercise {
     super(view);  
 
     this.textures = this.loadTextures();
-    this.sunSpherical = new Spherical(1, Math.PI * 0.5, 0.5);
+    this.sunSpherical = new Spherical(1, Math.PI * 0.5, -0.25);
 
     const geometry = new SphereGeometry(2, 256, 256);
 
