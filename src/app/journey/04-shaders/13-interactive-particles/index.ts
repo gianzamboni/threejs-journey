@@ -28,11 +28,12 @@ export class InteractiveParticles extends OrbitControlledExercise {
   constructor(view: RenderView) {
     super(view);
 
-    this.displacementEngine = new DisplacementEngine();
     this.picture = AssetLoader.getInstance().loadTexture("imgs/picture-1.png")
 
 
     this.particles = this.createParticles();
+    this.displacementEngine = new DisplacementEngine(this.particles, this.scene);
+
     this.scene.add(this.particles);
 
     this.camera.fov = 35;

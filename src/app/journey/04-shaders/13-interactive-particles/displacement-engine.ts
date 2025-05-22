@@ -1,11 +1,21 @@
+import { disposeMesh } from "#/app/utils/three-utils";
+import { Mesh, MeshBasicMaterial, Points, Scene } from "three";
+
 export class DisplacementEngine {
+
+  private scene: Scene;
+
+  private displacementMesh: Mesh;
 
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
   private glow: HTMLImageElement;
 
-  constructor() {
+  constructor(particles: Points, scene: Scene) {
+    this.scene = scene;
+    this.displacementMesh = this.createDisplacementMesh(particles);
+
     this.canvas = this.createCanvas();
     this.ctx = this.getContext();
     this.glow = this.createGlow();
@@ -15,6 +25,13 @@ export class DisplacementEngine {
 
   dispose() {
     this.canvas.remove();
+    disposeMesh(this.displacementMesh);
+  }
+
+  private createDisplacementMesh(particles: Points) {
+    const interactiveMesh = new Mesh(particles.geometry, new MeshBasicMaterial({ color: 0xff0000 }));
+    this.scene.add(interactiveMesh);
+    return interactiveMesh;
   }
 
   private createGlow() {
