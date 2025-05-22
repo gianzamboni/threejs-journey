@@ -1,4 +1,4 @@
-import { IcosahedronGeometry, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry, Spherical, SRGBColorSpace, Texture, Uniform, Vector3 } from "three";
+import { BackSide, Color, IcosahedronGeometry, Mesh, MeshBasicMaterial, ShaderMaterial, SphereGeometry, Spherical, SRGBColorSpace, Texture, Uniform, Vector3 } from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
@@ -10,6 +10,8 @@ import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
+import atmosphereFragmentShader from "./shaders/atmosphere.frag";
+import atmosphereVertexShader from "./shaders/atmosphere.vert";
 import earthFragmentShader from "./shaders/earth.frag";
 import earthVertexShader from "./shaders/earth.vert";
 
@@ -20,9 +22,30 @@ import earthVertexShader from "./shaders/earth.vert";
 )
 export class EarthShaders extends OrbitControlledExercise {
 
+  @Customizable([{
+    propertyPath: "uAtmosphereColor",
+    folderPath: "Atmosphere",
+    initialValue: "#00aaff",
+    type: "color",
+    settings: {
+      name: "Day Color",
+      onChange: "updateUniform"
+    }
+  }, {
+    propertyPath: "uAtmosphereTwilightColor",
+    folderPath: "Atmosphere",
+    initialValue: "#ff6600",
+    type: "color",
+    settings: {
+      name: "Twilight Color",
+      onChange: "updateUniform"
+    }
+  }])
   private earthMaterial: ShaderMaterial;
 
   private earth: Mesh;
+  private atmosphere: Mesh;
+
   private debugSun: Mesh;
 
   @Customizable([{
@@ -44,6 +67,8 @@ export class EarthShaders extends OrbitControlledExercise {
   }])
   private sunSpherical: Spherical;
 
+  private atmosphereMaterial: ShaderMaterial;
+
   private textures: {
     day: Texture;
     night: Texture;
@@ -56,9 +81,14 @@ export class EarthShaders extends OrbitControlledExercise {
     this.textures = this.loadTextures();
     this.sunSpherical = new Spherical(1, Math.PI * 0.5, 0.5);
 
-    this.earthMaterial = this.createMaterial();
-    const geometry = new SphereGeometry(2, 64, 64);
+    const geometry = new SphereGeometry(2, 256, 256);
+
+    this.earthMaterial = this.createEarthMaterial();
     this.earth = new Mesh(geometry, this.earthMaterial);
+
+    this.atmosphereMaterial = this.createAtmosphereMaterial();
+    this.atmosphere = new Mesh(geometry, this.atmosphereMaterial);
+    this.atmosphere.scale.set(1.04, 1.04, 1.04);
 
     this.debugSun = new Mesh(
       new IcosahedronGeometry(0.1, 2),
@@ -69,8 +99,7 @@ export class EarthShaders extends OrbitControlledExercise {
     this.camera.fov = 25;
     this.camera.position.set(12, 5, 4);
     this.camera.updateProjectionMatrix();
-    
-    this.scene.add(this.earth, this.debugSun);
+    this.scene.add(this.earth, this.debugSun, this.atmosphere);
   }
 
   @DebugFPS
@@ -80,7 +109,15 @@ export class EarthShaders extends OrbitControlledExercise {
     this.earth.rotation.y = timer.getElapsed() * 0.01;
   }
 
-  private createMaterial() {
+  public updateUniform(newValue?: number, customizableMetadata?: CustomizableMetadata) {
+    if(customizableMetadata && newValue) {
+      const property = customizableMetadata.property as 'uAtmosphereColor' | 'uAtmosphereTwilightColor';
+      this.earthMaterial.uniforms[property].value = new Color(newValue);
+      this.atmosphereMaterial.uniforms[property].value = new Color(newValue);
+    }
+  }
+
+  private createEarthMaterial() {
     return new ShaderMaterial({
       vertexShader: earthVertexShader,
       fragmentShader: earthFragmentShader,
@@ -89,8 +126,24 @@ export class EarthShaders extends OrbitControlledExercise {
         uNightTexture: new Uniform(this.textures.night),
         uSpecularCloudsTexture: new Uniform(this.textures.specularClouds),
         uSunDirection: new Uniform(new Vector3(0,0,1)),
+        uAtmosphereColor: new Uniform(new Color("#00aaff")),
+        uAtmosphereTwilightColor: new Uniform(new Color("#ff6600")),
         uTime: new Uniform(0.0)
       } 
+    });
+  }
+
+  private createAtmosphereMaterial() {
+    return new ShaderMaterial({
+      side: BackSide,
+      transparent: true,
+      vertexShader: atmosphereVertexShader,
+      fragmentShader: atmosphereFragmentShader,
+      uniforms: {
+        uAtmosphereColor: new Uniform(new Color("#00aaff")),
+        uAtmosphereTwilightColor: new Uniform(new Color("#ff6600")),
+        uSunDirection: new Uniform(new Vector3(0,0,1)),
+      }
     });
   }
 
@@ -120,11 +173,13 @@ export class EarthShaders extends OrbitControlledExercise {
     sunDirection.setFromSpherical(this.sunSpherical);
     this.debugSun.position.copy(sunDirection).multiplyScalar(5);
     this.earthMaterial.uniforms.uSunDirection.value.copy(sunDirection);
+    this.atmosphereMaterial.uniforms.uSunDirection.value.copy(sunDirection);
   }
 
   async dispose() {
     super.dispose();
     disposeMesh(this.earth);
     disposeMesh(this.debugSun);
+    disposeMesh(this.atmosphere);
   }
 }
