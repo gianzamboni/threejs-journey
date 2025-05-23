@@ -108,10 +108,12 @@ export class Collapsable {
     }
   }
 
-  private open() {
+  public open() {
     this.isOpen = true;
     this.collapsable.classList.remove('hidden');
-    this.collapsable.style.height = `${this.collapsable.scrollHeight}px`;
+    
+    const height = this.collapsable.scrollHeight;
+    this.collapsable.style.height = `${height}px`;
 
     for (const className of this.button.toggle) {
       this.button.element.classList.add(className);
@@ -122,7 +124,7 @@ export class Collapsable {
   private createCollapsable(settings: CollapsableSectionSettings | undefined) {
     const collapsable = document.createElement('div');
     collapsable.id = `${this.idPrefix}-content-container`;
-    const className = `${Collapsable.CSS.collapsable} ${settings?.className ?? ''}`;
+    const className = `${Collapsable.CSS.collapsable} ${settings?.className ?? ''} hidden`;
     collapsable.className = `${className}`;
     this.container.appendChild(collapsable);
     return collapsable;
