@@ -8,10 +8,6 @@ attribute float aAngle;
 
 varying vec3 vColor;
 
-float smootherStep(float t) {
-    return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
-}
-
 void main() {
   // Final position
   vec3 newPosition = position;
