@@ -33,12 +33,10 @@ export class InteractiveParticles extends AnimatedExercise {
     this.picture = AssetLoader.getInstance().loadTexture("imgs/picture-1.png")
 
     const geometry = new PlaneGeometry(10, 10, 128, 128);
-    this.displacementEngine = new MouseDisplacementEngine(geometry, this.scene);
-    this.material = this.createMaterial(this.displacementEngine.texture);
-    this.setupGeometry(geometry);
 
-    this.particles = this.createParticles();
-    this.displacementEngine = new DisplacementEngine(this.particles, this.scene);
+    this.displacementEngine = new DisplacementEngine(geometry, this.scene);
+
+    this.particles = this.createParticles(geometry, this.displacementEngine.texture);
 
     this.scene.add(this.particles);
 
@@ -54,30 +52,10 @@ export class InteractiveParticles extends AnimatedExercise {
   @DebugFPS
   public frame(timer: Timer): void {
     super.frame(timer);
-  }
-
-  @DebugFPS
-  public frame(timer: Timer): void {
-    this.material.uniforms.uTime.value = timer.getElapsed();
     this.displacementEngine.update(this.camera);
   }
 
-  private setupGeometry(geometry: PlaneGeometry) {
-    const intensityArray = new Float32Array(geometry.attributes.position.count);
-    const angleArray = new Float32Array(geometry.attributes.position.count);
-
-    for (let i = 0; i < geometry.attributes.position.count; i++) {
-      intensityArray[i] = Math.random();
-      angleArray[i] = Math.random() * Math.PI * 2;
-    }
-
-    geometry.setAttribute("aIntensity", new BufferAttribute(intensityArray, 1));
-    geometry.setAttribute("aAngle", new BufferAttribute(angleArray, 1));
-    geometry.setIndex(null);
-    geometry.deleteAttribute("normal");
-  }
-
-  private createMaterial(displacementTexture: Texture) {
+  private createParticles(geometry: PlaneGeometry, displacementTexture: Texture) {
     const material = new ShaderMaterial({
       blending: AdditiveBlending,
       vertexShader: imgVertexShader,
@@ -86,7 +64,6 @@ export class InteractiveParticles extends AnimatedExercise {
         uResolution: new Uniform(this.view.resolution),
         uPictureTexture: new Uniform(this.picture),
         uDisplacementTexture: new Uniform(displacementTexture),
-        uTime: new Uniform(0),
       }
     });
 

@@ -1,5 +1,7 @@
 import { BufferGeometry, Camera, CanvasTexture, Mesh, MeshBasicMaterial, Raycaster, Scene, Vector2 } from "three";
 
+import { BufferGeometry, Camera, CanvasTexture, Mesh, MeshBasicMaterial, Raycaster, Scene, Vector2 } from "three";
+
 import { disposeMesh } from "#/app/utils/three-utils";
 
 export class MouseDisplacementEngine {
@@ -15,15 +17,12 @@ export class MouseDisplacementEngine {
   private displacementMesh: Mesh;
   private displacementTexture: CanvasTexture;
 
-  private mousePosition = {
-    screen: new Vector2(9999, 9999),
-    canvas: new Vector2(9999, 9999),
-  }
+  private mousePosition = new Vector2(9999, 9999);
 
 
   constructor(geometry: BufferGeometry, scene: Scene) {
     this.scene = scene;
-    this.displacementMesh = this.createDisplacementMesh(geometry.clone());
+    this.displacementMesh = this.createDisplacementMesh(geometry);
     this.displacementMesh.visible = false;
     this.raycaster = new Raycaster();
 
@@ -32,11 +31,9 @@ export class MouseDisplacementEngine {
     this.glow = this.createGlow();
     this.displacementTexture = new CanvasTexture(this.canvas);
 
-    this.mousePosition.screen = new Vector2(9999, 9999);
-    this.mousePosition.canvas = new Vector2(9999, 9999);
+    this.mousePosition = new Vector2(9999, 9999);
 
     window.addEventListener("mousemove", this.updateMousePosition.bind(this));
-    document.addEventListener("touchmove", this.updateFingerPosition.bind(this), { passive: false });
 
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
@@ -46,22 +43,27 @@ export class MouseDisplacementEngine {
   }
 
   update(camera: Camera) {
-    this.raycaster.setFromCamera(this.mousePosition.screen, camera);
+    this.raycaster.setFromCamera(this.mousePosition, camera);
+    const intersections = this.raycaster.intersectObject(this.displacementMesh);
+    
+    const mouseOnCanvas = new Vector2(9999, 9999);
 
-    const previousMousePosition = this.mousePosition.canvas.clone();
-    this.updateMousePositionOnCanvas();
-
-    const distance = previousMousePosition.distanceTo(this.mousePosition.canvas);
-    const alpha = Math.min(distance * 0.1, 1);
+    if (intersections.length > 0) {
+      const uv = intersections[0].uv;
+      if (uv) {
+        mouseOnCanvas.x = uv.x * this.canvas.width;
+        mouseOnCanvas.y = (1 -uv.y) * this.canvas.height;
+      }
+    }
 
     const glowSize = this.canvas.width * 0.25;
     this.ctx.globalCompositeOperation = 'source-over';
     this.ctx.globalAlpha = 0.02;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.globalAlpha = alpha;
+    this.ctx.globalAlpha = 1;
     this.ctx.globalCompositeOperation = 'lighten';
-    this.ctx.drawImage(this.glow, this.mousePosition.canvas.x - glowSize * 0.5, this.mousePosition.canvas.y - glowSize * 0.5, glowSize, glowSize);
+    this.ctx.drawImage(this.glow, mouseOnCanvas.x - glowSize * 0.5, mouseOnCanvas.y - glowSize * 0.5, glowSize, glowSize);
 
     this.displacementTexture.needsUpdate = true;
 
@@ -72,39 +74,16 @@ export class MouseDisplacementEngine {
     this.canvas.remove();
     disposeMesh(this.displacementMesh);
     this.displacementTexture.dispose();
-    document.removeEventListener("mousemove", this.updateMousePosition.bind(this));
-  }
-
-  private updateMousePositionOnCanvas() {
-    const intersections = this.raycaster.intersectObject(this.displacementMesh);
-
-    if (intersections.length > 0) {
-      const uv = intersections[0].uv;
-      if (uv) {
-        this.mousePosition.canvas.x = uv.x * this.canvas.width;
-        this.mousePosition.canvas.y = (1 -uv.y) * this.canvas.height;
-      }
-    }
-  }
-
-  private updateFingerPosition(event: TouchEvent) {
-    event.preventDefault();
-    const touch = event.touches[0];
-    if (touch) {
-      this.mousePosition.screen.x = (touch.clientX / window.innerWidth) * 2 - 1;
-      this.mousePosition.screen.y = - (touch.clientY / window.innerHeight) * 2 + 1;
-    }
+    window.removeEventListener("mousemove", this.updateMousePosition.bind(this));
   }
 
   private updateMousePosition(event: MouseEvent) {
-    this.mousePosition.screen.x = (event.clientX / window.innerWidth) * 2 - 1;
-    this.mousePosition.screen.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    this.mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mousePosition.y = - (event.clientY / window.innerHeight) * 2 + 1;
   }
 
   private createDisplacementMesh(geometry: BufferGeometry) {
-    const interactiveMesh = new Mesh(geometry, new MeshBasicMaterial({ 
-      color: 0xff0000,
-    }));
+    const interactiveMesh = new Mesh(geometry, new MeshBasicMaterial({ color: 0xff0000 }));
     this.scene.add(interactiveMesh);
     return interactiveMesh;
   }
