@@ -30,9 +30,11 @@ export class InteractiveParticles extends OrbitControlledExercise {
 
     this.picture = AssetLoader.getInstance().loadTexture("imgs/picture-1.png")
 
+    const geometry = new PlaneGeometry(10, 10, 128, 128);
 
-    this.particles = this.createParticles();
-    this.displacementEngine = new DisplacementEngine(this.particles, this.scene);
+    this.displacementEngine = new DisplacementEngine(geometry, this.scene);
+
+    this.particles = this.createParticles(geometry, this.displacementEngine.texture);
 
     this.scene.add(this.particles);
 
@@ -47,16 +49,17 @@ export class InteractiveParticles extends OrbitControlledExercise {
   @DebugFPS
   public frame(timer: Timer): void {
     super.frame(timer);
+    this.displacementEngine.update(this.camera);
   }
 
-  private createParticles() {
-    const geometry = new PlaneGeometry(10, 10, 128, 128);
+  private createParticles(geometry: PlaneGeometry, displacementTexture: Texture) {
     const material = new ShaderMaterial({
       vertexShader: imgVertexShader,
       fragmentShader: imgFragmentShader,
       uniforms: {
         uResolution: new Uniform(this.view.resolution),
         uPictureTexture: new Uniform(this.picture),
+        uDisplacementTexture: new Uniform(displacementTexture),
       }
     });
 

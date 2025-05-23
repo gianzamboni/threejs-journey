@@ -1,35 +1,87 @@
+import { BufferGeometry, Camera, CanvasTexture, Mesh, MeshBasicMaterial, Raycaster, Scene, Vector2 } from "three";
+
 import { disposeMesh } from "#/app/utils/three-utils";
-import { Mesh, MeshBasicMaterial, Points, Scene } from "three";
 
 export class DisplacementEngine {
 
   private scene: Scene;
-
-  private displacementMesh: Mesh;
 
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
   private glow: HTMLImageElement;
 
-  constructor(particles: Points, scene: Scene) {
+  private raycaster: Raycaster;
+  private displacementMesh: Mesh;
+  private displacementTexture: CanvasTexture;
+
+  private mousePosition = new Vector2(9999, 9999);
+
+
+  constructor(geometry: BufferGeometry, scene: Scene) {
     this.scene = scene;
-    this.displacementMesh = this.createDisplacementMesh(particles);
+    this.displacementMesh = this.createDisplacementMesh(geometry);
+    this.displacementMesh.visible = false;
+    this.raycaster = new Raycaster();
 
     this.canvas = this.createCanvas();
     this.ctx = this.getContext();
     this.glow = this.createGlow();
+    this.displacementTexture = new CanvasTexture(this.canvas);
+
+    this.mousePosition = new Vector2(9999, 9999);
+
+    window.addEventListener("mousemove", this.updateMousePosition.bind(this));
 
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  get texture() {
+    return this.displacementTexture;
+  }
+
+  update(camera: Camera) {
+    this.raycaster.setFromCamera(this.mousePosition, camera);
+    const intersections = this.raycaster.intersectObject(this.displacementMesh);
+    
+    const mouseOnCanvas = new Vector2(9999, 9999);
+
+    if (intersections.length > 0) {
+      const uv = intersections[0].uv;
+      if (uv) {
+        mouseOnCanvas.x = uv.x * this.canvas.width;
+        mouseOnCanvas.y = (1 -uv.y) * this.canvas.height;
+      }
+    }
+
+    const glowSize = this.canvas.width * 0.25;
+    this.ctx.globalCompositeOperation = 'source-over';
+    this.ctx.globalAlpha = 0.02;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.globalAlpha = 1;
+    this.ctx.globalCompositeOperation = 'lighten';
+    this.ctx.drawImage(this.glow, mouseOnCanvas.x - glowSize * 0.5, mouseOnCanvas.y - glowSize * 0.5, glowSize, glowSize);
+
+    this.displacementTexture.needsUpdate = true;
+
+    return this.displacementTexture;
   }
 
   dispose() {
     this.canvas.remove();
     disposeMesh(this.displacementMesh);
+    this.displacementTexture.dispose();
+    window.removeEventListener("mousemove", this.updateMousePosition.bind(this));
   }
 
-  private createDisplacementMesh(particles: Points) {
-    const interactiveMesh = new Mesh(particles.geometry, new MeshBasicMaterial({ color: 0xff0000 }));
+  private updateMousePosition(event: MouseEvent) {
+    this.mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mousePosition.y = - (event.clientY / window.innerHeight) * 2 + 1;
+  }
+
+  private createDisplacementMesh(geometry: BufferGeometry) {
+    const interactiveMesh = new Mesh(geometry, new MeshBasicMaterial({ color: 0xff0000 }));
     this.scene.add(interactiveMesh);
     return interactiveMesh;
   }
