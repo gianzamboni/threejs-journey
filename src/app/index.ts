@@ -19,6 +19,7 @@ export class App {
   private activeExercise!: Exercise;
   private activeQuality!: Quality;
 
+  private layoutContainer: HTMLDivElement;
   private menu: Menu;
   private infoBox: InfoBox;
   private renderView: RenderView;
@@ -30,6 +31,10 @@ export class App {
 
   constructor(quality: Quality) {
     this.activeQuality = qualityFromString(quality);
+    this.layoutContainer = document.createElement('div');
+    this.layoutContainer.id = 'layout-container';
+    this.layoutContainer.className = 'w-100 h-100';
+    document.body.appendChild(this.layoutContainer);
 
     this.menu = new Menu();
     this.infoBox = new InfoBox();
@@ -147,7 +152,18 @@ export class App {
     });
 
     this.qualitySelector.addEventListener('quality-changed', this.changeQuality.bind(this) as EventListener);
+    
+    window.addEventListener('keydown', (event) => {
+      if(event.code === 'KeyH') {
+        this.toggleLayout();
+      }
+    });
+  
   }
+
+  private toggleLayout() {
+    this.layoutContainer.classList.toggle('hidden');
+    }
 
   private addToDOM() {
     const rowClasses = `${CSS_CLASSES.main_layout_index} fixed flex flex-col items-end`
@@ -167,12 +183,12 @@ export class App {
 
     this.qualitySelector.addTo(rightColumn);
     this.debugUI.addTo(rightColumn);
-    document.body.appendChild(rightColumn);
+    this.layoutContainer.appendChild(rightColumn);
 
-    this.menu.addTo(document.body);
+    this.menu.addTo(this.layoutContainer);
     this.renderView.addTo(document.body);
     this.loadingScreen.addTo(document.body);
-
   }
+
 }
 

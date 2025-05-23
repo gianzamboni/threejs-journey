@@ -12,13 +12,13 @@ export default class Menu extends EventTarget {
   private sideBar: SideBar;
   private menuContent: HTMLElement;
 
+  private lastSection: Collapsable | null = null;
+
   constructor() {
     super();
     this.sideBar = new SideBar({
       buttonTitle: `${HAMBURGER_ICON} Demos`,
     });
-
-    this.sideBar.addTo(document.body);
 
     const header = this.createHeader();
     this.sideBar.addContent(header);
@@ -31,6 +31,9 @@ export default class Menu extends EventTarget {
 
   public addTo(parent: HTMLElement) {
     this.sideBar.addTo(parent);
+    if (this.lastSection) {
+      this.lastSection.open();
+    }
   }
 
   private createExerciseMenu(sidebar: SideBar) {
@@ -39,7 +42,10 @@ export default class Menu extends EventTarget {
     menu.className = `overflow-y-auto h-full flex-col flex-wrap overflow-x-hidden ${CSS_CLASSES.scrollBar}`;
     sidebar.addContent(menu);
     for(const [index, section] of JOURNEY.entries()) {
-      this.createSection(section, menu, index === JOURNEY.length - 1);
+      const collapsable = this.createSection(section, menu);
+      if (index === JOURNEY.length - 1) {
+        this.lastSection = collapsable;
+      }
     }
     return menu;
   }
@@ -84,7 +90,7 @@ export default class Menu extends EventTarget {
     lastExercise[lastExercise.length - 1].click();
   }
 
-  private createSection(section: Section, menu: HTMLElement, isOpen: boolean = false) {
+  private createSection(section: Section, menu: HTMLElement) {
     const title = pascalCaseToText(section.id);
 
     const collapsable = new Collapsable(section.id, title);
@@ -95,9 +101,7 @@ export default class Menu extends EventTarget {
     }
     collapsable.addContent(exerciseList);
     collapsable.addTo(menu);
-    if(isOpen) {
-      collapsable.toggle();
-    }
+    return collapsable;
   }
 
   private createHeader() {

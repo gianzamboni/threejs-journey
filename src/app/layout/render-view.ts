@@ -133,7 +133,7 @@ export default class RenderView extends EventTarget {
     return window.innerWidth;
   }
 
-  get sizeAsVector2() {
+  get resolution() {
     return new Vector2(this.width * this.pixelRatio, this.height * this.pixelRatio);
   }
 }

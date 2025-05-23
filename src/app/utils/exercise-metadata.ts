@@ -71,6 +71,7 @@ export function getDescriptions(target: MetadataTarget): string[] {
         ${
           metadata.isDebuggable ? DEBUG_CONTROLLER_DESCRIPTION : ''
         }
+        <p><strong>Toggle Layout</strong>: Press H on keyboard</p>
       </div>`
     );
   }

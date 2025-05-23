@@ -1,6 +1,20 @@
-import { BackSide, Color, LinearFilter, Mesh, ShaderMaterial, SphereGeometry, Spherical, SRGBColorSpace, Texture, Uniform, Vector3 } from "three";
+import {
+  BackSide, 
+  Color, 
+  LinearFilter, 
+  Mesh, 
+  PointLight, 
+  ShaderMaterial, 
+  SphereGeometry, 
+  Spherical, 
+  SRGBColorSpace, 
+  Texture, 
+  Uniform, 
+  Vector3 
+} from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
+import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
@@ -49,6 +63,8 @@ export class EarthShaders extends OrbitControlledExercise {
   private earth: Mesh;
   private atmosphere: Mesh;
 
+  private sun: PointLight;
+
   @Customizable([{
     propertyPath: "phi",
     folderPath: "Sun",
@@ -74,6 +90,7 @@ export class EarthShaders extends OrbitControlledExercise {
     day: Texture;
     night: Texture;
     specularClouds: Texture;
+    lenses: Texture[];
   }
   
   constructor(view: RenderView) {
@@ -82,8 +99,9 @@ export class EarthShaders extends OrbitControlledExercise {
     this.textures = this.loadTextures();
     this.sunSpherical = new Spherical(1, Math.PI * 0.5, -0.25);
 
-    const geometry = new SphereGeometry(2, 256, 256);
+    this.sun = this.createSun();
 
+    const geometry = new SphereGeometry(2, 256, 256);
     this.earthMaterial = this.createEarthMaterial();
     this.earth = new Mesh(geometry, this.earthMaterial);
 
@@ -112,6 +130,24 @@ export class EarthShaders extends OrbitControlledExercise {
       this.earthMaterial.uniforms[property].value = new Color(newValue);
       this.atmosphereMaterial.uniforms[property].value = new Color(newValue);
     }
+  }
+
+  private createSun() {
+    const sun = new PointLight(0xffffff, 1.5, 2000, 0);
+    sun.position.set(0, 0, -4);
+
+    const lensFlare = new Lensflare();
+    const element = new LensflareElement(this.textures.lenses[0], 1000, 0);
+    const element2 = new LensflareElement(this.textures.lenses[1], 1000, 0.5);
+    lensFlare.addElement(element);
+    lensFlare.addElement(element2);
+    sun.add(lensFlare);
+
+
+    this.scene.add(sun);
+
+
+    return sun;
   }
 
   private createEarthMaterial() {
@@ -150,6 +186,10 @@ export class EarthShaders extends OrbitControlledExercise {
       day: assetLoader.loadTexture("textures/earth/day.jpg"),
       night: assetLoader.loadTexture("textures/earth/night.jpg"),
       specularClouds: assetLoader.loadTexture("textures/earth/specularClouds.jpg"),
+      lenses: [
+        assetLoader.loadTexture("textures/lenses/lensflare0.png"),
+        assetLoader.loadTexture("textures/lenses/lensflare1.png"),
+      ]
     }
 
     textures.day.colorSpace = SRGBColorSpace;
@@ -172,11 +212,18 @@ export class EarthShaders extends OrbitControlledExercise {
     sunDirection.setFromSpherical(this.sunSpherical);
     this.earthMaterial.uniforms.uSunDirection.value.copy(sunDirection);
     this.atmosphereMaterial.uniforms.uSunDirection.value.copy(sunDirection);
+    this.sun.position.copy(sunDirection).multiplyScalar(10);
   }
 
   async dispose() {
     super.dispose();
     disposeMesh(this.earth);
     disposeMesh(this.atmosphere);
+
+    this.sun.dispose();
+    this.textures.day.dispose();
+    this.textures.night.dispose();
+    this.textures.specularClouds.dispose();
+    this.textures.lenses.forEach(lens => lens.dispose());
   }
 }

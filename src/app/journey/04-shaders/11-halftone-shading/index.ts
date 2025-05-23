@@ -74,7 +74,7 @@ export class HalftoneShading extends OrbitControlledExercise {
       fragmentShader: halftoneFrag,
       uniforms: {
         uColor: new Uniform(new Color(INITIAL_COLOR)),
-        uResolution: new Uniform(this._view.sizeAsVector2),
+        uResolution: new Uniform(this._view.resolution),
         uShadowRepetitions: new Uniform(INITIAL_SHADOW_REPETITIONS),
         uShadowColor: new Uniform(new Color(INITIAL_SHADOW_COLOR)),
         uLightColor: new Uniform(new Color(INITIAL_LIGHT_COLOR)),
