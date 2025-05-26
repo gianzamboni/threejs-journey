@@ -72,6 +72,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
       const normalizedPositions = this.normalizePositions(positionBuffers);
       
       this.geometry.setAttribute('position', normalizedPositions[1]);
+      this.geometry.setAttribute('aPositionTarget', normalizedPositions[3]);
 
       this.points = new Points(this.geometry, this.material);
       this.scene.add(this.points);

@@ -1,9 +1,14 @@
+attribute vec3 aPositionTarget;
+
 uniform vec2 uResolution;
 uniform float uSize;
 
 void main() {
     // Final position
-    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+    float progress = 0.9;
+    vec3 mixedPosition = mix(position, aPositionTarget, progress);
+
+    vec4 modelPosition = modelMatrix * vec4(mixedPosition, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
     gl_Position = projectedPosition;
