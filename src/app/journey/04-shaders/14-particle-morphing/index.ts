@@ -39,7 +39,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
       vertexShader: particlesVertexShader,
       fragmentShader: particlesFragmentShader,
       uniforms: {
-        uSize: new Uniform(0.3),
+        uSize: new Uniform(0.5),
         uResolution: new Uniform(this.view.resolution),
       }
     });
