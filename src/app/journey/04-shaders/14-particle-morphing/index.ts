@@ -1,3 +1,4 @@
+import gsap from "gsap";
 import { 
   AdditiveBlending, 
   BufferAttribute, 
@@ -10,7 +11,7 @@ import {
 } from "three";
 import { BufferGeometry } from "three";
 
-import { Customizable } from "#/app/decorators/customizable";
+import { Callable, Customizable } from "#/app/decorators/customizable";
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -42,10 +43,14 @@ export class ParticleMorphing extends OrbitControlledExercise {
       min: 0,
       max: 1,
       step: 0.001,
+      listen: true,
     }
   }])
   private material: ShaderMaterial;
   private geometry: BufferGeometry;
+  
+  private modelVertices: Float32BufferAttribute[];
+  private currentModelIndex: number;
 
   private points: Points | undefined;
 
@@ -55,6 +60,9 @@ export class ParticleMorphing extends OrbitControlledExercise {
   
     this.material = this.createMaterial();
     this.geometry = new BufferGeometry();
+
+    this.modelVertices = [];
+    this.currentModelIndex = 0;
 
     this.loadModels();
     this.setupScene();
@@ -71,6 +79,25 @@ export class ParticleMorphing extends OrbitControlledExercise {
     })
   }
 
+  @Callable("Morphs", "Donut", 0)
+  @Callable("Morphs", "Suzanne", 1)
+  @Callable("Morphs", "Sphere", 2)
+  @Callable("Morphs", "Three.Js", 3)
+  morph(index: number) {
+    if(!this.points) return;
+    
+    this.points.geometry.attributes.position = this.modelVertices[this.currentModelIndex];
+    this.points.geometry.attributes.aPositionTarget = this.modelVertices[index];
+
+    gsap.fromTo(
+      this.material.uniforms.uProgress,
+      { value: 0 },
+      { value: 1, duration: 1, ease: "linear", onComplete: () => {
+        this.currentModelIndex = index;
+      } }
+    )
+  }
+
   private loadModels() {
     AssetLoader.getInstance()
     .loadModel("models/models.glb", (group) => {
@@ -78,10 +105,10 @@ export class ParticleMorphing extends OrbitControlledExercise {
         return (child as Mesh).geometry.attributes.position;
       });
 
-      const normalizedPositions = this.normalizePositions(positionBuffers);
+      this.modelVertices = this.normalizePositions(positionBuffers);
       
-      this.geometry.setAttribute('position', normalizedPositions[1]);
-      this.geometry.setAttribute('aPositionTarget', normalizedPositions[3]);
+      this.geometry.setAttribute('position', this.modelVertices[this.currentModelIndex]);
+      this.geometry.setAttribute('aPositionTarget', this.modelVertices[3]);
 
       this.points = new Points(this.geometry, this.material);
       this.scene.add(this.points);
@@ -124,7 +151,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
 
   private setupScene() {
     this.controls.autoRotate = true;
-    this.controls.autoRotateSpeed = 1;
+    this.controls.autoRotateSpeed = 0.12;
     this.camera.fov = 35;
     this.camera.position.set(-4, 0, 18);
     this.camera.lookAt(0 ,0, 0);
