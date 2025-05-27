@@ -110,10 +110,23 @@ export class ParticleMorphing extends OrbitControlledExercise {
       this.geometry.setAttribute('position', this.modelVertices[this.currentModelIndex]);
       this.geometry.setAttribute('aPositionTarget', this.modelVertices[3]);
 
+      this.generateGeometryAttribues();
+
       this.points = new Points(this.geometry, this.material);
       this.scene.add(this.points);
   }, { useDraco: true })
 
+  }
+
+  private generateGeometryAttribues() {
+    const particleCount = this.modelVertices[0].count;
+    const sizesArray = new Float32Array(particleCount);
+
+    for(let i = 0; i < particleCount; i++) {
+      sizesArray[i] = Math.random();
+    }
+
+    this.geometry.setAttribute('aSize', new Float32BufferAttribute(sizesArray, 1));
   }
 
   private normalizePositions(buffers: (BufferAttribute | InterleavedBufferAttribute)[]) {
@@ -176,7 +189,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
       vertexShader: particlesVertexShader,
       fragmentShader: particlesFragmentShader,
       uniforms: {
-        uSize: new Uniform(0.15),
+        uSize: new Uniform(0.4),
         uResolution: new Uniform(this.view.resolution),
         uProgress: new Uniform(0),
       }
