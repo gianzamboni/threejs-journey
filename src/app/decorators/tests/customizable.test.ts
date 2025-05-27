@@ -75,7 +75,10 @@ describe('Callable decorator', () => {
     const expectedController: ControllerConfig = { 
       type: 'callable', 
       folderPath, 
-      settings: { name } 
+      settings: { name },
+      context: {
+        callableArgs: []
+      } 
     };
     
     expect(mockMetadata.controllersConfig!['testMethod']).toEqual([expectedController]);
