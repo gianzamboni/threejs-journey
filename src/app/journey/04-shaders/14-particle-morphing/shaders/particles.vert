@@ -2,10 +2,10 @@ attribute vec3 aPositionTarget;
 
 uniform vec2 uResolution;
 uniform float uSize;
-
+uniform float uProgress;
 void main() {
     // Final position
-    float progress = 0.9;
+    float progress = uProgress;
     vec3 mixedPosition = mix(position, aPositionTarget, progress);
 
     vec4 modelPosition = modelMatrix * vec4(mixedPosition, 1.0);

@@ -35,6 +35,15 @@ export class ParticleMorphing extends OrbitControlledExercise {
   }])
   private _view: RenderView;
 
+  @Customizable([{
+    propertyPath: "uniforms.uProgress.value",
+    settings: {
+      name: "Progress",
+      min: 0,
+      max: 1,
+      step: 0.001,
+    }
+  }])
   private material: ShaderMaterial;
   private geometry: BufferGeometry;
 
@@ -142,6 +151,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
       uniforms: {
         uSize: new Uniform(0.15),
         uResolution: new Uniform(this.view.resolution),
+        uProgress: new Uniform(0),
       }
     });
   }
