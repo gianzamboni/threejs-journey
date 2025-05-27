@@ -58,13 +58,23 @@ export class ControllerFactory {
         const customizableObject = this.findCustomizableObject(key, config);
         const isColor = config.type === 'color';
         const isMaster = config.type === 'master';
-        
+        const isCallable = config.type === 'callable';
 
         let controller: Controller;
         if(isColor) {
           controller = folder.addColor(
             customizableObject.object, 
             customizableObject.propertyName
+          );
+        } else if(isCallable && config.context?.callableArgs !== undefined) {
+          const callableId = crypto.randomUUID();
+          customizableObject.object[callableId] = function() {
+            (this[customizableObject.propertyName] as (...args: unknown[]) => void)(...config.context!.callableArgs as unknown[]);
+          }
+
+          controller = folder.add(
+            customizableObject.object, 
+            callableId
           );
         } else {
           controller = folder.add(
