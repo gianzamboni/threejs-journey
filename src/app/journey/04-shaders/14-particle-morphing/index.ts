@@ -13,13 +13,14 @@ import {
 import { BufferGeometry } from "three";
 
 import { Callable, Customizable } from "#/app/decorators/customizable";
-import { Exercise } from "#/app/decorators/exercise";
+import { ActionButton, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import particlesFragmentShader from "./shaders/particles.frag";
 import particlesVertexShader from "./shaders/particles.vert";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import { Timer } from "three/examples/jsm/Addons.js";
 
 const BACKGROUND_COLOR = "#160920";
 
@@ -99,10 +100,10 @@ export class ParticleMorphing extends OrbitControlledExercise {
     })
   }
 
-  @Callable("Morphs", "Donut", 0)
-  @Callable("Morphs", "Suzanne", 1)
-  @Callable("Morphs", "Sphere", 2)
-  @Callable("Morphs", "Three.Js", 3)
+  @Callable("Morphs", "Donut", 1)
+  @Callable("Morphs", "Suzanne", 2)
+  @Callable("Morphs", "Sphere", 3)
+  @Callable("Morphs", "Three.Js", 4)
   morph(index: number) {
     if(!this.points) return;
     
@@ -112,10 +113,35 @@ export class ParticleMorphing extends OrbitControlledExercise {
     gsap.fromTo(
       this.material.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 3, ease: "linear", onComplete: () => {
+      { value: 1, duration: 5, ease: "linear", onComplete: () => {
         this.currentModelIndex = index;
       } }
     )
+  }
+
+  @ActionButton("Dot", "DOT")
+  toDot() {
+    this.morph(0);
+  }
+  
+  @ActionButton("Line", "LINE")
+  toLine() {
+    this.morph(1);
+  }
+
+  @ActionButton("Circle", "CIRCLE")
+  toCircle() {
+    this.morph(2);
+  }
+
+  @ActionButton("Three.Js", "THREEJS")
+  toThreeJs() {
+    this.morph(3);
+  }
+
+  @ActionButton("Donut", "DONUT")
+  toDonut() {
+    this.morph(4);
   }
 
   updateColorA(color: string) {
@@ -126,6 +152,11 @@ export class ParticleMorphing extends OrbitControlledExercise {
     this.material.uniforms.uColorB.value.set(new Color(color));
   }
   
+  frame(timer: Timer) {
+    super.frame(timer);
+    this.material.uniforms.uTime.value = timer.getElapsed();
+  }
+
   private loadModels() {
     AssetLoader.getInstance()
     .loadModel("models/models.glb", (group) => {
@@ -168,6 +199,8 @@ export class ParticleMorphing extends OrbitControlledExercise {
       return this.cloneAndNormalizeBuffer(buffer, maxLength);
     });
 
+    const zeroBuffer = new Float32Array(maxLength * 3);
+    normalizedBuffers.unshift(new Float32BufferAttribute(zeroBuffer, 3));
     return normalizedBuffers;
   }
 
@@ -222,6 +255,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
         uProgress: new Uniform(0),
         uColorA: new Uniform(new Color(COLOR_A)),
         uColorB: new Uniform(new Color(COLOR_B)),
+        uTime: new Uniform(0),
       }
     });
   }
