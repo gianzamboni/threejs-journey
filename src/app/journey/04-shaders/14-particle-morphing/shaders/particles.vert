@@ -6,7 +6,7 @@ uniform float uSize;
 uniform float uProgress;
 
 varying vec3 vPosition;
-varying vec3 vColor;
+varying float vNoise;
 #include simplexNoise.glsl
 
 
@@ -35,5 +35,5 @@ void main() {
     gl_PointSize = uSize * aSize * uResolution.y;
     gl_PointSize *= (1.0 / - viewPosition.z);
 
-    vColor = vec3(noise);
+    vNoise = noise;
 }
