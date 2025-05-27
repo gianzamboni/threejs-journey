@@ -2,6 +2,7 @@ import gsap from "gsap";
 import { 
   AdditiveBlending, 
   BufferAttribute, 
+  Color, 
   Float32BufferAttribute, 
   InterleavedBufferAttribute, 
   Mesh, 
@@ -21,6 +22,9 @@ import particlesVertexShader from "./shaders/particles.vert";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 const BACKGROUND_COLOR = "#160920";
+
+const COLOR_A = "#ff7380";
+const COLOR_B = "#0091ff";
 
 @Exercise('particle-morphing')
 export class ParticleMorphing extends OrbitControlledExercise {
@@ -44,6 +48,22 @@ export class ParticleMorphing extends OrbitControlledExercise {
       max: 1,
       step: 0.001,
       listen: true,
+    }
+  }, {
+    propertyPath: "colorA",
+    initialValue: COLOR_A,
+    type: "color",
+    settings: {
+      name: "Color A",
+      onChange: "updateColorA", 
+    }
+  }, {
+    propertyPath: "colorB",
+    initialValue: COLOR_B,
+    type: "color",
+    settings: {
+      name: "Color B",
+      onChange: "updateColorB",
     }
   }])
   private material: ShaderMaterial;
@@ -92,12 +112,20 @@ export class ParticleMorphing extends OrbitControlledExercise {
     gsap.fromTo(
       this.material.uniforms.uProgress,
       { value: 0 },
-      { value: 1, duration: 1, ease: "linear", onComplete: () => {
+      { value: 1, duration: 3, ease: "linear", onComplete: () => {
         this.currentModelIndex = index;
       } }
     )
   }
 
+  updateColorA(color: string) {
+    this.material.uniforms.uColorA.value.set(new Color(color));
+  }
+
+  updateColorB(color: string) {
+    this.material.uniforms.uColorB.value.set(new Color(color));
+  }
+  
   private loadModels() {
     AssetLoader.getInstance()
     .loadModel("models/models.glb", (group) => {
@@ -113,6 +141,8 @@ export class ParticleMorphing extends OrbitControlledExercise {
       this.generateGeometryAttribues();
 
       this.points = new Points(this.geometry, this.material);
+      this.points.frustumCulled = false;
+      
       this.scene.add(this.points);
   }, { useDraco: true })
 
@@ -163,8 +193,6 @@ export class ParticleMorphing extends OrbitControlledExercise {
   }
 
   private setupScene() {
-    this.controls.autoRotate = true;
-    this.controls.autoRotateSpeed = 0.12;
     this.camera.fov = 35;
     this.camera.position.set(-4, 0, 18);
     this.camera.lookAt(0 ,0, 0);
@@ -192,6 +220,8 @@ export class ParticleMorphing extends OrbitControlledExercise {
         uSize: new Uniform(0.4),
         uResolution: new Uniform(this.view.resolution),
         uProgress: new Uniform(0),
+        uColorA: new Uniform(new Color(COLOR_A)),
+        uColorB: new Uniform(new Color(COLOR_B)),
       }
     });
   }
