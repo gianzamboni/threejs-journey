@@ -12,6 +12,8 @@ import {
 } from "three";
 import { BufferGeometry } from "three";
 
+import { Timer } from 'three/addons/misc/Timer.js';
+
 import { Callable, Customizable } from "#/app/decorators/customizable";
 import { ActionButton, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
@@ -20,7 +22,6 @@ import particlesFragmentShader from "./shaders/particles.frag";
 import particlesVertexShader from "./shaders/particles.vert";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-import { Timer } from "three/examples/jsm/Addons.js";
 
 const BACKGROUND_COLOR = "#160920";
 
@@ -106,7 +107,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
   @Callable("Morphs", "Three.Js", 4)
   morph(index: number) {
     if(!this.points) return;
-    
+
     this.points.geometry.attributes.position = this.modelVertices[this.currentModelIndex];
     this.points.geometry.attributes.aPositionTarget = this.modelVertices[index];
 
@@ -119,27 +120,27 @@ export class ParticleMorphing extends OrbitControlledExercise {
     )
   }
 
-  @ActionButton("Dot", "DOT")
+  @ActionButton("Dot", "Dot")
   toDot() {
     this.morph(0);
   }
   
-  @ActionButton("Line", "LINE")
+  @ActionButton("Donut", "Donut")
   toLine() {
     this.morph(1);
   }
 
-  @ActionButton("Circle", "CIRCLE")
+  @ActionButton("Suzanne", "Suzanne")
   toCircle() {
     this.morph(2);
   }
 
-  @ActionButton("Three.Js", "THREEJS")
+  @ActionButton("Sphere", "Sphere")
   toThreeJs() {
     this.morph(3);
   }
 
-  @ActionButton("Donut", "DONUT")
+  @ActionButton("ThreeJs", "ThreeJs")
   toDonut() {
     this.morph(4);
   }
