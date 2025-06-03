@@ -16,8 +16,14 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Callable, Customizable } from "#/app/decorators/customizable";
 import { ActionButton, Exercise } from "#/app/decorators/exercise";
+import { ActionBar } from "#/app/layout/action-bar";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { ExtraConfig } from "#/app/types/exercise";
+import DONUT_ICON from "./icons/donut.svg?raw";
+import DOT_ICON from "./icons/dot.svg?raw";
+import SUZANNE_ICON from "./icons/monkey.svg?raw";
+import SPHERE_ICON from "./icons/sphere.svg?raw";
 import particlesFragmentShader from "./shaders/particles.frag";
 import particlesVertexShader from "./shaders/particles.vert";
 
@@ -76,7 +82,11 @@ export class ParticleMorphing extends OrbitControlledExercise {
 
   private points: Points | undefined;
 
-  constructor(view: RenderView) {
+
+  private actionBar: ActionBar;
+  private progressBar: HTMLElement | undefined;
+
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
     this._view = view;
   
@@ -86,6 +96,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
     this.modelVertices = [];
     this.currentModelIndex = 0;
 
+    this.actionBar = extraConfig.layoutComponents.actionBar;
     this.loadModels();
     this.setupScene();
   }
@@ -107,7 +118,7 @@ export class ParticleMorphing extends OrbitControlledExercise {
   @Callable("Morphs", "Three.Js", 4)
   morph(index: number) {
     if(!this.points) return;
-
+    this.actionBar.disable();
     this.points.geometry.attributes.position = this.modelVertices[this.currentModelIndex];
     this.points.geometry.attributes.aPositionTarget = this.modelVertices[index];
 
@@ -116,31 +127,46 @@ export class ParticleMorphing extends OrbitControlledExercise {
       { value: 0 },
       { value: 1, duration: 5, ease: "linear", onComplete: () => {
         this.currentModelIndex = index;
+        this.actionBar.enable();
       } }
     )
+
+    if(this.progressBar) {
+      this.progressBar.style.opacity = '1';
+    gsap.fromTo(this.progressBar, {
+      width: '0%',
+    }, {
+      width: '100%',
+        duration: 5,
+        ease: "linear",
+        onComplete: () => {
+          this.actionBar.enable();
+        }
+      })
+    }
   }
 
-  @ActionButton("Dot", "Dot")
+  @ActionButton("Dot", DOT_ICON)
   toDot() {
     this.morph(0);
   }
   
-  @ActionButton("Donut", "Donut")
+  @ActionButton("Donut", DONUT_ICON)
   toLine() {
     this.morph(1);
   }
 
-  @ActionButton("Suzanne", "Suzanne")
+  @ActionButton("Suzanne", SUZANNE_ICON)
   toCircle() {
     this.morph(2);
   }
 
-  @ActionButton("Sphere", "Sphere")
+  @ActionButton("Sphere", SPHERE_ICON)
   toThreeJs() {
     this.morph(3);
   }
 
-  @ActionButton("ThreeJs", "ThreeJs")
+  @ActionButton("ThreeJs", "<span class='text-2xl'>Three.js Text</span>", "col-span-4")
   toDonut() {
     this.morph(4);
   }

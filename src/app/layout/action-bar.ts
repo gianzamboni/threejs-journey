@@ -13,12 +13,12 @@ export class ActionBar {
     action: (...args: any[]) => void;
   }[];
 
-  private static buttonClasses = `cursor-pointer py-2 px-3 items-center border font-medium rounded-md shadow-xs ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`
+  private static buttonClasses = `cursor-pointer py-2 px-3 items-center border font-medium rounded-md shadow-xs transition-all duration-300 ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text} ${CSS_CLASSES.hover} ${CSS_CLASSES.main_layout_index}`
 
   constructor() {
     this.layoutContainer = document.createElement('div');
     this.layoutContainer.id = 'action-bar-container';
-    this.layoutContainer.className = `grid grid-cols-4 gap-5 mx-5 my-5 justify-around`;
+    this.layoutContainer.className = `grid grid-cols-4 gap-5 my-5 justify-around`;
     this.buttons = [];
     this.interactiveElements = [];
   }
@@ -69,6 +69,14 @@ export class ActionBar {
   disable() {
     this.buttons.forEach(button => {
       button.disabled = true;
+      button.style.opacity = '0.5';
+    });
+  }
+
+  enable() {
+    this.buttons.forEach(button => {
+      button.disabled = false;
+      button.style.opacity = '1';
     });
   }
 
