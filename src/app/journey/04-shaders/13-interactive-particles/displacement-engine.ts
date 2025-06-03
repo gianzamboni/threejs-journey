@@ -1,7 +1,5 @@
 import { BufferGeometry, Camera, CanvasTexture, Mesh, MeshBasicMaterial, Raycaster, Scene, Vector2 } from "three";
 
-import { BufferGeometry, Camera, CanvasTexture, Mesh, MeshBasicMaterial, Raycaster, Scene, Vector2 } from "three";
-
 import { disposeMesh } from "#/app/utils/three-utils";
 
 export class MouseDisplacementEngine {
