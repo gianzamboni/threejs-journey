@@ -115,7 +115,12 @@ export class App {
       await this.activeExercise.dispose();
     }
 
-    this.activeExercise = new newExercise(this.renderView, this.activeQuality);
+    this.activeExercise = new newExercise(this.renderView, {
+      quality: this.activeQuality,
+      layoutComponents: { 
+        actionBar: this.actionBar
+      }
+    });
     this.updateURL(this.activeExercise);
     this.debugUI.createControllers(this.activeExercise);
     this.infoBox.updateContent(this.activeExercise);
@@ -169,7 +174,7 @@ export class App {
     const rowClasses = `${CSS_CLASSES.main_layout_index} fixed flex flex-col items-end`
     const bottomRow = document.createElement('div');
     bottomRow.id = "bottom-row";
-    bottomRow.className = `${rowClasses} bottom-0 left-0 md:flex-row justify-between align-center`;
+    bottomRow.className = `${rowClasses} bottom-0 left-0 md:flex-row justify-between align-center w-full px-5`;
 
     const rightColumn = document.createElement('div');
     rightColumn.id = "right-column";

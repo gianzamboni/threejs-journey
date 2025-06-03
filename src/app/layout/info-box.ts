@@ -13,7 +13,7 @@ export class InfoBox {
     this._container.id = 'info-box-container';
 
     this.collapsable = new Collapsable('info-box', 'Información', {
-      className: 'mx-5 w-[90vw] sm:w-[16vw] md:min-w-[390px] ',
+      className: 'w-[90vw] sm:w-[16vw] md:min-w-[390px] ',
       button: {
         className: 'flex items-center justify-center font-bold text-2xl gap-1 py-2 rounded-lg mb-0',
         iconSize: 32,

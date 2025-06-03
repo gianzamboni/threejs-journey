@@ -15,3 +15,7 @@ a {
     color: #000;
   }
 }
+
+.col-span-4 {
+  grid-column: span 4;
+}

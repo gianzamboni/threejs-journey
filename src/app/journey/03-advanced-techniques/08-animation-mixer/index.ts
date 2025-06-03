@@ -18,9 +18,9 @@ import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
-import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { ExtraConfig } from "#/app/types/exercise";
 import { disposeMesh } from "#/app/utils/three-utils";
 import IDLE from './icons/idle.svg?raw';
 import RUN from './icons/run.svg?raw';
@@ -52,10 +52,10 @@ export class AnimationMixerTest extends OrbitControlledExercise {
   @Customizable(LIGHT_CONTROLLERS)
   private directionalLight: DirectionalLight;
   
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
 
-    this.quality = QUALITY_CONFIG[quality];
+    this.quality = QUALITY_CONFIG[extraConfig.quality];
     this.envMapIntensity = 0.4;
     this.envMap = this.loadEnvTexture();
     this.scene.environment = this.envMap;

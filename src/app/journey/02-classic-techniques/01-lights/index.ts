@@ -25,9 +25,8 @@ import { Customizable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
-import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
-import { Position3D } from '#/app/types/exercise';
+import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { Lights, LightType } from '#/app/utils/light-controllers-utils';
 import { disposeObjects } from '#/app/utils/three-utils';
 import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
@@ -59,14 +58,14 @@ export class LightsExercise extends OrbitControlledExercise {
 
   private helpersVisibleStatus: HelperStatusDict;
 
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
 
     import('three/addons/lights/RectAreaLightUniformsLib.js').then(({ RectAreaLightUniformsLib }) => {
       RectAreaLightUniformsLib.init();
     });
     
-    this.quality = QUALITY_CONFIG[quality];
+    this.quality = QUALITY_CONFIG[extraConfig.quality];
     this.camera.position.set(2, 1, 3);
     this.material = new MeshStandardMaterial();
     this.material.roughness = 0.4;

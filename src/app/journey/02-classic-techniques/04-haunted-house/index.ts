@@ -11,8 +11,8 @@ import { Sky } from 'three/addons/objects/Sky.js';
 import { DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
-import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
+import { ExtraConfig } from '#/app/types/exercise';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { Bushes } from './bushes';
 import { Floor } from './floor';
@@ -43,9 +43,9 @@ export class HauntedHouse extends OrbitControlledExercise {
   /**
    * Create a new haunted house
    */
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
-    this.quality = QUALITY_CONFIG[quality];
+    this.quality = QUALITY_CONFIG[extraConfig.quality];
 
     this.scene = new Scene();
     this.lights = this.createLights();

@@ -12,6 +12,7 @@ import { RagingSeaV2 } from "./10-raging-sea-2";
 import { HalftoneShading } from "./11-halftone-shading";
 import { EarthShaders } from "./12-earth-shaders";
 import { InteractiveParticles } from "./13-interactive-particles";
+import { ParticleMorphing } from "./14-particle-morphing";
 
 export const SHADERS: Section = {
   id: 'shaders',
@@ -29,5 +30,6 @@ export const SHADERS: Section = {
     HalftoneShading,
     EarthShaders,
     InteractiveParticles,
+    ParticleMorphing,
   ]
 }

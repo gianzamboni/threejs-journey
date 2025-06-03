@@ -16,10 +16,9 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { DebugFPS } from '#/app/decorators/debug';
 import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
-import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
-import { Position3D } from '#/app/types/exercise';
+import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import BOX from './icons/cube.svg?raw';
@@ -85,10 +84,10 @@ export class Physics extends OrbitControlledExercise {
   
   private qualityConfig: QualityConfig;
 
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
     
-    this.qualityConfig = QUALITY_CONFIG[quality];
+    this.qualityConfig = QUALITY_CONFIG[extraConfig.quality];
     view.enableShadows(this.qualityConfig.shadowMapType);
 
     this.environmentMap = this.loadEnvironmentMap();

@@ -106,7 +106,7 @@ describe('ActionBar', () => {
       {
         label: 'Test Selectable',
         options: mockOptions,
-        classes: 'w-full'
+        classes: 'col-span-4'
       }
     );
     

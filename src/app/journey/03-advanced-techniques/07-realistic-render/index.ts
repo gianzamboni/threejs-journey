@@ -16,9 +16,9 @@ import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
-import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { ExtraConfig } from '#/app/types/exercise';
 import { loadTextureMaps, TextureDict, TextureMaps } from "#/app/utils/textures";
 import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
@@ -51,9 +51,9 @@ export class RealisticRender extends OrbitControlledExercise {
 
   private qualityConfig: QualityConfig;
 
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
-    this.qualityConfig = QUALITY_CONFIG[quality];
+    this.qualityConfig = QUALITY_CONFIG[extraConfig.quality];
     this._scene = this.scene;
     this._scene.environmentIntensity = 1;
     this._renderer = view.renderer;
