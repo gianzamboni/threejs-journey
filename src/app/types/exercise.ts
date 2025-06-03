@@ -10,6 +10,8 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
 
+import { ActionBar } from '../layout/action-bar';
+
 export interface Action {
   type: string;
   label: string;
@@ -19,6 +21,7 @@ export interface Action {
 export interface ButtonAction extends Action {
   type: 'button';
   icon: string;
+  customClasses?: string;
   onClick: () => void;
 }
 
@@ -34,10 +37,18 @@ export type Section = {
   exercises: ExerciseClass[];
 }
 
+
+export type ExtraConfig = {
+  quality: Quality;
+  layoutComponents: {
+    actionBar: ActionBar;
+  }
+}
+
 export type Exercise = BaseExercise | AnimatedExercise | OrbitControlledExercise;
 
 export type Constructor<T> = new (...args: any[]) => T;
-export type ExerciseClass = new (renderView: RenderView, quality: Quality) => Exercise;
+export type ExerciseClass = new (renderView: RenderView, extraConfig: ExtraConfig) => Exercise;
 
 export type MeshObject = {
   geometry: BufferGeometry;

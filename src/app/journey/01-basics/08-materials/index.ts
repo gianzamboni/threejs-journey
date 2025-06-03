@@ -15,9 +15,9 @@ import { Customizable } from '#/app/decorators/customizable';
 import { DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
-import { Quality } from '#/app/layout/quality-selector';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
+import { ExtraConfig } from '#/app/types/exercise';
 import { disposeObjects } from '#/app/utils/three-utils';
 import { PHYSICAL_MATERIAL_CONFIGS } from './debug-ui-configs';
 import { QUALITY_CONFIG } from './quality-config';
@@ -39,9 +39,9 @@ export class MaterialsTest extends OrbitControlledExercise {
   private meshes: Mesh[];
   private envMap: Texture | undefined;
 
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
-    this.qualityconfig = QUALITY_CONFIG[quality];
+    this.qualityconfig = QUALITY_CONFIG[extraConfig.quality];
 
     this.loader = AssetLoader.getInstance();
     this.camera.position.set(2, 1, 3);

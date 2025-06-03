@@ -115,7 +115,12 @@ export class App {
       await this.activeExercise.dispose();
     }
 
-    this.activeExercise = new newExercise(this.renderView, this.activeQuality);
+    this.activeExercise = new newExercise(this.renderView, {
+      quality: this.activeQuality,
+      layoutComponents: { 
+        actionBar: this.actionBar
+      }
+    });
     this.updateURL(this.activeExercise);
     this.debugUI.createControllers(this.activeExercise);
     this.infoBox.updateContent(this.activeExercise);

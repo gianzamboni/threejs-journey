@@ -6,8 +6,8 @@ import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise } from "#/app/decorators/exercise";
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
-import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
+import { ExtraConfig } from "#/app/types/exercise";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { RAGING_SEA_COLORS_CONTROLS, RAGING_SEA_CONTROLS } from "./controls";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
@@ -23,13 +23,13 @@ export class RagingSea extends AnimatedExercise {
   }
   @Customizable(RAGING_SEA_CONTROLS)
   private material: ShaderMaterial;
-
+ 
   private water: Mesh;
   private quality: QualityConfig;
 
-  constructor(_: RenderView, quality: Quality) {
+  constructor(_: RenderView, extraConfig: ExtraConfig) {
     super();
-    this.quality = QUALITY_CONFIG[quality];
+    this.quality = QUALITY_CONFIG[extraConfig.quality];
 
     const geometry = new PlaneGeometry(50, 50, this.quality.segments, this.quality.segments);
     this.material = new ShaderMaterial({

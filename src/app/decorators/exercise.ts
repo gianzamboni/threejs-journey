@@ -28,13 +28,13 @@ export function IsAnimated<T extends ExerciseClass>(target: T, context: ClassDec
   return target;
 }
 
-export function ActionButton(label: string, icon: string) {
+export function ActionButton(label: string, icon: string, customClasses?: string) {
   return function(target: () => void, context: ClassMethodDecoratorContext) {
     if(context.metadata.actions === undefined) {
       context.metadata.actions = [] as ButtonAction[];
     }
     const actions = context.metadata.actions as ButtonAction[];
-    actions.push({ label, icon, onClick: target, type: 'button' });
+    actions.push({ label, icon, onClick: target, type: 'button', customClasses });
   }
 }
 

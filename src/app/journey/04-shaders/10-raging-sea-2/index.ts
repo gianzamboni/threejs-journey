@@ -5,8 +5,8 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise } from "#/app/decorators/exercise";
-import { Quality } from "#/app/layout/quality-selector";
 import RenderView from "#/app/layout/render-view";
+import { ExtraConfig } from "#/app/types/exercise";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { RAGING_SEA_CONTROLS_V2, RAGING_SEA_COLORS_CONTROLS_V2 } from "./controls";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
@@ -26,9 +26,9 @@ export class RagingSeaV2 extends OrbitControlledExercise {
   private water: Mesh;
   private quality: QualityConfig;
 
-  constructor(view: RenderView, quality: Quality) {
+  constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
-    this.quality = QUALITY_CONFIG[quality];
+    this.quality = QUALITY_CONFIG[extraConfig.quality];
 
     const geometry = new PlaneGeometry(50, 50, this.quality.segments, this.quality.segments);
     geometry.deleteAttribute("normal");
