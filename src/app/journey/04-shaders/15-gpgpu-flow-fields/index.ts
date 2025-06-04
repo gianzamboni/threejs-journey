@@ -1,4 +1,4 @@
-import { BufferGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, SphereGeometry, Uniform } from "three";
+import { BufferAttribute, BufferGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, SphereGeometry, Uniform } from "three";
 
 import { GPUComputationRenderer, Variable } from 'three/addons/misc/GPUComputationRenderer.js'
 import { Timer } from "three/examples/jsm/Addons.js";
@@ -46,9 +46,6 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
     this._view = view;
     
     this.geometry = new SphereGeometry(3);
-    this.bufferGeometry = new BufferGeometry();
-    
-    this.bufferGeometry.setDrawRange(0, this.geometry.attributes.position.count);
     
     this.gpgpuSize = Math.ceil(Math.sqrt(this.geometry.attributes.position.count));
     this.gpgpu = new GPUComputationRenderer(this.gpgpuSize, this.gpgpuSize, this.view.renderer);
@@ -64,6 +61,24 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
       }
     })
 
+    const particlesUvArray = new Float32Array(this.geometry.attributes.position.count * 2);
+    for(let y = 0; y < this.gpgpuSize; y++) {
+      for(let x = 0; x < this.gpgpuSize; x++) {
+        const i = y * this.gpgpuSize + x;
+        const i2 = i * 2;
+
+        const uvX = (x + 0.5) / this.gpgpuSize;
+        const uvY = (y + 0.5) / this.gpgpuSize;
+
+        particlesUvArray[i2 + 0] = uvX;
+        particlesUvArray[i2 + 1] = uvY;
+      }
+    }
+
+    this.bufferGeometry = new BufferGeometry();
+ 
+    this.bufferGeometry.setDrawRange(0, this.geometry.attributes.position.count);
+    this.bufferGeometry.setAttribute("aParticlesUv", new BufferAttribute(particlesUvArray, 2));
     this.particles = new Points(this.bufferGeometry, this.material);
     this.scene.add(this.particles);
 
@@ -85,7 +100,6 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
     this.gpgpu.setVariableDependencies(this.uParticles, [ this.uParticles ]);
 
     this.gpgpu.init();
-
 
     this.debugPlane = new Mesh(
       new PlaneGeometry(3, 3), 
