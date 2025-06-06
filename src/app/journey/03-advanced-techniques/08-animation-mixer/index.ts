@@ -103,7 +103,8 @@ export class AnimationMixerTest extends OrbitControlledExercise {
   }
 
   loadFox() {
-    AssetLoader.getInstance().loadGLTF('/models/Fox/glTF/Fox.gltf', (gltf) => {
+    AssetLoader.getInstance().loadGLTF('/models/Fox/glTF/Fox.gltf', {
+      onLoad: (gltf) => {
       this.fox = gltf;
       this.fox.scene.scale.set(0.02, 0.02, 0.02);
       this.scene.add(this.fox.scene);
@@ -126,7 +127,7 @@ export class AnimationMixerTest extends OrbitControlledExercise {
       this.changeAnimation('idle');
 
       this.updateAllMaterials();
-    });
+    }});
   }
 
   changeAnimation(action: keyof Actions) {

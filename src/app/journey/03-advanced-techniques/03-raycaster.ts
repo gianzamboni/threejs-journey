@@ -80,12 +80,13 @@ export default class RaycasterDemo extends OrbitControlledExercise {
 
   private loadDuck() {
     const loader = AssetLoader.getInstance();
-    loader.loadGLTF('models/Duck/glTF/Duck.gltf', (model: GLTF) => {
+    loader.loadGLTF('models/Duck/glTF/Duck.gltf', {
+      onLoad: (model: GLTF) => {
       this.duck = model.scene.children[0].children[0] as Mesh;
       this.duck.scale.set(0.00625, 0.00625, 0.00625);
       this.duck.position.y = -1.2;
       this.scene.add(this.duck);
-    });
+    }});
   }
 
   frame(timer: Timer): void {

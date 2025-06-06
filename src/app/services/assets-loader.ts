@@ -127,7 +127,10 @@ export class AssetLoader extends EventTarget {
     return this.fontLoader.load(url, onLoad, undefined, () => this.onError(url));
   }
 
-  loadGLTF(url: string, onLoad: (_: GLTF) => void, options: { useDraco?: boolean } = {}) {
+  loadGLTF(url: string, options: { 
+    useDraco?: boolean,
+    onLoad?: (_: GLTF) => void
+  } = {}) {
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader(this.loadingManager);
     }
@@ -138,17 +141,24 @@ export class AssetLoader extends EventTarget {
       }
       this.gltfLoader.setDRACOLoader(this.dracoLoader);
     }
-    return this.gltfLoader.load(url, onLoad);
+
+    if(options.onLoad !== undefined) {
+      return this.gltfLoader.load(url, options.onLoad);
+    } else {
+      return this.gltfLoader.loadAsync(url);
+    }
   }
 
   loadModel(url: string, callback: (mesh: Group) => void, options: { useDraco?: boolean } = {}) {
     const useDraco = options.useDraco ?? false;
     this.loadGLTF(
       url, 
-      (scene) => {
-        callback(scene.scene);
-      }, 
-      { useDraco }
+      { 
+        useDraco,
+        onLoad: (scene) => {
+          callback(scene.scene);
+        }
+      }
     );
   }
 }

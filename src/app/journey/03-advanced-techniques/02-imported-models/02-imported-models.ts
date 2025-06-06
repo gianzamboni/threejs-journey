@@ -90,7 +90,8 @@ export default class ImportedModels extends OrbitControlledExercise {
   public loadFox() {
     this.resetScene();
     const loader = AssetLoader.getInstance();
-    loader.loadGLTF('models/Fox/glTF/Fox.gltf', (model) => {
+    loader.loadGLTF('models/Fox/glTF/Fox.gltf', {
+      onLoad: (model) => {
       this.importedModel = {
         models: model.scene,
         mixer: new AnimationMixer(model.scene)
@@ -99,7 +100,7 @@ export default class ImportedModels extends OrbitControlledExercise {
       this.importedModel.currentAction = this.importedModel.mixer?.clipAction(model.animations[1], this.importedModel.models);
       this.scene.add(this.importedModel.models);
       this.importedModel.currentAction?.play();
-    }, { useDraco: true });
+    },  useDraco: true });
   }
   
   private resetScene() {
