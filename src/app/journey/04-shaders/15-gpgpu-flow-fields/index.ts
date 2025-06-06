@@ -1,13 +1,14 @@
-import { BufferAttribute, BufferGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, SphereGeometry, Uniform } from "three";
+import { BufferAttribute, BufferGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform } from "three";
 
 import { GPUComputationRenderer, Variable } from 'three/addons/misc/GPUComputationRenderer.js'
-import { Timer } from "three/examples/jsm/Addons.js";
+import { GLTF, Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
+import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import gpgpuParticlesFragmentShader from "./shaders/gpgpu/particles.glsl";
 import particlesFragmentShader from "./shaders/particles.frag";
@@ -29,87 +30,98 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
   }])
   private _view: RenderView;
 
-  private geometry: SphereGeometry;
-  private material: ShaderMaterial;
-  private particles: Points;
+  private geometry: BufferGeometry | undefined;
+  private material: ShaderMaterial | undefined;
+  private particles: Points | undefined;
 
-  private gpgpuSize: number;
-  private gpgpu: GPUComputationRenderer;
-  private bufferGeometry: BufferGeometry;
-  private uParticles: Variable;
+  private gpgpuSize: number | undefined;
+  private gpgpu: GPUComputationRenderer | undefined;
+  private bufferGeometry: BufferGeometry | undefined;
+  private uParticles: Variable | undefined;
 
-  private debugPlane: Mesh;
+  private debugPlane: Mesh | undefined;
 
-  constructor(view: RenderView) { 
+  constructor(view: RenderView) {
     super(view);
 
     this._view = view;
-    
-    this.geometry = new SphereGeometry(3);
-    
-    this.gpgpuSize = Math.ceil(Math.sqrt(this.geometry.attributes.position.count));
-    this.gpgpu = new GPUComputationRenderer(this.gpgpuSize, this.gpgpuSize, this.view.renderer);
-    const baseParticlesTexture = this.gpgpu.createTexture();
-
-    this.material = new ShaderMaterial({
-      vertexShader: particlesVertexShader,
-      fragmentShader: particlesFragmentShader,
-      uniforms: {
-        uSize: new Uniform(0.4),
-        uResolution: new Uniform(this.view.resolution),
-        uParticles: new Uniform(baseParticlesTexture),
-      }
-    })
-
-    const particlesUvArray = new Float32Array(this.geometry.attributes.position.count * 2);
-    for(let y = 0; y < this.gpgpuSize; y++) {
-      for(let x = 0; x < this.gpgpuSize; x++) {
-        const i = y * this.gpgpuSize + x;
-        const i2 = i * 2;
-
-        const uvX = (x + 0.5) / this.gpgpuSize;
-        const uvY = (y + 0.5) / this.gpgpuSize;
-
-        particlesUvArray[i2 + 0] = uvX;
-        particlesUvArray[i2 + 1] = uvY;
-      }
-    }
-
-    this.bufferGeometry = new BufferGeometry();
- 
-    this.bufferGeometry.setDrawRange(0, this.geometry.attributes.position.count);
-    this.bufferGeometry.setAttribute("aParticlesUv", new BufferAttribute(particlesUvArray, 2));
-    this.particles = new Points(this.bufferGeometry, this.material);
-    this.scene.add(this.particles);
-
-    const particlesPosition = this.geometry.attributes.position;
-    const textureData = baseParticlesTexture.image.data as Float32Array;
-    for (let i = 0; i < particlesPosition.count; i++) {
-      const i3 = i * 3;
-      const i4 = i * 4;
-
-      textureData[i4 + 0] = particlesPosition.array[i3 + 0];
-      textureData[i4 + 1] = particlesPosition.array[i3 + 1];
-      textureData[i4 + 2] = particlesPosition.array[i3 + 2];
-      textureData[i4 + 3] = 0;
-    }
-    console.log(textureData);
 
 
-    this.uParticles = this.gpgpu.addVariable("uParticles", gpgpuParticlesFragmentShader, baseParticlesTexture);
-    this.gpgpu.setVariableDependencies(this.uParticles, [ this.uParticles ]);
+    AssetLoader.getInstance().loadGLTF('models/ship.glb', {
+      onLoad: (gltf: GLTF) => {
+        this.geometry = (gltf.scene.children[0] as Mesh).geometry;
+        this.gpgpuSize = Math.ceil(Math.sqrt(this.geometry.attributes.position.count));
+        this.gpgpu = new GPUComputationRenderer(this.gpgpuSize, this.gpgpuSize, this.view.renderer);
+        const baseParticlesTexture = this.gpgpu.createTexture();
 
-    this.gpgpu.init();
+        this.material = new ShaderMaterial({
+          vertexShader: particlesVertexShader,
+          fragmentShader: particlesFragmentShader,
+          uniforms: {
+            uSize: new Uniform(0.07),
+            uResolution: new Uniform(this.view.resolution),
+            uParticles: new Uniform(baseParticlesTexture),
+          }
+        })
 
-    this.debugPlane = new Mesh(
-      new PlaneGeometry(3, 3), 
-      new MeshBasicMaterial({
-        map: this.gpgpu.getCurrentRenderTarget(this.uParticles).texture,
-      })
-    );
 
-    this.debugPlane.position.set(6, 0, 0);
-    this.scene.add(this.debugPlane);
+        const particlesUvArray = new Float32Array(this.geometry.attributes.position.count * 2);
+        const particlesSizeArray = new Float32Array(this.geometry.attributes.position.count);
+
+        for (let y = 0; y < this.gpgpuSize; y++) {
+          for (let x = 0; x < this.gpgpuSize; x++) {
+            const i = y * this.gpgpuSize + x;
+            const i2 = i * 2;
+
+            const uvX = (x + 0.5) / this.gpgpuSize;
+            const uvY = (y + 0.5) / this.gpgpuSize;
+
+            particlesUvArray[i2 + 0] = uvX;
+            particlesUvArray[i2 + 1] = uvY;
+            particlesSizeArray[i] = Math.random();
+          }
+        }
+
+        this.bufferGeometry = new BufferGeometry();
+
+        this.bufferGeometry.setDrawRange(0, this.geometry.attributes.position.count);
+        this.bufferGeometry.setAttribute("aParticlesUv", new BufferAttribute(particlesUvArray, 2));
+        this.bufferGeometry.setAttribute("aColor", this.geometry.attributes.color);
+        this.bufferGeometry.setAttribute("aSize", new BufferAttribute(particlesSizeArray, 1));
+
+        this.particles = new Points(this.bufferGeometry, this.material);
+        this.scene.add(this.particles);
+
+        const particlesPosition = this.geometry.attributes.position;
+        const textureData = baseParticlesTexture.image.data as Float32Array;
+        for (let i = 0; i < particlesPosition.count; i++) {
+          const i3 = i * 3;
+          const i4 = i * 4;
+
+          textureData[i4 + 0] = particlesPosition.array[i3 + 0];
+          textureData[i4 + 1] = particlesPosition.array[i3 + 1];
+          textureData[i4 + 2] = particlesPosition.array[i3 + 2];
+          textureData[i4 + 3] = 0;
+        }
+
+        this.uParticles = this.gpgpu.addVariable("uParticles", gpgpuParticlesFragmentShader, baseParticlesTexture);
+        this.gpgpu.setVariableDependencies(this.uParticles, [this.uParticles]);
+
+        this.gpgpu.init();
+
+        this.debugPlane = new Mesh(
+          new PlaneGeometry(3, 3),
+          new MeshBasicMaterial({
+            map: this.gpgpu.getCurrentRenderTarget(this.uParticles).texture,
+          })
+        );
+
+        this.debugPlane.position.set(6, 0, 0);
+        this.scene.add(this.debugPlane);
+
+      },
+      useDraco: true
+    });
 
     this.camera.fov = 35;
     this.camera.position.set(4.5, 4, 20);
@@ -123,21 +135,24 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
   @DebugFPS
   frame(timer: Timer): void {
     super.frame(timer);
-    this.gpgpu.compute();
-    this.material.uniforms.uParticles.value = this.gpgpu.getCurrentRenderTarget(this.uParticles).texture;
+    if(this.gpgpu && this.material && this.uParticles) {
+      this.gpgpu.compute();
+      this.material.uniforms.uParticles.value = this.gpgpu.getCurrentRenderTarget(this.uParticles).texture;
+    }
   }
-  
+
   updateBackgroundColor(color: string) {
     this._view.setRender({
       clearColor: color,
     })
   }
-
   async dispose() {
     await super.dispose();
-    this.geometry.dispose();
-    this.material.dispose();
-    disposeMesh(this.debugPlane);
+    this.geometry?.dispose();
+    this.material?.dispose();
+    if(this.debugPlane) {
+      disposeMesh(this.debugPlane);
+    }
   }
 
 }
