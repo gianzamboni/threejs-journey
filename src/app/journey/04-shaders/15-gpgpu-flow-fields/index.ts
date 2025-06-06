@@ -37,7 +37,18 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
   private gpgpuSize: number | undefined;
   private gpgpu: GPUComputationRenderer | undefined;
   private bufferGeometry: BufferGeometry | undefined;
-  private uParticles: Variable | undefined;
+
+  @Customizable([{
+    withDelay: true,
+    propertyPath: "material.uniforms.uFlowFieldInfluence.value",
+    settings: {
+      name: "Flow Field Influence",
+      min: 0,
+      max: 1,
+      step: 0.01,
+    }
+  }])
+  private particleVariables: Variable | undefined;
 
   private debugPlane: Mesh | undefined;
 
@@ -45,7 +56,6 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
     super(view);
 
     this._view = view;
-
 
     AssetLoader.getInstance().loadGLTF('models/ship.glb', {
       onLoad: (gltf: GLTF) => {
@@ -61,6 +71,7 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
             uSize: new Uniform(0.07),
             uResolution: new Uniform(this.view.resolution),
             uParticles: new Uniform(baseParticlesTexture),
+            uTime: new Uniform(0),
           }
         })
 
@@ -88,7 +99,7 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
         this.bufferGeometry.setAttribute("aParticlesUv", new BufferAttribute(particlesUvArray, 2));
         this.bufferGeometry.setAttribute("aColor", this.geometry.attributes.color);
         this.bufferGeometry.setAttribute("aSize", new BufferAttribute(particlesSizeArray, 1));
-
+      
         this.particles = new Points(this.bufferGeometry, this.material);
         this.scene.add(this.particles);
 
@@ -101,18 +112,25 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
           textureData[i4 + 0] = particlesPosition.array[i3 + 0];
           textureData[i4 + 1] = particlesPosition.array[i3 + 1];
           textureData[i4 + 2] = particlesPosition.array[i3 + 2];
-          textureData[i4 + 3] = 0;
+          textureData[i4 + 3] = Math.random();
         }
 
-        this.uParticles = this.gpgpu.addVariable("uParticles", gpgpuParticlesFragmentShader, baseParticlesTexture);
-        this.gpgpu.setVariableDependencies(this.uParticles, [this.uParticles]);
+        this.particleVariables = this.gpgpu.addVariable("uParticles", gpgpuParticlesFragmentShader, baseParticlesTexture);
+        this.gpgpu.setVariableDependencies(this.particleVariables, [this.particleVariables]);
+
+        this.particleVariables.material.uniforms.uTime = new Uniform(0);
+        this.particleVariables.material.uniforms.uBase = new Uniform(baseParticlesTexture);
+        this.particleVariables.material.uniforms.uDeltaTime = new Uniform(0);
+        this.particleVariables.material.uniforms.uFlowFieldInfluence = new Uniform(0.5);
 
         this.gpgpu.init();
 
         this.debugPlane = new Mesh(
           new PlaneGeometry(3, 3),
           new MeshBasicMaterial({
-            map: this.gpgpu.getCurrentRenderTarget(this.uParticles).texture,
+            transparent: true,
+            visible: false,
+            map: this.gpgpu.getCurrentRenderTarget(this.particleVariables).texture,
           })
         );
 
@@ -135,9 +153,12 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
   @DebugFPS
   frame(timer: Timer): void {
     super.frame(timer);
-    if(this.gpgpu && this.material && this.uParticles) {
+    if(this.gpgpu && this.material && this.particleVariables) {
       this.gpgpu.compute();
-      this.material.uniforms.uParticles.value = this.gpgpu.getCurrentRenderTarget(this.uParticles).texture;
+      this.material.uniforms.uParticles.value = this.gpgpu.getCurrentRenderTarget(this.particleVariables).texture;
+      this.particleVariables.material.uniforms.uTime.value = timer.getElapsed();
+      this.particleVariables.material.uniforms.uDeltaTime.value = timer.getDelta();
+
     }
   }
 
