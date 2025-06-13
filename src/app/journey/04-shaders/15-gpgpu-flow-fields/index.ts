@@ -1,7 +1,6 @@
-import { BufferAttribute, BufferGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Points, ShaderMaterial, Uniform } from "three";
+import { BufferAttribute, BufferGeometry, Mesh, Points, ShaderMaterial, Uniform } from "three";
 
-import { GPUComputationRenderer, Variable } from 'three/addons/misc/GPUComputationRenderer.js'
-import { GLTF, Timer } from "three/examples/jsm/Addons.js";
+import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
@@ -10,7 +9,7 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
-import gpgpuParticlesFragmentShader from "./shaders/gpgpu/particles.glsl";
+import { GPGPUFlowFieldsEngine } from "./particles-engine";
 import particlesFragmentShader from "./shaders/particles.frag";
 import particlesVertexShader from "./shaders/particles.vert";
 
@@ -33,22 +32,7 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
   private geometry: BufferGeometry | undefined;
   private material: ShaderMaterial | undefined;
   private particles: Points | undefined;
-
-  private gpgpuSize: number | undefined;
-  private gpgpu: GPUComputationRenderer | undefined;
-  private bufferGeometry: BufferGeometry | undefined;
-
-  @Customizable([{
-    withDelay: true,
-    propertyPath: "material.uniforms.uFlowFieldInfluence.value",
-    settings: {
-      name: "Flow Field Influence",
-      min: 0,
-      max: 1,
-      step: 0.01,
-    }
-  }])
-  private particleVariables: Variable | undefined;
+  private engine: GPGPUFlowFieldsEngine | undefined;
 
   private debugPlane: Mesh | undefined;
 
@@ -57,89 +41,7 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
 
     this._view = view;
 
-    AssetLoader.getInstance().loadGLTF('models/ship.glb', {
-      onLoad: (gltf: GLTF) => {
-        this.geometry = (gltf.scene.children[0] as Mesh).geometry;
-        this.gpgpuSize = Math.ceil(Math.sqrt(this.geometry.attributes.position.count));
-        this.gpgpu = new GPUComputationRenderer(this.gpgpuSize, this.gpgpuSize, this.view.renderer);
-        const baseParticlesTexture = this.gpgpu.createTexture();
-
-        this.material = new ShaderMaterial({
-          vertexShader: particlesVertexShader,
-          fragmentShader: particlesFragmentShader,
-          uniforms: {
-            uSize: new Uniform(0.07),
-            uResolution: new Uniform(this.view.resolution),
-            uParticles: new Uniform(baseParticlesTexture),
-            uTime: new Uniform(0),
-          }
-        })
-
-
-        const particlesUvArray = new Float32Array(this.geometry.attributes.position.count * 2);
-        const particlesSizeArray = new Float32Array(this.geometry.attributes.position.count);
-
-        for (let y = 0; y < this.gpgpuSize; y++) {
-          for (let x = 0; x < this.gpgpuSize; x++) {
-            const i = y * this.gpgpuSize + x;
-            const i2 = i * 2;
-
-            const uvX = (x + 0.5) / this.gpgpuSize;
-            const uvY = (y + 0.5) / this.gpgpuSize;
-
-            particlesUvArray[i2 + 0] = uvX;
-            particlesUvArray[i2 + 1] = uvY;
-            particlesSizeArray[i] = Math.random();
-          }
-        }
-
-        this.bufferGeometry = new BufferGeometry();
-
-        this.bufferGeometry.setDrawRange(0, this.geometry.attributes.position.count);
-        this.bufferGeometry.setAttribute("aParticlesUv", new BufferAttribute(particlesUvArray, 2));
-        this.bufferGeometry.setAttribute("aColor", this.geometry.attributes.color);
-        this.bufferGeometry.setAttribute("aSize", new BufferAttribute(particlesSizeArray, 1));
-      
-        this.particles = new Points(this.bufferGeometry, this.material);
-        this.scene.add(this.particles);
-
-        const particlesPosition = this.geometry.attributes.position;
-        const textureData = baseParticlesTexture.image.data as Float32Array;
-        for (let i = 0; i < particlesPosition.count; i++) {
-          const i3 = i * 3;
-          const i4 = i * 4;
-
-          textureData[i4 + 0] = particlesPosition.array[i3 + 0];
-          textureData[i4 + 1] = particlesPosition.array[i3 + 1];
-          textureData[i4 + 2] = particlesPosition.array[i3 + 2];
-          textureData[i4 + 3] = Math.random();
-        }
-
-        this.particleVariables = this.gpgpu.addVariable("uParticles", gpgpuParticlesFragmentShader, baseParticlesTexture);
-        this.gpgpu.setVariableDependencies(this.particleVariables, [this.particleVariables]);
-
-        this.particleVariables.material.uniforms.uTime = new Uniform(0);
-        this.particleVariables.material.uniforms.uBase = new Uniform(baseParticlesTexture);
-        this.particleVariables.material.uniforms.uDeltaTime = new Uniform(0);
-        this.particleVariables.material.uniforms.uFlowFieldInfluence = new Uniform(0.5);
-
-        this.gpgpu.init();
-
-        this.debugPlane = new Mesh(
-          new PlaneGeometry(3, 3),
-          new MeshBasicMaterial({
-            transparent: true,
-            visible: false,
-            map: this.gpgpu.getCurrentRenderTarget(this.particleVariables).texture,
-          })
-        );
-
-        this.debugPlane.position.set(6, 0, 0);
-        this.scene.add(this.debugPlane);
-
-      },
-      useDraco: true
-    });
+    this.loadShipModel();
 
     this.camera.fov = 35;
     this.camera.position.set(4.5, 4, 20);
@@ -148,17 +50,19 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
     this._view.setRender({
       clearColor: BACKGROUND_COLOR,
     })
+    console.log("Engine setup");
   }
 
   @DebugFPS
   frame(timer: Timer): void {
+    console.log("Frame");
     super.frame(timer);
-    if(this.gpgpu && this.material && this.particleVariables) {
-      this.gpgpu.compute();
-      this.material.uniforms.uParticles.value = this.gpgpu.getCurrentRenderTarget(this.particleVariables).texture;
-      this.particleVariables.material.uniforms.uTime.value = timer.getElapsed();
-      this.particleVariables.material.uniforms.uDeltaTime.value = timer.getDelta();
-
+    if (this.engine && this.material) {
+      console.log("Update");
+      this.engine.update(timer);
+      console.log("Engine Update done");
+      this.material.uniforms.uParticles.value = this.engine.currentSnapshot;
+      console.log("Material Update done");
     }
   }
 
@@ -167,13 +71,56 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
       clearColor: color,
     })
   }
+
   async dispose() {
     await super.dispose();
     this.geometry?.dispose();
     this.material?.dispose();
-    if(this.debugPlane) {
+    if (this.debugPlane) {
       disposeMesh(this.debugPlane);
     }
   }
 
+  private loadShipModel() {
+    AssetLoader.getInstance().loadGLTF('models/ship.glb', {
+      onLoad: (gltf) => {
+        const geometry = (gltf.scene.children[0] as Mesh).geometry;
+        this.engine = new GPGPUFlowFieldsEngine(geometry, this.view.renderer);
+        this.material = this.createMaterial(this.engine);
+
+        this.geometry = this.createGeometry(geometry, this.engine);
+        this.particles = new Points(this.geometry, this.material);
+        this.scene.add(this.particles);
+      },
+      useDraco: true
+    });
+  }
+  
+  private createMaterial(engine: GPGPUFlowFieldsEngine) {
+    return new ShaderMaterial({
+      vertexShader: particlesVertexShader,
+      fragmentShader: particlesFragmentShader,
+      uniforms: {
+        uSize: new Uniform(0.07),
+        uResolution: new Uniform(this.view.resolution),
+        uParticles: new Uniform(engine.currentSnapshot),
+        uTime: new Uniform(0),
+      }
+    });
+  }
+
+  private createGeometry(baseGeometry: BufferGeometry, engine: GPGPUFlowFieldsEngine) {
+    const particlesSizeArray = new Float32Array(baseGeometry.attributes.position.count);
+    for (let i = 0; i < particlesSizeArray.length; i++) {
+      particlesSizeArray[i] = Math.random();
+    }
+
+    const geometry = new BufferGeometry();
+    geometry.setDrawRange(0, baseGeometry.attributes.position.count);
+    geometry.setAttribute("aParticlesUv", new BufferAttribute(engine.uvMap, 2));
+    geometry.setAttribute("aColor", baseGeometry.attributes.color);
+    geometry.setAttribute("aSize", new BufferAttribute(particlesSizeArray, 1));
+
+    return geometry;
+  }
 }

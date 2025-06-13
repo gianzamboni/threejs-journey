@@ -1,5 +1,6 @@
 import { BufferGeometry, DataTexture, Uniform, WebGLRenderer } from "three";
 
+import { Timer } from 'three/addons/misc/Timer.js';
 import { GPUComputationRenderer, Variable } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
@@ -13,7 +14,6 @@ export class GPGPUFlowFieldsEngine {
   private renderer: GPUComputationRenderer;
 
   @Customizable([{
-    withDelay: true,
     propertyPath: "material.uniforms.uFlowFieldInfluence.value",
     folderPath: "Flow Field",
     settings: {
@@ -25,7 +25,6 @@ export class GPGPUFlowFieldsEngine {
   }, {
     propertyPath: "material.uniforms.uFlowFieldFrequency.value",
     folderPath: "Flow Field",
-    withDelay: true,
     settings: {
       name: "Frequency",
       min: 0,
@@ -78,7 +77,23 @@ export class GPGPUFlowFieldsEngine {
     return this.renderer.getCurrentRenderTarget(this.particleVariables).texture as DataTexture;
   }
 
+  update(timer: Timer) {
+    console.log("Update engine");
+    this.gpgpu.compute();
+    console.log("Compute");
+    this.particleVariables.material.uniforms.uTime.value = timer.getElapsed();
+    console.log("Time", timer.getElapsed());
+    this.particleVariables.material.uniforms.uDeltaTime.value = timer.getDelta();
+    console.log("Delta", timer.getDelta());
+  }
+
+  dispose() {
+    this.baseGeometry.dispose();
+  }
+
   private configureVariable(baseDataTexture: DataTexture) {
+    this.renderer.setVariableDependencies(this.particleVariables, [this.particleVariables]);
+
     const particlesPosition = this.baseGeometry.attributes.position;
     const textureData = baseDataTexture.image.data as Float32Array;
 
@@ -98,10 +113,6 @@ export class GPGPUFlowFieldsEngine {
     this.particleVariables.material.uniforms.uDeltaTime = new Uniform(0);
     this.particleVariables.material.uniforms.uFlowFieldInfluence = new Uniform(0.5);
     this.particleVariables.material.uniforms.uFlowFieldFrequency = new Uniform(0.5);
-  }
-
-  dispose() {
-    this.baseGeometry.dispose();
   }
 
 }
