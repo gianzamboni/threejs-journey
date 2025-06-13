@@ -4,6 +4,7 @@ uniform float uTime;
 uniform sampler2D uBase;
 uniform float uDeltaTime;
 uniform float uFlowFieldInfluence;
+uniform float uFlowFieldFrequency;
 
 void main() {
   vec2 uv = gl_FragCoord.xy / resolution.xy;
@@ -20,9 +21,9 @@ void main() {
     strength = smoothstep(flowFieldInfluence, 1.0, strength);
     
     vec3 flowField = vec3(
-      simplexNoise4d(vec4(particle.xyz, time)),
-      simplexNoise4d(vec4(particle.xyz + 1.0, time)),
-      simplexNoise4d(vec4(particle.xyz + 2.0, time))
+      simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency, time)),
+      simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 1.0, time)),
+      simplexNoise4d(vec4(particle.xyz * uFlowFieldFrequency + 2.0, time))
     ); 
 
     flowField = normalize(flowField);
