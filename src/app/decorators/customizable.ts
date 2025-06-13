@@ -12,6 +12,7 @@ type LilGuiControllerConfig = Omit<{
 }
 
 export type ControllerConfig = {
+  withDelay?: boolean;
   type?: 'color' | 'callable' | 'master';
   propertyPath?: string;  
   folderPath?: string;

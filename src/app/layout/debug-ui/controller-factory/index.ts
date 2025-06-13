@@ -52,49 +52,70 @@ export class ControllerFactory {
     const controllersConfig = getControllers(this.exercise);
     for (const key in controllersConfig) {
       for(const config of controllersConfig[key]) {
-        this.assertControllerConfigIsValid(config);
-
-        const folder = this.getFolder(config.folderPath);
-        const customizableObject = this.findCustomizableObject(key, config);
-        const isColor = config.type === 'color';
-        const isMaster = config.type === 'master';
-        const isCallable = config.type === 'callable';
-
-        let controller: Controller;
-        if(isColor) {
-          controller = folder.addColor(
-            customizableObject.object, 
-            customizableObject.propertyName
-          );
-        } else if(isCallable && config.context?.callableArgs !== undefined) {
-          const callableId = crypto.randomUUID();
-          customizableObject.object[callableId] = function() {
-            (this[customizableObject.propertyName] as (...args: unknown[]) => void)(...config.context!.callableArgs as unknown[]);
-          }
-
-          controller = folder.add(
-            customizableObject.object, 
-            callableId
-          );
+        if(config.withDelay) {
+          this.createControllerWithDelay(key, config);
         } else {
-          controller = folder.add(
-            customizableObject.object, 
-            customizableObject.propertyName
-          );
+          this.createController(key, config);
         }
-    
-        // Apply controller settings
-        this.applyControllerSettings(controller, config);
-        
-        // Add masters controller functionality if needed. That is, enable/disable other controllers of the same folder
-        this.masterControllerSetup(folder, controller, isMaster);
-        
-        // Close all folders after all controllers are created
-        this.gui.folders.forEach(f => f.close());
-      }
+      } 
     }
   }
 
+  private createControllerWithDelay(key: string, config: ControllerConfig): void {
+    setTimeout(() => {
+      try {
+        this.createController(key, config);
+      } catch(e) {
+        console.error(e);
+        setTimeout(() => {
+          this.createControllerWithDelay(key, config);
+        }, 300);
+      }
+    }, 300);
+  }
+
+
+  private createController(key: string, config: ControllerConfig): void {
+    this.assertControllerConfigIsValid(config);
+
+    const folder = this.getFolder(config.folderPath);
+    const customizableObject = this.findCustomizableObject(key, config);
+    const isColor = config.type === 'color';
+    const isMaster = config.type === 'master';
+    const isCallable = config.type === 'callable';
+
+    let controller: Controller;
+    if(isColor) {
+      controller = folder.addColor(
+        customizableObject.object, 
+        customizableObject.propertyName
+      );
+    } else if(isCallable && config.context?.callableArgs !== undefined) {
+      const callableId = crypto.randomUUID();
+      customizableObject.object[callableId] = function() {
+        (this[customizableObject.propertyName] as (...args: unknown[]) => void)(...config.context!.callableArgs as unknown[]);
+      }
+
+      controller = folder.add(
+        customizableObject.object, 
+        callableId
+      );
+    } else {
+      controller = folder.add(
+        customizableObject.object, 
+        customizableObject.propertyName
+      );
+    }
+
+    // Apply controller settings
+    this.applyControllerSettings(controller, config);
+    
+    // Add masters controller functionality if needed. That is, enable/disable other controllers of the same folder
+    this.masterControllerSetup(folder, controller, isMaster);
+    
+    // Close all folders after all controllers are created
+    this.gui.folders.forEach(f => f.close());
+  }
   /**
    * Tracks a controller for master functionality
    * @param folder The folder containing the controller

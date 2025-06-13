@@ -149,7 +149,7 @@ describe('AssetLoader', () => {
     
     it('should load GLTF model', () => {
       const onLoad = vi.fn();
-      assetLoader.loadGLTF('/model.glb', onLoad);
+      assetLoader.loadGLTF('/model.glb', { onLoad });
 
       expect(GLTFLoader).toHaveBeenCalled();
       expect(onLoad).toHaveBeenCalledWith({ scene: { scene: 'gltfScene' } });
@@ -157,7 +157,7 @@ describe('AssetLoader', () => {
 
     it('should load GLTF model with Draco compression', () => {
       const onLoad = vi.fn();
-      assetLoader.loadGLTF('/model.glb', onLoad, { useDraco: true });
+      assetLoader.loadGLTF('/model.glb', { onLoad, useDraco: true });
       
       expect(DRACOLoader).toHaveBeenCalled();
       expect(GLTFLoader).toHaveBeenCalled();
@@ -227,7 +227,7 @@ describe('AssetLoader', () => {
     it('should reset all loaders', () => {
       // Initialize some loaders first
       assetLoader.loadTexture('/texture.jpg');
-      assetLoader.loadGLTF('/model.glb', () => {}, { useDraco: true });
+      assetLoader.loadGLTF('/model.glb', { onLoad: () => {}, useDraco: true });
       
       // Then reset
       assetLoader.reset();

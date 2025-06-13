@@ -142,19 +142,21 @@ export class ModifiedMaterials extends OrbitControlledExercise {
       shader.uniforms.uTime = this.uniforms.uTime;
 
     }
-
   }
+
   private loadModel() {
     const assetLoader = AssetLoader.getInstance();
-    assetLoader.loadGLTF('/models/LeePerrySmith/LeePerrySmith.glb', (gltf) => {
-      const mesh = gltf.scene.children[0] as Mesh;
-      mesh.rotation.y = Math.PI * 0.5;
-      mesh.material = this.material;
-      mesh.customDepthMaterial = this.depthMaterial;
-      this.scene.add(mesh);
-
-      this.updateAllMaterials();
-    });
+    assetLoader.loadGLTF('/models/LeePerrySmith/LeePerrySmith.glb', {
+      onLoad: (gltf) => {
+        const mesh = gltf.scene.children[0] as Mesh;
+        mesh.rotation.y = Math.PI * 0.5;
+        mesh.material = this.material;
+        mesh.customDepthMaterial = this.depthMaterial;
+        this.scene.add(mesh);
+        this.updateAllMaterials();
+    },
+    useDraco: true
+  });
   }
 
   private createLight() {
