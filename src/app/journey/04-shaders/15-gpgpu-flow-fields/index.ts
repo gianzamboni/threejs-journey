@@ -32,6 +32,28 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
   private geometry: BufferGeometry | undefined;
   private material: ShaderMaterial | undefined;
   private particles: Points | undefined;
+
+  @Customizable([{
+    withDelay: true,
+    propertyPath: "particleVariables.material.uniforms.uFlowFieldInfluence.value",
+    folderPath: "Flow Field",
+    settings: {
+      name: "Influence",
+      min: 0,
+      max: 1, 
+      step: 0.01,
+    }
+  }, {
+    withDelay: true,
+    propertyPath: "particleVariables.material.uniforms.uFlowFieldFrequency.value",
+    folderPath: "Flow Field",
+    settings: {
+      name: "Frequency",
+      min: 0,
+      max: 1,
+      step: 0.01,
+    }
+  }])
   private engine: GPGPUFlowFieldsEngine | undefined;
 
   private debugPlane: Mesh | undefined;
@@ -50,19 +72,14 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
     this._view.setRender({
       clearColor: BACKGROUND_COLOR,
     })
-    console.log("Engine setup");
   }
 
   @DebugFPS
   frame(timer: Timer): void {
-    console.log("Frame");
     super.frame(timer);
     if (this.engine && this.material) {
-      console.log("Update");
       this.engine.update(timer);
-      console.log("Engine Update done");
       this.material.uniforms.uParticles.value = this.engine.currentSnapshot;
-      console.log("Material Update done");
     }
   }
 

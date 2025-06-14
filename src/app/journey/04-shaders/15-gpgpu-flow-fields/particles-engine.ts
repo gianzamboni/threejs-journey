@@ -3,7 +3,6 @@ import { BufferGeometry, DataTexture, Uniform, WebGLRenderer } from "three";
 import { Timer } from 'three/addons/misc/Timer.js';
 import { GPUComputationRenderer, Variable } from "three/examples/jsm/Addons.js";
 
-import { Customizable } from "#/app/decorators/customizable";
 import gpgpuParticlesFragmentShader from "./shaders/gpgpu/particles.glsl";
 
 
@@ -13,25 +12,6 @@ export class GPGPUFlowFieldsEngine {
   private gpgpuSize: number;
   private renderer: GPUComputationRenderer;
 
-  @Customizable([{
-    propertyPath: "material.uniforms.uFlowFieldInfluence.value",
-    folderPath: "Flow Field",
-    settings: {
-      name: "Influence",
-      min: 0,
-      max: 1,
-      step: 0.01,
-    }
-  }, {
-    propertyPath: "material.uniforms.uFlowFieldFrequency.value",
-    folderPath: "Flow Field",
-    settings: {
-      name: "Frequency",
-      min: 0,
-      max: 1,
-      step: 0.01,
-    }
-  }])
   private particleVariables: Variable;
 
   constructor(baseGeometry: BufferGeometry, renderer: WebGLRenderer) {
@@ -78,13 +58,9 @@ export class GPGPUFlowFieldsEngine {
   }
 
   update(timer: Timer) {
-    console.log("Update engine");
     this.gpgpu.compute();
-    console.log("Compute");
     this.particleVariables.material.uniforms.uTime.value = timer.getElapsed();
-    console.log("Time", timer.getElapsed());
     this.particleVariables.material.uniforms.uDeltaTime.value = timer.getDelta();
-    console.log("Delta", timer.getDelta());
   }
 
   dispose() {
