@@ -1,4 +1,4 @@
-#include ../simplexNoise4d.glsl
+#include "../../../../../utils/shaders/simplexNoise4d.glsl"
 
 uniform float uTime;
 uniform sampler2D uBase;
