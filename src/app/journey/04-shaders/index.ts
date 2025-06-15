@@ -35,5 +35,5 @@ export const SHADERS: Section = {
     ParticleMorphing,
     GPGPUFlowFields,
     WobblySphere,
-  ]
+  ].reverse()
 }

@@ -19,5 +19,5 @@ export const ADVANCED_TECHNIQUES: Section = {
     RealTimeEnviromentMap,
     RealisticRender,
     AnimationMixerTest
-  ]
+  ].reverse()
 }

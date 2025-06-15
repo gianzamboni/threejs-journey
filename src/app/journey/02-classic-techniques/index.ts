@@ -17,5 +17,5 @@ export const CLASSIC_TECHNIQUES: Section = {
     Particles,
     GalaxyGenerator,
     ScrollBasedAnimation
-  ]
+  ].reverse()
 };
