@@ -1,9 +1,9 @@
 import { Collapsable } from "#/app/components/collapsable";
 import SideBar from "#/app/components/sidebar";
-import {HAMBURGER_ICON, PORTFOLIO_ICON } from "#/app/constants/icons";
+import {HAMBURGER_ICON, PORTFOLIO_ICON, STAR } from "#/app/constants/icons";
 import { JOURNEY } from "#/app/journey";
 import { ExerciseClass, Section } from "#/app/types/exercise";
-import { getId } from "#/app/utils/exercise-metadata";
+import { getId, getStarred } from "#/app/utils/exercise-metadata";
 import { pascalCaseToText } from "#/app/utils/text-utils";
 import { CSS_CLASSES } from "#/theme";
 export default class Menu extends EventTarget {
@@ -12,7 +12,7 @@ export default class Menu extends EventTarget {
   private sideBar: SideBar;
   private menuContent: HTMLElement;
 
-  private lastSection: Collapsable | null = null;
+  private firstSection: Collapsable | null = null;
 
   constructor() {
     super();
@@ -31,8 +31,8 @@ export default class Menu extends EventTarget {
 
   public addTo(parent: HTMLElement) {
     this.sideBar.addTo(parent);
-    if (this.lastSection) {
-      this.lastSection.open();
+    if (this.firstSection) {
+      this.firstSection.open();
     }
   }
 
@@ -43,8 +43,8 @@ export default class Menu extends EventTarget {
     sidebar.addContent(menu);
     for(const [index, section] of JOURNEY.entries()) {
       const collapsable = this.createSection(section, menu);
-      if (index === JOURNEY.length - 1) {
-        this.lastSection = collapsable;
+      if (index === 0) {
+        this.firstSection = collapsable;
       }
     }
     return menu;
@@ -53,14 +53,21 @@ export default class Menu extends EventTarget {
   private createExerciseItem(exercise: ExerciseClass) {
     const exerciseItem = document.createElement('li');
     const id = getId(exercise);
-    exerciseItem.id = id;
-    exerciseItem.textContent = pascalCaseToText(id);
+    const isStarred = getStarred(exercise);
+    exerciseItem.id = id; 
+    
+    if (isStarred) {
+      exerciseItem.innerHTML = `<p class="flex items-center gap-x-2 dark:text-amber-200 font-medium">${STAR}<span class="text-md">${pascalCaseToText(id)}</span></p>`;
+    } else {
+      exerciseItem.innerHTML = `<p class="pl-6">${pascalCaseToText(id)}</p>`;
+    }
     exerciseItem.className = 'exercise-item cursor-pointer ml-2';
     exerciseItem.addEventListener('click', () => {
       const selectedClasses = [
         'border-b-[1px]',
         'border-black',
         'dark:border-white',
+        'italic',
       ]
       if (this.selected) {
         this.selected.classList.remove(...selectedClasses);
@@ -85,9 +92,9 @@ export default class Menu extends EventTarget {
     }
   }
 
-  selectLastExercise() {
-    const lastExercise =  this.menuContent.querySelectorAll('li');
-    lastExercise[lastExercise.length - 1].click();
+  selectFirstExercise() {
+    const firstExercise =  this.menuContent.querySelectorAll('li');
+    firstExercise[0].click();
   }
 
   private createSection(section: Section, menu: HTMLElement) {

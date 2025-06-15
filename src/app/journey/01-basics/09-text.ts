@@ -9,14 +9,15 @@ import {
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Description, Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise, Starred } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeObjects } from '#/app/utils/three-utils';
 
 @Exercise('text-3d')
-@Description("<strong>A bunch of donuts and a text in 3D.</strong>")
+@Starred
+@Description("<strong>A bunch of randomly placed donuts and a text in 3D.</strong>")
 export class Text3D extends OrbitControlledExercise {
   private loader: AssetLoader;
 

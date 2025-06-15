@@ -46,7 +46,7 @@ export default class SideBar {
   private createPanel() {
     const panel = document.createElement('div');
     panel.id = 'sidebar-panel';
-    panel.className = `w-64 transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 ${CSS_CLASSES.sidebar_index} border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
+    panel.className = `transition-all duration-300 transform h-full -translate-x-full fixed top-0 start-0 ${CSS_CLASSES.sidebar_index} border-e ${CSS_CLASSES.background} ${CSS_CLASSES.border} ${CSS_CLASSES.text}`;
     return panel;
   }
 

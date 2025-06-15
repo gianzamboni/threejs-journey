@@ -56,7 +56,7 @@ export class App {
     if(exerciseId !== null) {
       this.menu.selectExercise(exerciseId);
     } else {
-      this.menu.selectLastExercise();
+      this.menu.selectFirstExercise();
     }
   }
 

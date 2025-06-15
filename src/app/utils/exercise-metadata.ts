@@ -10,6 +10,7 @@ export type ExerciseMetadata = {
   isAnimated?: boolean;
   isDebuggable?: boolean;
   shouldSendData?: boolean;
+  isStarred?: boolean;
 }
 
 export type WithMetadata<T> = T & {
@@ -53,6 +54,11 @@ export function getId(target: MetadataTarget): string {
     throw new Error('Exercise id is undefined');
   }
   return metadata.id;
+}
+
+export function getStarred(target: MetadataTarget): boolean {
+  const metadata = getMetadata(target);
+  return metadata.isStarred ?? false;
 }
 
 /**
