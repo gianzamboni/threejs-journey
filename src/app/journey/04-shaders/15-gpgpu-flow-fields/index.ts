@@ -93,6 +93,7 @@ export class GPGPUFlowFields extends OrbitControlledExercise {
     await super.dispose();
     this.geometry?.dispose();
     this.material?.dispose();
+    this.engine?.dispose();
     if (this.debugPlane) {
       disposeMesh(this.debugPlane);
     }

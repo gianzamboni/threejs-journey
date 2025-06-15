@@ -14,6 +14,7 @@ import { EarthShaders } from "./12-earth-shaders";
 import { InteractiveParticles } from "./13-interactive-particles";
 import { ParticleMorphing } from "./14-particle-morphing";
 import { GPGPUFlowFields } from "./15-gpgpu-flow-fields";
+import { WobblySphere } from "./16-wobbly-sphere";
 
 export const SHADERS: Section = {
   id: 'shaders',
@@ -33,5 +34,6 @@ export const SHADERS: Section = {
     InteractiveParticles,
     ParticleMorphing,
     GPGPUFlowFields,
+    WobblySphere,
   ]
 }

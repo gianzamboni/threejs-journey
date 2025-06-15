@@ -65,6 +65,8 @@ export class GPGPUFlowFieldsEngine {
 
   dispose() {
     this.baseGeometry.dispose();
+    this.particleVariables.material.dispose();
+    this.renderer.dispose();
   }
 
   private configureVariable(baseDataTexture: DataTexture) {
