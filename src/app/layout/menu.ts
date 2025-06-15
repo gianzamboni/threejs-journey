@@ -67,6 +67,7 @@ export default class Menu extends EventTarget {
         'border-b-[1px]',
         'border-black',
         'dark:border-white',
+        'italic',
       ]
       if (this.selected) {
         this.selected.classList.remove(...selectedClasses);
