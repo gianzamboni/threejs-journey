@@ -5,3 +5,4 @@ dist
 src/index.css
 legacy/
 static_old/
+.VSCodeCounter/
