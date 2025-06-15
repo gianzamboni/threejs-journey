@@ -41,7 +41,6 @@ export class Shadows extends OrbitControlledExercise {
 
   //private helpers: Helpers;
 
-
   @Customizable(MATERIAL_CONFIG)
   private material: MeshStandardMaterial;
 

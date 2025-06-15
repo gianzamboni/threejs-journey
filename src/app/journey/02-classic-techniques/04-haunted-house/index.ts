@@ -9,7 +9,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 
 import { DebugFPS } from '#/app/decorators/debug';
-import { Description, Exercise } from '#/app/decorators/exercise';
+import { Description, Exercise, Starred } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
 import { ExtraConfig } from '#/app/types/exercise';
@@ -27,6 +27,7 @@ import { SceneObject } from '../../../types/scene-object';
  * Haunted House exercise
  */
 @Exercise('haunted-house')
+@Starred
 @Description("<strong>A haunted house with ghosts and a sky.</strong>")
 export class HauntedHouse extends OrbitControlledExercise {
   private lights: {

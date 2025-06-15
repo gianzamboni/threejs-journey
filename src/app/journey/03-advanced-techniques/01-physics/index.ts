@@ -14,7 +14,7 @@ import {
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { DebugFPS } from '#/app/decorators/debug';
-import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
+import { ActionButton, Description, Exercise, Starred } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -35,6 +35,7 @@ type PhysicalObject = {
 }
 
 @Exercise('physics')
+@Starred
 @Description(
   "<p style='margin-bottom: 10px;'><strong>Physics Demo. It shows some objects falling.</strong></p>",
   "<p><strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects</p>"

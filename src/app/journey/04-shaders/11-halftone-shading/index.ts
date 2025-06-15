@@ -3,7 +3,7 @@ import { Color, ShaderMaterial, Uniform } from "three";
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
-import { Description, Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";
 import RenderView from "#/app/layout/render-view";
 import { INITIAL_CLEAR_COLOR, HALFTONE_SHADING_CONTROLLER, INITIAL_LIGHT_REPETITIONS, INITIAL_COLOR, INITIAL_SHADOW_REPETITIONS, INITIAL_SHADOW_COLOR, INITIAL_LIGHT_COLOR } from "./controllers";
@@ -14,6 +14,7 @@ import SuzanneScene from "../../common/suzanne-scene";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise("halftone-shading")
+@Starred
 @Description("<p>Halftone Shading implemented from scratch</p>")
 export class HalftoneShading extends OrbitControlledExercise {
 
