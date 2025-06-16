@@ -57,7 +57,7 @@ export default class Menu extends EventTarget {
     exerciseItem.id = id; 
     
     if (isStarred) {
-      exerciseItem.innerHTML = `<p class="flex items-center gap-x-2 font-bold ml-[-5px]">${STAR}<span class="text-md">${pascalCaseToText(id)}</span></p>`;
+      exerciseItem.innerHTML = `<p class="flex items-center gap-x-2 font-semibold ml-[-5px]">${STAR}<span class="text-md">${pascalCaseToText(id)}</span></p>`;
     } else {
       exerciseItem.innerHTML = `<p class="pl-6 ${CSS_CLASSES.light_text}">${pascalCaseToText(id)}</p>`;
     }
