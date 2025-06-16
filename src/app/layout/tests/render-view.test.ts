@@ -20,6 +20,7 @@ vi.mock('three', () => {
     },
     toneMapping: 0, // NoToneMapping
     toneMappingExposure: 1,
+    outputColorSpace: 'srgb',
     setClearColor: vi.fn()
   };
 
@@ -27,6 +28,7 @@ vi.mock('three', () => {
     WebGLRenderer: vi.fn().mockImplementation(() => mockRenderer),
     PCFShadowMap: 1,
     NoToneMapping: 0,
+    SRGBColorSpace: 'srgb',
     Color: vi.fn().mockImplementation((_color) => ({
       color: "#000000"
     }))
@@ -154,6 +156,7 @@ describe('RenderView', () => {
     expect(renderView.renderer.toneMapping).toBe(NoToneMapping);
     expect(renderView.renderer.toneMappingExposure).toBe(2);
     expect(renderView.renderer.setClearColor).toHaveBeenCalledWith('#ffffff');
+    expect(renderView.renderer.outputColorSpace).toBe('srgb');
   });
   
   it('should enable shadows', () => {

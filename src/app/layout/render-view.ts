@@ -5,7 +5,9 @@ import {
   PCFShadowMap,
   ToneMapping,
   Color,
-  Vector2
+  Vector2,
+  ColorSpace,
+  SRGBColorSpace
 } from 'three';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
@@ -19,6 +21,7 @@ type RenderConfig = {
     exposure?: number,
   },
   clearColor?: string,
+  outputColorSpace?: ColorSpace,
 }
 
 export default class RenderView extends EventTarget {
@@ -102,6 +105,10 @@ export default class RenderView extends EventTarget {
     if(renderConfig.clearColor) {
       this._renderer.setClearColor(renderConfig.clearColor);
     }
+
+    if(renderConfig.outputColorSpace) {
+      this._renderer.outputColorSpace = renderConfig.outputColorSpace;
+    }
   }
 
   enableShadows(shadowMapType: ShadowMapType) {
@@ -114,6 +121,7 @@ export default class RenderView extends EventTarget {
     this._renderer.shadowMap.type = PCFShadowMap;
     this._renderer.toneMapping = NoToneMapping;
     this._renderer.toneMappingExposure = 1;
+    this._renderer.outputColorSpace = SRGBColorSpace;
     this._renderer.setClearColor(new Color('#000000'));
   }
 
