@@ -9,7 +9,7 @@ export const CSS_CLASSES = {
     main_layout_index: `z-[2]`,
     sidebar_index: `z-[4]`,
     overlay_index: `z-[3]`,
-    light_text: `text-gray-800 dark:text-gray-300`,
+    light_text: `text-gray-800 dark:text-gray-200`,
 };
 
 export const SELECTABLE_CLASSES = {
