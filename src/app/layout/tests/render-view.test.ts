@@ -156,6 +156,7 @@ describe('RenderView', () => {
     expect(renderView.renderer.toneMapping).toBe(NoToneMapping);
     expect(renderView.renderer.toneMappingExposure).toBe(2);
     expect(renderView.renderer.setClearColor).toHaveBeenCalledWith('#ffffff');
+    expect(renderView.renderer.outputColorSpace).toBe('srgb');
   });
   
   it('should enable shadows', () => {
