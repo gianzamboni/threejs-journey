@@ -1,59 +1,69 @@
-import { ACESFilmicToneMapping, DirectionalLight, Group, Mesh, MeshStandardMaterial, PCFSoftShadowMap, PlaneGeometry, Texture, Vector3 } from "three";
+import { ACESFilmicToneMapping, DirectionalLight, DoubleSide, Group, LinearSRGBColorSpace, Mesh, MeshDepthMaterial, MeshStandardMaterial, PCFSoftShadowMap, PlaneGeometry, RGBADepthPacking, Texture, Vector3 } from "three";
 
 import { Timer } from 'three/addons/misc/Timer.js';
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
+import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
+import customColorSpaceFrag from './shaders/custom_colorspace.frag';
 import slicedFrag from './shaders/sliced.frag';
 import slicedVert from './shaders/sliced.vert';
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
-
 @Exercise('sliced-model')
+@Description(
+  '<p>Demostration of a model sliced in real time using a custom shader material.</p>',
+)
 export default class SlicedModel extends OrbitControlledExercise {
 
   private environmentMap: Texture | undefined;
 
-  private gearMaterials: MeshStandardMaterial;
-  private slicedMaterial: CustomShaderMaterial;
+  private materials: {
+    gear: MeshStandardMaterial;
+    sliced: CustomShaderMaterial;
+    slicedDepth: CustomShaderMaterial;
+  }
 
   private gears: Group | undefined;
   private plane: Mesh;
   private directionalLight: DirectionalLight;
 
+  @Customizable([{
+    propertyPath: 'uSliceStart.value',
+    settings: {
+      min: - Math.PI,
+      max: Math.PI,
+      step: 0.01,
+    }
+  }, {
+    propertyPath: 'uSliceArc.value',
+    settings: {
+      min: 0,
+      max: Math.PI * 2,
+      step: 0.01,
+    }
+  }])
+
+  private uniforms: {
+    uSliceStart: { value: number },
+    uSliceArc: { value: number },
+  }
+
   constructor(view: RenderView) {
     super(view);
+    this.loadEnvironment();
 
-    const loader = AssetLoader.getInstance();
+    this.uniforms = {
+      uSliceStart: { value: 1.75 },
+      uSliceArc: { value: 1.25 },
+    }
 
-    loader.loadEnvironment('env-maps/factory/1k.hdr', this.scene, (environmentMap) => {
-      this.environmentMap = environmentMap;
-      this.scene.background = environmentMap;
-      this.scene.backgroundBlurriness = 0.5;
-    });
-
-    this.gearMaterials = new MeshStandardMaterial({
-      metalness: 0.5,
-      roughness: 0.25,
-      envMapIntensity: 0.5,
-      color: '#858080'
-    })
-
-    this.slicedMaterial = new CustomShaderMaterial({
-      baseMaterial: MeshStandardMaterial,
-      metalness: 0.5,
-      roughness: 0.25,
-      envMapIntensity: 0.5,
-      color: '#858080',
-      vertexShader: slicedVert,
-      fragmentShader: slicedFrag,
-    })
-
+    this.materials = this.createMaterials();
     this.loadModel();
     this.plane = this.createPlane();
     this.directionalLight = this.createDirectionalLight();
@@ -69,6 +79,7 @@ export default class SlicedModel extends OrbitControlledExercise {
         mapping: ACESFilmicToneMapping,
         exposure: 1,
       },
+      outputColorSpace: LinearSRGBColorSpace,
     })
     this.scene.add(this.plane, this.directionalLight);
   }
@@ -95,7 +106,59 @@ export default class SlicedModel extends OrbitControlledExercise {
       this.gears = undefined;
     }
     disposeMesh(this.plane);
+    this.materials.sliced.dispose();
+    this.materials.slicedDepth.dispose();
+    this.materials.gear.dispose();
     this.directionalLight.dispose();
+  }
+
+  private createMaterials() {
+    const materialProps = {
+      metalness: 0.5,
+      roughness: 0.25,
+      envMapIntensity: 0.5,
+      color: '#858080'
+    }
+
+    const customMaterialProps = {
+      vertexShader: slicedVert,
+      fragmentShader: slicedFrag,
+      side: DoubleSide, 
+      uniforms: this.uniforms,
+      patchMap: {
+        csm_Slice: {
+            '#include <colorspace_fragment>': customColorSpaceFrag
+        }
+      },
+    }
+
+    const gearMaterial = new MeshStandardMaterial(materialProps);
+    
+    const slicedMaterial = new CustomShaderMaterial({
+      baseMaterial: MeshStandardMaterial,
+      ...materialProps,
+      ...customMaterialProps,
+    })
+
+    const slicedDepthMaterial = new CustomShaderMaterial({
+      baseMaterial: MeshDepthMaterial,
+      ...customMaterialProps,
+      depthPacking: RGBADepthPacking,
+    })
+
+    return {
+      gear: gearMaterial,
+      sliced: slicedMaterial,
+      slicedDepth: slicedDepthMaterial,
+    }
+  }
+  
+  private loadEnvironment() {
+    AssetLoader.getInstance().loadEnvironment('env-maps/factory/1k.hdr', this.scene, (environmentMap) => {
+      this.environmentMap = environmentMap;
+      this.scene.background = environmentMap;
+      this.scene.backgroundBlurriness = 0.5;
+    });
   }
 
   private createPlane() {
@@ -120,9 +183,10 @@ export default class SlicedModel extends OrbitControlledExercise {
         this.gears.children.forEach((child) => {
           if (child instanceof Mesh) {
             if(child.name === 'outerHull') {
-              child.material = this.slicedMaterial;
+              child.material = this.materials.sliced;
+              child.customDepthMaterial = this.materials.slicedDepth;
             } else {
-              child.material = this.gearMaterials;
+              child.material = this.materials.gear;
             }
             child.castShadow = true;
             child.receiveShadow = true;
