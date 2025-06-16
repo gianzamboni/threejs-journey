@@ -20,6 +20,7 @@ vi.mock('three', () => {
     },
     toneMapping: 0, // NoToneMapping
     toneMappingExposure: 1,
+    outputColorSpace: 'srgb',
     setClearColor: vi.fn()
   };
 
@@ -27,6 +28,7 @@ vi.mock('three', () => {
     WebGLRenderer: vi.fn().mockImplementation(() => mockRenderer),
     PCFShadowMap: 1,
     NoToneMapping: 0,
+    SRGBColorSpace: 'srgb',
     Color: vi.fn().mockImplementation((_color) => ({
       color: "#000000"
     }))
