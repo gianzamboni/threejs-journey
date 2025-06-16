@@ -1,9 +1,16 @@
-import { DirectionalLight, ACESFilmicToneMapping, PCFSoftShadowMap, BoxGeometry, MeshStandardMaterial } from "three";
+import { DirectionalLight, ACESFilmicToneMapping, PCFSoftShadowMap, BoxGeometry, MeshStandardMaterial, Mesh, PlaneGeometry } from "three";
 import { Brush, Evaluator, SUBTRACTION } from 'three-bvh-csg'
 
+import { Timer } from "three/examples/jsm/Addons.js";
+import CustomShaderMaterial from "three-custom-shader-material/vanilla";
+
+import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { disposeMesh } from "#/app/utils/three-utils";
+import terrainFrag from './shaders/terrain.frag';
+import terrainVert from './shaders/terrain.vert';
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
@@ -12,14 +19,16 @@ export class ProceduralTerrain extends OrbitControlledExercise {
 
   private directionalLight: DirectionalLight;
   private board: Brush;
-  
+  private terrain: Mesh;
+
   constructor(view: RenderView) {
     super(view);
 
     this.loadEnvironmentMap();
     this.directionalLight = this.createDirectionalLight();
     this.board = this.createBoard();
-    this.scene.add(this.directionalLight, this.board)
+    this.terrain = this.createTerrain();
+    this.scene.add(this.directionalLight, this.board, this.terrain)
 
     this.camera.fov = 35;
     this.camera.position.set(-10, 6, -2);
@@ -35,7 +44,33 @@ export class ProceduralTerrain extends OrbitControlledExercise {
     })
   }
 
+  @DebugFPS
+  frame(timer: Timer): void {
+      super.frame(timer);
+  }
+
   async dispose() {
+    disposeMesh(this.board);
+    disposeMesh(this.terrain);
+  }
+
+  private createTerrain() {
+    const geometry = new PlaneGeometry(10, 10, 1024, 1024);
+    geometry.rotateX(-Math.PI * 0.5);
+
+    const material = new CustomShaderMaterial({
+      baseMaterial: MeshStandardMaterial,
+      color: 0x85d534,
+      metalness: 0,
+      roughness: 0.5,
+      vertexShader: terrainVert,
+      fragmentShader: terrainFrag
+    })
+
+    const terrain = new Mesh(geometry, material);
+    terrain.castShadow = true;
+    terrain.receiveShadow = true;
+    return terrain
   }
 
   private createBoard() {
