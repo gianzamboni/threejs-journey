@@ -16,6 +16,7 @@ import { ParticleMorphing } from "./14-particle-morphing";
 import { GPGPUFlowFields } from "./15-gpgpu-flow-fields";
 import { WobblySphere } from "./16-wobbly-sphere";
 import SlicedModel from "./17-sliced-model";
+import { ProceduralTerrain } from "./18-procedural-terrain";
 
 export const SHADERS: Section = {
   id: 'shaders',
@@ -37,5 +38,6 @@ export const SHADERS: Section = {
     GPGPUFlowFields,
     WobblySphere,
     SlicedModel,
+    ProceduralTerrain
   ].reverse()
 }
