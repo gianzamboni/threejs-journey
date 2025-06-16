@@ -23,8 +23,7 @@ import { configureCamera, Galaxy, GALAXY_DEFAULT_SETTINGS, GalaxyParams, randomD
 
 @Exercise('animated-galaxy')
 @Description(
-  "<strong>A galaxy generator that creates a galaxy based on the settings.</strong>", 
-  "You can configure the galaxy with the hidden ui."
+  "<p>A galaxy generator that creates a galaxy based every time you load the page.</p>", 
 )
 export class AnimatedGalaxy extends OrbitControlledExercise {
   

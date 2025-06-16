@@ -31,7 +31,7 @@ type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>
 //}
 
 @Exercise('Shadows')
-@Description("<strong>A scene with shadows activated.</strong>")
+@Description("<p>A sphere that casts shadows. The shadow is calculated in real time.</p>")
 export class Shadows extends OrbitControlledExercise {
 
   private qualityConfig: QualityConfig;
@@ -40,7 +40,6 @@ export class Shadows extends OrbitControlledExercise {
   private lights: ExerciseLights;
 
   //private helpers: Helpers;
-
 
   @Customizable(MATERIAL_CONFIG)
   private material: MeshStandardMaterial;

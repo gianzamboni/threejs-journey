@@ -36,7 +36,7 @@ type Actions = {
 }
 
 @Exercise('animation-mixer')
-@Description('<strong>A fox with multiple animation. Select whichever you desire with the buttons above</strong>')
+@Description('<p>A fox with multiple animation. Select whichever you desire with the buttons above</p>')
 export class AnimationMixerTest extends OrbitControlledExercise {
   @Customizable(ENV_MAP_CONTROLLERS)
   private envMapIntensity: number;

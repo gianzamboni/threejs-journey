@@ -1,6 +1,7 @@
 precision highp float;
 
 uniform vec3 uSurfaceColor;
+uniform vec3 uLightColor;
 
 varying float vMaxElevation;
 varying float vElevation;
@@ -25,8 +26,8 @@ void main() {
   );
 
   light += pointLight(
-    vec3(1.0),            // Light color
-    10.0,                 // Light intensity,
+    uLightColor,            // Light color
+    20.0,                 // Light intensity,
     normal,               // Normal
     vec3(0.0, 0.25, -10.0), // Light position
     viewDirection,        // View direction

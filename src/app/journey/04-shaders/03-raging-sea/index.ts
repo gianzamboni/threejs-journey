@@ -4,7 +4,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise } from "#/app/decorators/exercise";
 import AnimatedExercise from "#/app/journey/exercises/animated-exercise";
 import RenderView from "#/app/layout/render-view";
 import { ExtraConfig } from "#/app/types/exercise";
@@ -15,6 +15,7 @@ import seaFragmentShader from "./shaders/sea.frag";
 import seaVertexShader from "./shaders/sea.vert";
 
 @Exercise("sea")
+@Description("<p>A simulated sea using Perlin noise.</p>")
 export class RagingSea extends AnimatedExercise {
   @Customizable(RAGING_SEA_COLORS_CONTROLS)
   private colors = {

@@ -33,7 +33,7 @@ export class App {
     this.activeQuality = qualityFromString(quality);
     this.layoutContainer = document.createElement('div');
     this.layoutContainer.id = 'layout-container';
-    this.layoutContainer.className = 'w-100 h-100';
+    this.layoutContainer.className = 'w-100 h-100 absolute top-0 left-0';
     document.body.appendChild(this.layoutContainer);
 
     this.menu = new Menu();
@@ -56,7 +56,7 @@ export class App {
     if(exerciseId !== null) {
       this.menu.selectExercise(exerciseId);
     } else {
-      this.menu.selectLastExercise();
+      this.menu.selectFirstExercise();
     }
   }
 
@@ -168,7 +168,7 @@ export class App {
 
   private toggleLayout() {
     this.layoutContainer.classList.toggle('hidden');
-    }
+  }
 
   private addToDOM() {
     const rowClasses = `${CSS_CLASSES.main_layout_index} fixed flex flex-col items-end`

@@ -19,11 +19,12 @@ function verifyUniqueExerciseIds(sections: Section[]) {
   }
 }
 
+
 export const JOURNEY: Section[] = [
  BASICS,
  CLASSIC_TECHNIQUES,
  ADVANCED_TECHNIQUES, 
  SHADERS
-];
+].reverse();
 
 verifyUniqueExerciseIds(JOURNEY);

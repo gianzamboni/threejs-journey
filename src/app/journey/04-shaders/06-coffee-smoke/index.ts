@@ -2,7 +2,7 @@ import { DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrappi
 
 import { Timer } from "three/addons/misc/Timer.js";
 
-import { Description, Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
@@ -12,6 +12,7 @@ import smokeVert from "./smoke.vert";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise("coffee-smoke")
+@Starred
 @Description("<p>Creating a coffee smoke effect using shaders</p>")
 export class CoffeeSmoke extends OrbitControlledExercise {
   

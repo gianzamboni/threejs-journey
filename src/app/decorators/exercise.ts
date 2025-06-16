@@ -7,6 +7,10 @@ export function Exercise(id: string) {
   }
 }
 
+export function Starred(_: ExerciseClass, context: ClassDecoratorContext) {
+  context.metadata.isStarred = true;
+}
+
 export function Description(...descriptions: string[]) {
   return function<T>(target: T, context: ClassDecoratorContext) {
     if(context.metadata.descriptions === undefined) {

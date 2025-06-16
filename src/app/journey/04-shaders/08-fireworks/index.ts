@@ -8,9 +8,10 @@ import {
 
 import { Sky } from 'three/addons/objects/Sky.js';
 
-import { Description, Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { CSS_CLASSES } from "#/theme";
 import { Firework } from "./firework";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
@@ -26,7 +27,8 @@ type SkyParameters = {
 }
 
 @Exercise("Fireworks")
-@Description("<p>¡Some fireworks! <strong>Click on the screen</strong> to make them explode!</p>")
+@Starred
+@Description(`<p class='${CSS_CLASSES.light_text}'>Some fireworks! <strong class='${CSS_CLASSES.text}'>Click on the screen</strong> to make them explode!</p>`)
 export default class Fireworks extends OrbitControlledExercise {
 
   private resolution: Vector2;

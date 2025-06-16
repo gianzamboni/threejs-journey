@@ -22,7 +22,7 @@ import { disposeObjects } from '#/app/utils/three-utils';
  * Particles exercise
  */
 @Exercise('particles')
-@Description("<strong>Random generated particles that move in sine wave like movement.</strong>")
+@Description("<p>Random generated particles that move in sine wave like movement.</p>")
 export class Particles extends OrbitControlledExercise {
   private particleGeometry: BufferGeometry;
   private particleTexture: Texture;

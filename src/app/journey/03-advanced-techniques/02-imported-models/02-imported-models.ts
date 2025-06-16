@@ -23,7 +23,7 @@ import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
 
 @Exercise('imported-models')
 @Description(
-  "<p><strong>Imported models I downloaded from Three.js Journey website.</strong></p>", 
+  "<p>Some models I downloaded from Three.js Journey website.</p>", 
   "<p>You can load a duck, a fox or a mask.</p>"
 )
 export default class ImportedModels extends OrbitControlledExercise {

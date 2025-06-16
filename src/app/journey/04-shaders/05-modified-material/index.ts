@@ -15,7 +15,7 @@ import {
 
 import { Timer } from "three/addons/misc/Timer.js";
 
-import { Description, Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -25,6 +25,7 @@ import beginNormalVertexExtension from './beginnormal_vertex_ext.glsl';
 import commonExtension from './common_ext.glsl';
 
 @Exercise("twisted-head")
+@Starred
 @Description("<p>Twisting a predined model using GLSL and extending the default shaders of Three.js</p>")
 export class ModifiedMaterials extends OrbitControlledExercise {
 

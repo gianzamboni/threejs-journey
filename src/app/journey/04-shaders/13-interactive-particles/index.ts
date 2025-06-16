@@ -3,7 +3,7 @@ import { AdditiveBlending, BufferAttribute, PlaneGeometry, Points, ShaderMateria
 import { Timer } from "three/examples/jsm/Addons.js";
 
 import { DebugFPS } from "#/app/decorators/debug";
-import { Description, Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
@@ -14,6 +14,7 @@ import imgVertexShader from "./shaders/img.vert";
 import AnimatedExercise from "../../exercises/animated-exercise";
 
 @Exercise('interactive-particles')
+@Starred
 @Description(
   '<p>Interactive Particles experiment.</p>',
   '<p>Just pass your mouse over the canvas and see the magic.</p>'

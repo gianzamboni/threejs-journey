@@ -13,7 +13,7 @@ import testVertexShader from './shaders/vertex.vert'
 const defaultShader = LocalStorage.getState<string>('patterns') ?? "Solid Color";
 
 @Exercise('patterns')
-@Description('<strong>Some shader patterns</strong>')
+@Description('<p>Some basic shader patterns.</p>')
 export class Patterns extends OrbitControlledExercise {
 
   private geometry: PlaneGeometry;

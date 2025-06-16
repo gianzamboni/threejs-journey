@@ -35,7 +35,7 @@ const INITIAL_ATMOSPHERE_TWILIGHT_COLOR = "#993d00";
 @Exercise("earth")
 @Description(
   "<p>Earth Shader.</p>",
-  "<p>Textures downloaded from <a href='https://www.solarsystemscope.com/textures/' target='_blank'>Solar System Scope</a>.</p>"
+  "<p>Textures downloaded from <a class='text-blue-800 dark:text-blue-400' href='https://www.solarsystemscope.com/textures/' target='_blank'>Solar System Scope</a>.</p>"
 )
 export class EarthShaders extends OrbitControlledExercise {
 

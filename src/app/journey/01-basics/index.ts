@@ -20,5 +20,5 @@ export const BASICS: Section = {
     TextureTest,
     MaterialsTest,
     Text3D,
-  ]
+  ].reverse()
 };

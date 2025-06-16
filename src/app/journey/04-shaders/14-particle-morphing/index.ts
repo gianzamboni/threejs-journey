@@ -15,7 +15,7 @@ import { BufferGeometry } from "three";
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Callable, Customizable } from "#/app/decorators/customizable";
-import { ActionButton, Exercise } from "#/app/decorators/exercise";
+import { ActionButton, Description, Exercise, Starred } from "#/app/decorators/exercise";
 import { ActionBar } from "#/app/layout/action-bar";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -35,6 +35,8 @@ const COLOR_A = "#ff7380";
 const COLOR_B = "#0091ff";
 
 @Exercise('particle-morphing')
+@Starred
+@Description("<p>A particle morphing experiment. You can transform the object in the scene by clicking on the buttons above.</p>")
 export class ParticleMorphing extends OrbitControlledExercise {
 
   @Customizable([{

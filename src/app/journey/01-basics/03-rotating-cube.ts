@@ -5,10 +5,11 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { createRedCube, disposeMesh } from '#/app/utils/three-utils';
+import { CSS_CLASSES } from '#/theme';
 @Exercise('animations')
 @Description(
-  "<p><strong>A cube and a camera that rotate around.</strong></p>", 
-  "<p>It is <strong>NOT</strong> interactive.</p>"
+  "<p>A cube and a camera that rotate around.</p>", 
+  `<p class='${CSS_CLASSES.light_text}'>It is <strong class='${CSS_CLASSES.text}'>NOT</strong> interactive.</p>`
 )
 export class RotatingCube extends AnimatedExercise {
     
