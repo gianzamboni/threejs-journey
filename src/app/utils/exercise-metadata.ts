@@ -1,5 +1,6 @@
 import { ExerciseControllers } from "#/app/decorators/customizable";
 import { ExerciseClass, Exercise, Action } from "#/app/types/exercise";
+import { CSS_CLASSES } from "#/theme";
 
 export type ExerciseMetadata = {
   id?: string;
@@ -20,13 +21,13 @@ export type WithMetadata<T> = T & {
 export type MetadataTarget = WithMetadata<ExerciseClass | Exercise>;
 
 const ORBIT_CONTROLLER_DESCRIPTION = `
-  <p><strong>Rotate:</strong> Click/Tap & drag</p>
-  <p><strong>Zoom:</strong> Scroll or pinch</p>
-  <p><strong>Pan:</strong> Two-finger Tap/Right click & drag</p>
+  <p><strong>Rotate:</strong> <span class="${CSS_CLASSES.light_text}">Click/Tap & drag</span></p>
+  <p><strong>Zoom:</strong> <span class="${CSS_CLASSES.light_text}">Scroll or pinch</span></p>
+  <p><strong>Pan:</strong> <span class="${CSS_CLASSES.light_text}">Two-finger Tap/Right click & drag</span></p>
 `;
 
 const DEBUG_CONTROLLER_DESCRIPTION = `
-  <p><strong>Toggle Debug</strong>: Double click/tap</p>
+  <p><strong>Toggle Debug</strong>: <span class="${CSS_CLASSES.light_text}">Double click/tap</span></p>
 `;
 
 /**
@@ -77,7 +78,7 @@ export function getDescriptions(target: MetadataTarget): string[] {
         ${
           metadata.isDebuggable ? DEBUG_CONTROLLER_DESCRIPTION : ''
         }
-        <p><strong>Toggle Layout</strong>: Press H on keyboard</p>
+        <p><strong>Toggle Layout</strong>: <span class="text-gray-800 dark:text-gray-300">Press H on keyboard</span></p>
       </div>`
     );
   }

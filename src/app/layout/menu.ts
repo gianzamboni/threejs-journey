@@ -57,9 +57,9 @@ export default class Menu extends EventTarget {
     exerciseItem.id = id; 
     
     if (isStarred) {
-      exerciseItem.innerHTML = `<p class="flex items-center gap-x-2 dark:text-amber-200 font-medium ml-[-5px]">${STAR}<span class="text-md">${pascalCaseToText(id)}</span></p>`;
+      exerciseItem.innerHTML = `<p class="flex items-center gap-x-2 font-bold ml-[-5px]">${STAR}<span class="text-md">${pascalCaseToText(id)}</span></p>`;
     } else {
-      exerciseItem.innerHTML = `<p class="pl-6">${pascalCaseToText(id)}</p>`;
+      exerciseItem.innerHTML = `<p class="pl-6 text-gray-800 dark:text-gray-300">${pascalCaseToText(id)}</p>`;
     }
     exerciseItem.className = 'exercise-item cursor-pointer ml-2';
     exerciseItem.addEventListener('click', () => {
@@ -67,7 +67,6 @@ export default class Menu extends EventTarget {
         'border-b-[1px]',
         'border-black',
         'dark:border-white',
-        'italic',
       ]
       if (this.selected) {
         this.selected.classList.remove(...selectedClasses);
@@ -131,9 +130,9 @@ export default class Menu extends EventTarget {
     footer.className = 'flex justify-center items-center p-4';
 
     const portfolioLinkg = document.createElement('a');
-    portfolioLinkg.className = 'flex items-center gap-x-1';
+    portfolioLinkg.className = 'flex items-center gap-x-1 text-blue-800 dark:text-blue-400 pointer';
     portfolioLinkg.target = '_blank';
-    portfolioLinkg.href = 'https://gianfrancozamboni.com.ar/portfolio';
+    portfolioLinkg.href = 'https://portfolio.gianfrancozamboni.com.ar';
     portfolioLinkg.innerHTML = `${PORTFOLIO_ICON}<span>Gianfranco Zamboni</span>`;
 
     footer.appendChild(portfolioLinkg);

@@ -25,8 +25,7 @@ import { GALAXY_DEFAULT_SETTINGS, Galaxy, GalaxyParams, configureCamera, randomD
 @Exercise('galaxy-generator')
 @Starred
 @Description(
-  "<strong>A galaxy generator that creates a galaxy based on the settings.</strong>", 
-  "You can configure the galaxy with the hidden ui."
+  "<p>A galaxy generator that creates a new galaxy every time you load the page.</p>", 
 )
 export class GalaxyGenerator extends OrbitControlledExercise {
 
@@ -48,7 +47,7 @@ export class GalaxyGenerator extends OrbitControlledExercise {
 
     configureCamera(this.camera);
     this.controls.autoRotate = true;
-    this.controls.autoRotateSpeed = 0.125;
+    this.controls.autoRotateSpeed = 0.015625;
   }
 
   public updateGalaxySettings<K extends keyof GalaxyParams>(newValue: GalaxyParams[K], { property }: { property: K }) {

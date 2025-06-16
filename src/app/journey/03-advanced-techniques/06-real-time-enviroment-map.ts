@@ -25,7 +25,7 @@ import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise("real-time-enviroment-map")
-@Description("<p><strong>Real-time enviroment map.</strong></p>")
+@Description("<p>Real-time enviroment map. This means that the reflections are calculated in real time.</p>")
 export class RealTimeEnviromentMap extends OrbitControlledExercise {
 
   private torusKnot: Mesh;

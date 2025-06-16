@@ -25,7 +25,7 @@ import { QualityConfig } from './quality-config';
 
 @Exercise('materials')
 @Description(
-  "<p><strong>Some objects with physical materials.</strong></p>",
+  "<p>Some objects setted up with physical materials.</p>",
   "<p>You can customize the material with the hidden ui</p>"
 )
 export class MaterialsTest extends OrbitControlledExercise {

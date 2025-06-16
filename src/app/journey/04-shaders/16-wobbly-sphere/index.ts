@@ -6,10 +6,11 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
+import { CSS_CLASSES } from "#/theme";
 import fragmentShader from "./shaders/wobble.frag";
 import vertexShader from "./shaders/wobble.vert";
 
@@ -17,6 +18,8 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 
 @Exercise("wobbly-sphere")
+@Description(`<p>A wobbly sphere using custom shaders.</p>`,
+  `<p class='${CSS_CLASSES.light_text}'>Although similar to the <strong class='${CSS_CLASSES.text}'>Raging Sea</strong> demo, in this case I am extending the materials provided by Three.js intstead of implementing my own from scratch.</p>`)
 export class WobblySphere extends OrbitControlledExercise {
 
   @Customizable([{

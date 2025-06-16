@@ -21,6 +21,7 @@ import { AssetLoader } from "#/app/services/assets-loader";
 import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
+import { CSS_CLASSES } from '#/theme';
 import BOX from './icons/cube.svg?raw';
 import SPHERE from './icons/sphere.svg?raw';
 import REMOVE from './icons/trash.svg?raw';
@@ -37,8 +38,8 @@ type PhysicalObject = {
 @Exercise('physics')
 @Starred
 @Description(
-  "<p style='margin-bottom: 10px;'><strong>Physics Demo. It shows some objects falling.</strong></p>",
-  "<p><strong>Buttons above</strong>: Add spheres and boxes to the scene or remove all objects</p>"
+  "<p style='margin-bottom: 10px;'>Physics Demo. It shows some objects falling and colliding with each other.</p>",
+  `<p><strong>Buttons above:</strong> <span class='${CSS_CLASSES.light_text}'>Add spheres and boxes to the scene or remove all objects</span></p>`
 )
 export class Physics extends OrbitControlledExercise {
   

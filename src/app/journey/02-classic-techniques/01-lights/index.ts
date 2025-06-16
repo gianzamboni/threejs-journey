@@ -43,7 +43,7 @@ type HelperStatusDict = Record<keyof Helpers, boolean>;
 export type LightTypeHelper = keyof Helpers;
 
 @Exercise('lights')
-@Description("<strong>A scene with each type of light offered by Three.js.</strong>")
+@Description("<p>A scene with each type of light offered by Three.js.</p>")
 export class LightsExercise extends OrbitControlledExercise {
   private quality: QualityConfig;
   private material: MeshStandardMaterial;

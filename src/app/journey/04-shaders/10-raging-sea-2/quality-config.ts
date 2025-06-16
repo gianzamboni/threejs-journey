@@ -30,7 +30,7 @@ export const QUALITY_CONFIG: Record<Quality, QualityConfig> = {
     }
   },
   [Quality.High]: {
-    segments: 2048,
+    segments: 1536,
     blending: AdditiveBlending,
     shader: {
       bigWaves: {

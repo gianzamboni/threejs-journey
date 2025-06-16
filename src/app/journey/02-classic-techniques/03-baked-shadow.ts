@@ -27,7 +27,7 @@ type Lights = {
 }
 
 @Exercise('baked-shadow')
-@Description("<strong>Shadows are baked in this scene, are less realistic but faster to render.</strong>")
+@Description("<p>Shadows are baked in this scene, are less realistic but faster to render.</p>")
 export class BakedShadow extends OrbitControlledExercise {
   private lights: Lights;
 

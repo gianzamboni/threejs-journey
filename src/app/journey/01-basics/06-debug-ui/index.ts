@@ -9,7 +9,7 @@ import { disposeObjects } from '#/app/utils/three-utils';
 import { DEBUG_UI_MATERIAL_CONFIG, DEBUG_UI_GEOMETRY_CONFIG, DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 
 @Exercise('debug-ui')
-@Description("<p><strong>A customizable Cube, this demo is thought to show a debug ui activated with double click.</strong></p>")
+@Description("<p>A customizable Cube, this demo is thought to show a debug ui activated with double click.</p>")
 export class DebugUITest extends OrbitControlledExercise {
   @Customizable(DEBUG_UI_CUBE_CONFIG)
   private cube: Mesh;

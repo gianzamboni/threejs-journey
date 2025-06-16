@@ -4,7 +4,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise } from "#/app/decorators/exercise";
+import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -16,6 +16,7 @@ import particlesVertexShader from "./shaders/particles.vert";
 const BACKGROUND_COLOR = "#29191f";
 
 @Exercise("gpgpu-flow-fields")
+@Description("<p>Implemented flow field using GPGPU Computation.</p>")
 export class GPGPUFlowFields extends OrbitControlledExercise {
 
   @Customizable([{

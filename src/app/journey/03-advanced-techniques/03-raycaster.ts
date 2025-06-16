@@ -15,14 +15,15 @@ import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
+import { CSS_CLASSES } from '#/theme';
 
 import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 
 @Exercise("Raycaster")
 @Description(
-  "<p><strong>This is a simple 3D interaction demo.</strong></p>",
-  "<p>The <strong>duck</strong> will grow when the <strong>mouse is over</strong> it.</p>",
-  "<p>The <strong>spheres</strong> will change color when the <strong>mouse is over</strong> them.</p>"
+  "<p>This is a simple 3D interaction demo.</p>",
+  `<p class='${CSS_CLASSES.light_text}'>The <strong class='${CSS_CLASSES.text}'>duck</strong> will grow when the <strong class='${CSS_CLASSES.text}'>mouse is over</strong> it.</p>`,
+  `<p class='${CSS_CLASSES.light_text}'>The <strong class='${CSS_CLASSES.text}'>spheres</strong> will change color when the <strong class='${CSS_CLASSES.text}'>mouse is over</strong> them.</p>`
 )
 export default class RaycasterDemo extends OrbitControlledExercise {
   

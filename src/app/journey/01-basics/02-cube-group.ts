@@ -3,11 +3,12 @@ import { Group, Mesh, MeshBasicMaterial, BoxGeometry, AxesHelper } from 'three';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
 import { disposeObjects } from '#/app/utils/three-utils';
+import { CSS_CLASSES } from '#/theme';
 
 @Exercise('object-transformation')
 @Description(
-  "<p><strong>A group of y-scaled cubes in the center of the scene.</strong></p>",
-  "<p>It is <strong>NOT</strong> interactive</p>"
+  "<p>A group of y-scaled cubes in the center of the scene.</p>",
+  `<p class='${CSS_CLASSES.light_text}'>It is <strong class='${CSS_CLASSES.text}'>NOT</strong> interactive.</p>`
 )
 export class CubeGroup extends BaseExercise {  
   private group: Group;

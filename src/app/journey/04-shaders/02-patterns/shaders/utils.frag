@@ -20,10 +20,7 @@ vec3 applyColor(vec2 vUv, float strength) {
 }
 
 float sweep(float value, float time) {
-  float forward = (value - mod(time, 1.0));
-  float reverse = 1.0 - forward;
-  return forward * mod(floor(time) - 1.0, 2.0) 
-    + reverse * mod(floor(time) , 2.0);
+  return (sin(time) + 1.0) / 2.0 * mod(floor(value) - 1.0, 2.0);
 } 
 
 vec3 horizontalSweep(vec2 vUv, float time, float strength) {

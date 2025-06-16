@@ -13,7 +13,7 @@ import testVertexShader from './vertex.vert'
 
 
 @Exercise('first-shader')
-@Description('<strong>A flag waving. My first shader</strong>')
+@Description('<p>A flag waving. My first shader</p>')
 export class Shaders extends OrbitControlledExercise {
 
   private geometry: PlaneGeometry;

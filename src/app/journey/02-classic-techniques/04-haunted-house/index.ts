@@ -28,7 +28,7 @@ import { SceneObject } from '../../../types/scene-object';
  */
 @Exercise('haunted-house')
 @Starred
-@Description("<strong>A haunted house with ghosts and a sky.</strong>")
+@Description("<p>A haunted house with light ghosts that move around.</p>")
 export class HauntedHouse extends OrbitControlledExercise {
   private lights: {
     ambient: AmbientLight;

@@ -18,7 +18,7 @@ import { disposeMesh } from "#/app/utils/three-utils";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
 
 @Exercise("grounded-skybox")
-@Description("<p><strong>Demo of a correctly positioned object with a skybox.</strong></p>")
+@Description("<p>Demo of a correctly positioned object with a skybox.</p>")
 export class GroundedSkyboxTest extends OrbitControlledExercise {
 
   private torusKnot: Mesh;

@@ -5,7 +5,7 @@ import { Sky } from 'three/addons/objects/Sky.js';
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise, Starred } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { ExtraConfig } from "#/app/types/exercise";
 import { disposeMesh } from "#/app/utils/three-utils";
@@ -27,6 +27,7 @@ type SkyParameters = {
 }
 @Exercise("sea-v2")
 @Starred
+@Description("<p>A full 3D sea using Perlin noise and custom light shaders.</p>")
 export class RagingSeaV2 extends OrbitControlledExercise {
   @Customizable(RAGING_SEA_COLORS_CONTROLS_V2)
   private colors = "#114e6e";
