@@ -21,6 +21,7 @@
     "gsap": "^3.12.5",
     "lil-gui": "^0.20.0",
     "three": "^0.175.0",
+    "three-bvh-csg": "^0.0.17",
     "three-custom-shader-material": "^6.3.7"
   },
   "devDependencies": {
