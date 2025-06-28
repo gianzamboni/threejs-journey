@@ -24,11 +24,11 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   constructor(view: RenderView) {
     super(view);
 
-    this.loadEnvironmentMap();
-    this.directionalLight = this.createDirectionalLight();
-    this.board = this.createBoard();
-    this.terrain = this.createTerrain();
-    this.scene.add(this.directionalLight, this.board, this.terrain)
+   this.loadEnvironmentMap();
+   this.directionalLight = this.createDirectionalLight();
+   this.board = this.createBoard();
+   this.terrain = this.createTerrain();
+   this.scene.add(this.directionalLight, this.board, this.terrain)
 
     this.camera.fov = 35;
     this.camera.position.set(-10, 6, -2);
