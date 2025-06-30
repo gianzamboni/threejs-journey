@@ -60,7 +60,7 @@ export class HalftoneShading extends OrbitControlledExercise {
   }
 
   public updateUniform(newValue: string, context: CustomizableMetadata) {
-    this.material.uniforms[context.property].value.set(new Color(newValue));
+    this.material.uniforms[`u${context.property}`].value.set(new Color(newValue));
   }
 
   public updateClearColor(newValue: string) {
