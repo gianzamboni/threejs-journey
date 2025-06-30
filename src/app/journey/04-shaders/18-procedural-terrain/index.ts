@@ -1,14 +1,17 @@
-import { DirectionalLight, ACESFilmicToneMapping, PCFSoftShadowMap, BoxGeometry, MeshStandardMaterial, Mesh, PlaneGeometry } from "three";
+import { DirectionalLight, ACESFilmicToneMapping, PCFSoftShadowMap, BoxGeometry, MeshStandardMaterial, Mesh, PlaneGeometry, Uniform, MeshDepthMaterial, RGBADepthPacking, Color } from "three";
 import { Brush, Evaluator, SUBTRACTION } from 'three-bvh-csg'
 
 import { Timer } from "three/examples/jsm/Addons.js";
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
+import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Exercise } from "#/app/decorators/exercise";
+import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";  
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
+import { UNIFORM_CONTROLLERS } from "./controllers";
 import terrainFrag from './shaders/terrain.frag';
 import terrainVert from './shaders/terrain.vert';
 
@@ -20,7 +23,22 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   private directionalLight: DirectionalLight;
   private board: Brush;
   private terrain: Mesh;
-
+  
+  @Customizable(UNIFORM_CONTROLLERS)
+  private commonUniforms: Record<string, Uniform<any>> = {
+    uPositionFrequency: new Uniform(0.2),
+    uStrength: new Uniform(2.0),
+    uWarpFrequency: new Uniform(5.0),
+    uWarpStrength: new Uniform(0.5),
+    uTime: new Uniform(0),
+    uColorWaterDeep: new Uniform(new Color('#002b3d')),
+    uColorWaterSurface: new Uniform(new Color('#66a8ff')),
+    uColorSand: new Uniform(new Color('#ffe894')),
+    uColorGrass: new Uniform(new Color('#85d534')),
+    uColorRock: new Uniform(new Color('#bfbd8d')),
+    uColorSnow: new Uniform(new Color('#ffffff')),
+  }
+  
   constructor(view: RenderView) {
     super(view);
 
@@ -47,6 +65,7 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   @DebugFPS
   frame(timer: Timer): void {
       super.frame(timer);
+      this.commonUniforms.uTime.value = timer.getElapsed();
   }
 
   async dispose() {
@@ -56,6 +75,8 @@ export class ProceduralTerrain extends OrbitControlledExercise {
 
   private createTerrain() {
     const geometry = new PlaneGeometry(10, 10, 1024, 1024);
+    geometry.deleteAttribute('uv')
+    geometry.deleteAttribute('normal');
     geometry.rotateX(-Math.PI * 0.5);
 
     const material = new CustomShaderMaterial({
@@ -64,10 +85,20 @@ export class ProceduralTerrain extends OrbitControlledExercise {
       metalness: 0,
       roughness: 0.5,
       vertexShader: terrainVert,
-      fragmentShader: terrainFrag
+      fragmentShader: terrainFrag,
+      uniforms: this.commonUniforms
     })
 
+    const depthMaterial = new CustomShaderMaterial({
+      baseMaterial: MeshDepthMaterial,
+      vertexShader: terrainVert,
+      fragmentShader: terrainFrag,
+      uniforms: this.commonUniforms,
+      depthPacking: RGBADepthPacking
+    });
+
     const terrain = new Mesh(geometry, material);
+    terrain.customDepthMaterial = depthMaterial;
     terrain.castShadow = true;
     terrain.receiveShadow = true;
     return terrain
@@ -111,4 +142,9 @@ export class ProceduralTerrain extends OrbitControlledExercise {
         this.scene.backgroundBlurriness = 0.5;
       })
   }
+
+  public updateUniform(newValue: string, context: CustomizableMetadata) {
+    this.commonUniforms[`u${context.property}`].value.set(new Color(newValue));
+  }
+  
 }
