@@ -1,4 +1,4 @@
-import { DirectionalLight, ACESFilmicToneMapping, PCFSoftShadowMap, BoxGeometry, MeshStandardMaterial, Mesh, PlaneGeometry, Uniform, MeshDepthMaterial, RGBADepthPacking, Color } from "three";
+import { DirectionalLight, ACESFilmicToneMapping, PCFSoftShadowMap, BoxGeometry, MeshStandardMaterial, Mesh, PlaneGeometry, Uniform, MeshDepthMaterial, RGBADepthPacking, Color, MeshPhysicalMaterial } from "three";
 import { Brush, Evaluator, SUBTRACTION } from 'three-bvh-csg'
 
 import { Timer } from "three/examples/jsm/Addons.js";
@@ -23,7 +23,8 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   private directionalLight: DirectionalLight;
   private board: Brush;
   private terrain: Mesh;
-  
+  private water: Mesh;
+
   @Customizable(UNIFORM_CONTROLLERS)
   private commonUniforms: Record<string, Uniform<any>> = {
     uPositionFrequency: new Uniform(0.2),
@@ -46,7 +47,8 @@ export class ProceduralTerrain extends OrbitControlledExercise {
    this.directionalLight = this.createDirectionalLight();
    this.board = this.createBoard();
    this.terrain = this.createTerrain();
-   this.scene.add(this.directionalLight, this.board, this.terrain)
+   this.water = this.createWater();
+   this.scene.add(this.directionalLight, this.board, this.terrain, this.water)
 
     this.camera.fov = 35;
     this.camera.position.set(-10, 6, -2);
@@ -71,6 +73,20 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   async dispose() {
     disposeMesh(this.board);
     disposeMesh(this.terrain);
+    disposeMesh(this.water);
+  }
+
+  private createWater() {
+    const geometry = new PlaneGeometry(10, 10, 1, 1);
+    const material = new MeshPhysicalMaterial({
+      transmission: 0.9,
+      roughness: 0.4,
+    });
+    const mesh = new Mesh(geometry, material);
+    mesh.rotateX(-Math.PI * 0.5);
+    mesh.position.y = -0.1;
+
+    return mesh;
   }
 
   private createTerrain() {

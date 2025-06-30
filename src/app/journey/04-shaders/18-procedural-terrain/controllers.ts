@@ -5,7 +5,7 @@ export const INITIAL_COLORS = {
   uColorWaterSurface: '#66a8ff',
   uColorSand: '#ffe894',
   uColorGrass: '#85d534',
-  uColorRock: '#bfbd8d',
+  uColorRock: '#7b7b74',
   uColorSnow: '#ffffff',
 }
 
