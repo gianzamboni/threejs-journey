@@ -6,7 +6,7 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise, Starred } from "#/app/decorators/exercise";
+import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";  
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -18,6 +18,9 @@ import terrainVert from './shaders/terrain.vert';
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('procedural-terrain')
+@Description(
+  '<p>Procedural terrain generated in real time using a custom shader material.</p>',
+)
 @Starred
 export class ProceduralTerrain extends OrbitControlledExercise {
 
@@ -27,7 +30,7 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   private water: Mesh;
 
   @Customizable(UNIFORM_CONTROLLERS)
-  private commonUniforms: Record<string, Uniform<any>> = {
+  private commonUniforms: Record<string, Uniform<number | Color>> = {
     uPositionFrequency: new Uniform(0.2),
     uStrength: new Uniform(2.0),
     uWarpFrequency: new Uniform(5.0),
@@ -161,7 +164,7 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   }
 
   public updateUniform(newValue: string, context: CustomizableMetadata) {
-    this.commonUniforms[`u${context.property}`].value.set(new Color(newValue));
+    (this.commonUniforms[`u${context.property}`].value as Color).set(newValue);
   }
   
 }
