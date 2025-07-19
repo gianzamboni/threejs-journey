@@ -6,7 +6,7 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
-import { Exercise } from "#/app/decorators/exercise";
+import { Exercise, Starred } from "#/app/decorators/exercise";
 import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";  
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -18,6 +18,7 @@ import terrainVert from './shaders/terrain.vert';
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('procedural-terrain')
+@Starred
 export class ProceduralTerrain extends OrbitControlledExercise {
 
   private directionalLight: DirectionalLight;
