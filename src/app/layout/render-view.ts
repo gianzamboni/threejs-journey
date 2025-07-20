@@ -10,6 +10,9 @@ import {
   SRGBColorSpace
 } from 'three';
 
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { Pass } from 'three/addons/postprocessing/Pass.js';
+
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import { Exercise } from '#/app/types/exercise';
 import { isAnimated } from '#/app/utils/exercise-metadata';
@@ -30,6 +33,8 @@ export default class RenderView extends EventTarget {
   private _renderer: WebGLRenderer;
 
   private exercise: Exercise | undefined;
+
+  private effectComposer: EffectComposer | undefined;
 
   constructor() {
     super();
@@ -57,6 +62,8 @@ export default class RenderView extends EventTarget {
     this.exercise = exercise;
     if(isAnimated(exercise)) {
       (this.exercise as AnimatedExercise).startAnimation(this);
+    } else if(this.effectComposer) {
+      this.effectComposer.render();
     } else {
       this._renderer.render(exercise.scene, exercise.camera);
     }
@@ -64,8 +71,11 @@ export default class RenderView extends EventTarget {
 
   update() {
     if(this.exercise === undefined) return;
-
-    this._renderer.render(this.exercise.scene, this.exercise.camera);
+    if(this.effectComposer) {
+      this.effectComposer.render();
+    } else {
+      this._renderer.render(this.exercise.scene, this.exercise.camera);
+    }
   }
   
   updateSize() {
@@ -76,6 +86,11 @@ export default class RenderView extends EventTarget {
 
     this._renderer.setSize(size.width, size.height);
     this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    if(this.effectComposer) {
+      this.effectComposer.setSize(size.width, size.height);
+      this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    }
 
     if(this.exercise) {
       this.exercise.updateCamera(size.width / size.height)
@@ -123,6 +138,15 @@ export default class RenderView extends EventTarget {
     this._renderer.toneMappingExposure = 1;
     this._renderer.outputColorSpace = SRGBColorSpace;
     this._renderer.setClearColor(new Color('#000000'));
+
+    if(this.effectComposer !== undefined) {
+      this.effectComposer.passes.forEach(pass => {
+        pass.dispose();
+      });
+
+      this.effectComposer.dispose();
+      this.effectComposer = undefined;
+    }
   }
 
   get pixelRatio() {
@@ -143,5 +167,20 @@ export default class RenderView extends EventTarget {
 
   get resolution() {
     return new Vector2(this.width * this.pixelRatio, this.height * this.pixelRatio);
+  }
+
+  private createEffectComposer() {
+    const effectComposer = new EffectComposer(this._renderer);
+    effectComposer.setSize(this.width, this.height);
+    effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    return effectComposer;
+  }
+
+  addEffects(...effect: Pass[]) {
+    if(!this.effectComposer) {
+      this.effectComposer = this.createEffectComposer();
+    }
+
+    effect.forEach(effect => this.effectComposer!.addPass(effect));
   }
 }

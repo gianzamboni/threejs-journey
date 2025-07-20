@@ -39,9 +39,7 @@ export default class BaseExercise extends EventTarget {
     }
   }
 
-  async dispose() {
-    for(const child of this.scene.children) {
-      this.scene.remove(child);  
-    }
+  dispose() {
+    this.scene.clear();
   }; 
 }

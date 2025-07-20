@@ -28,9 +28,10 @@ export default class AnimatedExercise extends BaseExercise {
   };
 
   async dispose(): Promise<void> {
+    super.dispose();
+
     if(this.animationLoop) {
       await this.animationLoop.stop();
     } 
-    super.dispose();
   }
 }

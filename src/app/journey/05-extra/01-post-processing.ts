@@ -3,10 +3,9 @@ import { DirectionalLight, Mesh, MeshStandardMaterial, PCFShadowMap, ReinhardTon
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 import { DotScreenPass } from 'three/addons/postprocessing/DotScreenPass.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
+import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader.js";
 import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js'
 
 import { Description, Exercise } from "#/app/decorators/exercise";
@@ -14,6 +13,7 @@ import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 
 import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
+
 @Exercise('post-processing')
 @Description(
   '<p>Post-processing is a technique that allows you to apply effects to your scene after it has been rendered. It is a powerful way to enhance the visual quality of your scene.</p>',
@@ -21,8 +21,6 @@ import OrbitControlledExercise from "../exercises/orbit-controlled-exercise";
 )
 export class PostProcessing extends OrbitControlledExercise {  
   private directionalLight: DirectionalLight;
-
-  private effectComposer: EffectComposer;
 
   constructor(view: RenderView) {
     super(view);
@@ -41,39 +39,27 @@ export class PostProcessing extends OrbitControlledExercise {
       }
     })
 
-    this.effectComposer = this.createEffectComposer();
     this.addPasses();
   }
 
   frame(timer: Timer) {
     super.frame(timer);
-    this.effectComposer.render();
   }
 
   private addPasses() {
     const renderPass = new RenderPass(this.scene, this.camera);
-    this.effectComposer.addPass(renderPass);
-
+    const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
     const dotScreenPass = new DotScreenPass();
-    dotScreenPass.enabled = false;
-    this.effectComposer.addPass(dotScreenPass);
-
-    const glitchPass = new GlitchPass();
-    glitchPass.goWild = true;
-    glitchPass.enabled = false;
-    this.effectComposer.addPass(glitchPass);
-
     const rgbShiftPass = new ShaderPass(RGBShiftShader);
-    rgbShiftPass.enabled = false;
-    this.effectComposer.addPass(rgbShiftPass);
+
+    this.view.addEffects(
+      renderPass,
+      gammaCorrectionPass,
+      dotScreenPass,
+      //rgbShiftPass,
+    );
   }
 
-  private createEffectComposer() {
-    const effectComposer = new EffectComposer(this.view.renderer);
-    effectComposer.setSize(this.view.width, this.view.height);
-    effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    return effectComposer;
-  }
 
 
   private createDirectionalLight() {
@@ -116,7 +102,5 @@ export class PostProcessing extends OrbitControlledExercise {
   async dispose() {
     await super.dispose();
     this.directionalLight.dispose();
-    this.effectComposer.passes.forEach(pass => pass.dispose());
-    this.effectComposer.dispose();
   }
 }
