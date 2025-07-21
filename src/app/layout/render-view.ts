@@ -7,7 +7,8 @@ import {
   Color,
   Vector2,
   ColorSpace,
-  SRGBColorSpace
+  SRGBColorSpace,
+  WebGLRenderTarget
 } from 'three';
 
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -35,6 +36,7 @@ export default class RenderView extends EventTarget {
   private exercise: Exercise | undefined;
 
   private effectComposer: EffectComposer | undefined;
+  private webGLRenderTarget: WebGLRenderTarget | undefined;
 
   constructor() {
     super();
@@ -170,7 +172,11 @@ export default class RenderView extends EventTarget {
   }
 
   private createEffectComposer() {
-    const effectComposer = new EffectComposer(this._renderer);
+    this.webGLRenderTarget = new WebGLRenderTarget(this.width, this.height, {
+    //  samples: this.renderer.getPixelRatio() === 1 ? 2 : 0,
+    });
+
+    const effectComposer = new EffectComposer(this._renderer, this.webGLRenderTarget);
     effectComposer.setSize(this.width, this.height);
     effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     return effectComposer;
@@ -179,6 +185,7 @@ export default class RenderView extends EventTarget {
   addEffects(...effect: Pass[]) {
     if(!this.effectComposer) {
       this.effectComposer = this.createEffectComposer();
+
     }
 
     effect.forEach(effect => this.effectComposer!.addPass(effect));
