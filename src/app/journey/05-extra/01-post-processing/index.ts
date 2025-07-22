@@ -1,4 +1,5 @@
 import { 
+  Color,
   DirectionalLight,
   Mesh,
   MeshStandardMaterial,
@@ -35,29 +36,16 @@ export class PostProcessing extends OrbitControlledExercise {
   private directionalLight: DirectionalLight;
 
   @Customizable([{
-    propertyPath: 'material.uniforms.uTint.value.x',
+    propertyPath: 'tintColor',
+    type: 'color',
+    initialValue: '#ff0000',
     settings: {
       min: 0,
       max: 1,
       step: 0.001,
-      name: 'Red',
+      name: 'Tint Color',
+      onChange: 'updateTint'
     }
-  }, {
-    propertyPath: 'material.uniforms.uTint.value.y',
-    settings: {
-      min: 0,
-      max: 1,
-      step: 0.001,
-      name: 'Green',
-    },
-  }, {
-    propertyPath: 'material.uniforms.uTint.value.z',
-    settings: {
-      min: 0,
-      max: 1,
-      step: 0.001,
-      name: 'Blue',
-    },
   }])
   private tintPass: ShaderPass;
 
@@ -113,11 +101,13 @@ export class PostProcessing extends OrbitControlledExercise {
     this.displacementPass.material.uniforms.uTime.value = timer.getElapsed();
   }
 
+  public updateTint(tint: string) {
+    this.tintPass.material.uniforms.uTint.value = new Color(tint);
+  }
+
   private addPasses() {
     const renderPass = new RenderPass(this.scene, this.camera);
     const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
-
-    
 
     this.view.addEffects(
       renderPass,
