@@ -4,6 +4,7 @@ import { BASICS } from "./01-basics";
 import { CLASSIC_TECHNIQUES } from "./02-classic-techniques";
 import { ADVANCED_TECHNIQUES } from "./03-advanced-techniques";
 import { SHADERS } from "./04-shaders";
+import { EXTRAS } from "./05-extra";
 
 function verifyUniqueExerciseIds(sections: Section[]) {
   const ids = new Set<string>();
@@ -24,7 +25,8 @@ export const JOURNEY: Section[] = [
  BASICS,
  CLASSIC_TECHNIQUES,
  ADVANCED_TECHNIQUES, 
- SHADERS
+ SHADERS,
+ EXTRAS,
 ].reverse();
 
 verifyUniqueExerciseIds(JOURNEY);

@@ -130,7 +130,7 @@ export default class Menu extends EventTarget {
     footer.className = 'flex justify-center items-center p-4';
 
     const portfolioLinkg = document.createElement('a');
-    portfolioLinkg.className = 'flex items-center gap-x-1 text-blue-800 dark:text-blue-400 pointer';
+    portfolioLinkg.className = 'flex items-center gap-x-1';
     portfolioLinkg.target = '_blank';
     portfolioLinkg.href = 'https://portfolio.gianfrancozamboni.com.ar';
     portfolioLinkg.innerHTML = `${PORTFOLIO_ICON}<span>Gianfranco Zamboni</span>`;

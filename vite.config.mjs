@@ -90,9 +90,19 @@ export default defineConfig(({ mode }) => {
           main: path.resolve(__dirname, 'src/index.html'),
         },
         output: {
-          manualChunks: {
-            'three': ['three'],
-            'vendor': ['gsap', 'lil-gui', 'cannon-es'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('gsap') || id.includes('lil-gui') || id.includes('cannon-es')) {
+                return 'vendor';
+              }
+              // Group specific packages into named chunks
+              if (id.includes('three')) {
+                return 'three';
+              }
+
+              // Everything else from node_modules goes to 'dependencies'
+              return 'dependencies';
+            }
           },
           format: 'es',
           generatedCode: {

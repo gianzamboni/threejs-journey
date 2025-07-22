@@ -27,14 +27,13 @@ export class LoadingScreen {
     this.label.innerHTML = '0%';
     textRow.appendChild(this.label);
 
-
     const progressBar = document.createElement('div');
     progressBar.className = 'bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 w-1/2';
     this.container.appendChild(progressBar);
 
     this.progress = document.createElement('div');
     this.progress.id = 'loading-screen-progress-bar';
-    this.progress.className = 'bg-blue-600 h-2.5 rounded-full transition-all duration-300 w-1/2';
+    this.progress.className = 'bg-blue-600 h-2.5 rounded-full transition-all duration-300 w-full origin-left';
 
     progressBar.appendChild(this.progress);
   }
@@ -47,18 +46,20 @@ export class LoadingScreen {
     this.container.classList.remove('hidden');
     this.container.style.opacity = '1';
     this.label.innerHTML = '0%';
-    this.progress.style.width = '0%';
+    this.progress.style.transform = 'scaleX(0)';
   }
 
   async update(data: LoadingData) {
-    const progress = Math.round(data.itemsLoaded * 100/ data.itemsTotal);
-    this.label.innerHTML = `${progress}%`;
-    this.progress.style.width = `${progress}%`;
+    const progress = data.itemsLoaded / data.itemsTotal;
+    this.label.innerHTML = `${Math.round(progress * 100)}%`;
+    this.progress.style.transform = `scaleX(${progress})`;
   }
 
   async hide() {
-    this.container.style.opacity = '0';
-    await sleep(310);
-    this.container.classList.add('hidden');
+    this.container.addEventListener('transitionend', async () => {
+      this.container.style.opacity = '0';
+      await sleep(310);
+      this.container.classList.add('hidden');
+    }, { once: true });
   }
 }

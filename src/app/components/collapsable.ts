@@ -69,7 +69,9 @@ export class Collapsable {
   replaceContent(content: HTMLElement[]) {
     this.collapsable.innerHTML = '';
 
-    if (this.isOpen) this.toggle();
+    if (this.isOpen) {
+      this.toggle();
+    }
 
     this.isActive = content !== undefined && content.length > 0;
 
@@ -86,6 +88,7 @@ export class Collapsable {
   }
 
   toggle() {
+    this.button.element.disabled = true;
     if (this.isActive && this.isOpen) {
       this.close();
     } else if(this.isActive) {
@@ -99,6 +102,7 @@ export class Collapsable {
       this.collapsable.style.height = '0';
       this.collapsable.addEventListener('transitionend', () => {
         this.collapsable.classList.add('hidden');
+        this.button.element.disabled = false;
       }, { once: true });
 
       for (const className of this.button.toggle) {
@@ -119,6 +123,9 @@ export class Collapsable {
       this.button.element.classList.add(className);
     }
     this.button.icon.classList.add('rotate-[270deg]');
+    this.collapsable.addEventListener('transitionend', () => {
+      this.button.element.disabled = false;
+    }, { once: true });
   }
   
   private createCollapsable(settings: CollapsableSectionSettings | undefined) {

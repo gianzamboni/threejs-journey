@@ -28,7 +28,7 @@ export default class OrbitControlledExercise extends AnimatedExercise {
   }
   
   async dispose() {
-    this.controls.dispose();
     super.dispose();
+    this.controls.dispose();
   }
 }
