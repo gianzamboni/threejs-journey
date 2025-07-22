@@ -50,9 +50,8 @@ export class LoadingScreen {
   }
 
   async update(data: LoadingData) {
-    const progress = Math.round(data.itemsLoaded / data.itemsTotal);
-    console.log(progress);
-    this.label.innerHTML = `${progress * 100}%`;
+    const progress = data.itemsLoaded / data.itemsTotal;
+    this.label.innerHTML = `${Math.round(progress * 100)}%`;
     this.progress.style.transform = `scaleX(${progress})`;
   }
 
@@ -62,6 +61,5 @@ export class LoadingScreen {
       await sleep(310);
       this.container.classList.add('hidden');
     }, { once: true });
-
   }
 }

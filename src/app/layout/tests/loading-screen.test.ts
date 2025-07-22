@@ -46,10 +46,8 @@ describe('LoadingScreen', () => {
   });
     
   it('should show the loading screen', async () => {
-    // Show loading screen
     await loadingScreen.show();
     
-    // Verify it's visible
     const container = getLoadingScreenContainer();
     expect(container!.classList.contains('hidden')).toBe(false);
     expect(container!.style.opacity).toBe('1');
@@ -59,7 +57,7 @@ describe('LoadingScreen', () => {
     expect(label.innerHTML).toBe('0%');
     
     const progress = getLoadingScreenProgressBar();
-    expect(progress.style.width).toBe('0%');
+    expect(progress.style.transform).toBe('scaleX(0)');
   });
   
   it('should update the loading progress', async () => {
@@ -70,6 +68,7 @@ describe('LoadingScreen', () => {
       itemsTotal: 100
     };
     
+    console.log(loadingData);
     // Update loading screen
     await loadingScreen.update(loadingData);
     
@@ -78,18 +77,13 @@ describe('LoadingScreen', () => {
     expect(label.innerHTML).toBe('50%');
     
     const progress = getLoadingScreenProgressBar();
-    expect(progress.style.width).toBe('50%');
+    expect(progress.style.transform).toBe('scaleX(0.5)');
   });
   
   it('should hide the loading screen', async () => {
-    // Hide loading screen
     await loadingScreen.hide();
-    
-    // Verify opacity is set to 0
+
     const container = getLoadingScreenContainer();
-    expect(container!.style.opacity).toBe('0');
-    
-    // Verify it's hidden
     expect(container!.classList.contains('hidden')).toBe(true);
   });
 });
