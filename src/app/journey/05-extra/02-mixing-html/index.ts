@@ -2,7 +2,9 @@ import {
   Mesh,
   MeshStandardMaterial,
   PCFShadowMap,
+  Raycaster,
   ReinhardToneMapping,
+  Vector3,
 } from "three";
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -12,7 +14,7 @@ import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
-import { MixingHtmlLayout } from "./layout";
+import { HelpPoint } from "./help-point";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
@@ -21,7 +23,9 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
   '<p>Here, I have added some html elements that moves along with the camera and merge with the scene.</p>'
 )
 export class MixingHtml extends OrbitControlledExercise {  
-  public layout: MixingHtmlLayout;
+  private points: HelpPoint[] = [];
+
+  private raycaster: Raycaster;
 
   constructor(view: RenderView) {
     super(view);
@@ -37,12 +41,58 @@ export class MixingHtml extends OrbitControlledExercise {
     })
     this.camera.position.set(4, 1, -4);
 
-    this.layout = new MixingHtmlLayout();
+    this.raycaster = new Raycaster();
+
+    this.createHelpPoints();
+  }
+
+  private createHelpPoints() {
+    this.points.push(
+      new HelpPoint(
+        '1',
+        'Front and top screen with HUD aggregating terrain and battle informations.',
+        new Vector3(1.2, 0.3, -0.6)
+      ),
+      new HelpPoint(
+        '2',
+        'Ventilation with air purifier and detection of environment toxicity.',
+        new Vector3(0.25, 0.8, -1.6)
+      ),
+      new HelpPoint(
+        '3',
+        'Cameras supporting night vision and heat vision with automatic adjustment.',
+        new Vector3(1.3, -1.3, -0.7)
+      )
+    );
+
+    this.points.forEach(point => {
+      document.body.appendChild(point.element);
+    });
   }
 
   @DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
+
+    this.points.forEach(point => {
+      const pointPosition = point.position.clone().project(this.camera);
+      point.screenPosition.set(pointPosition.x, pointPosition.y);
+      point.update();
+
+      this.raycaster.setFromCamera(point.screenPosition, this.camera);
+      const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+      if(intersects.length === 0) {
+        point.show();
+      } else {
+        const intersectionDistance = intersects[0].distance;
+        const pointDistance = point.position.distanceTo(this.camera.position);
+        if(intersectionDistance < pointDistance) {
+          point.hide();
+        } else {
+          point.show();
+        }
+      }
+    });
   }
 
   private loadEnvironmentMap() {
