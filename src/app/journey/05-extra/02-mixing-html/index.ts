@@ -12,6 +12,7 @@ import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { MixingHtmlLayout } from "./layout";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
@@ -20,6 +21,8 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
   '<p>Here, I have added some html elements that moves along with the camera and merge with the scene.</p>'
 )
 export class MixingHtml extends OrbitControlledExercise {  
+  public layout: MixingHtmlLayout;
+
   constructor(view: RenderView) {
     super(view);
     this.loadEnvironmentMap();
@@ -33,6 +36,8 @@ export class MixingHtml extends OrbitControlledExercise {
       }
     })
     this.camera.position.set(4, 1, -4);
+
+    this.layout = new MixingHtmlLayout();
   }
 
   @DebugFPS
