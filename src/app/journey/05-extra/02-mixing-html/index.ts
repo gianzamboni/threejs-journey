@@ -1,4 +1,5 @@
 import { 
+  Group,
   Mesh,
   MeshStandardMaterial,
   PCFShadowMap,
@@ -26,6 +27,8 @@ export class MixingHtml extends OrbitControlledExercise {
   private points: HelpPoint[] = [];
 
   private raycaster: Raycaster;
+
+  private model: Group | undefined;
 
   constructor(view: RenderView) {
     super(view);
@@ -108,6 +111,7 @@ export class MixingHtml extends OrbitControlledExercise {
       gltf.scene.rotation.y = Math.PI * 0.5
       this.scene.add(gltf.scene);
       this.updateAllMaterials();
+      this.model = gltf.scene;
     });
   }
 
@@ -124,6 +128,14 @@ export class MixingHtml extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
+    this.model?.traverse((child) => {
+      if(child instanceof Mesh && child.material instanceof MeshStandardMaterial) {
+        child.material.dispose();
+        child.geometry.dispose();
+      }
+    });
+    this.model?.clear();
+    this.model = undefined;
     this.points.forEach(point => {
       document.body.removeChild(point.element);
     });
