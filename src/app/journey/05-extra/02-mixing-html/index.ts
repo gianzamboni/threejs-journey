@@ -124,5 +124,8 @@ export class MixingHtml extends OrbitControlledExercise {
 
   async dispose() {
     await super.dispose();
+    this.points.forEach(point => {
+      document.body.removeChild(point.element);
+    });
   }
 }
