@@ -1,9 +1,12 @@
 import { Group, Mesh, MeshBasicMaterial, SRGBColorSpace } from "three";
 
+import { Timer } from "three/examples/jsm/Addons.js";
+
 import { Customizable } from "#/app/decorators/customizable";
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { Fireflies } from "./fireflies";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
@@ -25,6 +28,17 @@ export class PortalScene extends OrbitControlledExercise {
   private lampMaterial: MeshBasicMaterial;
   private portalLight: MeshBasicMaterial;
 
+  @Customizable([{
+    propertyPath: 'material.uniforms.uSize.value',
+    folderPath: 'Fireflies',
+    settings: {
+      min: 10,
+      max: 500,
+      step: 1,
+    }
+  }])
+  private fireflies: Fireflies;
+
   constructor(renderView: RenderView) {
     super(renderView);
 
@@ -40,7 +54,16 @@ export class PortalScene extends OrbitControlledExercise {
     this.loadPortal();
     this.camera.position.set(4, 2, 4);
 
+    this.fireflies = new Fireflies(renderView);
+    this.fireflies.addToScene(this.scene);
+
     this.updateClearColor(this.clearColor);
+  }
+
+
+  frame(timer: Timer) {
+    super.frame(timer);
+    this.fireflies.frame(timer);
   }
 
   private async loadPortal() {
@@ -86,6 +109,7 @@ export class PortalScene extends OrbitControlledExercise {
 
     this.portalMaterial.map?.dispose();
     this.portalMaterial.dispose();
+    this.fireflies.dispose();
   }
 }
 
