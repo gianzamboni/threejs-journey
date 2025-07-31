@@ -1,5 +1,6 @@
 import { Group, Mesh, MeshBasicMaterial, SRGBColorSpace } from "three";
 
+import { Customizable } from "#/app/decorators/customizable";
 import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
@@ -8,6 +9,15 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('portal-scene')
 export class PortalScene extends OrbitControlledExercise {
+ 
+  @Customizable([{
+    type: 'color',
+    settings: {
+      name: 'Background Color',
+      onChange: 'updateClearColor'
+    }
+  }])
+  private clearColor: string = '#080712';
 
   private portal: Group | undefined;
 
@@ -17,6 +27,7 @@ export class PortalScene extends OrbitControlledExercise {
 
   constructor(renderView: RenderView) {
     super(renderView);
+
 
     const texture = AssetLoader.getInstance().loadTexture('textures/portal_baked.jpg');
     texture.colorSpace = SRGBColorSpace;
@@ -28,13 +39,15 @@ export class PortalScene extends OrbitControlledExercise {
 
     this.loadPortal();
     this.camera.position.set(4, 2, 4);
+
+    this.updateClearColor(this.clearColor);
   }
 
   private async loadPortal() {
     AssetLoader.getInstance().loadGLTF('models/portal.glb', {
       useDraco: true,
       onLoad: gltf => {
-          
+
         gltf.scene.traverse(child => {
           if (child instanceof Mesh) {
             if (child.name.startsWith('Lamp')) {
@@ -50,6 +63,13 @@ export class PortalScene extends OrbitControlledExercise {
         this.portal = gltf.scene;
         this.scene.add(this.portal);
       }
+    });
+  }
+
+  public updateClearColor(newValue: string) {
+    this.clearColor = newValue;
+    this.view.setRender({
+      clearColor: this.clearColor
     });
   }
 
