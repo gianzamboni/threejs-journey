@@ -12,6 +12,9 @@ export class PortalScene extends OrbitControlledExercise {
   private portal: Group | undefined;
 
   private portalMaterial: MeshBasicMaterial;
+  private lampMaterial: MeshBasicMaterial;
+  private portalLight: MeshBasicMaterial;
+
   constructor(renderView: RenderView) {
     super(renderView);
 
@@ -19,6 +22,9 @@ export class PortalScene extends OrbitControlledExercise {
     texture.colorSpace = SRGBColorSpace;
     texture.flipY = false;
     this.portalMaterial = new MeshBasicMaterial({ map: texture });
+
+    this.lampMaterial = new MeshBasicMaterial({ color: 0xeeff00 });
+    this.portalLight = new MeshBasicMaterial({ color: 0x6864FF });
 
     this.loadPortal();
     this.camera.position.set(4, 2, 4);
@@ -30,7 +36,13 @@ export class PortalScene extends OrbitControlledExercise {
       onLoad: gltf => {
         gltf.scene.traverse(child => {
           if (child instanceof Mesh) {
-            child.material = this.portalMaterial;
+            if (child.name.startsWith('Lamp')) {
+              child.material = this.lampMaterial;
+            } else if (child.name === 'Circle') {
+              child.material = this.portalLight;
+            } else {
+              child.material = this.portalMaterial;
+            }
           }
         });
 
@@ -51,6 +63,7 @@ export class PortalScene extends OrbitControlledExercise {
       });
     }
 
+    this.portalMaterial.map?.dispose();
     this.portalMaterial.dispose();
   }
 }
