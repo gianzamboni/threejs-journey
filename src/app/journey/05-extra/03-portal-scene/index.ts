@@ -1,4 +1,4 @@
-import { Group, Mesh, MeshBasicMaterial, SRGBColorSpace } from "three";
+import { Color, Group, Mesh, MeshBasicMaterial, ShaderMaterial, SRGBColorSpace } from "three";
 
 import { Timer } from "three/examples/jsm/Addons.js";
 
@@ -7,6 +7,8 @@ import { Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { Fireflies } from "./fireflies";
+import portalFragmentShader from "./shaders/portal.frag";
+import portalVertexShader from "./shaders/portal.vert";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
@@ -22,11 +24,30 @@ export class PortalScene extends OrbitControlledExercise {
   }])
   private clearColor: string = '#080712';
 
+
+  @Customizable([{
+    type: 'color',
+    settings: {
+      name: 'Start Color',
+      onChange: 'updateStartColor'
+    }
+  }])
+  private startColor: string = '#d8d6ff';
+
+  @Customizable([{
+    type: 'color',
+    settings: {
+      name: 'End Color',
+      onChange: 'updateEndColor'
+    }
+  }])
+  private endColor: string = '#000000';
+
   private portal: Group | undefined;
 
   private portalMaterial: MeshBasicMaterial;
   private lampMaterial: MeshBasicMaterial;
-  private portalLight: MeshBasicMaterial;
+  private portalLight: ShaderMaterial;
 
   @Customizable([{
     propertyPath: 'material.uniforms.uSize.value',
@@ -49,7 +70,16 @@ export class PortalScene extends OrbitControlledExercise {
     this.portalMaterial = new MeshBasicMaterial({ map: texture });
 
     this.lampMaterial = new MeshBasicMaterial({ color: 0xeeff00 });
-    this.portalLight = new MeshBasicMaterial({ color: 0x6864FF });
+    this.portalLight = new ShaderMaterial({
+      fragmentShader: portalFragmentShader,
+      vertexShader: portalVertexShader,
+      uniforms: {
+        uTime: { value: 0 },
+        uStartColor: { value: new Color(this.startColor) },
+        uEndColor: { value: new Color(this.endColor) },
+      },
+      transparent: true,
+    });
 
     this.loadPortal();
     this.camera.position.set(4, 2, 4);
@@ -58,12 +88,14 @@ export class PortalScene extends OrbitControlledExercise {
     this.fireflies.addToScene(this.scene);
 
     this.updateClearColor(this.clearColor);
+    this.updateStartColor(this.startColor);
+    this.updateEndColor(this.endColor);
   }
-
 
   frame(timer: Timer) {
     super.frame(timer);
     this.fireflies.frame(timer);
+    this.portalLight.uniforms.uTime.value = timer.getElapsed();
   }
 
   private async loadPortal() {
@@ -94,6 +126,16 @@ export class PortalScene extends OrbitControlledExercise {
     this.view.setRender({
       clearColor: this.clearColor
     });
+  }
+
+  public updateStartColor(newValue: string) {
+    this.startColor = newValue;
+    this.portalLight.uniforms.uStartColor.value = new Color(this.startColor);
+  }
+
+  public updateEndColor(newValue: string) {
+    this.endColor = newValue;
+    this.portalLight.uniforms.uEndColor.value = new Color(this.endColor);
   }
 
   async dispose() {

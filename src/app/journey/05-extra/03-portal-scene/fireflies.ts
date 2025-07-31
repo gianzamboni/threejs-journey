@@ -5,7 +5,6 @@ import { Timer } from "three/examples/jsm/Addons.js";
 import RenderView from "#/app/layout/render-view";
 import fragmentShader from './shaders/fireflies.frag';
 import vertexShader from './shaders/fireflies.vert';
-
 export class Fireflies {
 
   private geometry: BufferGeometry;
