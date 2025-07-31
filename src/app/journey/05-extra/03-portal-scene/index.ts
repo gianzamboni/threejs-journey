@@ -34,6 +34,7 @@ export class PortalScene extends OrbitControlledExercise {
     AssetLoader.getInstance().loadGLTF('models/portal.glb', {
       useDraco: true,
       onLoad: gltf => {
+          
         gltf.scene.traverse(child => {
           if (child instanceof Mesh) {
             if (child.name.startsWith('Lamp')) {
