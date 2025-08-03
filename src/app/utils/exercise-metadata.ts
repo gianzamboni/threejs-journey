@@ -12,6 +12,7 @@ export type ExerciseMetadata = {
   isDebuggable?: boolean;
   shouldSendData?: boolean;
   isStarred?: boolean;
+  customizableQuality?: boolean;
 }
 
 export type WithMetadata<T> = T & {
@@ -119,4 +120,9 @@ export function hasControllers(target: MetadataTarget): boolean {
 export function getActions(target: MetadataTarget): Action[] {
   const metadata = getMetadata(target);
   return metadata.actions ?? [];
+}
+
+export function hasQualityOptions(target: MetadataTarget): boolean {
+  const metadata = getMetadata(target);
+  return metadata.customizableQuality ?? false;
 }

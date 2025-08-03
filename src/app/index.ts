@@ -9,7 +9,7 @@ import { ErrorData, WarningBox } from "#/app/layout/warning-box";
 import { AssetLoader, LoadingData } from "#/app/services/assets-loader";
 import { Exercise, ExerciseClass } from '#/app/types/exercise';
 import { isInDevMode } from '#/app/utils';
-import { getId, isDebuggable } from '#/app/utils/exercise-metadata';
+import { getId, hasQualityOptions, isDebuggable } from '#/app/utils/exercise-metadata';
 import { pascalCaseToText } from '#/app/utils/text-utils';
 import { CSS_CLASSES } from '#/theme';
 
@@ -113,6 +113,12 @@ export class App {
       this.renderView.reset();
       this.infoBox.close();
       await this.activeExercise.dispose();
+    }
+
+    if(hasQualityOptions(newExercise)) {
+      this.qualitySelector.show();
+    } else {
+      this.qualitySelector.hide();
     }
 
     this.activeExercise = new newExercise(this.renderView, {

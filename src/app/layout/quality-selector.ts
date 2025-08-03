@@ -37,6 +37,14 @@ export class QualitySelector extends EventTarget {
     this.qualityMenu.addTo(parent);
   }
 
+  hide() {
+    this.qualityMenu.hide();
+  }
+
+  show() {
+    this.qualityMenu.show();
+  }
+
   onQualityChange(event: CustomEvent) {
     const quality = qualityFromString(event.detail.value);
     this.dispatchEvent(new CustomEvent('quality-changed', { detail: quality }));
