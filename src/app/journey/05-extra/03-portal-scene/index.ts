@@ -3,14 +3,25 @@ import { Color, Group, Mesh, MeshBasicMaterial, ShaderMaterial, SRGBColorSpace }
 import { Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
-import { Exercise } from "#/app/decorators/exercise";
+import { Exercise, Selectable } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { Fireflies } from "./fireflies";
 import portalFragmentShader from "./shaders/portal.frag";
 import portalVertexShader from "./shaders/portal.vert";
+import portalFragmentShaderV2 from "./shaders/portal_v2.frag";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+
+const SHADER_DICTIONARY = {
+  "Smoky": portalFragmentShader,
+  "Swirly": portalFragmentShaderV2,
+}
+
+export const SHADER_LIST = Object.keys(SHADER_DICTIONARY).reduce((acc: Record<string, string>, key: string) => {
+  acc[key] = key;
+  return acc;
+}, {});
 
 @Exercise('portal-scene')
 export class PortalScene extends OrbitControlledExercise {
@@ -136,6 +147,12 @@ export class PortalScene extends OrbitControlledExercise {
   public updateEndColor(newValue: string) {
     this.endColor = newValue;
     this.portalLight.uniforms.uEndColor.value = new Color(this.endColor);
+  }
+
+  @Selectable('Portal Effect', SHADER_LIST, "Smoky")
+  public changeShader(shader: keyof typeof SHADER_DICTIONARY) {
+    this.portalLight.fragmentShader = SHADER_DICTIONARY[shader];
+    this.portalLight.needsUpdate = true;
   }
 
   async dispose() {
