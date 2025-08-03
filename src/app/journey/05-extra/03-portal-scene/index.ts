@@ -3,7 +3,7 @@ import { Color, Group, Mesh, MeshBasicMaterial, ShaderMaterial, SRGBColorSpace }
 import { Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
-import { Exercise, Selectable } from "#/app/decorators/exercise";
+import { Exercise, Selectable, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { Fireflies } from "./fireflies";
@@ -24,6 +24,7 @@ export const SHADER_LIST = Object.keys(SHADER_DICTIONARY).reduce((acc: Record<st
 }, {});
 
 @Exercise('portal-scene')
+@Starred
 export class PortalScene extends OrbitControlledExercise {
  
   @Customizable([{
