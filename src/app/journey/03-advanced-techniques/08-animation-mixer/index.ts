@@ -15,7 +15,7 @@ import { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
-import { DebugFPS } from "#/app/decorators/debug";
+import { CustomizableQuality, DebugFPS } from "#/app/decorators/debug";
 import { ActionButton, Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
@@ -37,6 +37,7 @@ type Actions = {
 
 @Exercise('animation-mixer')
 @Description('<p>A fox with multiple animation. Select whichever you desire with the buttons above</p>')
+@CustomizableQuality
 export class AnimationMixerTest extends OrbitControlledExercise {
   @Customizable(ENV_MAP_CONTROLLERS)
   private envMapIntensity: number;

@@ -2,6 +2,8 @@ import { Timer } from 'three/addons/misc/Timer.js';
 
 import { ExerciseMetadata } from '#/app/utils/exercise-metadata';
 
+import { ExerciseClass } from '../types/exercise';
+
 type FrameFunction = (timer: Timer, ...args: unknown[]) => void;
 
 export function initDebugMetadata(context: ClassDecoratorContext | ClassMethodDecoratorContext | ClassFieldDecoratorContext): ExerciseMetadata {
@@ -22,4 +24,9 @@ export function DebugFPS(target: FrameFunction, context: ClassMethodDecoratorCon
       (this as EventTarget).dispatchEvent(new CustomEvent('debug-info', { detail: { fps } }));
     }
   }
+}
+
+export function CustomizableQuality(_: ExerciseClass, context: ClassDecoratorContext) {
+    const metadata = initDebugMetadata(context);
+    metadata.customizableQuality = true;
 }

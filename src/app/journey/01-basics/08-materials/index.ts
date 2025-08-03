@@ -12,7 +12,7 @@ import {
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from '#/app/decorators/customizable';
-import { DebugFPS } from '#/app/decorators/debug';
+import { CustomizableQuality, DebugFPS } from '#/app/decorators/debug';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
@@ -28,6 +28,7 @@ import { QualityConfig } from './quality-config';
   "<p>Some objects setted up with physical materials.</p>",
   "<p>You can customize the material with the hidden ui</p>"
 )
+@CustomizableQuality
 export class MaterialsTest extends OrbitControlledExercise {
   private loader: AssetLoader;
   private qualityconfig: QualityConfig;
