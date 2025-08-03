@@ -12,7 +12,7 @@ import {
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
-import { DebugFPS } from "#/app/decorators/debug";
+import { CustomizableQuality, DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
@@ -32,6 +32,7 @@ type ExerciseLights = Pick<Lights, 'ambient' | 'directional' | 'spot' | 'point'>
 
 @Exercise('Shadows')
 @Description("<p>A sphere that casts shadows. The shadow is calculated in real time.</p>")
+@CustomizableQuality
 export class Shadows extends OrbitControlledExercise {
 
   private qualityConfig: QualityConfig;

@@ -13,7 +13,7 @@ import {
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { DebugFPS } from '#/app/decorators/debug';
+import { CustomizableQuality, DebugFPS } from '#/app/decorators/debug';
 import { ActionButton, Description, Exercise, Starred } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
@@ -41,6 +41,7 @@ type PhysicalObject = {
   "<p style='margin-bottom: 10px;'>Physics Demo. It shows some objects falling and colliding with each other.</p>",
   `<p><strong>Buttons above:</strong> <span class='${CSS_CLASSES.light_text}'>Add spheres and boxes to the scene or remove all objects</span></p>`
 )
+@CustomizableQuality
 export class Physics extends OrbitControlledExercise {
   
   private static readonly palette = [

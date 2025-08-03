@@ -4,7 +4,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 
 import { Customizable } from "#/app/decorators/customizable";
-import { DebugFPS } from "#/app/decorators/debug";
+import { CustomizableQuality, DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { ExtraConfig } from "#/app/types/exercise";
@@ -28,6 +28,7 @@ type SkyParameters = {
 @Exercise("sea-v2")
 @Starred
 @Description("<p>A full 3D sea using Perlin noise and custom light shaders.</p>")
+@CustomizableQuality
 export class RagingSeaV2 extends OrbitControlledExercise {
   @Customizable(RAGING_SEA_COLORS_CONTROLS_V2)
   private colors = "#114e6e";
@@ -49,6 +50,8 @@ export class RagingSeaV2 extends OrbitControlledExercise {
 
     const geometry = new PlaneGeometry(50, 50, this.quality.segments, this.quality.segments);
     geometry.deleteAttribute("normal");
+
+    this.colors = this.quality.initialColor;
 
     this.material = new ShaderMaterial({
       vertexShader: seaVertexShader,

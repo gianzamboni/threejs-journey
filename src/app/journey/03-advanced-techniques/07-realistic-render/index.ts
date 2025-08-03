@@ -13,7 +13,7 @@ import {
 import { Timer } from 'three/addons/misc/Timer.js';
 
 import { Customizable } from "#/app/decorators/customizable";
-import { DebugFPS } from "#/app/decorators/debug";
+import { CustomizableQuality, DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
@@ -32,6 +32,7 @@ type RenderedObject = {
 
 @Exercise('realistic-render')
 @Description('<p>Renderer tweaks to get a more realistic render</p>')
+@CustomizableQuality
 export class RealisticRender extends OrbitControlledExercise {
 
   @Customizable(SCENE_CONTROLLERS)
