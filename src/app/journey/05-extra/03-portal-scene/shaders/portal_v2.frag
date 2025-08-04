@@ -80,6 +80,14 @@ float cnoise(vec3 P)
     return 2.2 * n_xyz;
 }
 
+vec2 rotate(vec2 uv, float rotation, vec2 center) {
+  vec2 rotatedUv = vec2(
+    cos(rotation) * (uv.x - center.x) - sin(rotation) * (uv.y - center.y) + center.x,
+    sin(rotation) * (uv.x - center.x) + cos(rotation) * (uv.y - center.y) + center.y
+  );
+  return rotatedUv;
+}
+
 void main() {
 
   float effectRadius = .5;
@@ -94,12 +102,13 @@ void main() {
   float radius = length(uv);
 
   vec2 displacedUv = vec2(radius * cos(angle), radius * sin(angle)) + center; 
+  displacedUv = rotate(displacedUv, uTime * 0.1, center);
+  displacedUv = displacedUv + cnoise(vec3(displacedUv * 10., uTime * 0.2));
+  
+  float strength = cnoise(vec3(displacedUv * 5.0, 2.0));
 
-  displacedUv = displacedUv + cnoise(vec3(displacedUv * 10., uTime * 0.1));
-  float strength = cnoise(vec3(displacedUv * 5.0, uTime * 0.2));
 
-
-  float outerGlow = distance(vUv, vec2(0.5)) * 4.0 - 1.2; 
+  float outerGlow = distance(vUv, vec2(0.5)) * 3.5 - 0.9; 
   strength += outerGlow;
 
   strength += step(0.125, strength);
