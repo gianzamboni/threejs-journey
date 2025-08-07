@@ -81,8 +81,9 @@ export class WobblySphere extends OrbitControlledExercise {
   }
 
   private loadEnvironment() {
-    AssetLoader.getInstance().loadEnvironment("env-maps/alley/2k.hdr", this.scene, (environmentMap) => {
+    AssetLoader.getInstance().loadEnvironment("env-maps/alley/2k.hdr", (environmentMap) => {
       this.scene.background = environmentMap;
+      this.scene.environment = environmentMap;
     });
   }
 

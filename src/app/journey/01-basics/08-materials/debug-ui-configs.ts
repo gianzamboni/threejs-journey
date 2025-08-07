@@ -41,4 +41,4 @@ export const PHYSICAL_MATERIAL_CONFIGS: ControllerConfig[] = [
     folderPath: MATERIAL_FOLDER,      
     settings: DEFAULT_SETTINGS
   }
-]; 
+];

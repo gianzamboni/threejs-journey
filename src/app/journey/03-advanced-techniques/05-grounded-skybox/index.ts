@@ -74,8 +74,9 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
   loadEnvironmentMap() {
     const loader = AssetLoader.getInstance();
-    loader.loadEnvironment("env-maps/field/2k.hdr", this.scene, (envMap) => {
+    loader.loadEnvironment("env-maps/field/2k.hdr", (envMap) => {
       this.environmentMap = envMap;
+      this.scene.environment = envMap;
       this.skybox = new GroundedSkybox(this.environmentMap, 15, 70);
       this.skybox.position.y = 15;
       this.scene.add(this.skybox)

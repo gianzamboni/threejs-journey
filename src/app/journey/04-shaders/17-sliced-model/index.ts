@@ -154,8 +154,9 @@ export default class SlicedModel extends OrbitControlledExercise {
   }
   
   private loadEnvironment() {
-    AssetLoader.getInstance().loadEnvironment('env-maps/factory/1k.hdr', this.scene, (environmentMap) => {
+    AssetLoader.getInstance().loadEnvironment('env-maps/factory/1k.hdr', (environmentMap) => {
       this.environmentMap = environmentMap;
+      this.scene.environment = environmentMap;
       this.scene.background = environmentMap;
       this.scene.backgroundBlurriness = 0.5;
     });

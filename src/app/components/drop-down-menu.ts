@@ -7,8 +7,10 @@ type DropDownMenuConfig = {
 }
 
 export class DropDownMenu extends EventTarget {
+
     private menu: HTMLDivElement;
     private selectElement: HTMLSelectElement;
+  
     constructor(id: string, config: DropDownMenuConfig) {
         super();
         const { label, options, classes } = config;

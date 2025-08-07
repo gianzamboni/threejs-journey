@@ -157,8 +157,9 @@ export class ProceduralTerrain extends OrbitControlledExercise {
 
   private loadEnvironmentMap() {
     AssetLoader.getInstance()
-      .loadEnvironment('env-maps/field/2k.hdr', this.scene, (environmentMap) => {
+      .loadEnvironment('env-maps/field/2k.hdr', (environmentMap) => {
         this.scene.background = environmentMap;
+        this.scene.environment = environmentMap;
         this.scene.backgroundBlurriness = 0.5;
       })
   }

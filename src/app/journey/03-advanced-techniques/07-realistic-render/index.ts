@@ -142,9 +142,10 @@ export class RealisticRender extends OrbitControlledExercise {
 
   loadEnvironment() {
     const loader = AssetLoader.getInstance();
-    loader.loadEnvironment('env-maps/alley/2k.hdr', this._scene, (envMap) => {
+    loader.loadEnvironment('env-maps/alley/2k.hdr', (envMap) => {
       this.envMap = envMap;
-      this._scene.background = this.envMap;
+      this._scene.environment = envMap;
+      this._scene.background = envMap;
     });
   }
 
