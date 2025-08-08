@@ -1,9 +1,10 @@
+import { gsap } from "gsap";
 import { Mesh, BoxGeometry, MeshBasicMaterial, Color } from "three";
 
 import { disposeMesh } from "#/app/utils/three-utils";
 
 export class Cube extends Mesh {
-  
+
   constructor() {
     super(
       new BoxGeometry(1, 1, 1, 1, 1, 1), 

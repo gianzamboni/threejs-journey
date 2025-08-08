@@ -12,22 +12,22 @@ const DEFAULT_SETTINGS = {
  */
 export const PHYSICAL_MATERIAL_CONFIGS: ControllerConfig[] = [
   {
-    propertyPath: 'metalness',
+    propertyPath: 'material.metalness',
     folderPath: MATERIAL_FOLDER,
     settings: DEFAULT_SETTINGS
   }, 
   {
-    propertyPath: 'roughness',
+    propertyPath: 'material.roughness',
     folderPath: MATERIAL_FOLDER,
     settings: DEFAULT_SETTINGS
   }, 
   {
-    propertyPath: 'transmission',
+    propertyPath: 'material.transmission',
     folderPath: MATERIAL_FOLDER,
     settings: DEFAULT_SETTINGS
   }, 
   {
-    propertyPath: 'ior',
+    propertyPath: 'material.ior',
     folderPath: MATERIAL_FOLDER,
     settings: {
       min: 1,
@@ -37,7 +37,7 @@ export const PHYSICAL_MATERIAL_CONFIGS: ControllerConfig[] = [
     }
   }, 
   {
-    propertyPath: 'thickness',
+    propertyPath: 'material.thickness',
     folderPath: MATERIAL_FOLDER,      
     settings: DEFAULT_SETTINGS
   }
