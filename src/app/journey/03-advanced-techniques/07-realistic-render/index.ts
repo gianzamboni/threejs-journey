@@ -1,7 +1,6 @@
 import { 
   Mesh,
   Group,
-  Texture,
   Scene,
   WebGLRenderer,
   DirectionalLight,
@@ -24,6 +23,8 @@ import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
+import { EnvironmentMap } from '../../common/environment-map';
+
 
 type RenderedObject = {
   mesh: Mesh;
@@ -41,7 +42,7 @@ export class RealisticRender extends OrbitControlledExercise {
   @Customizable(RENDERER_CONTROLLERS)
   private _renderer: WebGLRenderer;
 
-  private envMap: Texture | undefined;
+  private envMap: EnvironmentMap;
 
   private hamburger: Group | undefined;
   private floor: RenderedObject;
@@ -63,7 +64,9 @@ export class RealisticRender extends OrbitControlledExercise {
     this.floor = this.createFloor();
     this.wall = this.createWall();
 
-    this.loadEnvironment();
+    this.envMap = new EnvironmentMap('env-maps/alley/2k.hdr');
+    this.envMap.addTo(this.scene);
+
     this.loadHamburger();
 
     this._scene.add(this.directionalLight, this.floor.mesh, this.wall.mesh);
@@ -138,15 +141,6 @@ export class RealisticRender extends OrbitControlledExercise {
     directionalLight.shadow.normalBias = 0.025;
     directionalLight.shadow.bias = -0.004;
     return directionalLight;
-  }
-
-  loadEnvironment() {
-    const loader = AssetLoader.getInstance();
-    loader.loadEnvironment('env-maps/alley/2k.hdr', (envMap) => {
-      this.envMap = envMap;
-      this._scene.environment = envMap;
-      this._scene.background = envMap;
-    });
   }
 
   loadHamburger() {

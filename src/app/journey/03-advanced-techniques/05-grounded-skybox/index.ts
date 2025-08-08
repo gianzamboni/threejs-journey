@@ -1,10 +1,10 @@
 import {
   Mesh,
   Group,
-  Texture,
   Scene,
   TorusKnotGeometry,
-  MeshStandardMaterial
+  MeshStandardMaterial,
+  Texture
 } from "three";
 
 import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js'
@@ -17,6 +17,8 @@ import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
 
+import { EnvironmentMap } from "../../common/environment-map";
+
 @Exercise("grounded-skybox")
 @Description("<p>Demo of a correctly positioned object with a skybox.</p>")
 export class GroundedSkyboxTest extends OrbitControlledExercise {
@@ -27,7 +29,7 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
   private skybox: GroundedSkybox | undefined;
 
-  private environmentMap: Texture | undefined;
+  private environmentMap: EnvironmentMap;
 
   @Customizable(ENV_CONTROLLERS)
   public _scene: Scene;
@@ -41,7 +43,10 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
     this.loadHelmetModel();
 
-    this.loadEnvironmentMap();
+    this.environmentMap = new EnvironmentMap('env-maps/field/2k.hdr');
+    this.environmentMap.addTo(this.scene, {
+      callback: this.addSkybox.bind(this)
+    });
 
     this.scene.add(this.torusKnot);
 
@@ -72,17 +77,11 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
       });
   }
 
-  loadEnvironmentMap() {
-    const loader = AssetLoader.getInstance();
-    loader.loadEnvironment("env-maps/field/2k.hdr", (envMap) => {
-      this.environmentMap = envMap;
-      this.scene.environment = envMap;
-      this.skybox = new GroundedSkybox(this.environmentMap, 15, 70);
-      this.skybox.position.y = 15;
-      this.scene.add(this.skybox)
-    });
+  addSkybox(texture: Texture) {
+    this.skybox = new GroundedSkybox(texture, 15, 70);
+    this.skybox.position.y = 15;
+    this.scene.add(this.skybox);
   }
-
 
   async dispose() {
     await super.dispose();

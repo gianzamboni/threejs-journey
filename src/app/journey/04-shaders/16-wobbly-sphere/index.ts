@@ -8,13 +8,13 @@ import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { CSS_CLASSES } from "#/theme";
 import { ANIMATION_CONTROLLERS, MATERIAL_CONTROLLERS } from "./controllers";
 import fragmentShader from "./shaders/wobble.frag";
 import vertexShader from "./shaders/wobble.vert";
 
+import { EnvironmentMap } from "../../common/environment-map";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 
@@ -31,9 +31,13 @@ export class WobblySphere extends OrbitControlledExercise {
   private uniforms: Record<string, Uniform>;
   private directionalLight: DirectionalLight;
 
+  private envMap: EnvironmentMap;
+
   constructor(view: RenderView) {
     super(view);
-    this.loadEnvironment();
+
+    this.envMap = new EnvironmentMap('env-maps/alley/2k.hdr');
+    this.envMap.addTo(this.scene);
     
     this.uniforms = this.createUniforms();
     this.wobble = this.createWobble();
@@ -78,13 +82,7 @@ export class WobblySphere extends OrbitControlledExercise {
     await super.dispose();
     disposeMesh(this.wobble);
     disposeMesh(this.plane);
-  }
-
-  private loadEnvironment() {
-    AssetLoader.getInstance().loadEnvironment("env-maps/alley/2k.hdr", (environmentMap) => {
-      this.scene.background = environmentMap;
-      this.scene.environment = environmentMap;
-    });
+    this.envMap.dispose();
   }
 
   private createDirectionalLight() {

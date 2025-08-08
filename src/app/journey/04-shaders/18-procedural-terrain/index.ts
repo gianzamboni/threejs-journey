@@ -9,12 +9,12 @@ import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise, Starred } from "#/app/decorators/exercise";
 import { CustomizableMetadata } from "#/app/layout/debug-ui/controller-factory";  
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { UNIFORM_CONTROLLERS } from "./controllers";
 import terrainFrag from './shaders/terrain.frag';
 import terrainVert from './shaders/terrain.vert';
 
+import { EnvironmentMap } from "../../common/environment-map";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('procedural-terrain')
@@ -28,7 +28,7 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   private board: Brush;
   private terrain: Mesh;
   private water: Mesh;
-
+  private envMap: EnvironmentMap;
   @Customizable(UNIFORM_CONTROLLERS)
   private commonUniforms: Record<string, Uniform<number | Color>> = {
     uPositionFrequency: new Uniform(0.2),
@@ -47,7 +47,10 @@ export class ProceduralTerrain extends OrbitControlledExercise {
   constructor(view: RenderView) {
     super(view);
 
-   this.loadEnvironmentMap();
+   this.envMap = new EnvironmentMap('env-maps/field/2k.hdr');
+   this.envMap.addTo(this.scene);
+   this.scene.backgroundBlurriness = 0.5;
+
    this.directionalLight = this.createDirectionalLight();
    this.board = this.createBoard();
    this.terrain = this.createTerrain();
@@ -78,6 +81,7 @@ export class ProceduralTerrain extends OrbitControlledExercise {
     disposeMesh(this.board);
     disposeMesh(this.terrain);
     disposeMesh(this.water);
+    this.envMap.dispose();
   }
 
   private createWater() {
@@ -153,15 +157,6 @@ export class ProceduralTerrain extends OrbitControlledExercise {
     directionalLight.shadow.camera.bottom = -8
     directionalLight.shadow.camera.left = -8
     return directionalLight;
-  }
-
-  private loadEnvironmentMap() {
-    AssetLoader.getInstance()
-      .loadEnvironment('env-maps/field/2k.hdr', (environmentMap) => {
-        this.scene.background = environmentMap;
-        this.scene.environment = environmentMap;
-        this.scene.backgroundBlurriness = 0.5;
-      })
   }
 
   public updateUniform(newValue: string, context: CustomizableMetadata) {

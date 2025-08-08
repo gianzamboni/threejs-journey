@@ -18,6 +18,7 @@ import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectio
 import { Customizable } from "#/app/decorators/customizable";
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
+import { EnvironmentMap } from "#/app/journey/common/environment-map";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import displacementFrag from "./shaders/displacement.frag";
@@ -51,9 +52,14 @@ export class PostProcessing extends OrbitControlledExercise {
 
   private displacementPass: ShaderPass;
 
+  private envMap: EnvironmentMap;
+
   constructor(view: RenderView) {
     super(view);
-    this.loadEnvironmentMap();
+    
+    this.envMap = new EnvironmentMap('env-maps/street', { isCubeTexture: true, extension: 'jpg' });
+    this.envMap.addTo(this.scene);
+
     this.loadModel();
 
     this.directionalLight = this.createDirectionalLight();
@@ -131,12 +137,6 @@ export class PostProcessing extends OrbitControlledExercise {
     return this.directionalLight;
   } 
 
-  private loadEnvironmentMap() {
-    const environmentMap = AssetLoader.getInstance().loadCubeTexture('env-maps/street', "jpg");
-    this.scene.background = environmentMap;
-    this.scene.environment = environmentMap;
-  }
-
   private loadModel() {
     const gltfLoader = new GLTFLoader();
     gltfLoader.load('/models/DamagedHelmet/glTF/DamagedHelmet.gltf', (gltf) => {
@@ -161,5 +161,6 @@ export class PostProcessing extends OrbitControlledExercise {
   async dispose() {
     await super.dispose();
     this.directionalLight.dispose();
+    this.envMap.dispose();
   }
 }

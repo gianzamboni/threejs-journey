@@ -19,7 +19,7 @@ import RenderView from '#/app/layout/render-view';
 import { ExtraConfig } from '#/app/types/exercise';
 import { disposeObjects } from '#/app/utils/three-utils';
 import { PHYSICAL_MATERIAL_CONFIGS } from './debug-ui-configs';
-import { EnvironmentMap } from './environment-map';
+import { EnvironmentMap } from '../../common/environment-map';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
 
 @Exercise('materials')
@@ -46,6 +46,7 @@ export class MaterialsTest extends OrbitControlledExercise {
     this.camera.position.set(2, 1, 3);
     this.environmentMap = new EnvironmentMap('env-maps/alley/2k.hdr');
     this.environmentMap.addTo(this.scene);
+    
     this.physicalMaterial = this.createMaterial();
 
     this.geometries = [
