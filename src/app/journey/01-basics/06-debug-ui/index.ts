@@ -14,9 +14,11 @@ export class DebugUITest extends OrbitControlledExercise {
 
   constructor(view: RenderView) {
     super(view);
-    this.enableAutoRotation();
+
     this.cube = new Cube();
     this.scene.add(this.cube);
+
+    this.enableAutoRotation();
   }
 
   @Callable('Awesome Cube', 'Spin')

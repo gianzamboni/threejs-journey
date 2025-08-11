@@ -1,26 +1,32 @@
 import { 
   Mesh, 
-  MeshMatcapMaterial,
   Scene,
 } from 'three';
 
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Font } from 'three/addons/loaders/FontLoader.js';
 
+import { AssetLoader } from '#/app/services/assets-loader';
+import { Matcap } from './matcap';
+
 export interface ThreeJsTextProps {
-  font: Font;
-  material: MeshMatcapMaterial;
+  onCreated: () => void;
+  material: Matcap;
 }
 
 export class ThreeJsText {
   private geometry?: TextGeometry;
   private mesh?: Mesh;
-  private material: MeshMatcapMaterial;
+  private material: Matcap;
 
 
   constructor(props: ThreeJsTextProps) {
     this.material = props.material;
-    this.createFromFont(props.font);
+    AssetLoader.getInstance()
+    .loadFont('fonts/helvetiker_regular.typeface.json', (font) => {
+      this.createFromFont(font);
+      props.onCreated();
+    });
   }
 
   /**
@@ -40,7 +46,7 @@ export class ThreeJsText {
     });
     
     this.geometry.center();
-    this.mesh = new Mesh(this.geometry, this.material);
+    this.mesh = new Mesh(this.geometry, this.material.material);
   }
 
   /**

@@ -1,13 +1,14 @@
 import { 
   Mesh, 
   TorusGeometry, 
-  MeshMatcapMaterial,
   Scene,
 } from 'three';
 
-export class Donut extends Mesh {
-  constructor(geometry: TorusGeometry, material: MeshMatcapMaterial) {
-    super(geometry, material);
+import { Matcap } from './matcap';
+
+export class RandomPositionedTorus extends Mesh {
+  constructor(geometry: TorusGeometry, material: Matcap) {
+    super(geometry, material.material);
 
     // Set random position
     this.position.x = (Math.random() - 0.5) * 10;
@@ -31,15 +32,15 @@ export class Donut extends Mesh {
 }
 
 export class RandomizedDonutCollection {
-  public donuts: Donut[];
+  public donuts: RandomPositionedTorus[];
   private sharedGeometry: TorusGeometry;
 
-  constructor(material: MeshMatcapMaterial, count: number = 100) {
+  constructor(material: Matcap, count: number = 100) {
     this.sharedGeometry = new TorusGeometry(0.3, 0.15, 32, 64);
     this.donuts = [];
     
     for (let i = 0; i < count; i++) {
-      const donut = new Donut(this.sharedGeometry, material);
+      const donut = new RandomPositionedTorus(this.sharedGeometry, material);
       this.donuts.push(donut);
     }
   }

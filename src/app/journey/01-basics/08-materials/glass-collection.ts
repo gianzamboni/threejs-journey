@@ -7,8 +7,12 @@ import { CenteredRotatingMeshRow } from "../../common/ThreeMeshRow";
 
 export class GlassCollection extends CenteredRotatingMeshRow { 
 
-  private static createMaterial(qualityConfig: QualityConfig) {
-    return new MeshPhysicalMaterial({
+
+  private material: MeshPhysicalMaterial;
+  private geometries: BufferGeometry[];
+
+  constructor(qualityConfig: QualityConfig) {
+    const material = new MeshPhysicalMaterial({
       metalness: 0,
       roughness: 0.1,
       transmission: 1,
@@ -16,22 +20,13 @@ export class GlassCollection extends CenteredRotatingMeshRow {
       thickness: 0.5,
       side: qualityConfig.materialSide,
     });
-  }
-
-  private static createGeometries() {
-    return [
+    
+    const geometries = [
       new SphereGeometry(0.5, 64, 64),
       new PlaneGeometry(1, 1, 1, 1),
       new TorusGeometry(0.3, 0.2, 64, 128)
-    ]
-  }
+    ];
 
-  private material: MeshPhysicalMaterial;
-  private geometries: BufferGeometry[];
-
-  constructor(qualityConfig: QualityConfig) {
-    const material = GlassCollection.createMaterial(qualityConfig);
-    const geometries = GlassCollection.createGeometries();
     super(geometries, material);
     this.material = material;
     this.geometries = geometries;
@@ -40,6 +35,4 @@ export class GlassCollection extends CenteredRotatingMeshRow {
   dispose() {
     disposeObjects(this.material, ...this.geometries);
   } 
-
-  
 }
