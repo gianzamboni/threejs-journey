@@ -1,9 +1,10 @@
 import { gsap } from "gsap";
 import { BoxGeometry, Color, MeshBasicMaterial } from "three";
 
-import { Cube, CubeProps } from "../../common/cube";
+import { CubeProps } from "../../common/cube";
+import { RedCube } from "../../common/red-cube";
 
-export class CustomizableCube extends Cube {
+export class CustomizableCube extends RedCube {
   constructor(props: CubeProps) {
     super(props);
   }

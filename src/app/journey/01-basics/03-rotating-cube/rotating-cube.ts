@@ -1,8 +1,8 @@
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { Cube } from "../../common/cube";
+import { RedCube } from "../../common/red-cube";
 
-export class RotatingCube extends Cube {
+export class RotatingCube extends RedCube {
   constructor() {
     super();
   }

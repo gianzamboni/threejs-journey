@@ -4,6 +4,7 @@ import BaseExercise from '#/app/journey/exercises/base-exercise';
 import { CSS_CLASSES } from '#/theme';
 
 import { Cube } from '../common/cube';
+import { RedCube } from '../common/red-cube';
 
 @Exercise('first-three-js-project')
 @Description("<p>Just a cube in the center of the scene.</p>",
@@ -13,7 +14,7 @@ export class CenteredCube extends BaseExercise {
   
   constructor() {
     super();
-    this.cube = new Cube();
+    this.cube = new RedCube();
     this.scene.add(this.cube);
   }
 
