@@ -1,3 +1,4 @@
+import { gsap } from "gsap";
 import { BoxGeometry, Color, MeshBasicMaterial } from "three";
 
 import { Cube, CubeProps } from "../../common/cube";
@@ -7,7 +8,6 @@ export class CustomizableCube extends Cube {
     super(props);
   }
 
-  
   updateSubdivisions(subdivisions: number) {
     this.geometry.dispose();
     this.geometry = new BoxGeometry(1, 1, 1, subdivisions, subdivisions, subdivisions);
