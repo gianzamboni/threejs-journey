@@ -1,7 +1,7 @@
 import { Section } from "#/app/types/exercise";
 import { CenteredCube } from "./01-centered-cube";
 import { CubeGroup } from "./02-cube-group";
-import { RotatingCube } from "./03-rotating-cube";
+import { RotatingCubeExercise } from "./03-rotating-cube";
 import { OrbitControlsTest } from "./04-orbit-controls";
 import { RandomTriangles } from "./05-random-triangles";
 import { DebugUITest } from "./06-debug-ui";
@@ -13,7 +13,7 @@ export const BASICS: Section = {
   exercises: [ 
     CenteredCube,
     CubeGroup,
-    RotatingCube,
+    RotatingCubeExercise,
     OrbitControlsTest,
     RandomTriangles,
     DebugUITest,

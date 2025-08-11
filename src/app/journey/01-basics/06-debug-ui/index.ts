@@ -2,7 +2,7 @@ import { Callable, Customizable } from '#/app/decorators/customizable';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
-import { Cube } from '../../common/cube';
+import { CustomizableCube } from './customizable-cube';
 import { DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 
 @Exercise('debug-ui')
@@ -10,12 +10,12 @@ import { DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 export class DebugUITest extends OrbitControlledExercise {
  
   @Customizable(DEBUG_UI_CUBE_CONFIG)
-  private cube: Cube;
+  private cube: CustomizableCube;
 
   constructor(view: RenderView) {
     super(view);
 
-    this.cube = new Cube({
+    this.cube = new CustomizableCube({
       wireframe: true
     });
     this.scene.add(this.cube);
