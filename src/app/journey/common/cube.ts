@@ -3,12 +3,18 @@ import { Mesh, BoxGeometry, MeshBasicMaterial, Color } from "three";
 
 import { disposeMesh } from "#/app/utils/three-utils";
 
+export type CubeProps = {
+  wireframe: boolean;
+}
+
 export class Cube extends Mesh {
 
-  constructor() {
+  constructor(props: CubeProps = {
+    wireframe: false
+  }) {
     super(
       new BoxGeometry(1, 1, 1, 1, 1, 1), 
-      new MeshBasicMaterial({ color: 0xff0000, wireframe: true })
+      new MeshBasicMaterial({ color: 0xff0000, wireframe: props.wireframe })
     );
   }
 

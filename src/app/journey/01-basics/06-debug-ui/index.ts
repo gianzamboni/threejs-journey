@@ -2,7 +2,7 @@ import { Callable, Customizable } from '#/app/decorators/customizable';
 import { Description, Exercise } from '#/app/decorators/exercise';
 import OrbitControlledExercise from '#/app/journey/exercises/orbit-controlled-exercise';
 import RenderView from '#/app/layout/render-view';
-import { Cube } from './cube';
+import { Cube } from '../../common/cube';
 import { DEBUG_UI_CUBE_CONFIG } from './debug-ui-configs';
 
 @Exercise('debug-ui')
@@ -15,7 +15,9 @@ export class DebugUITest extends OrbitControlledExercise {
   constructor(view: RenderView) {
     super(view);
 
-    this.cube = new Cube();
+    this.cube = new Cube({
+      wireframe: true
+    });
     this.scene.add(this.cube);
 
     this.enableAutoRotation();
