@@ -2,6 +2,7 @@
 import { Description, Exercise } from '#/app/decorators/exercise';
 import BaseExercise from '#/app/journey/exercises/base-exercise';
 import { CSS_CLASSES } from '#/theme';
+
 import { Cube } from '../common/cube';
 
 @Exercise('first-three-js-project')

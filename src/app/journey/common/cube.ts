@@ -12,10 +12,9 @@ export class Cube extends Mesh {
   constructor(props: CubeProps = {
     wireframe: false
   }) {
-    super(
-      new BoxGeometry(1, 1, 1, 1, 1, 1), 
-      new MeshBasicMaterial({ color: 0xff0000, wireframe: props.wireframe })
-    );
+    const geometry = new BoxGeometry(1, 1, 1, 1, 1, 1);
+    const material = new MeshBasicMaterial({ color: 0xff0000, wireframe: props.wireframe });
+    super(geometry, material);
   }
 
   updateSubdivisions(subdivisions: number) {
