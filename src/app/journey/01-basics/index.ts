@@ -3,7 +3,7 @@ import { CenteredCube } from "./01-centered-cube";
 import { CubeGroup } from "./02-cube-group";
 import { RotatingCubeExercise } from "./03-rotating-cube";
 import { OrbitControlsTest } from "./04-orbit-controls";
-import { RandomTriangles } from "./05-random-triangles";
+import { RandomTrianglesExercise } from "./05-random-triangles";
 import { DebugUITest } from "./06-debug-ui";
 import { TextureTest } from "./07-textures";
 import { MaterialsTest } from "./08-materials";
@@ -15,7 +15,7 @@ export const BASICS: Section = {
     CubeGroup,
     RotatingCubeExercise,
     OrbitControlsTest,
-    RandomTriangles,
+    RandomTrianglesExercise,
     DebugUITest,
     TextureTest,
     MaterialsTest,
