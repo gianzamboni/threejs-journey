@@ -8,14 +8,9 @@ import {
   RectAreaLight,
   SpotLight,
   SpotLightHelper,
-  MeshStandardMaterial,
-  Mesh,
-  SphereGeometry,
-  BoxGeometry,
-  TorusGeometry,
-  PlaneGeometry,
   Vector3,
-  Color
+  Color,
+  MeshStandardMaterial
 } from 'three';
 
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
@@ -29,8 +24,10 @@ import RenderView from '#/app/layout/render-view';
 import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { Lights, LightType } from '#/app/utils/light-controllers-utils';
 import { disposeObjects } from '#/app/utils/three-utils';
-import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
+import { AMBIENT_LIGHT_CONFIG, HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
+import { Floor } from './floor';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
+import { SolidCollection } from './solid-collection';
 
 type Helpers = {
   directional: DirectionalLightHelper,
@@ -47,8 +44,9 @@ export type LightTypeHelper = keyof Helpers;
 @CustomizableQuality
 export class LightsExercise extends OrbitControlledExercise {
   private quality: QualityConfig;
+
   private material: MeshStandardMaterial;
-  private animatedObjects: Mesh[];
+  private solidCollection: SolidCollection;
   private plane: Mesh;
 
   @Customizable(LIGHTS_CONFIG)
@@ -62,23 +60,30 @@ export class LightsExercise extends OrbitControlledExercise {
   constructor(view: RenderView, extraConfig: ExtraConfig) {
     super(view);
 
+    this.quality = QUALITY_CONFIG[extraConfig.quality];
+
+    this.material = new MeshStandardMaterial({
+      roughness: 0.4,
+    });
+
+    this.solidCollection = new SolidCollection(this.material, this.quality);
+    this.floor = new Floor(this.material);
+
     import('three/addons/lights/RectAreaLightUniformsLib.js').then(({ RectAreaLightUniformsLib }) => {
       RectAreaLightUniformsLib.init();
     });
-    
-    this.quality = QUALITY_CONFIG[extraConfig.quality];
-    this.camera.position.set(2, 1, 3);
-    this.material = new MeshStandardMaterial();
-    this.material.roughness = 0.4;
 
-    this.animatedObjects = this.createAnimatedObjects();
-    this.plane = this.createPlane();
+    this.scene.add(this.floor, this.solidCollection);
+    
+  
+    this.camera.position.set(2, 1, 3);
+    
+  
+    
     this.lights = this.createLights();
     [this.helpers, this.helpersVisibleStatus] = this.createLightHelpers();
 
     this.scene.add(
-      ...this.animatedObjects, 
-      this.plane,
       ...Object.values(this.lights),
       this.lights.spot.target,
       ...Object.values(this.helpers),
@@ -88,13 +93,8 @@ export class LightsExercise extends OrbitControlledExercise {
   @DebugFPS
   frame(timer: Timer) {
     super.frame(timer);
-
-    const elapsed = timer.getElapsed();
     this.helpers.spot.update();
-    for(const object of this.animatedObjects) {
-      object.rotation.y = 0.1 * elapsed;
-      object.rotation.x = 0.15 * elapsed;
-    }
+    this.solidCollection.frame(timer);
   }
 
   async dispose() {
@@ -104,9 +104,9 @@ export class LightsExercise extends OrbitControlledExercise {
     disposeObjects(
       ...Object.values(this.helpers),
       ...Object.values(this.lights),
-      this.plane.geometry,
-      ...this.animatedObjects.map(obj => obj.geometry),
-      this.material
+      this.solidCollection,
+      this.material,
+      this.floor
     );
   }
 
@@ -140,27 +140,6 @@ export class LightsExercise extends OrbitControlledExercise {
   updateLookAt(_: number, { target }: { target: Position3D }) {
     const newTarget = new Vector3(target.x, target.y, target.z);
     this.lights.rectArea.lookAt(newTarget);
-  }
-  
-  createAnimatedObjects() {
-    const geometries = [
-      new SphereGeometry(0.5, this.quality.sphereSegments, this.quality.sphereSegments),
-      new BoxGeometry(0.75, 0.75, 0.75, 1, 1, 1),
-      new TorusGeometry(0.3, 0.2, this.quality.torus.radialSegments, this.quality.torus.tubularSegments),
-    ]
-    const objects = geometries.map(geometry => new Mesh(geometry, this.material));
-
-    objects[0].position.x = -1.5;
-    objects[2].position.x = 1.5;
-
-    return objects;
-  }
-
-  createPlane() {
-    const plane = new Mesh(new PlaneGeometry(5, 5, 1, 1), this.material);
-    plane.rotation.x = -Math.PI * 0.5;
-    plane.position.y = -0.65;
-    return plane;
   }
 
   createLights() {

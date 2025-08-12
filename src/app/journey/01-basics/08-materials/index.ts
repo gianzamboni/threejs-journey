@@ -35,7 +35,7 @@ export class MaterialsTest extends OrbitControlledExercise {
     this.environmentMap.addTo(this.scene);
 
     this.meshCollection = new GlassCollection(this.qualityconfig);
-    this.meshCollection.addTo(this.scene);
+    this.scene.add(this.meshCollection);
 
     this.camera.position.set(2, 1, 3);
   }

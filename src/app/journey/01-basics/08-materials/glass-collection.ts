@@ -1,16 +1,11 @@
-import { BufferGeometry, MeshPhysicalMaterial, PlaneGeometry, SphereGeometry, TorusGeometry } from "three";
+import { MeshPhysicalMaterial, PlaneGeometry, SphereGeometry, TorusGeometry } from "three";
 
 import { disposeObjects } from "#/app/utils/three-utils";
 import { QualityConfig } from "./quality-config";
 
-import { CenteredRotatingMeshRow } from "../../common/ThreeMeshRow";
+import { CenteredRotatingMeshRow } from "../../common/centered-rotating-mesh-row";
 
 export class GlassCollection extends CenteredRotatingMeshRow { 
-
-
-  private material: MeshPhysicalMaterial;
-  private geometries: BufferGeometry[];
-
   constructor(qualityConfig: QualityConfig) {
     const material = new MeshPhysicalMaterial({
       metalness: 0,
@@ -28,8 +23,6 @@ export class GlassCollection extends CenteredRotatingMeshRow {
     ];
 
     super(geometries, material);
-    this.material = material;
-    this.geometries = geometries;
   }
 
   dispose() {
