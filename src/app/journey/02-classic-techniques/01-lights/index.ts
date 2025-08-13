@@ -24,7 +24,7 @@ import RenderView from '#/app/layout/render-view';
 import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { Lights, LightType } from '#/app/utils/light-controllers-utils';
 import { disposeObjects } from '#/app/utils/three-utils';
-import { AMBIENT_LIGHT_CONFIG, HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
+import { HELPERS_CONFIG, LIGHTS_CONFIG } from './debug-ui-configs';
 import { Floor } from './floor';
 import { QUALITY_CONFIG, QualityConfig } from './quality-config';
 import { SolidCollection } from './solid-collection';
@@ -47,7 +47,7 @@ export class LightsExercise extends OrbitControlledExercise {
 
   private material: MeshStandardMaterial;
   private solidCollection: SolidCollection;
-  private plane: Mesh;
+  private floor: Floor;
 
   @Customizable(LIGHTS_CONFIG)
   private lights: Lights;
