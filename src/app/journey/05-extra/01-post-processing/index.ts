@@ -31,7 +31,7 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 @Exercise('post-processing')
 @Description(
   '<p>Post-processing is a technique that allows you to apply effects to your scene after it has been rendered. It is a powerful way to enhance the visual quality of your scene.</p>',
-  '<p>Here i use <strong>Damaged Helmet</strong> model by <a href="https://www.artstation.com/theblueturtle">Leonardo Carrion</a>.'
+  '<p>Here i use <strong>Damaged Helmet</strong> model by <a href="https://www.artstation.com/theblueturtle" target="_blank">Leonardo Carrion</a>.'
 )
 export class PostProcessing extends OrbitControlledExercise {  
   private directionalLight: DirectionalLight;

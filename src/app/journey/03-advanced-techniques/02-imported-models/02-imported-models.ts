@@ -24,7 +24,7 @@ import OrbitControlledExercise from '../../exercises/orbit-controlled-exercise';
 @Exercise('imported-models')
 @Description(
   "<p>Some models I downloaded from Three.js Journey website.</p>", 
-  "<p>You can load a duck, a fox or a mask.</p>"
+  "<p>You can load a duck, a fox or a mask all models provided by <a href='https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main' target='_blank'>KhronosGroup.</a></p>"
 )
 export default class ImportedModels extends OrbitControlledExercise {
 

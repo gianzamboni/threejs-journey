@@ -21,7 +21,8 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('mixing-webgl-and-html')
 @Description(
-  '<p>Here, I have added some html elements that moves along with the camera and merge with the scene.</p>'
+  '<p>Here, I have added some html elements that moves along with the camera and merge with the scene.</p>',
+  '<p>I used <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/DamagedHelmet" target="_blank">Damaged Helmet</a> modelled by <a href="https://www.artstation.com/theblueturtle" target="_blank">Leonardo Carrion</a>.</p>'
 )
 export class MixingHtml extends OrbitControlledExercise {  
   private points: HelpPoint[] = [];

@@ -39,6 +39,7 @@ type PhysicalObject = {
 @Starred
 @Description(
   "<p style='margin-bottom: 10px;'>Physics Demo. It shows some objects falling and colliding with each other.</p>",
+  "<p>For the physics engine I used <a href='https://pmndrs.github.io/cannon-es/' target='_blank'>cannon-es</a></p>",
   `<p><strong>Buttons above:</strong> <span class='${CSS_CLASSES.light_text}'>Add spheres and boxes to the scene or remove all objects</span></p>`
 )
 @CustomizableQuality

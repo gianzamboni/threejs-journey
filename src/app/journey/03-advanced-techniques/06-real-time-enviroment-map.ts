@@ -25,7 +25,9 @@ import { AssetLoader } from "#/app/services/assets-loader";
 import { disposeMesh } from "#/app/utils/three-utils";
 
 @Exercise("real-time-enviroment-map")
-@Description("<p>Real-time enviroment map. This means that the reflections are calculated in real time.</p>")
+@Description("<p>Real-time enviroment map. This means that the reflections are calculated in real time.</p>",
+  '<p>The scene shows a torus knot (a three.js primitive) and a <a href="http://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/FlightHelmet" target="_blank">flight helmet</a> model provided by KhronosGroup.</p>'
+)
 export class RealTimeEnviromentMap extends OrbitControlledExercise {
 
   private torusKnot: Mesh;

@@ -32,7 +32,8 @@ type RenderedObject = {
 }
 
 @Exercise('realistic-render')
-@Description('<p>Renderer tweaks to get a more realistic render</p>')
+@Description('<p>Renderer tweaks to get a more realistic render</p>',
+'<p>I have modelled a hamburger in blender and imported it here.</p>')
 @CustomizableQuality
 export class RealisticRender extends OrbitControlledExercise {
 

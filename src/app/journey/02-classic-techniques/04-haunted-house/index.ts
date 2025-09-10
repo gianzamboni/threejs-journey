@@ -28,7 +28,10 @@ import { SceneObject } from '../../../types/scene-object';
  */
 @Exercise('haunted-house')
 @Starred
-@Description("<p>A haunted house with light ghosts that move around.</p>")
+@Description("<p>A haunted house with light ghosts that move around.</p>",
+  '<p>All the scene geometries are completely made in three.js and not imported from a model.</p>',
+  '<p>The textuers were downloaded from <a href="https://polyhaven.com/" target="_blank">Polyhaven</a>.</p>'
+)
 @CustomizableQuality
 export class HauntedHouse extends OrbitControlledExercise {
   private lights: {

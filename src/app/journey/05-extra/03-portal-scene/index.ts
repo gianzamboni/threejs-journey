@@ -3,7 +3,7 @@ import { Color, Group, Mesh, MeshBasicMaterial, ShaderMaterial, SRGBColorSpace }
 import { Timer } from "three/examples/jsm/Addons.js";
 
 import { Customizable } from "#/app/decorators/customizable";
-import { Exercise, Selectable, Starred } from "#/app/decorators/exercise";
+import { Description, Exercise, Selectable, Starred } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { Fireflies } from "./fireflies";
@@ -25,6 +25,10 @@ export const SHADER_LIST = Object.keys(SHADER_DICTIONARY).reduce((acc: Record<st
 
 @Exercise('portal-scene')
 @Starred
+@Description(
+  "<p>I have modelled this scene using Blender and baked it shadows into a texture</p>",
+  "<p>In threeJs I used a shaders to create the portal effect and to add some fireflies</p>"
+)
 export class PortalScene extends OrbitControlledExercise {
  
   @Customizable([{

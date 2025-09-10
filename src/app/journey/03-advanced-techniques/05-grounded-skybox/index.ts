@@ -20,7 +20,9 @@ import { ENV_CONTROLLERS } from "./debug-ui.config";
 import { EnvironmentMap } from "../../common/environment-map";
 
 @Exercise("grounded-skybox")
-@Description("<p>Demo of a correctly positioned object with a skybox.</p>")
+@Description("<p>Demo of a correctly positioned object with a skybox.</p>",
+  '<p>The scene shows a torus knot (a three.js primitive) and a <a href="http://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/FlightHelmet" target="_blank">flight helmet</a> model provided by KhronosGroup.</p>'
+)
 export class GroundedSkyboxTest extends OrbitControlledExercise {
 
   private torusKnot: Mesh;

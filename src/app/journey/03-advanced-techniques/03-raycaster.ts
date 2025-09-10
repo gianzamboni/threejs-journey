@@ -22,7 +22,7 @@ import OrbitControlledExercise from '../exercises/orbit-controlled-exercise';
 @Exercise("Raycaster")
 @Description(
   "<p>This is a simple 3D interaction demo.</p>",
-  `<p class='${CSS_CLASSES.light_text}'>The <strong class='${CSS_CLASSES.text}'>duck</strong> will grow when the <strong class='${CSS_CLASSES.text}'>mouse is over</strong> it.</p>`,
+  `<p class='${CSS_CLASSES.light_text}'>The <a href="https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/Duck" target="_blank">duck model</a> will grow when the <strong class='${CSS_CLASSES.text}'>mouse is over</strong> it.</p>`,
   `<p class='${CSS_CLASSES.light_text}'>The <strong class='${CSS_CLASSES.text}'>spheres</strong> will change color when the <strong class='${CSS_CLASSES.text}'>mouse is over</strong> them.</p>`
 )
 export default class RaycasterDemo extends OrbitControlledExercise {
