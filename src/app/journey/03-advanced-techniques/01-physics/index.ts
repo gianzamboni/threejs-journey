@@ -1,7 +1,6 @@
 import * as CANNON from 'cannon-es';
 import { 
   Mesh,
-  Texture,
   MeshStandardMaterial,
   SphereGeometry,
   BoxGeometry,
@@ -17,7 +16,6 @@ import { CustomizableQuality, DebugFPS } from '#/app/decorators/debug';
 import { ActionButton, Description, Exercise, Starred } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/services/assets-loader";
 import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
@@ -26,6 +24,8 @@ import BOX from './icons/cube.svg?raw';
 import SPHERE from './icons/sphere.svg?raw';
 import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
+
+import { EnvironmentMap } from '../../common/environment-map';
 
 
 
@@ -39,6 +39,7 @@ type PhysicalObject = {
 @Starred
 @Description(
   "<p style='margin-bottom: 10px;'>Physics Demo. It shows some objects falling and colliding with each other.</p>",
+  "<p>For the physics engine I used <a href='https://pmndrs.github.io/cannon-es/' target='_blank'>cannon-es</a></p>",
   `<p><strong>Buttons above:</strong> <span class='${CSS_CLASSES.light_text}'>Add spheres and boxes to the scene or remove all objects</span></p>`
 )
 @CustomizableQuality
@@ -67,7 +68,7 @@ export class Physics extends OrbitControlledExercise {
     "#996952"
   ];
 
-  private environmentMap: Texture;
+  private environmentMap: EnvironmentMap;
 
   private materials: Record<string, MeshStandardMaterial>;
 
@@ -93,7 +94,7 @@ export class Physics extends OrbitControlledExercise {
     this.qualityConfig = QUALITY_CONFIG[extraConfig.quality];
     view.enableShadows(this.qualityConfig.shadowMapType);
 
-    this.environmentMap = this.loadEnvironmentMap();
+    this.environmentMap = new EnvironmentMap('env-maps/factory', { isCubeTexture: true });
 
     this.physicsWorld = this.setupPhysics();
     this.materials = {};
@@ -237,7 +238,7 @@ export class Physics extends OrbitControlledExercise {
         color,
         metalness: 0.3,
         roughness: 0.4,
-        envMap: this.environmentMap,
+        envMap: this.environmentMap.asTexture,
         envMapIntensity: 0.5
       });
     }
@@ -250,7 +251,7 @@ export class Physics extends OrbitControlledExercise {
       color: '#777777',
       metalness: 0.3,
       roughness: 0.4,
-      envMap: this.environmentMap,
+      envMap: this.environmentMap.asTexture,
       envMapIntensity: 0.5
     });
 
@@ -280,10 +281,6 @@ export class Physics extends OrbitControlledExercise {
     return light;
   }
 
-  private loadEnvironmentMap() {
-    const assetLoader = AssetLoader.getInstance();
-    return assetLoader.loadCubeTexture('env-maps/factory');
-  }
 
   async dispose() {
     await super.dispose();

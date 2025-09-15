@@ -14,14 +14,15 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import { AssetLoader } from "#/app/services/assets-loader";
 import { HelpPoint } from "./help-point";
 
+import { EnvironmentMap } from "../../common/environment-map";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('mixing-webgl-and-html')
 @Description(
-  '<p>Here, I have added some html elements that moves along with the camera and merge with the scene.</p>'
+  '<p>Here, I have added some html elements that moves along with the camera and merge with the scene.</p>',
+  '<p>I used <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/DamagedHelmet" target="_blank">Damaged Helmet</a> modelled by <a href="https://www.artstation.com/theblueturtle" target="_blank">Leonardo Carrion</a>.</p>'
 )
 export class MixingHtml extends OrbitControlledExercise {  
   private points: HelpPoint[] = [];
@@ -30,9 +31,12 @@ export class MixingHtml extends OrbitControlledExercise {
 
   private model: Group | undefined;
 
+  private envMap: EnvironmentMap;
+
   constructor(view: RenderView) {
     super(view);
-    this.loadEnvironmentMap();
+    this.envMap = new EnvironmentMap('env-maps/street', { isCubeTexture: true, extension: 'jpg' });
+    this.envMap.addTo(this.scene);
     this.loadModel();
 
     this.view.setRender({
@@ -96,12 +100,6 @@ export class MixingHtml extends OrbitControlledExercise {
         }
       }
     });
-  }
-
-  private loadEnvironmentMap() {
-    const environmentMap = AssetLoader.getInstance().loadCubeTexture('env-maps/street', "jpg");
-    this.scene.background = environmentMap;
-    this.scene.environment = environmentMap;
   }
 
   private loadModel() {

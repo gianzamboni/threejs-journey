@@ -26,7 +26,9 @@ import commonExtension from './common_ext.glsl';
 
 @Exercise("twisted-head")
 @Starred
-@Description("<p>Twisting a predined model using GLSL and extending the default shaders of Three.js</p>")
+@Description("<p>Twisting a predefined model using GLSL and extending the default shaders of Three.js</p>",
+  "<p>I used <a href='https://sketchfab.com/3d-models/head-lee-perry-smith-4d07eb2030db4406bc7eee971d1d3a97' target='_blank'>Lee Perry Smith Head</a> for the model</p>"
+)
 export class ModifiedMaterials extends OrbitControlledExercise {
 
   private envMap: CubeTexture;

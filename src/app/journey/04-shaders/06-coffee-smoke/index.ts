@@ -13,7 +13,9 @@ import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise("coffee-smoke")
 @Starred
-@Description("<p>Creating a coffee smoke effect using shaders</p>")
+@Description("<p>Creating a coffee smoke effect using shaders</p>",
+    "<p>The mug model and textures were provided by Bruno simons for the course <a href='https://threejs-journey.com/' target='_blank'>ThreeJS Journey</a></p>"
+  )
 export class CoffeeSmoke extends OrbitControlledExercise {
   
   private coffeeMug: Group | undefined;

@@ -36,7 +36,9 @@ type Actions = {
 }
 
 @Exercise('animation-mixer')
-@Description('<p>A fox with multiple animation. Select whichever you desire with the buttons above</p>')
+@Description('<p>A fox with multiple animation. Select whichever you desire with the buttons above.</p>',
+'<p>The model is <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/Fox" target="_blank">Fox</a> was modelled and animated by tom kranis.</p>'
+)
 @CustomizableQuality
 export class AnimationMixerTest extends OrbitControlledExercise {
   @Customizable(ENV_MAP_CONTROLLERS)

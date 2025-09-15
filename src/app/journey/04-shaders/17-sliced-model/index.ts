@@ -13,6 +13,7 @@ import customColorSpaceFrag from './shaders/custom_colorspace.frag';
 import slicedFrag from './shaders/sliced.frag';
 import slicedVert from './shaders/sliced.vert';
 
+import { EnvironmentMap } from "../../common/environment-map";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
 
 @Exercise('sliced-model')
@@ -32,6 +33,8 @@ export default class SlicedModel extends OrbitControlledExercise {
   private gears: Group | undefined;
   private plane: Mesh;
   private directionalLight: DirectionalLight;
+
+  private envMap: EnvironmentMap;
 
   @Customizable([{
     propertyPath: 'uSliceStart.value',
@@ -56,7 +59,10 @@ export default class SlicedModel extends OrbitControlledExercise {
 
   constructor(view: RenderView) {
     super(view);
-    this.loadEnvironment();
+
+    this.envMap = new EnvironmentMap('env-maps/factory/1k.hdr');
+    this.envMap.addTo(this.scene);
+    this.scene.backgroundBlurriness = 0.5;
 
     this.uniforms = {
       uSliceStart: { value: 1.75 },
@@ -153,14 +159,6 @@ export default class SlicedModel extends OrbitControlledExercise {
     }
   }
   
-  private loadEnvironment() {
-    AssetLoader.getInstance().loadEnvironment('env-maps/factory/1k.hdr', this.scene, (environmentMap) => {
-      this.environmentMap = environmentMap;
-      this.scene.background = environmentMap;
-      this.scene.backgroundBlurriness = 0.5;
-    });
-  }
-
   private createPlane() {
     const plane = new Mesh(
       new PlaneGeometry(10, 10, 10),

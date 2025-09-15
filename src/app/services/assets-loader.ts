@@ -2,7 +2,6 @@ import {
   LoadingManager,
   TextureLoader,
   CubeTextureLoader,
-  Scene,
   Texture,
   EquirectangularReflectionMapping,
   Group
@@ -101,13 +100,12 @@ export class AssetLoader extends EventTarget {
     return this.textureLoader.load(url);
   }
 
-  loadEnvironment(url: string, scene: Scene, onLoad: (_: Texture) => void) {
+  loadEnvironment(url: string, onLoad: (_: Texture) => void) {
     if (!this.rgbeLoader) {
       this.rgbeLoader = new RGBELoader(this.loadingManager);
     }
     return this.rgbeLoader.load(url, (envMap) => {
       envMap.mapping = EquirectangularReflectionMapping;
-      scene.environment = envMap;
       onLoad(envMap);
     }, undefined, () => this.onError(url));
   }
