@@ -1,7 +1,6 @@
 import { 
   TextureLoader, 
   CubeTextureLoader, 
-  Scene
 } from 'three';
 import { expect, describe, it, vi, beforeEach, MockInstance } from 'vitest';
 
@@ -123,14 +122,13 @@ describe('AssetLoader', () => {
     });
     
     it('should load environment map', () => {
-      const scene = new Scene();
       const onLoad = vi.fn();
       
-      assetLoader.loadEnvironment('/env.hdr', scene, onLoad);
+      const dataTexture = assetLoader.loadEnvironment('/env.hdr', onLoad);
       
       expect(RGBELoader).toHaveBeenCalled();
       expect(onLoad).toHaveBeenCalled();
-      expect(scene.environment).toEqual({ mapping: 'mapping' });
+      expect(dataTexture).toEqual("rgbeLoader");
     });
     
     it('should load cube texture', () => {
