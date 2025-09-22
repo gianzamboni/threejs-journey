@@ -14,6 +14,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
+import { DUCK_URL } from '#/app/utils/tests/models-urls';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { CSS_CLASSES } from '#/theme';
 
@@ -81,7 +82,7 @@ export default class RaycasterDemo extends OrbitControlledExercise {
 
   private loadDuck() {
     const loader = AssetLoader.getInstance();
-    loader.loadGLTF('models/Duck/glTF/Duck.gltf', {
+    loader.loadGLTF(DUCK_URL, {
       onLoad: (model: GLTF) => {
       this.duck = model.scene.children[0].children[0] as Mesh;
       this.duck.scale.set(0.00625, 0.00625, 0.00625);

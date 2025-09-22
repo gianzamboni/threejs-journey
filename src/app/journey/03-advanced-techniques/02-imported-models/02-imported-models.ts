@@ -14,6 +14,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { ActionButton, Description, Exercise } from '#/app/decorators/exercise';
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
+import { DUCK_URL } from '#/app/utils/tests/models-urls';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import DUCK from './icons/duck.svg?raw';
 import FOX from './icons/fox.svg?raw';
@@ -62,7 +63,7 @@ export default class ImportedModels extends OrbitControlledExercise {
   public loadDuck() {
     this.resetScene();
     AssetLoader.getInstance()
-      .loadModel('models/Duck/glTF/Duck.gltf', (model) => {
+      .loadModel(DUCK_URL, (model) => {
         this.importedModel = {
           models: model
         }
