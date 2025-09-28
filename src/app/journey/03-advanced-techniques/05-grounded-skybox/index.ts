@@ -14,6 +14,7 @@ import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { HELMET_URL } from "#/app/utils/tests/models-urls";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
 
@@ -71,7 +72,7 @@ export class GroundedSkyboxTest extends OrbitControlledExercise {
 
   loadHelmetModel() {
     AssetLoader.getInstance()
-      .loadModel('/models/FlightHelmet/glTF/FlightHelmet.gltf', 
+      .loadModel(HELMET_URL, 
         (model) => {
         this.helmet = model;
         this.helmet.scale.set(10, 10, 10);

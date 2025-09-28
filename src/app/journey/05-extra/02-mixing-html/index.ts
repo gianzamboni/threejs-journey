@@ -14,10 +14,12 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
+import { DAMAGED_HELMET_URL } from "#/app/utils/tests/models-urls";
 import { HelpPoint } from "./help-point";
 
 import { EnvironmentMap } from "../../common/environment-map";
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+
 
 @Exercise('mixing-webgl-and-html')
 @Description(
@@ -104,7 +106,7 @@ export class MixingHtml extends OrbitControlledExercise {
 
   private loadModel() {
     const gltfLoader = new GLTFLoader();
-    gltfLoader.load('/models/DamagedHelmet/glTF/DamagedHelmet.gltf', (gltf) => {
+    gltfLoader.load(DAMAGED_HELMET_URL, (gltf) => {
       gltf.scene.scale.set(2, 2, 2)
       gltf.scene.rotation.y = Math.PI * 0.5
       this.scene.add(gltf.scene);
