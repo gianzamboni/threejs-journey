@@ -27,6 +27,7 @@ import tintFrag from "./shaders/tint.frag";
 import tintVert from "./shaders/tint.vert";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
+import { DAMAGED_HELMET_URL } from "#/app/utils/tests/models-urls";
 
 @Exercise('post-processing')
 @Description(
@@ -139,7 +140,7 @@ export class PostProcessing extends OrbitControlledExercise {
 
   private loadModel() {
     const gltfLoader = new GLTFLoader();
-    gltfLoader.load('/models/DamagedHelmet/glTF/DamagedHelmet.gltf', (gltf) => {
+    gltfLoader.load(DAMAGED_HELMET_URL, (gltf) => {
       gltf.scene.scale.set(2, 2, 2)
       gltf.scene.rotation.y = Math.PI * 0.5
       this.scene.add(gltf.scene);

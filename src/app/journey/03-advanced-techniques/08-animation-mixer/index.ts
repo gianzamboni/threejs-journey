@@ -27,6 +27,7 @@ import RUN from './icons/run.svg?raw';
 import WALK from './icons/walk.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 import { ENV_MAP_CONTROLLERS, LIGHT_CONTROLLERS } from "./ui-controllers";
+import { FOX_URL } from "#/app/utils/tests/models-urls";
 
 
 type Actions = {
@@ -106,7 +107,7 @@ export class AnimationMixerTest extends OrbitControlledExercise {
   }
 
   loadFox() {
-    AssetLoader.getInstance().loadGLTF('/models/Fox/glTF/Fox.gltf', {
+    AssetLoader.getInstance().loadGLTF(FOX_URL, {
       onLoad: (gltf) => {
       this.fox = gltf;
       this.fox.scene.scale.set(0.02, 0.02, 0.02);

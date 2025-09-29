@@ -74,12 +74,8 @@ export class LightsExercise extends OrbitControlledExercise {
     });
 
     this.scene.add(this.floor, this.solidCollection);
-    
-  
     this.camera.position.set(2, 1, 3);
-    
-  
-    
+     
     this.lights = this.createLights();
     [this.helpers, this.helpersVisibleStatus] = this.createLightHelpers();
 

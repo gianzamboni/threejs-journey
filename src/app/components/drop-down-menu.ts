@@ -40,33 +40,32 @@ export class DropDownMenu extends EventTarget {
     }
 
     onChange(event: Event) {
-        this.dispatchEvent(new CustomEvent('change', { detail: { value: (event.target as HTMLSelectElement).value } }));
+      this.dispatchEvent(new CustomEvent('change', { detail: { value: (event.target as HTMLSelectElement).value } }));
     }
 
     addTo(parent: HTMLElement) {
-        parent.appendChild(this.menu);
+      parent.appendChild(this.menu);
     }
 
     remove() {
-        this.selectElement.removeEventListener('change', this.onChange.bind(this));
-        this.menu.remove(); 
+      this.selectElement.removeEventListener('change', this.onChange.bind(this));
+      this.menu.remove(); 
     }
 
     setValue(value: string) {
-        this.selectElement.value = value;
+      this.selectElement.value = value;
     }
 
     getValue() {
-        const selectElement = this.menu.querySelector(`#${this.menu.id}-select`) as HTMLSelectElement;
-        return selectElement.value;
+      const selectElement = this.menu.querySelector(`#${this.menu.id}-select`) as HTMLSelectElement;
+      return selectElement.value;
     }
 
     hide() {
-        this.menu.style.display = 'none';
+      this.menu.style.display = 'none';
     }
 
     show() {
-        this.menu.style.display = 'flex';
+      this.menu.style.display = 'flex';
     }
-    
 }

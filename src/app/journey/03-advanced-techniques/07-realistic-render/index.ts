@@ -18,6 +18,7 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { ExtraConfig } from '#/app/types/exercise';
+import { HAMBURGER_URL } from '#/app/utils/tests/models-urls';
 import { loadTextureMaps, TextureDict, TextureMaps } from "#/app/utils/textures";
 import { disposeMesh, disposeObjects } from "#/app/utils/three-utils";
 import { SCENE_CONTROLLERS, RENDERER_CONTROLLERS, LIGHT_CONTROLLERS } from "./controllers";
@@ -146,7 +147,7 @@ export class RealisticRender extends OrbitControlledExercise {
 
   loadHamburger() {
     AssetLoader.getInstance()
-      .loadModel('/models/Hamburger/hamburger.glb', 
+      .loadModel(HAMBURGER_URL, 
         (model) => {
           this.hamburger = model;
           this.hamburger.scale.set(2.5, 2.5, 2.5);

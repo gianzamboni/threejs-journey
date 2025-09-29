@@ -14,8 +14,8 @@ import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { HAMBURGER_URL } from '#/app/utils/tests/models-urls';
 import { disposeMesh } from "#/app/utils/three-utils";
-
 
 @Exercise("Hamburger")
 @Description("<p>A small hamburger model made by me on Blender.</p>")
@@ -75,7 +75,7 @@ export class CustomModelTest extends OrbitControlledExercise {
 
   private loadHamburger() {
     AssetLoader.getInstance()
-      .loadModel('/models/Hamburger/hamburger.glb', (group) => {
+      .loadModel(HAMBURGER_URL, (group) => {
         this.hamburger = group;
         this.hamburger.traverse((mesh) => {
           mesh.castShadow = true;
