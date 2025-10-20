@@ -115,7 +115,7 @@ export class PortalScene extends OrbitControlledExercise {
   }
 
   private async loadPortal() {
-    AssetLoader.getInstance().loadGLTF('https://i0hci4avyoqkwwp1.public.blob.vercel-storage.com/portal.glb', {
+    AssetLoader.getInstance().loadGLTF('https://i0hci4avyoqkwwp1.public.blob.vercel-storage.com/portal/portal.glb', {
       useDraco: true,
       onLoad: gltf => {
 
