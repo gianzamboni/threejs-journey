@@ -150,7 +150,7 @@ export class RealisticRender extends OrbitControlledExercise {
       .loadModel(HAMBURGER_URL, 
         (model) => {
           this.hamburger = model;
-          this.hamburger.scale.set(2.5, 2.5, 2.5);
+          this.hamburger.scale.set(0.25, 0.25, 0.25);
           this._scene.add(this.hamburger);
           this.updateAllMaterials();
         },

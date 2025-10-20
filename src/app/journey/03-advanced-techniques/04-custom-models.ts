@@ -77,6 +77,7 @@ export class CustomModelTest extends OrbitControlledExercise {
     AssetLoader.getInstance()
       .loadModel(HAMBURGER_URL, (group) => {
         this.hamburger = group;
+        this.hamburger.scale.set(0.125, 0.125, 0.125);
         this.hamburger.traverse((mesh) => {
           mesh.castShadow = true;
           mesh.receiveShadow = true;
