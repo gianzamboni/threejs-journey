@@ -21,13 +21,13 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
 import { ExtraConfig } from "#/app/types/exercise";
+import { FOX_URL } from "#/app/utils/tests/models-urls";
 import { disposeMesh } from "#/app/utils/three-utils";
 import IDLE from './icons/idle.svg?raw';
 import RUN from './icons/run.svg?raw';
 import WALK from './icons/walk.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 import { ENV_MAP_CONTROLLERS, LIGHT_CONTROLLERS } from "./ui-controllers";
-import { FOX_URL } from "#/app/utils/tests/models-urls";
 
 
 type Actions = {

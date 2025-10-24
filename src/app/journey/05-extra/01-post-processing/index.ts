@@ -21,13 +21,13 @@ import { Description, Exercise } from "#/app/decorators/exercise";
 import { EnvironmentMap } from "#/app/journey/common/environment-map";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
+import { DAMAGED_HELMET_URL } from "#/app/utils/tests/models-urls";
 import displacementFrag from "./shaders/displacement.frag";
 import displacementVert from "./shaders/displacement.vert";
 import tintFrag from "./shaders/tint.frag";
 import tintVert from "./shaders/tint.vert";
 
 import OrbitControlledExercise from "../../exercises/orbit-controlled-exercise";
-import { DAMAGED_HELMET_URL } from "#/app/utils/tests/models-urls";
 
 @Exercise('post-processing')
 @Description(
