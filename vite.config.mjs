@@ -119,16 +119,23 @@ export default defineConfig(({ mode }) => {
       }
     },
     test: {
-      root: './',
+      root: './src/tests',
       globals: true,
       environment: "jsdom",
-      setupFiles: ['./vitest/vitest.setup.ts'],
+      setupFiles: ['./src/tests/setup/vitest.setup.ts'],
+      include: ['**/*.test.ts'],
+      exclude: ['**/node_modules/**'],
+      resolve: {
+        alias: {
+          '#': path.resolve(__dirname, 'src')
+        }
+      },
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
         exclude: [
           'node_modules/',
-          'vitest/vitest.setup.ts',
+          'src/tests/setup/**',
           '**/*.d.ts',
           '**/types/**'
         ],
