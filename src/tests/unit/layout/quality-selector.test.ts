@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { QualitySelector, Quality, qualityFromString } from '../quality-selector';
+import { QualitySelector, Quality, qualityFromString } from '#/app/layout/quality-selector';
 
 describe('QualitySelector', () => {
   let qualitySelector: QualitySelector;

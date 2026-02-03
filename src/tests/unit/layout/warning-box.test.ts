@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { WarningBox, ErrorData } from '../warning-box';
+import { WarningBox, ErrorData } from '#/app/layout/warning-box';
 
 describe('WarningBox', () => {
   let warningBox: WarningBox;

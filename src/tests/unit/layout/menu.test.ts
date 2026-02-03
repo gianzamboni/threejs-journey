@@ -1,9 +1,8 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 
+import Menu from '#/app/layout/menu';
 import { ExerciseClass } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
-
-import Menu from '../menu';
 
 // Mock dependencies
 vi.mock('#/app/utils/exercise-metadata');

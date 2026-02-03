@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
-import { GraphPanel } from './graph-panel';
+import { GraphPanel } from '#/app/layout/debug-ui/graph-panel';
 
 describe('GraphPanel', () => {
   const parentElement = document.body;

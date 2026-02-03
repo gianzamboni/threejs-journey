@@ -3,14 +3,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { Exercise } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
-import { ControllerFactory } from './controller-factory';
-import { GraphPanel } from './graph-panel';
-import DebugUI from './index';
+import { ControllerFactory } from '#/app/layout/debug-ui/controller-factory';
+import { GraphPanel } from '#/app/layout/debug-ui/graph-panel';
+import DebugUI from '#/app/layout/debug-ui';
 
 // Mock dependencies
 vi.mock('lil-gui');
-vi.mock('./graph-panel');
-vi.mock('./controller-factory');
+vi.mock('#/app/layout/debug-ui/graph-panel');
+vi.mock('#/app/layout/debug-ui/controller-factory');
 vi.mock('#/app/utils/exercise-metadata');
 
 describe('DebugUI', () => {

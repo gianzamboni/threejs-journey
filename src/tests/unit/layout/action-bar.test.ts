@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { DropDownMenu } from '../../components/drop-down-menu';
-import { ButtonAction, Exercise, SelectableAction } from '../../types/exercise';
-import * as ExerciseMetadata from '../../utils/exercise-metadata';
-import { ActionBar } from '../action-bar';
+import { DropDownMenu } from '#/app/components/drop-down-menu';
+import { ButtonAction, Exercise, SelectableAction } from '#/app/types/exercise';
+import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { ActionBar } from '#/app/layout/action-bar';
 
 // Mock the DropDownMenu class
-vi.mock('../../components/drop-down-menu', () => {
+vi.mock('#/app/components/drop-down-menu', () => {
   return {
     DropDownMenu: vi.fn().mockImplementation(() => ({
       addTo: vi.fn(),
@@ -28,7 +28,7 @@ function getActionButtons(): HTMLButtonElement[] {
 }
 
 // Mock the exercise metadata utils
-vi.mock('../../utils/exercise-metadata', () => ({
+vi.mock('#/app/utils/exercise-metadata', () => ({
   getActions: vi.fn()
 }));
 

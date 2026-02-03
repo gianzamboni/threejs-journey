@@ -2,10 +2,10 @@ import { PCFShadowMap, NoToneMapping } from 'three';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
+import RenderView from '#/app/layout/render-view';
 import { Exercise } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 
-import RenderView from '../render-view';
 
 // Mock Three.js - using simple approach instead of async
 vi.mock('three', () => {

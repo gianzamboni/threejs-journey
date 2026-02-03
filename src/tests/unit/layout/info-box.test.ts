@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi, Mock, Mocked } from 'vitest';
 
 import { Collapsable } from '#/app/components/collapsable';
+import { InfoBox } from '#/app/layout/info-box';
 import { Exercise } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 
-import { InfoBox } from '../info-box';
 // Mock dependencies
 vi.mock('#/app/components/collapsable');
 vi.mock('#/app/utils/exercise-metadata', () => ({
