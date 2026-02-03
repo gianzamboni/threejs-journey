@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach, vi } from 'vitest';
 
-import { Overlay } from '../overlay';
+import { Overlay } from '#/app/components/overlay';
 
 describe('Overlay', () => {
   let overlay: Overlay;

@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from 'vitest';
 
-import SideBar from '../sidebar';
+import SideBar from '#/app/components/sidebar';
 
 function getSideBarComponents() {
   return {

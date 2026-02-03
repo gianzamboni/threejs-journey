@@ -1,8 +1,7 @@
 import { expect, describe, it, beforeEach } from 'vitest';
 
+import { Collapsable } from '#/app/components/collapsable';
 import { sleep } from '#/app/utils/sleep';
-
-import { Collapsable } from '../collapsable';
 
 function getCollapsableContainer(id: string): HTMLElement {
   return document.querySelector(`#collapsable-${id}`) as HTMLElement;
