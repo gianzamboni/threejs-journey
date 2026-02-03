@@ -1,6 +1,6 @@
 import { expect, describe, it, vi, beforeEach } from 'vitest';
 
-import { Customizable, Callable, type ControllerConfig, type ExerciseControllers } from '../customizable';
+import { Customizable, Callable, type ControllerConfig, type ExerciseControllers } from '#/app/decorators/customizable';
 
 describe('Customizable decorator', () => {
   let mockMetadata: { controllersConfig?: ExerciseControllers };

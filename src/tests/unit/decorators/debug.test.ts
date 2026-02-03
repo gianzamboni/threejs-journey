@@ -2,7 +2,7 @@ import { expect, describe, it, vi, beforeEach } from 'vitest';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { initDebugMetadata, DebugFPS } from '../debug';
+import { initDebugMetadata, DebugFPS } from '#/app/decorators/debug';
 
 
 describe('initDebugMetadata', () => {
