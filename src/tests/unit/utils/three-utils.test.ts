@@ -1,7 +1,7 @@
 import { BoxGeometry, MeshBasicMaterial, Mesh, BufferGeometry, Material } from 'three';
 import { expect, describe, it, vi } from 'vitest';
 
-import { createRedCube, disposeMesh, disposeObjects } from '../three-utils';
+import { createRedCube, disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 
 // Mock Three.js classes
 vi.mock('three', () => {

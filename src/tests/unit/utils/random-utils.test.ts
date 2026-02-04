@@ -1,6 +1,6 @@
 import { expect, describe, it } from 'vitest';
 
-import { randomBetween, randomSign, getRandom3DPosition, getRandomValueFrom } from '../random-utils';
+import { randomBetween, randomSign, getRandom3DPosition, getRandomValueFrom } from '#/app/utils/random-utils';
 
 describe('randomBetween', () => {
   it('should return a number between min and max boundaries', () => {

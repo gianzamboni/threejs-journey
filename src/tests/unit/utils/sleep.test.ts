@@ -1,6 +1,6 @@
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 
-import { sleep, waitForCondition } from '../sleep';
+import { sleep, waitForCondition } from '#/app/utils/sleep';
 
 describe('sleep', () => {
   beforeEach(() => {

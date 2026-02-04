@@ -1,7 +1,8 @@
 import { expect, describe, it, beforeEach } from 'vitest';
 
-import { ExerciseControllers } from '#/app/decorators/customizable';
-import { Exercise, Action } from '#/app/types/exercise';
+import { Action, Exercise } from '#/app/types/exercise';
+
+import { type ExerciseControllers } from '#/app/decorators/customizable';
 
 import {
   getMetadata,
@@ -13,7 +14,7 @@ import {
   hasControllers,
   getActions,
   MetadataTarget
-} from '../exercise-metadata';
+} from '#/app/utils/exercise-metadata';
 
 describe('exercise-metadata', () => {
   let mockTarget: MetadataTarget;

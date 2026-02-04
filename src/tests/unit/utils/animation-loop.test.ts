@@ -2,7 +2,7 @@ import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 
 import RenderView from '#/app/layout/render-view';
 
-import { AnimationLoop } from '../animation-loop';
+import { AnimationLoop } from '#/app/utils/animation-loop';
 
 // Mock RenderView
 vi.mock('#/app/layout/render-view');

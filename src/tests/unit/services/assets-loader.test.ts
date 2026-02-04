@@ -9,7 +9,7 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
-import { AssetLoader } from '../../services/assets-loader';
+import { AssetLoader } from '#/app/services/assets-loader';
 
 // Mock Three.js loaders
 vi.mock('three', () => {
@@ -93,17 +93,15 @@ vi.mock('three/addons/loaders/DRACOLoader.js', () => {
 
 describe('AssetLoader', () => {
   let assetLoader: AssetLoader;
-  let dispatchEventSpy: MockInstance<(event: Event) => boolean>;
+  let dispatchEventSpy: MockInstance;
   
   beforeEach(() => {
-    // Reset the singleton instance for tests
-    vi.spyOn(AssetLoader, 'getInstance').mockRestore();
-    // @ts-expect-error - accessing private property for testing
-    AssetLoader.instance = undefined;
+    // Clear any existing mocks
+    vi.clearAllMocks();
     
     assetLoader = AssetLoader.getInstance();
+    assetLoader.reset();
     dispatchEventSpy = vi.spyOn(assetLoader, 'dispatchEvent');
-    vi.clearAllMocks();
   });
   
   describe('Singleton pattern', () => {
