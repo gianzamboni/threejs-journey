@@ -1,19 +1,22 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import { QualitySelector, Quality, qualityFromString } from '#/app/layout/quality-selector';
+import { mountComponent } from '#/tests/utils/test-helpers';
 
 describe('QualitySelector', () => {
   let qualitySelector: QualitySelector;
   let parent: HTMLDivElement;
-  
+
   beforeEach(() => {
-    // Setup
-    qualitySelector = new QualitySelector(Quality.High);
-    parent = document.createElement('div');
-    document.body.appendChild(parent);
-    qualitySelector.addTo(parent);
+    const container = mountComponent(() => new QualitySelector(Quality.High), { clearMocks: false });
+    qualitySelector = container.component;
+    parent = container.parent;
   });
-  
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
   it('should create and initialize the quality selector correctly', () => {
     // Access the private field for testing
     const selectorElement = parent.querySelector('#quality-selector');

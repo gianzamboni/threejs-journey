@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import { DropDownMenu } from '#/app/components/drop-down-menu';
-import { ButtonAction, Exercise, SelectableAction } from '#/app/types/exercise';
-import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 import { ActionBar } from '#/app/layout/action-bar';
+import { ButtonAction, SelectableAction } from '#/app/types/exercise';
+import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { mountComponent, createMockExercise } from '#/tests/utils/test-helpers';
 
 // Mock the DropDownMenu class
 vi.mock('#/app/components/drop-down-menu', () => {
@@ -35,20 +36,16 @@ vi.mock('#/app/utils/exercise-metadata', () => ({
 
 describe('ActionBar', () => {
   let actionBar: ActionBar;
-  let parent: HTMLDivElement;
-  
-  beforeEach(() => {
 
-    document.body.innerHTML = '';
-    vi.clearAllMocks();
-    
-    // Setup
-    actionBar = new ActionBar();
-    parent = document.createElement('div');
-    document.body.appendChild(parent);
-    actionBar.addTo(parent);
+  beforeEach(() => {
+    const container = mountComponent(() => new ActionBar(), { clearBody: true });
+    actionBar = container.component;
   });
-  
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
   it('should create and initialize the action bar with no buttons', () => {
     const actionBarContainer = document.querySelector('#action-bar-container');
     expect(actionBarContainer).not.toBeNull();
@@ -66,7 +63,7 @@ describe('ActionBar', () => {
       onClick: vi.fn()
     };
     
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     
     // Add button
     actionBar.addButton(mockAction, mockExercise);
@@ -95,7 +92,7 @@ describe('ActionBar', () => {
       onChange: mockOnChange
     };
     
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     
     // Add selectable
     actionBar.addSelectable(mockAction, mockExercise);
@@ -128,7 +125,7 @@ describe('ActionBar', () => {
       onChange: mockOnChange
     };
     
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     
     // Add selectable
     actionBar.addSelectable(mockAction, mockExercise);
@@ -154,7 +151,7 @@ describe('ActionBar', () => {
       onClick: vi.fn()
     };
     
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     const mockRemove = vi.fn();
 
     actionBar.addButton(mockAction, mockExercise);
@@ -180,7 +177,7 @@ describe('ActionBar', () => {
   
   it('should update content with actions from exercise', () => {
     // Setup mock exercise and actions
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     const mockActions: ButtonAction[] = [
       {
         type: 'button',
@@ -214,7 +211,7 @@ describe('ActionBar', () => {
 
   it('should update content with mixed button and selectable actions', () => {
     // Setup mock exercise and actions
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     const mockButtonAction: ButtonAction = {
       type: 'button',
       icon: '<svg>Icon</svg>',
@@ -265,7 +262,7 @@ describe('ActionBar', () => {
       onChange: vi.fn()
     };
     
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     
     actionBar.addButton(mockButtonAction, mockExercise);
     actionBar.addSelectable(mockSelectableAction, mockExercise);

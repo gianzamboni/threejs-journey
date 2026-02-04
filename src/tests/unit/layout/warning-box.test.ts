@@ -1,19 +1,22 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import { WarningBox, ErrorData } from '#/app/layout/warning-box';
+import { mountComponent } from '#/tests/utils/test-helpers';
 
 describe('WarningBox', () => {
   let warningBox: WarningBox;
   let parent: HTMLDivElement;
-  
+
   beforeEach(() => {
-    // Setup
-    warningBox = new WarningBox();
-    parent = document.createElement('div');
-    document.body.appendChild(parent);
-    warningBox.addTo(parent);
+    const container = mountComponent(() => new WarningBox(), { clearMocks: false });
+    warningBox = container.component;
+    parent = container.parent;
   });
-  
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
   it('should create and initialize the warning box correctly', () => {
     // Initial state check
     const warningBoxElement = parent.querySelector('#warning-box');

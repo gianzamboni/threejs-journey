@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi, Mock, Mocked } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi, Mock, Mocked } from 'vitest';
 
 import { Collapsable } from '#/app/components/collapsable';
 import { InfoBox } from '#/app/layout/info-box';
-import { Exercise } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { mountComponent, createMockExercise } from '#/tests/utils/test-helpers';
 
 // Mock dependencies
 vi.mock('#/app/components/collapsable');
@@ -18,9 +18,6 @@ describe('InfoBox', () => {
   let mockCollapsable: Mocked<Partial<Collapsable>>;
 
   beforeEach(() => {
-    // Reset mocks
-    vi.clearAllMocks();
-
     // Setup mocks
     (Collapsable as unknown as Mock).mockImplementation(() => {
       return mockCollapsable = {
@@ -31,11 +28,14 @@ describe('InfoBox', () => {
       };
     });
 
-    // Create instance
-    infoBox = new InfoBox();
-    parent = document.createElement('div');
-    document.body.appendChild(parent);
-    infoBox.addTo(parent);
+    // Create instance using helper
+    const container = mountComponent(() => new InfoBox(), { clearBody: false });
+    infoBox = container.component;
+    parent = container.parent;
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
   });
 
   it('should create and initialize the info box correctly', () => {
@@ -53,7 +53,7 @@ describe('InfoBox', () => {
 
   it('should update content with descriptions', () => {
     // Setup mock exercise and metadata
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     const mockId = 'TestExercise';
     const mockDescriptions = ['<p>Test description</p>'];
 
@@ -72,7 +72,7 @@ describe('InfoBox', () => {
 
   it('should update content with empty descriptions', () => {
     // Setup mock exercise and metadata
-    const mockExercise = {} as Exercise;
+    const mockExercise = createMockExercise();
     (ExerciseMetadata.getId as Mock).mockReturnValue('TestExercise');
     (ExerciseMetadata.getDescriptions as Mock).mockReturnValue([]);
 

@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import { LoadingScreen } from '#/app/layout/loading-screen';
 import { LoadingData } from '#/app/services/assets-loader';
+import { mountComponent } from '#/tests/utils/test-helpers';
 
 function getLoadingScreenContainer(): HTMLElement {
   return document.querySelector('#loading-screen-container') as HTMLElement;
@@ -17,26 +18,21 @@ function getLoadingScreenLabelText(): HTMLElement {
 
 describe('LoadingScreen', () => {
   let loadingScreen: LoadingScreen;
-  let parent: HTMLDivElement;
-  
+
   beforeEach(() => {
-    vi.clearAllMocks();
-    document.body.innerHTML = '';
-    // Setup
-    loadingScreen = new LoadingScreen();
-    parent = document.createElement('div');
-    document.body.appendChild(parent);
-    loadingScreen.addTo(parent);
+    const container = mountComponent(() => new LoadingScreen(), { clearBody: true, clearMocks: true });
+    loadingScreen = container.component;
   });
-  
+
   afterEach(() => {
-    vi.restoreAllMocks();
+    document.body.innerHTML = '';
   });
-  
+
   it('should create and initialize the loading screen correctly', () => {
     const container = document.querySelector('#loading-screen-container');
     expect(container).not.toBeNull();
     expect(container!.classList.contains('hidden')).toBe(true);
+
     
     const progress = document.querySelector('#loading-screen-progress-bar');
     expect(progress).not.toBeNull();
