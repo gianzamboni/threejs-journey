@@ -61,18 +61,14 @@ describe('LoadingScreen', () => {
   });
   
   it('should update the loading progress', async () => {
-    // Create loading data
     const loadingData: LoadingData = {
       url: 'test.jpg',
       itemsLoaded: 50,
       itemsTotal: 100
     };
     
-    console.log(loadingData);
-    // Update loading screen
     await loadingScreen.update(loadingData);
     
-    // Verify progress is updated
     const label = getLoadingScreenLabelText();
     expect(label.innerHTML).toBe('50%');
     

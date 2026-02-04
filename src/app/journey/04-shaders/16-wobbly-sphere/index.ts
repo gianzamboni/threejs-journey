@@ -70,7 +70,6 @@ export class WobblySphere extends OrbitControlledExercise {
   }
 
   public updateColorA(newColor: string) {
-    console.log('updateColorA', newColor);
     this.uniforms.uColorA.value.set(new Color(newColor));
   }
 

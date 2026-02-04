@@ -55,11 +55,9 @@ export function Callable<T>(folderPath: string, name: string, ...callableArgs: T
 
 export function EnableCustomization() {
   return function(_: undefined, context: ClassFieldDecoratorContext) {
-    console.log(context);
     let controllersConfig = context.metadata?.controllersConfig;
     if(controllersConfig === undefined) {
       controllersConfig = {};
     }
-    console.log(controllersConfig);
   }
 }

@@ -30,7 +30,6 @@ describe('AnimationLoop', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
