@@ -1,10 +1,10 @@
 import { PCFShadowMap, NoToneMapping } from 'three';
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 import AnimatedExercise from '#/app/journey/exercises/animated-exercise';
 import RenderView from '#/app/layout/render-view';
-import { Exercise } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { mountComponent, createMockExercise } from '#/tests/utils/test-helpers';
 
 
 // Mock Three.js - using simple approach instead of async
@@ -42,41 +42,33 @@ vi.mock('#/app/utils/exercise-metadata', () => ({
 
 describe('RenderView', () => {
   let renderView: RenderView;
-  let mockExercise: Exercise;
+  let mockExercise: ReturnType<typeof createMockExercise>;
   let originalInnerWidth: number;
   let originalInnerHeight: number;
-  
+
   beforeEach(() => {
-    vi.clearAllMocks();
-    
-    document.body.innerHTML = '';
+    const container = mountComponent(() => new RenderView(), { clearBody: true });
+    renderView = container.component;
+
     // Save original window dimensions
     originalInnerWidth = window.innerWidth;
     originalInnerHeight = window.innerHeight;
-    
+
     // Mock window dimensions
     Object.defineProperty(window, 'innerWidth', { value: 1920, writable: true });
     Object.defineProperty(window, 'innerHeight', { value: 1080, writable: true });
-    
-    // Mock exercise
-    mockExercise = {
-      scene: {},
-      camera: {},
-      updateCamera: vi.fn()
-    } as unknown as Exercise;
-    
-    // Create instance
-    renderView = new RenderView();
-    renderView.addTo(document.body);
 
+    // Create mock exercise
+    mockExercise = createMockExercise();
   });
-  
+
   afterEach(() => {
     // Restore original window dimensions
     Object.defineProperty(window, 'innerWidth', { value: originalInnerWidth });
     Object.defineProperty(window, 'innerHeight', { value: originalInnerHeight });
+    document.body.innerHTML = '';
   });
-  
+
   it('should create and initialize the renderer correctly', () => {
     const canvas = document.querySelector('#render-view-canvas');
     expect(canvas).not.toBeNull();

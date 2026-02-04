@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi, Mock } from 'vitest';
 
 import Menu from '#/app/layout/menu';
 import { ExerciseClass } from '#/app/types/exercise';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { mountComponent } from '#/tests/utils/test-helpers';
 
 // Mock dependencies
 vi.mock('#/app/utils/exercise-metadata');
@@ -41,18 +42,15 @@ vi.mock('#/app/journey', () => ({
 describe('Menu', () => {
   let menu: Menu;
   let mockEventListener: Mock<(event: CustomEvent) => void>;
-  
+
   beforeEach(() => {
-    // Reset mocks
-    vi.clearAllMocks();
-    
     mockEventListener = vi.fn();
-    // Setup document
+    const container = mountComponent(() => new Menu(), { clearBody: true });
+    menu = container.component;
+  });
+
+  afterEach(() => {
     document.body.innerHTML = '';
-    
-    // Create instance
-    menu = new Menu();
-    menu.addTo(document.body);
   });
   
   it('should create and initialize the menu correctly', () => {

@@ -1,11 +1,11 @@
 import GUI from 'lil-gui';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { Exercise } from '#/app/types/exercise';
-import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 import { ControllerFactory } from '#/app/layout/debug-ui/controller-factory';
 import { GraphPanel } from '#/app/layout/debug-ui/graph-panel';
 import DebugUI from '#/app/layout/debug-ui';
+import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { createMockExercise } from '#/tests/utils/test-helpers';
 
 // Mock dependencies
 vi.mock('lil-gui');
@@ -16,25 +16,30 @@ vi.mock('#/app/utils/exercise-metadata');
 describe('DebugUI', () => {
   let debugUI: DebugUI;
   let parent: HTMLElement;
-  let mockExercise: Exercise;
+  let mockExercise: ReturnType<typeof createMockExercise>;
 
   beforeEach(() => {
     // Reset mocks
     vi.resetAllMocks();
-    
+
     // Create a new DebugUI instance for each test
     debugUI = new DebugUI();
-    
+
     // Create a parent element for adding the debug UI
     parent = document.createElement('div');
-    
+    document.body.appendChild(parent);
+
     // Create a mock exercise
-    mockExercise = {} as unknown as Exercise;
-    
+    mockExercise = createMockExercise();
+
     // Mock exercise metadata functions
     vi.mocked(ExerciseMetadata.isDebuggable).mockReturnValue(true);
     vi.mocked(ExerciseMetadata.hasControllers).mockReturnValue(false);
     vi.mocked(ExerciseMetadata.getMetadata).mockReturnValue({});
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
   });
 
   it('should create a container div on initialization', () => {

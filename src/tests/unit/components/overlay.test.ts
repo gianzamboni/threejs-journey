@@ -1,27 +1,32 @@
-import { expect, describe, it, beforeEach, vi } from 'vitest';
+import { expect, describe, it, beforeEach, afterEach, vi } from 'vitest';
 
 import { Overlay } from '#/app/components/overlay';
+import { mountComponent } from '#/tests/utils/test-helpers';
 
 describe('Overlay', () => {
   let overlay: Overlay;
-  const parentElement = document.body;
-  
+  let parent: HTMLDivElement;
+
   beforeEach(() => {
-    document.body.innerHTML = '';
-    overlay = new Overlay();
-    overlay.addTo(parentElement);
+    const container = mountComponent(() => new Overlay(), { clearMocks: false });
+    overlay = container.component;
+    parent = container.parent;
   });
-  
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
   describe('initialization', () => {
     it('should create an overlay with the correct properties', () => {
       expect(overlay).toBeDefined();
-      
-      const overlayElement = parentElement.querySelector('#overlay');
+
+      const overlayElement = parent.querySelector('#overlay');
       expect(overlayElement).not.toBeNull();
     });
     
     it('should initially be hidden', () => {
-      const overlayElement = parentElement.querySelector('#overlay') as HTMLElement;
+      const overlayElement = parent.querySelector('#overlay') as HTMLElement;
       expect(overlayElement.classList.contains('hidden')).toBe(true);
       expect(overlay.opened).toBe(false);
     });
@@ -29,7 +34,7 @@ describe('Overlay', () => {
   
   describe('show', () => {
     it('should make the overlay visible', () => {
-      const overlayElement = parentElement.querySelector('#overlay') as HTMLElement;
+      const overlayElement = parent.querySelector('#overlay') as HTMLElement;
       expect(overlayElement.classList.contains('hidden')).toBe(true);
       
       overlay.show();
@@ -42,7 +47,7 @@ describe('Overlay', () => {
   describe('hide', () => {
     it('should hide the overlay', () => {
       overlay.show();
-      const overlayElement = parentElement.querySelector('#overlay') as HTMLElement;
+      const overlayElement = parent.querySelector('#overlay') as HTMLElement;
       expect(overlayElement.classList.contains('hidden')).toBe(false);
       
       overlay.hide();
@@ -54,7 +59,7 @@ describe('Overlay', () => {
   
   describe('toggle', () => {
     it('should toggle the visibility of the overlay', () => {
-      const overlayElement = parentElement.querySelector('#overlay');
+      const overlayElement = parent.querySelector('#overlay');
       
       expect(overlayElement?.classList.contains('hidden')).toBe(true);
       expect(overlay.opened).toBe(false);
@@ -92,7 +97,7 @@ describe('Overlay', () => {
       
       overlay.addEventListener('click', mockCallback);
       
-      const overlayElement = parentElement.querySelector('#overlay') as HTMLElement;
+      const overlayElement = parent.querySelector('#overlay') as HTMLElement;
       overlayElement.dispatchEvent(new MouseEvent('click'));
       
       expect(mockCallback).toHaveBeenCalledTimes(1);
