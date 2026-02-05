@@ -2,10 +2,10 @@ import { GUI } from "lil-gui";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ControllerConfig } from '#/app/decorators/customizable';
-import { TestExercise } from './test-exercise';
-import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
-
 import { ControllerFactory, WithDebugObject } from '#/app/layout/debug-ui/controller-factory';
+import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
+import { TestExercise } from './test-exercise';
+
 
 describe('ControllerFactory', () => {
   let gui: GUI;

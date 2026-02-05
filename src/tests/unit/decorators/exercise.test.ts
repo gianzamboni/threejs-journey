@@ -1,8 +1,8 @@
 import { expect, describe, it, vi, beforeEach } from 'vitest';
 
+import { Exercise, Description, WithOrbitControllerDescription, IsAnimated, ActionButton } from '#/app/decorators/exercise';
 import { ExerciseClass, ButtonAction, Action } from '#/app/types/exercise';
 
-import { Exercise, Description, WithOrbitControllerDescription, IsAnimated, ActionButton } from '#/app/decorators/exercise';
 
 function createMockContext() {
   return {

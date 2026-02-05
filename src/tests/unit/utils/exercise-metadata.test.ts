@@ -1,9 +1,7 @@
 import { expect, describe, it, beforeEach } from 'vitest';
 
-import { Action, Exercise } from '#/app/types/exercise';
-
 import { type ExerciseControllers } from '#/app/decorators/customizable';
-
+import { Action, Exercise } from '#/app/types/exercise';
 import {
   getMetadata,
   getId,

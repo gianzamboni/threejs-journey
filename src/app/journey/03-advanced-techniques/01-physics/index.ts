@@ -12,6 +12,7 @@ import {
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
+import { RELOAD } from '#/app/constants/icons';
 import { CustomizableQuality, DebugFPS } from '#/app/decorators/debug';
 import { ActionButton, Description, Exercise, Starred } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
@@ -26,7 +27,6 @@ import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import { EnvironmentMap } from '../../common/environment-map';
-import { RELOAD } from '#/app/constants/icons';
 
 
 

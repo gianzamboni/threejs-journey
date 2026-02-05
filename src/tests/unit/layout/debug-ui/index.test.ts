@@ -1,9 +1,9 @@
 import GUI from 'lil-gui';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
+import DebugUI from '#/app/layout/debug-ui';
 import { ControllerFactory } from '#/app/layout/debug-ui/controller-factory';
 import { GraphPanel } from '#/app/layout/debug-ui/graph-panel';
-import DebugUI from '#/app/layout/debug-ui';
 import * as ExerciseMetadata from '#/app/utils/exercise-metadata';
 import { createMockExercise } from '#/tests/utils/test-helpers';
 
