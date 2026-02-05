@@ -26,6 +26,7 @@ import REMOVE from './icons/trash.svg?raw';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import { EnvironmentMap } from '../../common/environment-map';
+import { RELOAD } from '#/app/constants/icons';
 
 
 
@@ -115,6 +116,18 @@ export class Physics extends OrbitControlledExercise {
     this.scene.add(this.floor.mesh, this.ambientLight, this.directionalLight);
 
     this.hitSound = new Audio('https://i0hci4avyoqkwwp1.public.blob.vercel-storage.com/sounds/hit.mp3');
+    this.hitSound.onerror = () => {
+      const message = document.createElement('span');
+      message.textContent = 'Error loading sound';
+      this.dispatchEvent(new CustomEvent('loading-error', {
+        detail: {
+          message: message,
+          actionIcon: RELOAD,
+          action: () => window.location.reload()
+        }
+      }));
+    }
+
   }
 
   @DebugFPS
