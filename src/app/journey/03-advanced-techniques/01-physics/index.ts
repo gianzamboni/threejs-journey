@@ -114,7 +114,7 @@ export class Physics extends OrbitControlledExercise {
     this.physicsWorld.addBody(this.floor.physics);
     this.scene.add(this.floor.mesh, this.ambientLight, this.directionalLight);
 
-    this.hitSound = new Audio('sounds/hit.mp3');
+    this.hitSound = new Audio('https://i0hci4avyoqkwwp1.public.blob.vercel-storage.com/sounds/hit.mp3');
   }
 
   @DebugFPS
