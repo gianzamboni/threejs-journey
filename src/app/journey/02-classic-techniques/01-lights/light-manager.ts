@@ -13,8 +13,9 @@ export class LightManager {
 
   toggleLight(newValue: boolean, { lightType }: {lightType: LightType}) {
     const light = this.lights[lightType];
+    if(light.visible === newValue) return;
+
     light.visible = newValue;
-    
     if(lightType in this.helpers) {
       lightType = lightType as LightTypeHelper;
       const helper = this.helpers[lightType];
