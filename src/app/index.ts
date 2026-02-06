@@ -164,6 +164,8 @@ export class App {
 
     this.qualitySelector.addEventListener('quality-changed', this.changeQuality.bind(this) as EventListener);
     
+    window.addEventListener('loading-error', this.showErrorMessage.bind(this) as EventListener);
+    
     window.addEventListener('keydown', (event) => {
       if(event.code === 'KeyH') {
         this.toggleLayout();

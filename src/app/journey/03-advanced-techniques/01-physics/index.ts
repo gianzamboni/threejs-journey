@@ -4,31 +4,28 @@ import {
   MeshStandardMaterial,
   SphereGeometry,
   BoxGeometry,
-  AmbientLight,
-  DirectionalLight,
   Color,
   PlaneGeometry
 } from 'three';
 
 import { Timer } from 'three/addons/misc/Timer.js';
 
-import { RELOAD } from '#/app/constants/icons';
 import { CustomizableQuality, DebugFPS } from '#/app/decorators/debug';
 import { ActionButton, Description, Exercise, Starred } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
-import RenderView from "#/app/layout/render-view";
+import RenderView from '#/app/layout/render-view';
 import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { CSS_CLASSES } from '#/theme';
+import { CollisionSound } from './collision-sound';
 import BOX from './icons/cube.svg?raw';
 import SPHERE from './icons/sphere.svg?raw';
 import REMOVE from './icons/trash.svg?raw';
+import { Lighting } from './lighting';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import { EnvironmentMap } from '../../common/environment-map';
-
-
 
 type PhysicalObject = {
   mesh: Mesh;
@@ -80,12 +77,11 @@ export class Physics extends OrbitControlledExercise {
 
   private floor: PhysicalObject;
 
-  private ambientLight: AmbientLight;
-  private directionalLight: DirectionalLight;
+  private lighting: Lighting;
 
   private physicsWorld: CANNON.World;
 
-  private hitSound: HTMLAudioElement;
+  private collisionSound: CollisionSound;
   
   private qualityConfig: QualityConfig;
 
@@ -107,26 +103,15 @@ export class Physics extends OrbitControlledExercise {
 
     this.floor = this.createFloor();
 
-    this.ambientLight = new AmbientLight(0xffffff, 2.1);
-    this.directionalLight = this.createDirectionalLight();
+    this.lighting = new Lighting();
 
     this.camera.position.set(-3, 3, 3);
 
     this.physicsWorld.addBody(this.floor.physics);
-    this.scene.add(this.floor.mesh, this.ambientLight, this.directionalLight);
+    this.scene.add(this.floor.mesh);
+    this.lighting.setup(this.scene);
 
-    this.hitSound = new Audio('https://i0hci4avyoqkwwp1.public.blob.vercel-storage.com/sounds/hit.mp3');
-    this.hitSound.onerror = () => {
-      const message = document.createElement('span');
-      message.textContent = 'Error loading sound';
-      this.dispatchEvent(new CustomEvent('loading-error', {
-        detail: {
-          message: message,
-          actionIcon: RELOAD,
-          action: () => window.location.reload()
-        }
-      }));
-    }
+    this.collisionSound = new CollisionSound();
 
   }
 
@@ -150,9 +135,7 @@ export class Physics extends OrbitControlledExercise {
   public playHitSound(collision: { contact: CANNON.ContactEquation}) {
     const velocity = collision.contact.getImpactVelocityAlongNormal();
     if (velocity > 1.5) {
-      this.hitSound.volume = Math.random();
-      this.hitSound.currentTime = 0;
-      this.hitSound.play();
+      this.collisionSound.play();
     }
   }
 
@@ -280,20 +263,6 @@ export class Physics extends OrbitControlledExercise {
     body.addShape(shape);    
     return { mesh, physics: body };
   }
-
-  private createDirectionalLight() {
-    const light = new DirectionalLight(0xffffff, 0.6);
-    light.castShadow = true;
-    light.shadow.mapSize.set(1024, 1024);
-    light.shadow.camera.far = 15;
-    light.shadow.camera.left = - 7;
-    light.shadow.camera.top = 7;
-    light.shadow.camera.right = 7;
-    light.shadow.camera.bottom = - 7;
-    light.position.set(5, 5, 5);
-    return light;
-  }
-
 
   async dispose() {
     await super.dispose();
