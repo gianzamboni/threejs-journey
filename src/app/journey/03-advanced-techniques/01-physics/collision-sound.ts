@@ -1,3 +1,5 @@
+import { RELOAD } from "#/app/constants/icons";
+
 export class CollisionSound {
   private hitSound: HTMLAudioElement;
 
@@ -13,7 +15,7 @@ export class CollisionSound {
       this.dispatchEvent(new CustomEvent('loading-error', {
         detail: {
           message: message,
-          actionIcon: '🔄',
+          actionIcon: RELOAD,
           action: () => window.location.reload()
         }
       }));
