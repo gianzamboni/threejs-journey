@@ -2,6 +2,7 @@ import * as CANNON from 'cannon-es';
 import { Scene } from 'three';
 
 import { CollisionSound } from './collision-sound';
+import { PhysicalFloor } from './physical-floor';
 import { CollisionEvent, PhysicalObject } from './physical-object';
 import { PhysicalObjectFactory } from './physical-object-factory';
 
@@ -13,7 +14,7 @@ type PhysicalWorldConfig = {
 export class PhysicalWorld {
   private world: CANNON.World;
   private physicalObjects: PhysicalObject[];
-  private floor: PhysicalObject;
+  private floor: PhysicalFloor;
   private collisionSound: CollisionSound;
   private factory: PhysicalObjectFactory;
 

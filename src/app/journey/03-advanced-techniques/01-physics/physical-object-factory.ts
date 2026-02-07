@@ -2,17 +2,18 @@ import * as CANNON from 'cannon-es';
 import {
   BoxGeometry,
   Color,
-  Mesh,
   MeshStandardMaterial,
-  PlaneGeometry,
   Scene,
   SphereGeometry,
 } from 'three';
 
-import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
+import { getRandomValueFrom } from '#/app/utils/random-utils';
 import { disposeObjects } from '#/app/utils/three-utils';
 import colorPalette from './color-palette';
-import { CollisionEvent, PhysicalObject } from './physical-object';
+import { PhysicalBox } from './physical-box';
+import { PhysicalFloor } from './physical-floor';
+import { CollisionEvent } from './physical-object';
+import { PhysicalSphere } from './physical-sphere';
 
 import { EnvironmentMap } from '../../common/environment-map';
 
@@ -46,66 +47,32 @@ export class PhysicalObjectFactory {
     this.boxGeometry = new BoxGeometry(1, 1, 1);
   }
 
-  public createSphere(): PhysicalObject {
-    const radius = randomBetween(0.1, 0.5);
-    const position = getRandom3DPosition();
-
-    const material = this.getMaterial();
-    const mesh = new Mesh(this.sphereGeometry, material);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.scale.set(radius, radius, radius);
-    mesh.position.set(position.x, position.y, position.z);
-
-    const shape = new CANNON.Sphere(radius);
-    return new PhysicalObject({ mesh, shape, position, world: this.world, scene: this.scene, onCollide: this.onCollide });
-  }
-
-  public createBox(): PhysicalObject {
-    const width = Math.random();
-    const height = Math.random();
-    const depth = Math.random();
-    const position = getRandom3DPosition();
-
-    const material = this.getMaterial();
-    const mesh = new Mesh(this.boxGeometry, material);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.scale.set(width, height, depth);
-    mesh.position.set(position.x, position.y, position.z);
-
-    const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
-    return new PhysicalObject({ mesh, shape, position, world: this.world, scene: this.scene, onCollide: this.onCollide });
-  }
-
-  public createFloor(): PhysicalObject {
-    const geometry = new PlaneGeometry(10, 10);
-    const material = new MeshStandardMaterial({
-      color: '#777777',
-      metalness: 0.3,
-      roughness: 0.4,
-      envMap: this.environmentMap.asTexture,
-      envMapIntensity: 0.5
-    });
-
-    const mesh = new Mesh(geometry, material);
-    mesh.receiveShadow = true;
-    mesh.rotation.x = -Math.PI * 0.5;
-
-    const shape = new CANNON.Box(new CANNON.Vec3(5, 5, 0.1));
-    const floor = new PhysicalObject({
-      mesh,
-      shape,
-      position: { x: 0, y: 0, z: 0 },
-      mass: 0,
+  public createSphere(): PhysicalSphere {
+    return new PhysicalSphere({
+      geometry: this.sphereGeometry,
+      material: this.getMaterial(),
       world: this.world,
       scene: this.scene,
+      onCollide: this.onCollide,
     });
+  }
 
-    floor.physics.position.set(0, -0.1, 0);
-    floor.physics.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
+  public createBox(): PhysicalBox {
+    return new PhysicalBox({
+      geometry: this.boxGeometry,
+      material: this.getMaterial(),
+      world: this.world,
+      scene: this.scene,
+      onCollide: this.onCollide,
+    });
+  }
 
-    return floor;
+  public createFloor(): PhysicalFloor {
+    return new PhysicalFloor({
+      world: this.world,
+      scene: this.scene,
+      envMap: this.environmentMap.asTexture,
+    });
   }
 
   private getMaterial(): MeshStandardMaterial {
