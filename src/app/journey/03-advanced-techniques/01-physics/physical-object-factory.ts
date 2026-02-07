@@ -91,6 +91,8 @@ export class PhysicalObjectFactory {
   }
 
   public dispose(): void {
+    this.sphereGeometry.dispose();
+    this.boxGeometry.dispose();
     disposeObjects(this.environmentMap, ...Object.values(this.materials));
   }
 }

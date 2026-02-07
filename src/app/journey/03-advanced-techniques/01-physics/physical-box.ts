@@ -1,7 +1,7 @@
 import * as CANNON from 'cannon-es';
 import { BoxGeometry, Mesh, MeshStandardMaterial, Scene } from 'three';
 
-import { getRandom3DPosition } from '#/app/utils/random-utils';
+import { getRandom3DPosition, randomBetween } from '#/app/utils/random-utils';
 import { CollisionEvent, PhysicalObject } from './physical-object';
 
 type PhysicalBoxConfig = {
@@ -14,9 +14,9 @@ type PhysicalBoxConfig = {
 
 export class PhysicalBox extends PhysicalObject {
   constructor(config: PhysicalBoxConfig) {
-    const width = Math.random();
-    const height = Math.random();
-    const depth = Math.random();
+    const width = randomBetween(0.1, 1);
+    const height = randomBetween(0.1, 1);
+    const depth = randomBetween(0.1, 1);
     const position = getRandom3DPosition();
 
     const mesh = new Mesh(config.geometry, config.material);
