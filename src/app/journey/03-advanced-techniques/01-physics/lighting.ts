@@ -25,4 +25,13 @@ export class Lighting {
   public setup(scene: Scene): void {
     scene.add(this.ambientLight, this.directionalLight);
   }
+
+  public dispose(): void {
+    if (this.directionalLight.shadow.map) {
+      this.directionalLight.shadow.map.dispose();
+    }
+
+    this.directionalLight.dispose();
+    this.ambientLight.dispose();
+  }
 }

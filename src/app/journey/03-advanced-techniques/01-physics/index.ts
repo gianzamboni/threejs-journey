@@ -69,5 +69,6 @@ export class Physics extends OrbitControlledExercise {
   async dispose() {
     await super.dispose();
     this.physicalWorld.dispose();
+    this.lighting.dispose();
   }
 }
