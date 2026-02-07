@@ -16,22 +16,18 @@ import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-ex
 import RenderView from '#/app/layout/render-view';
 import { ExtraConfig, Position3D } from '#/app/types/exercise';
 import { getRandom3DPosition, getRandomValueFrom, randomBetween } from '#/app/utils/random-utils';
-import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
+import { disposeObjects } from '#/app/utils/three-utils';
 import { CSS_CLASSES } from '#/theme';
 import { CollisionSound } from './collision-sound';
+import colorPalette from './color-palette';
 import BOX from './icons/cube.svg?raw';
 import SPHERE from './icons/sphere.svg?raw';
 import REMOVE from './icons/trash.svg?raw';
 import { Lighting } from './lighting';
+import { CollisionEvent, PhysicalObject } from './physical-object';
 import { QUALITY_CONFIG, QualityConfig } from "./quality-config";
 
 import { EnvironmentMap } from '../../common/environment-map';
-
-type PhysicalObject = {
-  mesh: Mesh;
-  physics: CANNON.Body;
-  color?: string;
-}
 
 @Exercise('physics')
 @Starred
@@ -42,30 +38,6 @@ type PhysicalObject = {
 )
 @CustomizableQuality
 export class Physics extends OrbitControlledExercise {
-  
-  private static readonly palette = [
-    "#ff6a10",
-    "#00a1f4",
-    "#50ea00",
-    "#a249da",
-    "#60ff67",
-    "#e887ff",
-    "#3bffa2",
-    "#ff5c74",
-    "#00ad8c",
-    "#d43a4b",
-    "#02b1b5",
-    "#cb4266",
-    "#f6ffad",
-    "#996197",
-    "#ffcd64",
-    "#c0e3ff",
-    "#a96148",
-    "#ff89b6",
-    "#6c7957",
-    "#996952"
-  ];
-
   private environmentMap: EnvironmentMap;
 
   private materials: Record<string, MeshStandardMaterial>;
@@ -82,6 +54,7 @@ export class Physics extends OrbitControlledExercise {
   private physicsWorld: CANNON.World;
 
   private collisionSound: CollisionSound;
+  private boundPlayHitSound: (event: CollisionEvent) => void;
   
   private qualityConfig: QualityConfig;
 
@@ -107,11 +80,9 @@ export class Physics extends OrbitControlledExercise {
 
     this.camera.position.set(-3, 3, 3);
 
-    this.physicsWorld.addBody(this.floor.physics);
-    this.scene.add(this.floor.mesh);
     this.lighting.setup(this.scene);
-
     this.collisionSound = new CollisionSound();
+    this.boundPlayHitSound = this.playHitSound.bind(this);
 
   }
 
@@ -123,16 +94,15 @@ export class Physics extends OrbitControlledExercise {
 
     for(let i = this.physicalObjects.length - 1; i >= 0; i--) {
       const object = this.physicalObjects[i];
-      if(object.mesh.position.y < -20) {
+      if(object.isBelowY(-20)) {
         this.removeObject(object, i);
       } else {
-        object.mesh.position.copy(object.physics.position);
-        object.mesh.quaternion.copy(object.physics.quaternion);
+        object.sync();
       }
     }
   }
 
-  public playHitSound(collision: { contact: CANNON.ContactEquation}) {
+  public playHitSound(collision: CollisionEvent) {
     const velocity = collision.contact.getImpactVelocityAlongNormal();
     if (velocity > 1.5) {
       this.collisionSound.play();
@@ -182,52 +152,36 @@ export class Physics extends OrbitControlledExercise {
   }
 
   public removeObject(object: PhysicalObject, index: number) {
-    object.physics.removeEventListener('collide', this.playHitSound.bind(this));
-    this.physicsWorld.removeBody(object.physics);
-    this.scene.remove(object.mesh);
+    object.dispose();
     this.physicalObjects.splice(index, 1);
-  }
-
-  private createPhysicalObject(mesh: Mesh, shape: CANNON.Shape, position: Position3D) {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.position.copy(position);
-    this.scene.add(mesh);
-
-    const body = new CANNON.Body({
-      mass: 1,
-      position: new CANNON.Vec3(0, 3, 0),
-      shape,
-    });
-
-    body.addEventListener('collide', this.playHitSound.bind(this));
-    body.position.copy(new CANNON.Vec3(position.x, position.y, position.z));
-    this.physicsWorld.addBody(body);
-
-    const color = (mesh.material as MeshStandardMaterial).color.getHexString();
-    return { mesh, physics: body, color };
   }
 
   private createBox(width: number, height: number, depth: number, position: Position3D) {
     const material = this.getMaterial();
     const mesh = new Mesh(this.boxGeometry, material);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     mesh.scale.set(width, height, depth);
+    mesh.position.set(position.x, position.y, position.z);
 
     const shape = new CANNON.Box(new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5));
-    return this.createPhysicalObject(mesh, shape, position);
+    return new PhysicalObject({ mesh, shape, position, world: this.physicsWorld, scene: this.scene, onCollide: this.boundPlayHitSound });
   }
 
   private createSphere(radius: number, position: Position3D) {
     const material = this.getMaterial();
     const mesh = new Mesh(this.sphereGeometry, material);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     mesh.scale.set(radius, radius, radius);
+    mesh.position.set(position.x, position.y, position.z);
 
     const shape = new CANNON.Sphere(radius);
-    return this.createPhysicalObject(mesh, shape, position);
+    return new PhysicalObject({ mesh, shape, position, world: this.physicsWorld, scene: this.scene, onCollide: this.boundPlayHitSound });
   }
 
   private getMaterial() {
-    const colorString = getRandomValueFrom(Physics.palette);
+    const colorString = getRandomValueFrom(colorPalette);
     const color = new Color(colorString);
     if(!this.materials[colorString]) {
       this.materials[colorString] = new MeshStandardMaterial({ 
@@ -241,7 +195,7 @@ export class Physics extends OrbitControlledExercise {
     return this.materials[colorString];
   }
 
-  private createFloor() {
+  private createFloor(): PhysicalObject {
     const geometry = new PlaneGeometry(10, 10);
     const material = new MeshStandardMaterial({ 
       color: '#777777',
@@ -256,12 +210,19 @@ export class Physics extends OrbitControlledExercise {
     mesh.rotation.x = -Math.PI * 0.5;
 
     const shape = new CANNON.Box(new CANNON.Vec3(5, 5, 0.1));
-    const body = new CANNON.Body();
-    body.mass  = 0;
-    body.position.set(0, -0.1, 0);
-    body.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
-    body.addShape(shape);    
-    return { mesh, physics: body };
+    const floor = new PhysicalObject({
+      mesh,
+      shape,
+      position: { x: 0, y: 0, z: 0 },
+      mass: 0,
+      world: this.physicsWorld,
+      scene: this.scene,
+    });
+
+    floor.physics.position.set(0, -0.1, 0);
+    floor.physics.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
+
+    return floor;
   }
 
   async dispose() {
@@ -270,6 +231,6 @@ export class Physics extends OrbitControlledExercise {
       this.removeObject(object, index);
     });
     disposeObjects(this.environmentMap, ...Object.values(this.materials));
-    disposeMesh(this.floor.mesh);
+    this.floor.dispose();
   }
 }
