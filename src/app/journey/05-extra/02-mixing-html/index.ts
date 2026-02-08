@@ -14,7 +14,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { DebugFPS } from "#/app/decorators/debug";
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from "#/app/layout/render-view";
-import { DAMAGED_HELMET_URL } from "#/app/utils/tests/models-urls";
+import { DAMAGED_HELMET_URL } from "#/app/utils/models-urls";
 import { HelpPoint } from "./help-point";
 
 import { EnvironmentMap } from "../../common/environment-map";

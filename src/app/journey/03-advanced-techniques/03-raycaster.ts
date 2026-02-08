@@ -14,7 +14,7 @@ import { Timer } from 'three/addons/misc/Timer.js';
 import { Description, Exercise } from "#/app/decorators/exercise";
 import RenderView from '#/app/layout/render-view';
 import { AssetLoader } from '#/app/services/assets-loader';
-import { DUCK_URL } from '#/app/utils/tests/models-urls';
+import { DUCK_URL } from '#/app/utils/models-urls';
 import { disposeMesh, disposeObjects } from '#/app/utils/three-utils';
 import { CSS_CLASSES } from '#/theme';
 

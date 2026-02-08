@@ -14,7 +14,7 @@ import { Description, Exercise } from "#/app/decorators/exercise";
 import OrbitControlledExercise from "#/app/journey/exercises/orbit-controlled-exercise";
 import RenderView from "#/app/layout/render-view";
 import { AssetLoader } from "#/app/services/assets-loader";
-import { HELMET_URL } from "#/app/utils/tests/models-urls";
+import { HELMET_URL } from "#/app/utils/models-urls";
 import { disposeMesh } from "#/app/utils/three-utils";
 import { ENV_CONTROLLERS } from "./debug-ui.config";
 
